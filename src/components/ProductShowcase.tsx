@@ -58,7 +58,7 @@ export const ProductShowcase = () => {
                 
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
                   <img 
-                    src="/src/assets/tech-background.jpg" 
+                    src="src/assets/tech-background.jpg" 
                     alt="InterpreLab Platform Dashboard"
                     className="w-full h-full object-cover"
                   />
@@ -121,7 +121,7 @@ export const ProductShowcase = () => {
                 
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
                   <img 
-                    src="/src/assets/extension-preview.jpg" 
+                    src="src/assets/extension-preview.jpg" 
                     alt="InterpreCoach Extension Preview"
                     className="w-full h-full object-cover"
                   />
@@ -231,79 +231,36 @@ export const ProductShowcase = () => {
           </Card>
         </div>
 
-        {/* Business Model & Infrastructure Section */}
-        <div className="mt-20 space-y-16">
-          {/* Business Model */}
-          <div className="text-center space-y-8">
-            <Badge className="bg-gradient-primary border-0 text-white px-4 py-2">
-              Flexible Pricing
-            </Badge>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">
-              Freemium to Enterprise Solutions
-            </h3>
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center">
-                  <h4 className="text-xl font-bold text-foreground mb-2">Free Tier</h4>
-                  <p className="text-muted-foreground mb-4">Basic features with limited usage</p>
-                  <Badge variant="outline">Perfect for Students</Badge>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm border-primary/50">
-                <CardContent className="p-6 text-center">
-                  <h4 className="text-xl font-bold text-foreground mb-2">Professional</h4>
-                  <p className="text-muted-foreground mb-4">Advanced features for working interpreters</p>
-                  <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center">
-                  <h4 className="text-xl font-bold text-foreground mb-2">Enterprise</h4>
-                  <p className="text-muted-foreground mb-4">Custom solutions for organizations</p>
-                  <Badge variant="outline">White Glove Support</Badge>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Technical Infrastructure */}
-          <div className="text-center space-y-8">
-            <Badge className="bg-gradient-success border-0 text-white px-4 py-2">
-              Powered by Google Cloud
-            </Badge>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">
-              Enterprise-Grade Infrastructure
-            </h3>
-            <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Cloud className="w-8 h-8 mx-auto text-primary" />
-                  <h4 className="font-bold text-foreground">Hosting</h4>
-                  <p className="text-sm text-muted-foreground">Cloud Run, App Engine, Firebase</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Cpu className="w-8 h-8 mx-auto text-success" />
-                  <h4 className="font-bold text-foreground">AI/ML</h4>
-                  <p className="text-sm text-muted-foreground">Vertex AI, Natural Language API</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Database className="w-8 h-8 mx-auto text-accent" />
-                  <h4 className="font-bold text-foreground">Storage</h4>
-                  <p className="text-sm text-muted-foreground">Firestore, BigQuery, Cloud Storage</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Shield className="w-8 h-8 mx-auto text-warning" />
-                  <h4 className="font-bold text-foreground">Security</h4>
-                  <p className="text-sm text-muted-foreground">IAM, Cloud Identity, Cloud Armor</p>
-                </CardContent>
-              </Card>
-            </div>
+        {/* Business Model Section */}
+        <div className="mt-20 text-center space-y-8">
+          <Badge className="bg-gradient-primary border-0 text-white px-4 py-2">
+            Flexible Pricing
+          </Badge>
+          <h3 className="text-3xl md:text-4xl font-bold text-white">
+            Freemium to Enterprise Solutions
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
+              <CardContent className="p-6 text-center">
+                <h4 className="text-xl font-bold text-foreground mb-2">Free Tier</h4>
+                <p className="text-muted-foreground mb-4">Basic features with limited usage</p>
+                <Badge variant="outline">Perfect for Students</Badge>
+              </CardContent>
+            </Card>
+            <Card className="bg-card/30 border-border/50 backdrop-blur-sm border-primary/50">
+              <CardContent className="p-6 text-center">
+                <h4 className="text-xl font-bold text-foreground mb-2">Professional</h4>
+                <p className="text-muted-foreground mb-4">Advanced features for working interpreters</p>
+                <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
+              </CardContent>
+            </Card>
+            <Card className="bg-card/30 border-border/50 backdrop-blur-sm">
+              <CardContent className="p-6 text-center">
+                <h4 className="text-xl font-bold text-foreground mb-2">Enterprise</h4>
+                <p className="text-muted-foreground mb-4">Custom solutions for organizations</p>
+                <Badge variant="outline">White Glove Support</Badge>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

@@ -26,6 +26,90 @@ interface ContextWindow {
   timestamp: Date;
 }
 
+export const InterpreBotUI = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [showAssessment, setShowAssessment] = useState(false);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed bottom-6 right-6 w-[400px] z-50">
+      <div className="extension-window">
+        <Card className="bg-card/95 border-border/50">
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-lg">🤖</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">InterpreBot</h3>
+                    <p className="text-xs text-muted-foreground">AI Language Assessment</p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-6 h-6"
+                  onClick={() => setIsVisible(false)}
+                >
+                  <Square className="w-3 h-3" />
+                </Button>
+              </div>
+
+              {!showAssessment ? (
+                <>
+                  <div className="text-center space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      Welcome to InterpreLab! I'm your AI assessment assistant.
+                    </p>
+                    <p className="text-sm font-medium">
+                      Would you like to take a language assessment to see where you stand across various skill sets?
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Button 
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                      onClick={() => setShowAssessment(true)}
+                    >
+                      Start Assessment
+                    </Button>
+                    <Button variant="outline" className="w-full" onClick={() => setIsVisible(false)}>
+                      Maybe Later
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <BarChart3 className="w-6 h-6 text-white" />
+                    </div>
+                    <p className="text-sm font-medium">Assessment in Progress...</p>
+                    <p className="text-xs text-muted-foreground">Analyzing your interpretation skills</p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {['Voice Control', 'Grammar & Syntax', 'Vocabulary', 'Ethics'].map((skill, i) => (
+                      <div key={skill} className="flex justify-between items-center text-xs">
+                        <span>{skill}</span>
+                        <Badge variant="outline">{85 + i * 3}%</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
 export const ExtensionUI = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isMuted, setIsMuted] = useState(false);

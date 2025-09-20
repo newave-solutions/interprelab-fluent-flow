@@ -28,7 +28,7 @@ export const Hero = () => {
           </Badge>
 
            {/* Main Headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
             <span className="bg-gradient-primary bg-clip-text text-transparent animate-pulse-glow">
               InterpreLab
             </span>
