@@ -22,6 +22,7 @@ import {
   Eye,
   Waves
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const ProductShowcase = () => {
   return (
@@ -102,9 +103,11 @@ export const ProductShowcase = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-primary border-0 text-white hover:opacity-90">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Start Training
+                <Button asChild className="w-full bg-gradient-primary border-0 text-white hover:opacity-90">
+                  <Link to="/interprebot">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Take the Assessment
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -165,9 +168,11 @@ export const ProductShowcase = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-success border-0 text-white hover:opacity-90">
-                  <Download className="w-4 h-4 mr-2" />
-                  Install Extension
+                <Button asChild className="w-full bg-gradient-success border-0 text-white hover:opacity-90">
+                  <Link to="/interprecoach">
+                    <Download className="w-4 h-4 mr-2" />
+                    Meet InterpreCoach
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -308,9 +313,11 @@ export const ProductShowcase = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 border-0 text-white hover:opacity-90">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Start Assessment
+                <Button asChild className="w-full bg-gradient-to-r from-purple-500 to-pink-500 border-0 text-white hover:opacity-90">
+                  <Link to="/interprebot">
+                    <TrendingUp className="w-4 h-4 mr-2" />
+                    Find out more
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -359,14 +366,15 @@ export const ProductShowcase = () => {
             Join thousands of interpreters who trust InterpreLab's AI-powered ecosystem for training, live assistance, and continuous improvement.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-primary border-0 text-white hover:opacity-90">
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Start Free Trial
+            <Button asChild size="lg" className="bg-gradient-primary border-0 text-white hover:opacity-90">
+              <Link to="/interprecoach">
+                <ArrowRight className="w-5 h-5 mr-2" />
+                Join the waitlist
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
-              <Calendar className="w-5 h-5 mr-2" />
-              Schedule Demo
-            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <Link to="/contact">Find out more</Link>
+              </Button>
           </div>
         </div>
       </div>

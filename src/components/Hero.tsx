@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Play, Shield, Zap, Users } from "lucide-react";
 import heroImage from "@/assets/hero-interprelab.jpg";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -79,14 +80,18 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-            <Button variant="hero" size="xl" className="group">
-              Get Started Today
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            <Button variant="hero" size="xl" className="group" asChild>
+              <Link to="/interprebot">
+                Take the Assessment
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
             
-            <Button variant="glass" size="xl" className="group">
-              <Play className="w-5 h-5 mr-2" />
-              Watch Demo
+            <Button variant="glass" size="xl" className="group" asChild>
+              <Link to="/interprecoach">
+                <Play className="w-5 h-5 mr-2" />
+                Meet InterpreCoach
+              </Link>
             </Button>
           </div>
 

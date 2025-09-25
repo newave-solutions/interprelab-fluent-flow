@@ -51,28 +51,21 @@ export const Footer = () => {
 
           {/* Products */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Products</h4>
+            <h4 className="text-sm font-semibold text-foreground">Services</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  <Chrome className="w-3 h-3" />
-                  InterpreCoach Extension
+                <a href="/interprebot" className="hover:text-foreground transition-colors flex items-center gap-2">
+                  InterpreBot
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  <Shield className="w-3 h-3" />
-                  Enterprise Platform
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  API Integration
+                <a href="/interprecoach" className="hover:text-foreground transition-colors flex items-center gap-2">
+                  InterpreCoach
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-foreground transition-colors">
-                  Custom Solutions
+                  Certification Courses
                 </a>
               </li>
             </ul>
@@ -80,26 +73,21 @@ export const Footer = () => {
 
           {/* Solutions */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Solutions</h4>
+            <h4 className="text-sm font-semibold text-foreground">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Healthcare Systems
+                <a href="https://www.certifiedmedicalinterpreters.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  NBCMI
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Legal Firms
+                <a href="https://cchicertification.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  CCHI
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Government Agencies
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Educational Institutions
+                <a href="/careers" className="hover:text-foreground transition-colors">
+                  Careers
                 </a>
               </li>
             </ul>
@@ -111,7 +99,7 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>hello@interprelab.com</span>
+                <span>admin.ceo@interprelab.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -119,7 +107,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>San Francisco, CA</span>
+                <span>Houston, Texas</span>
               </div>
             </div>
 
