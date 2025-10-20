@@ -49,7 +49,7 @@
 - **Add navigation:** Update `Navigation.tsx` to include new links.
 
 ## References
-- [`README.md`](../../README.md) for setup/workflow details
+- [`README.md`](../README.md) for setup/workflow details
 - `src/components/ui/` for UI patterns
 - `src/pages/` for page structure
 - `src/App.tsx` for routing logic

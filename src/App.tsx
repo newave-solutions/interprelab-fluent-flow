@@ -1,4 +1,4 @@
-import { Toaster as Sonner } from "src/components/ui/sonner";
+import { Toaster as Sonner } from "./components/ui/sonner";
 import { Routes, Route } from 'react-router-dom';
 import NotFound from "./pages/NotFound";
 import InterpreBot from "./pages/InterpreBot";

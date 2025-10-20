@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import { ArrowRight, Play, Shield, Zap, Users } from "lucide-react";
 import heroImage from "@/assets/hero-interprelab.jpg";
 import { Link } from "react-router-dom";
@@ -9,8 +9,8 @@ export const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background with overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
+        <img
+          src={heroImage}
           alt="Advanced medical interpretation technology with AI interfaces"
           className="w-full h-full object-cover"
         />
@@ -21,7 +21,7 @@ export const Hero = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
         <div className="max-w-5xl mx-auto space-y-8 animate-fade-in">
-          
+
           {/* Badge */}
           <Badge variant="secondary" className="glass px-6 py-2 text-sm font-medium">
             <Zap className="w-4 h-4 mr-2" />
@@ -30,24 +30,29 @@ export const Hero = () => {
 
            {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
-            <span className="bg-gradient-primary bg-clip-text text-transparent animate-pulse-glow">
+            <span className="bg-gradient-primary bg-clip-text text-transparent animate-pulse-glow flex items-center justify-center gap-4">
+              <img
+                src="/interprelab-logo.svg"
+                alt="InterpreLab Logo"
+                className="h-16 md:h-20 lg:h-24 w-auto inline-block"
+              />
               InterpreLab
             </span>
             <br />
             <span className="text-foreground">
-              Complete AI-Powered
+              Where Innovation Meets
             </span>
             <br />
             <span className="text-muted-foreground text-4xl md:text-5xl lg:text-6xl">
-              Interpreter Ecosystem
+              Interpretation Excellence
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up">
-            Three integrated solutions: <strong>InterpreLab Platform</strong> for comprehensive training, 
-            <strong>InterpreCoach Extension</strong> for live session assistance, and <strong>InterpreBot Analyst</strong> 
-            for personalized skill assessment and development.
+            Discover the power of our integrated ecosystem: <strong>InterpreLab Platform</strong> for comprehensive training,
+            <strong>InterpreCoach Extension</strong> for real-time assistance, and <strong>InterpreBot Analyst</strong>
+            for intelligent skill development - all unified under one innovative laboratory of interpretation technology.
           </p>
 
           {/* Key Features */}
@@ -86,7 +91,7 @@ export const Hero = () => {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            
+
             <Button variant="glass" size="xl" className="group" asChild>
               <Link to="/interprecoach">
                 <Play className="w-5 h-5 mr-2" />
