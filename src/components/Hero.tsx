@@ -7,108 +7,87 @@ import heroImage from "@/assets/hero-interprelab.jpg";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background with overlay */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Advanced medical interpretation technology with AI interfaces"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background/90" />
-        <div className="absolute inset-0 bg-gradient-glow opacity-30" />
+      {/* Simplified Background */}
+      <div className="absolute inset-0 z-0 bg-background">
+        <div className="absolute inset-0 bg-gradient-glow opacity-20" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
-        <div className="max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div className="max-w-5xl mx-auto space-y-10 animate-fade-in">
           
           {/* Badge */}
-          <Badge variant="secondary" className="glass px-6 py-2 text-sm font-medium">
+          <Badge className="glass px-6 py-3 text-sm font-medium border-primary/20">
             <Zap className="w-4 h-4 mr-2" />
-            Revolutionary AI-Powered Interpretation Platform
+            AI-Powered Interpretation Platform
           </Badge>
 
-           {/* Main Headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
-            <span className="bg-gradient-primary bg-clip-text text-transparent glow">
-              InterpreLab
+          {/* Main Headline - Simplified */}
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight">
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              Master Medical
             </span>
             <br />
             <span className="text-foreground">
-              AI-Powered Training
-            </span>
-            <br />
-            <span className="text-muted-foreground text-4xl md:text-5xl lg:text-6xl">
-              for Medical Interpreters
+              Interpretation
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up">
-            Master medical interpretation with AI-driven assessment, real-time coaching, and certification-ready courses trusted by professionals worldwide.
+          {/* Subtitle - Concise */}
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
           </p>
 
-          {/* Key Features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-slide-up">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">🎓</span>
-              </div>
-              <span>Training Platform</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-8 h-8 bg-gradient-success rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">⚡</span>
-              </div>
-              <span>Live Assistant</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">🤖</span>
-              </div>
-              <span>AI Analyst</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">☁️</span>
-              </div>
-              <span>Google Cloud</span>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
+          {/* CTA Buttons - Prominent */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Link to="/waitlist">
-              <Button variant="hero" size="xl" className="group">
-                Get Started Today
+              <Button size="xl" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow group px-8 py-6 text-lg">
+                Start Free Trial
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             
             <Link to="/signin">
-              <Button variant="glass" size="xl" className="group">
+              <Button variant="outline" size="xl" className="glass border-primary/30 group px-8 py-6 text-lg">
                 <User className="w-5 h-5 mr-2" />
                 Sign In
               </Button>
             </Link>
           </div>
 
-          {/* Trust Indicators */}
-          <div className="pt-8 text-sm text-muted-foreground animate-slide-up">
-            <p>Trusted by healthcare systems and legal firms across 50+ countries</p>
-            <div className="flex justify-center gap-8 mt-4 opacity-60">
-              <span>🏥 Medical Centers</span>
-              <span>⚖️ Legal Firms</span>
-              <span>🌍 Global Organizations</span>
+          {/* Trust Stats - Clean */}
+          <div className="pt-12 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+            <div className="space-y-1">
+              <div className="text-3xl md:text-4xl font-bold text-foreground">50+</div>
+              <div className="text-sm text-muted-foreground">Countries</div>
             </div>
+            <div className="space-y-1">
+              <div className="text-3xl md:text-4xl font-bold text-foreground">10k+</div>
+              <div className="text-sm text-muted-foreground">Interpreters</div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-3xl md:text-4xl font-bold text-foreground">98%</div>
+              <div className="text-sm text-muted-foreground">Satisfaction</div>
+            </div>
+          </div>
+
+          {/* Trust Badges */}
+          <div className="flex flex-wrap justify-center gap-4 pt-8 opacity-70">
+            <Badge variant="outline" className="px-4 py-2">
+              <Shield className="w-4 h-4 mr-2" />
+              HIPAA Compliant
+            </Badge>
+            <Badge variant="outline" className="px-4 py-2">
+              SOC 2 Certified
+            </Badge>
+            <Badge variant="outline" className="px-4 py-2">
+              ISO 27001
+            </Badge>
           </div>
         </div>
       </div>
-
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-float" />
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
-      <div className="absolute top-1/2 right-20 w-16 h-16 bg-success/10 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }} />
     </section>
   );
 };
