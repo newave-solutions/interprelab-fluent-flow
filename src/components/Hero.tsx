@@ -3,10 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, User, Shield, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-interprelab.jpg";
-
 export const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Simplified Background */}
       <div className="absolute inset-0 z-0 bg-background">
         <div className="absolute inset-0 bg-gradient-glow opacity-20" />
@@ -26,19 +24,13 @@ export const Hero = () => {
 
           {/* Main Headline - Simplified */}
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight">
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
-              Master Medical
-            </span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Welcome to</span>
             <br />
-            <span className="text-foreground">
-              Interpretation
-            </span>
+            <span className="text-foreground">InterpreLab</span>
           </h1>
 
           {/* Subtitle - Concise */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
-          </p>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">An AI-driven medical interpreter training platform for both new and seasoned interpreters who wish to embrace AI into their everyday duties</p>
 
           {/* CTA Buttons - Prominent */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -88,6 +80,5 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
