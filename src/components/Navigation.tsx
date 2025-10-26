@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -16,11 +16,27 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-export const Navigation = () => {
+interface NavigationProps {
+  transparent?: boolean;
+}
+
+export const Navigation = ({ transparent = false }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  useEffect(() => {
+    if (!transparent) return;
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [transparent]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -42,8 +58,12 @@ export const Navigation = () => {
     { label: t('contact'), href: '/contact' },
   ];
 
+  const navClass = transparent && !isScrolled
+    ? "fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/10"
+    : "fixed top-0 left-0 right-0 z-50 glass border-b border-border/50";
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+    <nav className={navClass}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -52,8 +72,12 @@ export const Navigation = () => {
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">InterpreLab</h1>
-              <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
+              <h1 className={`text-xl font-bold ${transparent && !isScrolled ? "text-white" : ""}`}>
+                InterpreLab
+              </h1>
+              <p className={`text-xs ${transparent && !isScrolled ? "text-white/70" : "text-muted-foreground"}`}>
+                Advanced Interpretation
+              </p>
             </div>
           </Link>
 
@@ -64,7 +88,13 @@ export const Navigation = () => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="text-sm font-medium text-foreground/80 hover:text-foreground bg-transparent">
+                      <NavigationMenuTrigger 
+                        className={`text-sm font-medium bg-transparent ${
+                          transparent && !isScrolled 
+                            ? "text-white/90 hover:text-white" 
+                            : "text-foreground/80 hover:text-foreground"
+                        }`}
+                      >
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -87,7 +117,11 @@ export const Navigation = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    transparent && !isScrolled
+                      ? "text-white/90 hover:text-white"
+                      : "text-foreground hover:text-primary"
+                  }`}
                 >
                   {item.label}
                 </Link>

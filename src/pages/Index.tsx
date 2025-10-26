@@ -1,79 +1,58 @@
 import { Navigation } from "@/components/Navigation";
-import { VideoSection } from "@/components/VideoSection";
+import { FullScreenVideoHero } from "@/components/VideoSection";
 import { SolutionHero } from "@/components/SolutionHero";
-import { ProductShowcase } from "@/components/ProductShowcase";
-import { StatsSection } from "@/components/StatsSection";
+import { TrustedPartners } from "@/components/TrustedPartners";
 import { Testimonials } from "@/components/Testimonials";
+import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
-import { AlertTriangle, Brain, SearchX } from "lucide-react";
-import { useEffect } from "react";
 
 const Index = () => {
-  useEffect(() => {
-    const animatedElements = document.querySelectorAll('.scroll-animate');
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.2,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-x-0');
-          entry.target.classList.remove('opacity-0');
-        }
-      });
-    }, observerOptions);
-
-    animatedElements.forEach(el => {
-      observer.observe(el);
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  const painPoints = [
+    {
+      videoSrc: "/videos/lep-statistics.mp4",
+      title: "20 Million Americans Can't Access Quality Healthcare",
+      description:
+        "Over 20 million Limited English Proficient (LEP) individuals in the United States struggle to receive quality healthcare due to language barriers. These marginalized communities face adverse outcomes—including higher mortality rates—because they cannot effectively communicate their needs. Quality interpretation isn't just helpful, it's life-saving.",
+    },
+    {
+      videoSrc: "/videos/interpreter-stress.mp4",
+      title: "The Crushing Weight of Real-Time Complexity",
+      description:
+        "Medical interpreters face intense cognitive demands: listening intently, processing highly specialized terminology across countless medical fields, translating accurately under pressure, and managing the emotional toll of traumatic situations—all simultaneously. This mental juggling act requires exceptional focus and resilience to prevent burnout.",
+    },
+    {
+      videoSrc: "/videos/terminology-gap.mp4",
+      title: "Isolated, Overwhelmed, and Under-Supported",
+      description:
+        "With an overwhelming ratio of interpreters to Quality Assurance specialists, most interpreters receive minimal supervision, infrequent feedback, and limited professional development. Mastering terminology across cardiology, oncology, neurology, and dozens of other specialties feels impossible when you're navigating it alone.",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation transparent />
+      
+      {/* Full-screen video sections with snap scrolling */}
+      <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
+        {painPoints.map((painPoint, index) => (
+          <FullScreenVideoHero
+            key={index}
+            videoSrc={painPoint.videoSrc}
+            title={painPoint.title}
+            description={painPoint.description}
+            index={index}
+          />
+        ))}
+      </div>
+
+      {/* Main content */}
       <main>
-        {/* Pain Point Video Sections */}
-        <VideoSection
-          videoSrc="videos/covid-intro.mp4"
-          title="The Stark Reality of Miscommunication"
-          description="Effective communication is literally a matter of life and death. Studies revealed that Limited English Proficient (LEP) patients were significantly more likely—in some cases, twice as likely—to face adverse outcomes, including mortality, during hospitalization compared to English-speaking patients. This underscores the critical need for skilled medical interpreters."
-          icon={<AlertTriangle className="w-12 h-12 text-primary" />}
-          iconColor="text-primary"
-        />
-
-        <VideoSection
-          videoSrc="videos/stressed.mp4"
-          title="Juggling Complexity Under Pressure"
-          description="Medical interpreting requires immense cognitive effort. Interpreters must simultaneously listen intently, comprehend complex medical information often filled with jargon, accurately convert it to another language, and relay it clearly—all while managing the emotional weight of potentially sensitive or stressful situations."
-          icon={<Brain className="w-12 h-12 text-success" />}
-          iconColor="text-success"
-          reverse
-        />
-
-        <VideoSection
-          videoSrc="videos/no-terms.mp4"
-          title="Navigating Niche Knowledge & Isolation"
-          description="Mastering medical terminology is an ongoing challenge, as healthcare encompasses countless specialties, each with its own unique vocabulary. The ratio of working interpreters to Quality Assurance specialists is often overwhelmingly high, resulting in limited supervision, infrequent feedback, and fewer opportunities for targeted skill development."
-          icon={<SearchX className="w-12 h-12 text-warning" />}
-          iconColor="text-warning"
-        />
-
-        {/* Solution Hero Section */}
         <SolutionHero />
-
-        {/* Existing Sections */}
-        <ProductShowcase />
-        <StatsSection />
+        <TrustedPartners />
         <Testimonials />
+        <FAQ />
       </main>
+      
       <Footer />
     </div>
   );
