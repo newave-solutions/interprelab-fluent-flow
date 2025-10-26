@@ -6,6 +6,7 @@ import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "luc
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -128,6 +129,7 @@ export const Navigation = () => {
                 </Link>
               </>
             )}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu */}
