@@ -1,25 +1,21 @@
-import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
 
-interface VideoSectionProps {
+interface FullScreenVideoHeroProps {
   videoSrc: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
-  iconColor: string;
-  reverse?: boolean;
+  index: number;
 }
 
-export const VideoSection = ({
+export const FullScreenVideoHero = ({
   videoSrc,
   title,
   description,
-  icon,
-  iconColor,
-  reverse = false,
-}: VideoSectionProps) => {
+  index,
+}: FullScreenVideoHeroProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [textVisible, setTextVisible] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -40,8 +36,11 @@ export const VideoSection = ({
             video.muted = true;
             video.play().catch((e) => console.log("Retry failed:", e));
           });
+          // Fade in text after 800ms
+          setTimeout(() => setTextVisible(true), 800);
         } else {
           video.pause();
+          setTextVisible(false);
         }
       });
     }, observerOptions);
@@ -56,50 +55,48 @@ export const VideoSection = ({
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex items-center justify-center py-20 px-4 overflow-hidden"
+      className="h-screen w-full relative snap-start snap-always overflow-hidden"
     >
-      <div
-        className={cn(
-          "container mx-auto flex flex-col gap-12 items-center",
-          reverse ? "md:flex-row-reverse" : "md:flex-row"
-        )}
+      {/* Full-screen video background */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-cover"
+        playsInline
+        muted
+        loop
+        preload="auto"
+        poster={`https://placehold.co/1920x1080/1e293b/ffffff?text=Video+${index + 1}`}
       >
-        {/* Video Card */}
-        <div className="w-full md:w-1/2 lg:w-5/12 scroll-animate opacity-0 transition-all duration-1000 ease-out transform translate-x-0">
-          <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
-            <video
-              ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover"
-              playsInline
-              muted
-              loop
-              preload="metadata"
-            >
-              <source src={videoSrc} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
-            <div className="relative z-20 flex flex-col items-center justify-center h-full p-8 text-center">
-              <div className={cn("mb-6 p-4 rounded-full bg-background/10 backdrop-blur-sm", iconColor)}>
-                {icon}
-              </div>
-              <h3 className="text-xl md:text-2xl font-display font-bold text-white">
-                {title}
-              </h3>
-            </div>
-          </div>
-        </div>
+        <source src={videoSrc} type="video/mp4" />
+      </video>
 
-        {/* Content */}
-        <div className="w-full md:w-1/2 lg:w-7/12 text-center md:text-left scroll-animate opacity-0 transition-all duration-1000 ease-out delay-200">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent leading-tight">
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/60 z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 h-full flex items-center justify-center px-6">
+        <div
+          className={`max-w-4xl text-center space-y-6 transition-all duration-1000 ${
+            textVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight">
             {title}
-          </h2>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-sans">
+          </h1>
+          <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-sans max-w-3xl mx-auto">
             {description}
           </p>
         </div>
       </div>
+
+      {/* Scroll indicator (only on first section) */}
+      {index === 0 && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-3 bg-white/50 rounded-full" />
+          </div>
+        </div>
+      )}
     </section>
   );
 };

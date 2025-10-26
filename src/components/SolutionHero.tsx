@@ -6,32 +6,25 @@ import { Link } from "react-router-dom";
 export const SolutionHero = () => {
   const solutions = [
     {
-      icon: <Bot className="w-8 h-8" />,
+      icon: <Bot className="w-6 h-6" />,
       title: "InterpreBot",
       description: "AI-powered assessment tool that provides instant feedback on your interpretation skills",
       link: "/interprebot",
       color: "text-primary",
     },
     {
-      icon: <BookOpen className="w-8 h-8" />,
+      icon: <BookOpen className="w-6 h-6" />,
       title: "InterpreCoach",
       description: "Personalized AI coaching to help you master medical terminology and improve techniques",
       link: "/interprecoach",
       color: "text-success",
     },
     {
-      icon: <BarChart3 className="w-8 h-8" />,
+      icon: <BarChart3 className="w-6 h-6" />,
       title: "InterpreTrack",
       description: "Track your performance, analyze patterns, and measure your growth over time",
       link: "/interpretrack",
       color: "text-warning",
-    },
-    {
-      icon: <MessageSquare className="w-8 h-8" />,
-      title: "InterpreHub",
-      description: "Connect with fellow interpreters, share insights, and build your professional network",
-      link: "/interprehub",
-      color: "text-accent",
     },
   ];
 
@@ -40,35 +33,34 @@ export const SolutionHero = () => {
       <div className="container mx-auto">
         {/* Headline */}
         <div className="text-center mb-16 space-y-6 animate-fade-in">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Embrace the Change,
             </span>
             <br />
             <span className="text-foreground">Don't Get Replaced By It</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-sans">
-            InterpreLab is your AI-powered training platform designed to elevate medical interpreters
-            through intelligent feedback, personalized coaching, and data-driven insights.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto font-sans">
+            Three powerful tools designed to elevate medical interpreters through AI-powered feedback and coaching.
           </p>
         </div>
 
         {/* Solution Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-6xl mx-auto">
           {solutions.map((solution, index) => (
             <Card
               key={solution.title}
               className="group hover:shadow-glow transition-all duration-300 hover:-translate-y-1 glass border-primary/20 animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <CardContent className="p-8">
-                <div className={`mb-4 ${solution.color}`}>
+              <CardContent className="p-6">
+                <div className={`mb-3 ${solution.color}`}>
                   {solution.icon}
                 </div>
-                <h3 className="text-2xl font-display font-bold mb-3 text-foreground">
+                <h3 className="text-lg font-display font-bold mb-2 text-foreground">
                   {solution.title}
                 </h3>
-                <p className="text-muted-foreground mb-4 font-sans leading-relaxed">
+                <p className="text-sm text-muted-foreground mb-4 font-sans leading-relaxed">
                   {solution.description}
                 </p>
                 <Link to={solution.link}>
@@ -88,22 +80,13 @@ export const SolutionHero = () => {
         {/* CTA Section */}
         <div className="text-center space-y-6 animate-fade-in" style={{ animationDelay: "400ms" }}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/waitlist">
-              <Button
-                size="xl"
-                className="bg-gradient-primary hover:opacity-90 text-white shadow-glow group px-8 py-6 text-lg font-display"
-              >
-                Start Your Free Trial
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
             <Link to="/about">
               <Button
-                variant="outline"
-                size="xl"
-                className="glass border-primary/30 px-8 py-6 text-lg font-display"
+                size="lg"
+                className="bg-gradient-primary hover:opacity-90 text-white shadow-glow group px-8 py-4 font-display"
               >
-                Learn More About Us
+                Find Out More
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </div>
