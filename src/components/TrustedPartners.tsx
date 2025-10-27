@@ -22,52 +22,49 @@ export const TrustedPartners = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
+    <section className="py-12 px-6 bg-muted/20">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <Badge className="glass px-6 py-3 mb-4 border-primary/20">
-            Trusted Partners
-          </Badge>
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+        <div className="text-center mb-8">
+          <h3 className="text-xl md:text-2xl font-display font-semibold text-muted-foreground mb-2">
             Backed by Industry Leaders
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Partnering with the world's most trusted technology providers to deliver secure, reliable, and cutting-edge solutions.
+          </h3>
+          <p className="text-sm text-muted-foreground/80 max-w-xl mx-auto">
+            Powered by cutting-edge technology from trusted platforms
           </p>
         </div>
 
         {/* Partner Logos */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto items-center">
           {partners.map((partner, index) => (
             <div
               key={index}
-              className="glass p-6 rounded-xl flex items-center justify-center hover-lift transition-all duration-300 border-border/30"
+              className="glass p-4 rounded-lg flex items-center justify-center hover:bg-background/50 transition-all duration-300"
             >
               <img
                 src={partner.logo}
                 alt={partner.name}
-                className="w-full h-auto opacity-60 hover:opacity-100 transition-opacity"
+                className="w-full max-w-[140px] h-auto opacity-50 hover:opacity-70 transition-opacity"
               />
             </div>
           ))}
         </div>
 
         {/* Trust Badges */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12">
-          <Badge variant="outline" className="px-4 py-2">
-            <Shield className="w-4 h-4 mr-2" />
+        <div className="flex flex-wrap justify-center gap-3 mt-8">
+          <Badge variant="outline" className="px-3 py-1.5 text-xs">
+            <Shield className="w-3 h-3 mr-1.5" />
             HIPAA Compliant
           </Badge>
-          <Badge variant="outline" className="px-4 py-2">
-            <Shield className="w-4 h-4 mr-2" />
+          <Badge variant="outline" className="px-3 py-1.5 text-xs">
+            <Shield className="w-3 h-3 mr-1.5" />
             SOC 2 Certified
           </Badge>
-          <Badge variant="outline" className="px-4 py-2">
-            <Shield className="w-4 h-4 mr-2" />
+          <Badge variant="outline" className="px-3 py-1.5 text-xs">
+            <Shield className="w-3 h-3 mr-1.5" />
             ISO 27001
           </Badge>
-          <Badge variant="outline" className="px-4 py-2">
-            <Shield className="w-4 h-4 mr-2" />
+          <Badge variant="outline" className="px-3 py-1.5 text-xs">
+            <Shield className="w-3 h-3 mr-1.5" />
             GDPR Ready
           </Badge>
         </div>

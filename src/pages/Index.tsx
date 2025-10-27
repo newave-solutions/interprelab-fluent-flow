@@ -10,21 +10,21 @@ const Index = () => {
   const painPoints = [
     {
       videoSrc: "/videos/lep-statistics.mp4",
-      title: "20 Million Americans Can't Access Quality Healthcare",
+      title: "20 Million Voices Unheard",
       description:
-        "Over 20 million Limited English Proficient (LEP) individuals in the United States struggle to receive quality healthcare due to language barriers. These marginalized communities face adverse outcomes—including higher mortality rates—because they cannot effectively communicate their needs. Quality interpretation isn't just helpful, it's life-saving.",
+        "Despite legal requirements under Title VI and Section 1557 of the ACA, Limited English Proficiency (LEP) patients face increased health risks due to interpretation quality issues.",
     },
     {
       videoSrc: "/videos/interpreter-stress.mp4",
-      title: "The Crushing Weight of Real-Time Complexity",
+      title: "Real-Time Precision Under Pressure",
       description:
-        "Medical interpreters face intense cognitive demands: listening intently, processing highly specialized terminology across countless medical fields, translating accurately under pressure, and managing the emotional toll of traumatic situations—all simultaneously. This mental juggling act requires exceptional focus and resilience to prevent burnout.",
+        "Despite legal requirements under Title VI and Section 1557 of the ACA, Limited English Proficiency (LEP) patients face increased health risks due to interpretation quality issues.",
     },
     {
       videoSrc: "/videos/terminology-gap.mp4",
-      title: "Isolated, Overwhelmed, and Under-Supported",
+      title: "Mastering Medicine Alone",
       description:
-        "With an overwhelming ratio of interpreters to Quality Assurance specialists, most interpreters receive minimal supervision, infrequent feedback, and limited professional development. Mastering terminology across cardiology, oncology, neurology, and dozens of other specialties feels impossible when you're navigating it alone.",
+        "Despite legal requirements under Title VI and Section 1557 of the ACA, Limited English Proficiency (LEP) patients face increased health risks due to interpretation quality issues.",
     },
   ];
 
@@ -48,9 +48,9 @@ const Index = () => {
       {/* Main content */}
       <main>
         <SolutionHero />
-        <TrustedPartners />
         <Testimonials />
         <FAQ />
+        <TrustedPartners />
       </main>
       
       <Footer />
