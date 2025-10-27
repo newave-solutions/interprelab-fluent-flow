@@ -65,7 +65,7 @@ export const FullScreenVideoHero = ({
         muted
         loop
         preload="auto"
-        poster={`https://placehold.co/1920x1080/1e293b/ffffff?text=Video+${index + 1}`}
+        poster={index === 0 ? "/videos/lep-statistics-poster.jpg" : index === 1 ? "/videos/interpreter-stress-poster.jpg" : "/videos/terminology-gap-poster.jpg"}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>

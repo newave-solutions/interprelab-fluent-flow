@@ -33,15 +33,18 @@ export const SolutionHero = () => {
       <div className="container mx-auto">
         {/* Headline */}
         <div className="text-center mb-16 space-y-6 animate-fade-in">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Embrace the Change,
             </span>
             <br />
             <span className="text-foreground">Don't Get Replaced By It</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto font-sans">
-            Three powerful tools designed to elevate medical interpreters through AI-powered feedback and coaching.
+          <p className="text-xl md:text-2xl text-muted-foreground/90 max-w-4xl mx-auto font-sans leading-relaxed">
+            The InterpreLab Ecosystem: AI-powered solutions designed to eradicate the human margin of error in medical interpretation
+          </p>
+          <p className="text-lg md:text-xl text-muted-foreground/80 max-w-3xl mx-auto font-sans leading-relaxed">
+            We're contributing to the UN SDG 2030 goals by transforming healthcare communication on a global scale—ensuring every voice is heard, every diagnosis is clear, and every patient receives equitable care.
           </p>
         </div>
 
