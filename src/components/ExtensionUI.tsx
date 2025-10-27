@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Mic, 
-  Square, 
-  Volume2, 
-  VolumeX, 
-  Minimize2, 
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
+import {
+  Mic,
+  Square,
+  Volume2,
+  VolumeX,
+  Minimize2,
   Settings,
   Languages,
   Stethoscope,
@@ -71,7 +71,7 @@ export const InterpreBotUI = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Button 
+                    <Button
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                       onClick={() => setShowAssessment(true)}
                     >
@@ -91,7 +91,7 @@ export const InterpreBotUI = () => {
                     <p className="text-sm font-medium">Assessment in Progress...</p>
                     <p className="text-xs text-muted-foreground">Analyzing your interpretation skills</p>
                   </div>
-                  
+
                   <div className="space-y-2">
                     {['Voice Control', 'Grammar & Syntax', 'Vocabulary', 'Ethics'].map((skill, i) => (
                       <div key={skill} className="flex justify-between items-center text-xs">
@@ -127,7 +127,7 @@ export const ExtensionUI = () => {
       timestamp: new Date()
     },
     {
-      id: '2', 
+      id: '2',
       title: 'Medical Terminology Agent',
       content: 'Detected: chest pain (dolor torácico), shortness of breath (disnea), cardiovascular assessment needed',
       type: 'medical',
@@ -136,7 +136,7 @@ export const ExtensionUI = () => {
     },
     {
       id: '3',
-      title: 'Cultural Context Agent', 
+      title: 'Cultural Context Agent',
       content: 'Patient communication style: Direct. Cultural background: Latin American. Adaptation recommended.',
       type: 'cultural',
       confidence: 92,
@@ -182,10 +182,10 @@ export const ExtensionUI = () => {
           'Live suggestion: "El médico va a revisar su presión arterial"',
           'Analytics: Session quality improving, confidence up 3%'
         ];
-        
+
         const randomUpdate = updates[Math.floor(Math.random() * updates.length)];
         const types: Array<'translation' | 'medical' | 'cultural' | 'analysis'> = ['translation', 'medical', 'cultural', 'analysis'];
-        
+
         setContextWindows(prev => {
           const newWindow: ContextWindow = {
             id: Date.now().toString(),
@@ -226,8 +226,8 @@ export const ExtensionUI = () => {
   if (isMinimized) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size="icon"
           onClick={() => setIsMinimized(false)}
           className="w-14 h-14 rounded-full glow animate-pulse-glow bg-card/95 backdrop-blur-sm"
@@ -252,7 +252,7 @@ export const ExtensionUI = () => {
                   <p className="text-xs text-muted-foreground">Real-time AI Processing Pipeline</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">
                   6 Agents Active
@@ -300,11 +300,11 @@ export const ExtensionUI = () => {
                     </>
                   )}
                 </Button>
-                
+
                 <Badge variant="outline" className="text-xs">
                   EN → ES Medical
                 </Badge>
-                
+
                 <Badge className="bg-success text-success-foreground text-xs">
                   WebSocket Active
                 </Badge>
@@ -338,7 +338,7 @@ export const ExtensionUI = () => {
                   </Card>
                 ))}
               </div>
-              
+
               {isRecording && (
                 <div className="flex items-center gap-2 p-3 bg-success/10 rounded-lg border border-success/20 mt-4">
                   <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
@@ -347,7 +347,7 @@ export const ExtensionUI = () => {
                   </span>
                 </div>
               )}
-              
+
               {/* Data Flow Visualization */}
               <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
                 <div className="text-xs text-primary-foreground mb-2 font-medium">Data Flow Pipeline:</div>

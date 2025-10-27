@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Quote } from "lucide-react";
 
 export const Testimonials = () => {
@@ -20,7 +20,7 @@ export const Testimonials = () => {
     {
       name: "Carlos Mendez",
       role: "Court Interpreter",
-      location: "Miami, FL", 
+      location: "Miami, FL",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       quote: "The ethics training and cultural context features are game-changers. InterpreBot's analysis helped me identify blind spots I never knew I had.",
       rating: 5,
@@ -36,7 +36,7 @@ export const Testimonials = () => {
       specialty: "Training"
     },
     {
-      name: "Ahmed Hassan", 
+      name: "Ahmed Hassan",
       role: "Freelance Medical Interpreter",
       location: "Houston, TX",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
@@ -84,12 +84,12 @@ export const Testimonials = () => {
 
   return (
     <section className="py-20 px-6 relative">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-      
+
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16 animate-fade-in">
           <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
@@ -105,7 +105,7 @@ export const Testimonials = () => {
 
         <div className="max-w-4xl mx-auto">
           <div className="relative overflow-hidden">
-            <div 
+            <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >

@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "outline" | "ghost" | "hero" | "glass";
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "icon";
   asChild?: boolean;
 }
 
@@ -23,7 +23,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       sm: "h-9 px-3 text-sm",
       md: "h-10 px-4 py-2",
       lg: "h-11 px-8",
-      xl: "h-12 px-8 text-lg"
+      xl: "h-12 px-8 text-lg",
+      icon: "h-10 w-10"
     };
 
     if (asChild) {

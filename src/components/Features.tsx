@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { 
+import { Badge } from "./ui/badge";
+import { Card, CardContent } from "./ui/card";
+import {
   Monitor,
   TrendingUp,
   BookOpen,
@@ -57,12 +57,12 @@ export const Features = () => {
 
   return (
     <section className="py-20 px-6 relative">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-      
+
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16 animate-fade-in">
           <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
@@ -72,14 +72,14 @@ export const Features = () => {
             Comprehensive Features for Professional Interpreters
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            From continuous monitoring to collaborative learning, InterpreLab provides 
+            From continuous monitoring to collaborative learning, InterpreLab provides
             everything interpreters need to excel in high-stakes environments.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
-            <Card 
+            <Card
               key={feature.title}
               className="bg-card/50 border-border/50 backdrop-blur-sm hover-lift group"
               style={{ animationDelay: `${index * 100}ms` }}

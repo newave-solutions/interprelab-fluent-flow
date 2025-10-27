@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ArrowRight, Play, Shield, Zap, Users } from "lucide-react";
-import heroImage from "@/assets/hero-interprelab.jpg";
+import heroImage from "../assets/hero-interprelab.jpg";
 import { Link } from "react-router-dom";
 
 export const Hero = () => {

@@ -1,4 +1,4 @@
-import { Toaster as Sonner } from "./components/ui/sonner";
+
 import { Routes, Route } from 'react-router-dom';
 import NotFound from "./pages/NotFound";
 import InterpreBot from "./pages/InterpreBot";
@@ -14,7 +14,7 @@ import Home from "./pages/Home";
 function App() {
   return (
     <>
-      <Sonner />
+
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

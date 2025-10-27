@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { Chrome } from "lucide-react";
 import { ExtensionUI } from "./ExtensionUI";
 
@@ -9,8 +9,8 @@ export const InterpreCoachButton = () => {
   return (
     <>
       <div className="fixed top-20 right-6 z-40">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size="sm"
           onClick={() => setShowExtension(!showExtension)}
           className="bg-card/95 backdrop-blur-sm border-success/50 text-success hover:bg-success/10"
@@ -19,7 +19,7 @@ export const InterpreCoachButton = () => {
           InterpreCoach Demo
         </Button>
       </div>
-      
+
       {showExtension && <ExtensionUI />}
     </>
   );

@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
+import { Badge } from "./ui/badge";
+import { Card, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
+import {
   Play,
   Users,
   BookOpen,
@@ -45,12 +45,12 @@ export const Resources = () => {
 
   return (
     <section className="py-20 px-6 relative">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-      
+
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16 animate-fade-in">
           <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
@@ -60,14 +60,14 @@ export const Resources = () => {
             Everything You Need to Excel
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Access comprehensive training materials, practice scenarios, and professional development resources 
+            Access comprehensive training materials, practice scenarios, and professional development resources
             designed specifically for medical and legal interpreters.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {resources.map((resource, index) => (
-            <Card 
+            <Card
               key={resource.title}
               className="bg-card/50 border-border/50 backdrop-blur-sm hover-lift group"
               style={{ animationDelay: `${index * 100}ms` }}
@@ -107,9 +107,9 @@ export const Resources = () => {
               </div>
               <h3 className="text-2xl font-bold text-foreground">InterpreterHub</h3>
             </div>
-            
+
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Connect with the global interpreter community. Share experiences, discuss challenging situations, 
+              Connect with the global interpreter community. Share experiences, discuss challenging situations,
               and discover new opportunities in the field.
             </p>
 
@@ -126,7 +126,7 @@ export const Resources = () => {
                   </Button>
                 </CardContent>
               </Card>
-              
+
               <Card className="bg-card/30 border-border/50">
                 <CardContent className="p-6 text-center space-y-3">
                   <Briefcase className="w-8 h-8 mx-auto text-success" />
