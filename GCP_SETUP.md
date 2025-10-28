@@ -30,7 +30,10 @@ from sendgrid.helpers.mail import Mail
 
 # IMPORTANT: Store your SendGrid API Key in Secret Manager
 # and access it securely.
-SENDGRID_API_KEY = "YOUR_SENDGRID_API_KEY"
+import os
+# ...
+# Load the API key from an environment variable
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDER_EMAIL = "admin.ceo@interprelab.com"
 RECIPIENT_EMAIL = "admin.ceo@interprelab.com"
 
