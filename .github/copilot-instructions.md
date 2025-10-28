@@ -33,7 +33,6 @@
 
 ## Integration Points
 - **Deployment:** Standard Vite/React build. Deploy using your preferred platform (e.g., Vercel, Netlify, GCP Cloud Run, Docker).
-## Integration Points
 - **Deployment:** Standard Vite/React build. Deploy using your preferred platform (e.g., Vercel, Netlify, GCP Cloud Run, Docker).
 - **Custom Domain:** The intended production domain is `interprelab.com`. Configure DNS and hosting as needed for your provider.
 - **Docker:** See `Dockerfile` and `nginx.conf` for container deployment.
