@@ -13,9 +13,15 @@ const InterpreCoach = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-                Chrome Extension
-              </Badge>
+              <div className="flex flex-wrap gap-3 mb-6">
+                <Badge className="bg-primary/10 text-primary border-primary/20">
+                  Chrome Extension
+                </Badge>
+                <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
+                  <Shield className="w-3 h-3 mr-1" />
+                  HIPAA Compliant
+                </Badge>
+              </div>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
                 InterpreCoach
               </h1>
