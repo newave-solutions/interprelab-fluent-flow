@@ -49,6 +49,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
       submenu: [
         { label: 'InterpreBot', href: '/interprebot' },
         { label: 'InterpreCoach', href: '/interprecoach' },
+        { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreHub', href: '/interpre-hub' },
       ]
