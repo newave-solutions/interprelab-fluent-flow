@@ -1,10 +1,22 @@
 import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 import { corsHeaders } from "../_shared/cors.ts";
-import { Tables } from "../../integrations/supabase/types"; // Assuming this path is correct
 
 // Type definition for a call log from the database
-type CallLog = Tables<'call_logs'>;
+interface CallLog {
+  id: string;
+  user_id: string;
+  start_time: string;
+  end_time?: string;
+  duration_seconds?: number;
+  language_pair?: string;
+  interpretation_type?: string;
+  client_name?: string;
+  earnings?: number;
+  currency?: string;
+  notes?: string;
+  created_at?: string;
+}
 
 /**
  * Calculates the start and end date for a given period.
