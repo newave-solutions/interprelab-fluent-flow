@@ -76,7 +76,7 @@ export default function InterpreHub() {
   ];
 
   return (
-    <Layout showInterpreBot={false}>
+    <Layout>
       <div className="min-h-screen bg-background">
         <div className="flex">
           {/* Sidebar */}
