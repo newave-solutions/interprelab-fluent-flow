@@ -3,17 +3,21 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-export default function Navigation() {
+interface NavigationProps {
+  transparent?: boolean;
+}
+
+export default function Navigation({ transparent = false }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
+    <nav className={`fixed top-0 left-0 right-0 z-50 ${transparent ? 'bg-transparent' : 'bg-background/95 backdrop-blur-sm border-b border-border/50'}`}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img
-              src="/interprelab-logo.svg"
+              src="/logo.png"
               alt="InterpreLab"
               className="h-8 w-auto"
             />
@@ -32,6 +36,12 @@ export default function Navigation() {
             </Link>
             <Link to="/interprecoach" className="text-sm font-medium hover:text-primary transition-colors">
               InterpreCoach
+            </Link>
+            <Link to="/interprestudy" className="text-sm font-medium hover:text-primary transition-colors">
+              InterpreStudy
+            </Link>
+            <Link to="/interpretrack" className="text-sm font-medium hover:text-primary transition-colors">
+              InterpreTrack
             </Link>
             <Link to="/resources" className="text-sm font-medium hover:text-primary transition-colors">
               Resources
@@ -92,6 +102,20 @@ export default function Navigation() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 InterpreCoach
+              </Link>
+              <Link
+                to="/interprestudy"
+                className="text-sm font-medium hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                InterpreStudy
+              </Link>
+              <Link
+                to="/interpretrack"
+                className="text-sm font-medium hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                InterpreTrack
               </Link>
               <Link
                 to="/resources"

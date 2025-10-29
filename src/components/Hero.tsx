@@ -3,8 +3,17 @@ import { Badge } from "./ui/badge";
 import { ArrowRight, Play, Shield, Zap, Users } from "lucide-react";
 import heroImage from "../assets/hero-interprelab.jpg";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export const Hero = () => {
+  const [showVideo, setShowVideo] = useState(false);
+
+  const sampleVideos = [
+    { src: "/videos/placeholder-video.html", poster: "/videos/lep-statistics-poster.jpg", title: "LEP Statistics" },
+    { src: "/videos/placeholder-video.html", poster: "/videos/interpreter-stress-poster.jpg", title: "Interpreter Stress" },
+    { src: "/videos/placeholder-video.html", poster: "/videos/terminology-gap-poster.jpg", title: "Terminology Gap" }
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background with overlay */}
@@ -30,29 +39,25 @@ export const Hero = () => {
 
            {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
-            <span className="bg-gradient-primary bg-clip-text text-transparent animate-pulse-glow flex items-center justify-center gap-4">
+            <span className="bg-gradient-primary bg-clip-text text-transparent flex items-center justify-center gap-4">
               <img
-                src="/interprelab-logo.svg"
+                src="/logo.png"
                 alt="InterpreLab Logo"
                 className="h-16 md:h-20 lg:h-24 w-auto inline-block"
               />
-              InterpreLab
+              Master Medical
             </span>
             <br />
             <span className="text-foreground">
-              Where Innovation Meets
-            </span>
-            <br />
-            <span className="text-muted-foreground text-4xl md:text-5xl lg:text-6xl">
-              Interpretation Excellence
+              Interpretation
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up">
-            Discover the power of our integrated ecosystem: <strong>InterpreLab Platform</strong> for comprehensive training,
-            <strong>InterpreCoach Extension</strong> for real-time assistance, and <strong>InterpreBot Analyst</strong>
-            for intelligent skill development - all unified under one innovative laboratory of interpretation technology.
+            Complete ecosystem with <strong>InterpreBot</strong> for skill assessment,
+            <strong>InterpreCoach</strong> for live support, <strong>InterpreStudy</strong> for comprehensive training,
+            and <strong>InterpreTrack</strong> for performance analytics - all unified under one innovative platform.
           </p>
 
           {/* Key Features */}
@@ -92,13 +97,40 @@ export const Hero = () => {
               </Link>
             </Button>
 
-            <Button variant="glass" size="xl" className="group" asChild>
-              <Link to="/interprecoach">
-                <Play className="w-5 h-5 mr-2" />
-                Meet InterpreCoach
+            <Button variant="glass" size="xl" className="group" onClick={() => setShowVideo(!showVideo)}>
+              <Play className="w-5 h-5 mr-2" />
+              {showVideo ? "Hide Videos" : "Watch Demo"}
+            </Button>
+
+            <Button variant="outline" size="xl" className="group" asChild>
+              <Link to="/interpretrack">
+                Track Your Calls
               </Link>
             </Button>
           </div>
+
+          {/* Sample Videos Section */}
+          {showVideo && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 animate-slide-up">
+              {sampleVideos.map((video, index) => (
+                <div key={index} className="glass rounded-lg overflow-hidden group cursor-pointer">
+                  <div className="relative aspect-video">
+                    <img
+                      src={video.poster}
+                      alt={video.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Play className="w-12 h-12 text-white" />
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-foreground">{video.title}</h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Trust Indicators */}
           <div className="pt-8 text-sm text-muted-foreground animate-slide-up">
