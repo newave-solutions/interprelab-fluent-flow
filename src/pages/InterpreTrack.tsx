@@ -149,9 +149,6 @@ const InterpreTrack = () => {
                 <p className="text-sm font-medium text-primary mt-2 mb-3">
                   Don't want to do it manually? Let InterpreTrack take care of everything for you! Just sit back and watch your money come in!
                 </p>
-                <CardDescription>
-                  Start and stop tracking with one click. No manual timers or complicated setup.
-                </CardDescription>
               </CardHeader>
             </Card>
 
