@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "InterpreCoach - HIPAA Compliant Medical Interpretation Assistant",
-  "version": "1.0.0",
-  "description": "Real-time medical interpretation assistance with HIPAA-compliant PHI protection and de-identification",
+  "version": "2.0.0",
+  "description": "Real-time medical interpretation assistance with HIPAA-compliant PHI protection and Google Medical AI integration",
   "permissions": [
     "activeTab",
     "storage"
@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content-script.js"],
+      "js": ["content-script-optimized.js"],
       "css": ["overlay-styles.css"],
       "run_at": "document_end"
     }
@@ -36,7 +36,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["overlay-styles.css"],
+      "resources": ["overlay-styles.css", "config.json"],
       "matches": ["<all_urls>"]
     }
   ]

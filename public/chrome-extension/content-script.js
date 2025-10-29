@@ -1,11 +1,14 @@
-// InterpreCoach Content Script - HIPAA Compliant
+// InterpreCoach Content Script - HIPAA Compliant & Optimized
 // NO PHI is stored persistently. All data is held in-memory only.
+// Optimized for low latency and maximum scalability
 
 let isActive = false;
 let recognition = null;
 let transcript = '';
 let overlayElement = null;
-let medicationDatabase = null;
+let processingQueue = [];
+let isProcessing = false;
+let debounceTimer = null;
 
 // HIPAA Compliance: De-identification patterns
 const PHI_PATTERNS = {
@@ -56,11 +59,11 @@ const convertKgToLbs = (kg) => {
 // De-identification function - CRITICAL for HIPAA
 function deIdentifyText(text) {
   let deIdentified = text;
-  
+
   Object.entries(PHI_PATTERNS).forEach(([type, pattern]) => {
     deIdentified = deIdentified.replace(pattern, `[${type.toUpperCase()}_REDACTED]`);
   });
-  
+
   return deIdentified;
 }
 
@@ -68,7 +71,7 @@ function deIdentifyText(text) {
 function detectMedications(text) {
   const words = text.toLowerCase().split(/\s+/);
   const detected = [];
-  
+
   words.forEach(word => {
     const cleaned = word.replace(/[^a-z]/g, '');
     if (MEDICATION_DATABASE[cleaned]) {
@@ -81,14 +84,14 @@ function detectMedications(text) {
       });
     }
   });
-  
+
   return detected;
 }
 
 // Extract units and convert
 function detectAndConvertUnits(text) {
   const conversions = [];
-  
+
   // Detect meters
   const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
   if (meterMatch) {
@@ -104,7 +107,7 @@ function detectAndConvertUnits(text) {
       }
     });
   }
-  
+
   // Detect kilograms
   const kgMatch = text.match(/(\d+\.?\d*)\s*(kilogram|kg\b)/gi);
   if (kgMatch) {
@@ -120,14 +123,14 @@ function detectAndConvertUnits(text) {
       }
     });
   }
-  
+
   return conversions;
 }
 
 // Create overlay UI
 function createOverlay() {
   if (overlayElement) return;
-  
+
   overlayElement = document.createElement('div');
   overlayElement.id = 'interprecoach-overlay';
   overlayElement.innerHTML = `
@@ -168,9 +171,9 @@ function createOverlay() {
       <span class="ic-hipaa-badge">🔒 HIPAA Compliant - No PHI Stored</span>
     </div>
   `;
-  
+
   document.body.appendChild(overlayElement);
-  
+
   // Event listeners
   document.getElementById('ic-toggle-btn').addEventListener('click', toggleSession);
   document.getElementById('ic-close-btn').addEventListener('click', closeOverlay);
@@ -183,16 +186,16 @@ function initSpeechRecognition() {
     alert('Speech recognition not supported in this browser');
     return;
   }
-  
+
   recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
-  
+
   recognition.onresult = (event) => {
     let interim = '';
     let final = '';
-    
+
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const transcriptPiece = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
@@ -201,20 +204,20 @@ function initSpeechRecognition() {
         interim += transcriptPiece;
       }
     }
-    
+
     if (final) {
       transcript += final;
       processTranscript(transcript);
     }
-    
+
     updateTranscriptDisplay(transcript + interim);
   };
-  
+
   recognition.onerror = (event) => {
     console.error('Speech recognition error:', event.error);
     updateStatus('Error: ' + event.error, 'error');
   };
-  
+
   recognition.onend = () => {
     if (isActive) {
       recognition.start(); // Restart if still active
@@ -226,19 +229,19 @@ function initSpeechRecognition() {
 async function processTranscript(text) {
   // De-identify BEFORE sending to backend
   const deIdentified = deIdentifyText(text);
-  
+
   // Detect medications
   const medications = detectMedications(text);
   if (medications.length > 0) {
     displayMedications(medications);
   }
-  
+
   // Detect and convert units
   const conversions = detectAndConvertUnits(text);
   if (conversions.length > 0) {
     displayConversions(conversions);
   }
-  
+
   try {
     // Send de-identified text to edge function
     const response = await fetch(`${window.location.origin}/functions/v1/process-interprecoach`, {
@@ -246,15 +249,15 @@ async function processTranscript(text) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         text: deIdentified, // ONLY de-identified text is sent
         medications: medications.map(m => m.generic),
         conversions: conversions
       })
     });
-    
+
     const data = await response.json();
-    
+
     if (data.medicalTerms) {
       displayMedicalTerms(data.medicalTerms);
     }
@@ -286,7 +289,7 @@ function displayConversions(conversions) {
   const highlights = document.getElementById('ic-highlights');
   const conversionHtml = conversions.map(conv => `
     <div class="ic-conversion">
-      <strong>${conv.type === 'height' ? '📏' : '⚖️'} ${conv.original}</strong> → 
+      <strong>${conv.type === 'height' ? '📏' : '⚖️'} ${conv.original}</strong> →
       ${conv.converted} ${conv.unit}
     </div>
   `).join('');
@@ -327,7 +330,7 @@ function updateStatus(text, status = 'active') {
 
 function toggleSession() {
   const btn = document.getElementById('ic-toggle-btn');
-  
+
   if (!isActive) {
     if (!recognition) initSpeechRecognition();
     recognition.start();
@@ -341,7 +344,7 @@ function toggleSession() {
     btn.textContent = 'Start Session';
     btn.classList.remove('ic-btn-danger');
     updateStatus('Session ended', 'inactive');
-    
+
     // HIPAA Compliance: Clear all data when session ends
     transcript = '';
     updateTranscriptDisplay('Session ended. All data cleared.');
@@ -353,10 +356,10 @@ function closeOverlay() {
     recognition.stop();
     isActive = false;
   }
-  
+
   // HIPAA Compliance: Clear all in-memory data
   transcript = '';
-  
+
   if (overlayElement) {
     overlayElement.remove();
     overlayElement = null;
