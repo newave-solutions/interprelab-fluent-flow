@@ -1,0 +1,19 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": false,
+  "deno.config": "./deno.json",
+  "deno.importMap": "./import_map.json",
+  "typescript.tsdk": "../../node_modules/typescript/lib",
+  "typescript.validate.enable": false,
+  "javascript.validate.enable": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true,
+    "https://esm.sh": true
+  },
+  "deno.codeLens.implementations": true,
+  "deno.codeLens.references": true
+}

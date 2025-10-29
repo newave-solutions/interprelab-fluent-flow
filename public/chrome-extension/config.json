@@ -1,6 +1,6 @@
 {
-  "supabaseUrl": "YOUR_SUPABASE_PROJECT_URL",
-  "supabaseAnonKey": "YOUR_SUPABASE_ANON_KEY",
-  "googleCloudProject": "YOUR_GOOGLE_CLOUD_PROJECT_ID",
+  "supabaseUrl": "https://iokgkrnbawhizmuejluz.supabase.co",
+  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlva2drcm5iYXdoaXptdWVqbHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2Mjg5ODcsImV4cCI6MjA3NzIwNDk4N30.GTIKRwPUu44PA209OFLj1WaEEGgKwbBaO0iTc7P-UtY",
+  "googleCloudProject": "interprelab-eco-landing-page",
   "googleMedicalAIEnabled": true
 }

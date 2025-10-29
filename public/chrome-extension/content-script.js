@@ -1,7 +1,24 @@
-// InterpreCoach Content Script - HIPAA Compliant & Optimized
-// NO PHI is stored persistently. All data is held in-memory only.
-// Optimized for low latency and maximum scalability
+// InterpreCoach Content Script - UNIFIED & OPTIMIZED
+// Version: 2.0.0 - Production Ready
+// HIPAA Compliant: NO PHI stored persistently. All data held in-memory only.
+// Optimized for low latency, maximum scalability, and Google Medical AI integration
 
+// ============================================================================
+// CONFIGURATION & STATE
+// ============================================================================
+
+const CONFIG = {
+  DEBOUNCE_DELAY: 1500,        // Wait 1.5s after speech stops before processing
+  API_TIMEOUT: 5000,            // 5-second timeout for API calls
+  QUEUE_DELAY: 500,             // 500ms delay between queued requests
+  CACHE_TTL: 300000,            // 5-minute cache TTL
+  MAX_QUEUE_SIZE: 10,           // Maximum items in processing queue
+  SUPABASE_URL: null,           // Loaded from config.json
+  SUPABASE_KEY: null,           // Loaded from config.json
+  GOOGLE_AI_ENABLED: true       // Enable Google Medical AI
+};
+
+// State management
 let isActive = false;
 let recognition = null;
 let transcript = '';
@@ -9,20 +26,27 @@ let overlayElement = null;
 let processingQueue = [];
 let isProcessing = false;
 let debounceTimer = null;
+let cache = new Map();
 
-// HIPAA Compliance: De-identification patterns
+// ============================================================================
+// HIPAA COMPLIANCE: PHI DE-IDENTIFICATION PATTERNS
+// ============================================================================
+
 const PHI_PATTERNS = {
-  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
+  names: /\b(?:Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g,
   phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
   ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
-  dates: /\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b/gi,
-  mrn: /\b(MRN|Medical Record|Patient ID|Record Number)[\s:]*[A-Z0-9-]+\b/gi,
+  dates: /\b(?:\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b/gi,
+  mrn: /\b(?:MRN|Medical Record|Patient ID|Record Number)[\s:]*[A-Z0-9-]+\b/gi,
   address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir)\b/gi,
   zipcode: /\b\d{5}(?:-\d{4})?\b/g
 };
 
-// Medication database with generic/brand names
+// ============================================================================
+// MEDICAL KNOWLEDGE BASE
+// ============================================================================
+
 const MEDICATION_DATABASE = {
   'acetaminophen': { generic: 'acetaminophen', brand: ['Tylenol', 'Paracetamol'], category: 'analgesic' },
   'tylenol': { generic: 'acetaminophen', brand: ['Tylenol'], category: 'analgesic' },
@@ -44,6 +68,10 @@ const MEDICATION_DATABASE = {
   'zoloft': { generic: 'sertraline', brand: ['Zoloft'], category: 'SSRI' }
 };
 
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
 // Unit conversion helpers
 const convertMetersToFeet = (meters) => {
   const feet = meters * 3.28084;
@@ -52,29 +80,46 @@ const convertMetersToFeet = (meters) => {
   return `${wholeFeet}'${inches}"`;
 };
 
-const convertKgToLbs = (kg) => {
-  return (kg * 2.20462).toFixed(1);
-};
+const convertKgToLbs = (kg) => (kg * 2.20462).toFixed(1);
 
-// De-identification function - CRITICAL for HIPAA
+// Load configuration from config.json
+async function loadConfig() {
+  try {
+    const response = await fetch(chrome.runtime.getURL('config.json'));
+    const config = await response.json();
+    CONFIG.SUPABASE_URL = config.supabaseUrl;
+    CONFIG.SUPABASE_KEY = config.supabaseAnonKey;
+    CONFIG.GOOGLE_AI_ENABLED = config.googleMedicalAIEnabled;
+    console.log('✅ Configuration loaded successfully');
+  } catch (error) {
+    console.error('❌ Failed to load configuration:', error);
+  }
+}
+
+// ============================================================================
+// HIPAA COMPLIANCE: DE-IDENTIFICATION
+// ============================================================================
+
 function deIdentifyText(text) {
   let deIdentified = text;
-
-  Object.entries(PHI_PATTERNS).forEach(([type, pattern]) => {
+  for (const [type, pattern] of Object.entries(PHI_PATTERNS)) {
     deIdentified = deIdentified.replace(pattern, `[${type.toUpperCase()}_REDACTED]`);
-  });
-
+  }
   return deIdentified;
 }
 
-// Detect medications in text
+// ============================================================================
+// LOCAL PROCESSING (INSTANT, NO API CALLS)
+// ============================================================================
+
 function detectMedications(text) {
   const words = text.toLowerCase().split(/\s+/);
   const detected = [];
+  const seen = new Set();
 
-  words.forEach(word => {
+  for (const word of words) {
     const cleaned = word.replace(/[^a-z]/g, '');
-    if (MEDICATION_DATABASE[cleaned]) {
+    if (MEDICATION_DATABASE[cleaned] && !seen.has(cleaned)) {
       const med = MEDICATION_DATABASE[cleaned];
       detected.push({
         detected: word,
@@ -82,108 +127,115 @@ function detectMedications(text) {
         brands: med.brand,
         category: med.category
       });
+      seen.add(cleaned);
     }
-  });
+  }
 
   return detected;
 }
 
-// Extract units and convert
 function detectAndConvertUnits(text) {
   const conversions = [];
 
   // Detect meters
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
-  if (meterMatch) {
-    meterMatch.forEach(match => {
-      const value = parseFloat(match);
-      if (!isNaN(value)) {
-        conversions.push({
-          original: match,
-          type: 'height',
-          converted: convertMetersToFeet(value),
-          unit: 'feet/inches'
-        });
-      }
-    });
+  const meterRegex = /(\d+\.?\d*)\s*(?:meter|metres|m\b)/gi;
+  let match;
+  while ((match = meterRegex.exec(text)) !== null) {
+    const value = parseFloat(match[1]);
+    if (!isNaN(value)) {
+      conversions.push({
+        original: match[0],
+        type: 'height',
+        converted: convertMetersToFeet(value),
+        unit: 'feet/inches'
+      });
+    }
   }
 
   // Detect kilograms
-  const kgMatch = text.match(/(\d+\.?\d*)\s*(kilogram|kg\b)/gi);
-  if (kgMatch) {
-    kgMatch.forEach(match => {
-      const value = parseFloat(match);
-      if (!isNaN(value)) {
-        conversions.push({
-          original: match,
-          type: 'weight',
-          converted: convertKgToLbs(value),
-          unit: 'lbs'
-        });
-      }
-    });
+  const kgRegex = /(\d+\.?\d*)\s*(?:kilogram|kg\b)/gi;
+  while ((match = kgRegex.exec(text)) !== null) {
+    const value = parseFloat(match[1]);
+    if (!isNaN(value)) {
+      conversions.push({
+        original: match[0],
+        type: 'weight',
+        converted: convertKgToLbs(value),
+        unit: 'lbs'
+      });
+    }
   }
 
   return conversions;
 }
 
-// Create overlay UI
+// ============================================================================
+// UI CREATION & MANAGEMENT
+// ============================================================================
+
 function createOverlay() {
   if (overlayElement) return;
 
-  overlayElement = document.createElement('div');
-  overlayElement.id = 'interprecoach-overlay';
-  overlayElement.innerHTML = `
-    <div class="ic-header">
-      <div class="ic-title">
-        <div class="ic-icon">🎤</div>
-        <span>InterpreCoach</span>
+  const template = document.createElement('template');
+  template.innerHTML = `
+    <div id="interprecoach-overlay">
+      <div class="ic-header">
+        <div class="ic-title">
+          <div class="ic-icon">🎤</div>
+          <span>InterpreCoach AI</span>
+        </div>
+        <div class="ic-controls">
+          <button id="ic-toggle-btn" class="ic-btn-primary">Start Session</button>
+          <button id="ic-minimize-btn" class="ic-btn-icon">−</button>
+          <button id="ic-close-btn" class="ic-btn-icon">×</button>
+        </div>
       </div>
-      <div class="ic-controls">
-        <button id="ic-toggle-btn" class="ic-btn-primary">Start Session</button>
-        <button id="ic-minimize-btn" class="ic-btn-icon">−</button>
-        <button id="ic-close-btn" class="ic-btn-icon">×</button>
+      <div class="ic-content">
+        <div class="ic-status">
+          <span class="ic-status-indicator"></span>
+          <span id="ic-status-text">Ready</span>
+        </div>
+        <div class="ic-section">
+          <h3>Live Transcript</h3>
+          <div id="ic-transcript" class="ic-transcript">Waiting for speech...</div>
+        </div>
+        <div class="ic-section">
+          <h3>AI Insights</h3>
+          <div id="ic-highlights" class="ic-highlights">No insights yet</div>
+        </div>
+        <div class="ic-section">
+          <h3>Medical Terms</h3>
+          <div id="ic-terms" class="ic-terms">No medical terms detected</div>
+        </div>
+        <div class="ic-section">
+          <h3>Medications</h3>
+          <div id="ic-medications" class="ic-medications">No medications detected</div>
+        </div>
       </div>
-    </div>
-    <div class="ic-content">
-      <div class="ic-status">
-        <span class="ic-status-indicator"></span>
-        <span id="ic-status-text">Ready</span>
+      <div class="ic-footer">
+        <span class="ic-hipaa-badge">🔒 HIPAA Compliant - Google Medical AI</span>
       </div>
-      <div class="ic-section">
-        <h3>Live Transcript</h3>
-        <div id="ic-transcript" class="ic-transcript">Waiting for speech...</div>
-      </div>
-      <div class="ic-section">
-        <h3>Key Highlights</h3>
-        <div id="ic-highlights" class="ic-highlights">No highlights yet</div>
-      </div>
-      <div class="ic-section">
-        <h3>Medical Terms</h3>
-        <div id="ic-terms" class="ic-terms">No medical terms detected</div>
-      </div>
-      <div class="ic-section">
-        <h3>Medications</h3>
-        <div id="ic-medications" class="ic-medications">No medications detected</div>
-      </div>
-    </div>
-    <div class="ic-footer">
-      <span class="ic-hipaa-badge">🔒 HIPAA Compliant - No PHI Stored</span>
     </div>
   `;
 
+  overlayElement = template.content.firstElementChild;
   document.body.appendChild(overlayElement);
 
-  // Event listeners
-  document.getElementById('ic-toggle-btn').addEventListener('click', toggleSession);
-  document.getElementById('ic-close-btn').addEventListener('click', closeOverlay);
-  document.getElementById('ic-minimize-btn').addEventListener('click', minimizeOverlay);
+  // Event delegation for better performance
+  overlayElement.addEventListener('click', (e) => {
+    if (e.target.id === 'ic-toggle-btn') toggleSession();
+    else if (e.target.id === 'ic-close-btn') closeOverlay();
+    else if (e.target.id === 'ic-minimize-btn') minimizeOverlay();
+  });
 }
 
-// Initialize speech recognition
+// ============================================================================
+// SPEECH RECOGNITION
+// ============================================================================
+
 function initSpeechRecognition() {
   if (!('webkitSpeechRecognition' in window)) {
-    alert('Speech recognition not supported in this browser');
+    alert('Speech recognition not supported in this browser. Please use Chrome.');
     return;
   }
 
@@ -191,26 +243,28 @@ function initSpeechRecognition() {
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
+  recognition.maxAlternatives = 1; // Optimize for performance
+
+  let finalTranscript = '';
 
   recognition.onresult = (event) => {
     let interim = '';
-    let final = '';
 
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const transcriptPiece = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
-        final += transcriptPiece + ' ';
+        finalTranscript += transcriptPiece + ' ';
       } else {
         interim += transcriptPiece;
       }
     }
 
-    if (final) {
-      transcript += final;
-      processTranscript(transcript);
-    }
-
+    transcript = finalTranscript;
     updateTranscriptDisplay(transcript + interim);
+
+    if (finalTranscript) {
+      processTranscript(finalTranscript);
+    }
   };
 
   recognition.onerror = (event) => {
@@ -220,43 +274,108 @@ function initSpeechRecognition() {
 
   recognition.onend = () => {
     if (isActive) {
-      recognition.start(); // Restart if still active
+      recognition.start(); // Auto-restart if still active
     }
   };
 }
 
-// Process transcript with AI (de-identified)
+// ============================================================================
+// PROCESSING PIPELINE
+// ============================================================================
+
 async function processTranscript(text) {
-  // De-identify BEFORE sending to backend
+  // Debounce to reduce API calls
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(async () => {
+    await processTranscriptImmediate(text);
+  }, CONFIG.DEBOUNCE_DELAY);
+}
+
+async function processTranscriptImmediate(text) {
+  // Check cache first
+  const cacheKey = text.substring(0, 100);
+  if (cache.has(cacheKey)) {
+    const cached = cache.get(cacheKey);
+    if (Date.now() - cached.timestamp < CONFIG.CACHE_TTL) {
+      displayCachedResults(cached.data);
+      return;
+    }
+    cache.delete(cacheKey);
+  }
+
+  // De-identify BEFORE any processing (HIPAA compliance)
   const deIdentified = deIdentifyText(text);
 
-  // Detect medications
+  // Local processing (instant, no API calls)
   const medications = detectMedications(text);
   if (medications.length > 0) {
     displayMedications(medications);
   }
 
-  // Detect and convert units
   const conversions = detectAndConvertUnits(text);
   if (conversions.length > 0) {
     displayConversions(conversions);
   }
 
+  // Queue API request for Google Medical AI processing
+  if (processingQueue.length < CONFIG.MAX_QUEUE_SIZE) {
+    processingQueue.push({ deIdentified, medications, conversions, cacheKey });
+
+    if (!isProcessing) {
+      processQueue();
+    }
+  }
+}
+
+// ============================================================================
+// API COMMUNICATION WITH GOOGLE MEDICAL AI
+// ============================================================================
+
+async function processQueue() {
+  if (processingQueue.length === 0) {
+    isProcessing = false;
+    return;
+  }
+
+  isProcessing = true;
+  const item = processingQueue.shift();
+
   try {
-    // Send de-identified text to edge function
-    const response = await fetch(`${window.location.origin}/functions/v1/process-interprecoach`, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+
+    // Call Supabase Edge Function (which connects to Google Medical AI)
+    const apiUrl = `${CONFIG.SUPABASE_URL}/functions/v1/process-interprecoach`;
+
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'apikey': CONFIG.SUPABASE_KEY,
+        'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`
       },
       body: JSON.stringify({
-        text: deIdentified, // ONLY de-identified text is sent
-        medications: medications.map(m => m.generic),
-        conversions: conversions
-      })
+        text: item.deIdentified,
+        medications: item.medications.map(m => m.generic),
+        conversions: item.conversions,
+        useGoogleMedicalAI: CONFIG.GOOGLE_AI_ENABLED
+      }),
+      signal: controller.signal
     });
 
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
     const data = await response.json();
+
+    // Cache results
+    cache.set(item.cacheKey, {
+      data,
+      timestamp: Date.now()
+    });
 
     if (data.medicalTerms) {
       displayMedicalTerms(data.medicalTerms);
@@ -265,14 +384,30 @@ async function processTranscript(text) {
       displayHighlights(data.highlights);
     }
   } catch (error) {
-    console.error('Processing error:', error);
+    if (error.name === 'AbortError') {
+      console.warn('⏱️ Request timeout - continuing with local processing');
+    } else {
+      console.error('❌ Processing error:', error);
+    }
   }
+
+  // Process next item with rate limiting
+  setTimeout(() => processQueue(), CONFIG.QUEUE_DELAY);
 }
+
+// ============================================================================
+// DISPLAY FUNCTIONS (OPTIMIZED WITH BATCH UPDATES)
+// ============================================================================
 
 function displayMedications(medications) {
   const medDiv = document.getElementById('ic-medications');
-  medDiv.innerHTML = medications.map(med => `
-    <div class="ic-medication">
+  if (!medDiv) return;
+
+  const fragment = document.createDocumentFragment();
+  medications.forEach(med => {
+    const div = document.createElement('div');
+    div.className = 'ic-medication';
+    div.innerHTML = `
       <div class="ic-med-header">
         <strong>${med.detected}</strong>
         <span class="ic-badge">${med.category}</span>
@@ -281,55 +416,97 @@ function displayMedications(medications) {
         <div><strong>Generic:</strong> ${med.generic}</div>
         <div><strong>Brand Names:</strong> ${med.brands.join(', ')}</div>
       </div>
-    </div>
-  `).join('');
+    `;
+    fragment.appendChild(div);
+  });
+
+  medDiv.innerHTML = '';
+  medDiv.appendChild(fragment);
 }
 
 function displayConversions(conversions) {
   const highlights = document.getElementById('ic-highlights');
-  const conversionHtml = conversions.map(conv => `
-    <div class="ic-conversion">
+  if (!highlights) return;
+
+  const fragment = document.createDocumentFragment();
+  conversions.forEach(conv => {
+    const div = document.createElement('div');
+    div.className = 'ic-conversion';
+    div.innerHTML = `
       <strong>${conv.type === 'height' ? '📏' : '⚖️'} ${conv.original}</strong> →
       ${conv.converted} ${conv.unit}
-    </div>
-  `).join('');
-  highlights.innerHTML += conversionHtml;
+    `;
+    fragment.appendChild(div);
+  });
+
+  highlights.appendChild(fragment);
 }
 
 function displayMedicalTerms(terms) {
   const termsDiv = document.getElementById('ic-terms');
-  termsDiv.innerHTML = terms.map(term => `
-    <div class="ic-term">
+  if (!termsDiv) return;
+
+  const fragment = document.createDocumentFragment();
+  terms.forEach(term => {
+    const div = document.createElement('div');
+    div.className = 'ic-term';
+    div.innerHTML = `
       <strong>${term.term}</strong>
       <p>${term.definition}</p>
       ${term.translation ? `<em>Translation: ${term.translation}</em>` : ''}
-    </div>
-  `).join('');
+    `;
+    fragment.appendChild(div);
+  });
+
+  termsDiv.innerHTML = '';
+  termsDiv.appendChild(fragment);
 }
 
 function displayHighlights(highlights) {
   const highlightsDiv = document.getElementById('ic-highlights');
-  highlightsDiv.innerHTML = highlights.map(h => `
-    <div class="ic-highlight">
+  if (!highlightsDiv) return;
+
+  const fragment = document.createDocumentFragment();
+  highlights.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'ic-highlight';
+    div.innerHTML = `
       <span class="ic-highlight-icon">${h.icon || '•'}</span>
       <span>${h.text}</span>
-    </div>
-  `).join('');
+    `;
+    fragment.appendChild(div);
+  });
+
+  highlightsDiv.innerHTML = '';
+  highlightsDiv.appendChild(fragment);
+}
+
+function displayCachedResults(data) {
+  if (data.medicalTerms) displayMedicalTerms(data.medicalTerms);
+  if (data.highlights) displayHighlights(data.highlights);
 }
 
 function updateTranscriptDisplay(text) {
-  document.getElementById('ic-transcript').textContent = text || 'Listening...';
+  const transcriptDiv = document.getElementById('ic-transcript');
+  if (transcriptDiv) {
+    transcriptDiv.textContent = text || 'Listening...';
+  }
 }
 
 function updateStatus(text, status = 'active') {
   const statusText = document.getElementById('ic-status-text');
-  const indicator = overlayElement.querySelector('.ic-status-indicator');
-  statusText.textContent = text;
-  indicator.className = `ic-status-indicator ic-status-${status}`;
+  const indicator = overlayElement?.querySelector('.ic-status-indicator');
+  if (statusText) statusText.textContent = text;
+  if (indicator) indicator.className = `ic-status-indicator ic-status-${status}`;
 }
+
+// ============================================================================
+// SESSION MANAGEMENT
+// ============================================================================
 
 function toggleSession() {
   const btn = document.getElementById('ic-toggle-btn');
+  if (!btn) return;
 
   if (!isActive) {
     if (!recognition) initSpeechRecognition();
@@ -345,20 +522,24 @@ function toggleSession() {
     btn.classList.remove('ic-btn-danger');
     updateStatus('Session ended', 'inactive');
 
-    // HIPAA Compliance: Clear all data when session ends
+    // HIPAA Compliance: Clear all data
     transcript = '';
+    cache.clear();
+    processingQueue = [];
     updateTranscriptDisplay('Session ended. All data cleared.');
   }
 }
 
 function closeOverlay() {
-  if (isActive) {
+  if (isActive && recognition) {
     recognition.stop();
     isActive = false;
   }
 
   // HIPAA Compliance: Clear all in-memory data
   transcript = '';
+  cache.clear();
+  processingQueue = [];
 
   if (overlayElement) {
     overlayElement.remove();
@@ -367,10 +548,19 @@ function closeOverlay() {
 }
 
 function minimizeOverlay() {
-  overlayElement.classList.toggle('ic-minimized');
+  if (overlayElement) {
+    overlayElement.classList.toggle('ic-minimized');
+  }
 }
 
-// Initialize on extension icon click
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+// Load configuration on startup
+loadConfig();
+
+// Message listener for extension activation
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'toggle') {
     if (!overlayElement) {
@@ -383,5 +573,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Auto-initialize for testing (remove in production)
 if (window.location.search.includes('interprecoach=1')) {
-  setTimeout(createOverlay, 1000);
+  setTimeout(() => {
+    loadConfig().then(() => createOverlay());
+  }, 1000);
 }
+
+console.log('✅ InterpreCoach Content Script loaded - Version 2.0.0');
