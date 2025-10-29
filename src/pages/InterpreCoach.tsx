@@ -26,7 +26,7 @@ const InterpreCoach = () => {
                 InterpreCoach
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Chrome extension providing real-time terminology support and coaching during live interpretation sessions.
+                Chrome extension providing real-time transcription support, terminology detection and translation, key highlights and continuous upload thorughout encounter, a notepad section, and post-session QA feedback!
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="glass-button">
