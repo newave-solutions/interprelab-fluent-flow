@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useCallTracker } from '@/hooks/useCallTracker';
-import { Phone, PhoneOff, Clock, BarChart3, DollarSign, Calendar, TrendingUp, Settings, CheckCircle } from 'lucide-react';
+import { Phone, PhoneOff, Clock, BarChart3, DollarSign, Calendar, TrendingUp, Settings, CheckCircle, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -141,12 +141,18 @@ const InterpreTrack = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 relative">
-              <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground">Premium</Badge>
-              <CardHeader>
-                <Clock className="w-12 h-12 text-primary mb-4" />
+            <Card className="glass border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:border-purple-400 transition-all duration-300 relative">
+              <Badge className="absolute top-4 right-4 bg-purple-600 text-white border-purple-500">
+                <Star className="w-3 h-3 mr-1 fill-white" />
+                Premium
+              </Badge>
+              <CardHeader className="border-b border-purple-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <Clock className="w-12 h-12 text-purple-500" />
+                  <Star className="w-6 h-6 text-purple-500 fill-purple-500" />
+                </div>
                 <CardTitle>Automatic Time Tracking</CardTitle>
-                <p className="text-sm font-medium text-primary mt-2 mb-3">
+                <p className="text-sm font-medium text-purple-500 mt-2 mb-3">
                   Don't want to do it manually? Let InterpreTrack take care of everything for you! Just sit back and watch your money come in!
                 </p>
               </CardHeader>
