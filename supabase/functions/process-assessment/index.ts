@@ -173,10 +173,10 @@ function generateFeedback(percentage: number, assessmentType: string, results: a
       return acc
     }, {} as Record<string, number>)
 
-    const mostMissedDifficulty = Object.entries(difficultyCounts).reduce((max, [diff, count]) =>
-      count > max.count ? { difficulty: diff, count } : max,
-      { difficulty: '', count: 0 }
-    )
+    const mostMissedDifficulty = Object.entries(difficultyCounts).reduce((max, [diff, count]) => {
+      const countNum = count as number;
+      return countNum > max.count ? { difficulty: diff, count: countNum } : max;
+    }, { difficulty: '', count: 0 })
 
     if (mostMissedDifficulty.difficulty) {
       feedback += `Focus on ${mostMissedDifficulty.difficulty} level concepts for better results. `
@@ -202,7 +202,7 @@ function identifyStrongAreas(results: any[]): string[] {
   }, {} as Record<string, number>)
 
   return Object.entries(correctByDifficulty)
-    .filter(([_, count]) => count >= 2)
+    .filter(([_, count]) => (count as number) >= 2)
     .map(([difficulty, _]) => difficulty)
 }
 
@@ -213,12 +213,20 @@ function identifyWeakAreas(results: any[]): string[] {
   }, {} as Record<string, number>)
 
   return Object.entries(incorrectByDifficulty)
-    .filter(([_, count]) => count >= 2)
+    .filter(([_, count]) => (count as number) >= 2)
     .map(([difficulty, _]) => difficulty)
 }
 
 async function checkAndAwardAchievements(supabaseClient: any, userId: string, assessmentData: any) {
-  const achievements = []
+  interface Achievement {
+    user_id: string;
+    achievement_type: string;
+    achievement_name: string;
+    description: string;
+    points_earned: number;
+  }
+
+  const achievements: Achievement[] = []
 
   // Perfect score achievement
   if (assessmentData.score === 100) {
