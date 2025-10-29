@@ -178,7 +178,7 @@ const InterpreBot = () => {
                     <h3 className="text-2xl font-semibold">Take the Assessment</h3>
                   </div>
                   <p className="text-muted-foreground mb-4">
-                    Compete a language assessment of both your source and target language to obtain a baseline of how you measure up, and if you're already in the field you can select to include interpreting metrics components onto your assessment!
+                    Complete a language assessment of both your source and target language to obtain a baseline of how you measure up, and if you're already in the field you can select to include interpreting metrics components onto your assessment!
                   </p>
                   <Button className="glass-button">
                     Start Assessment
@@ -199,7 +199,7 @@ const InterpreBot = () => {
                     <h3 className="text-2xl font-semibold">Get Your Metrics</h3>
                   </div>
                   <p className="text-muted-foreground mb-4">
-                    Instant metrics generated thorugh interprebot with detailed scores on accuracy, fluency, reading comprehension and fluency, sentence structure and vocabulary, voice control and pace, amongst the many. When we say 'detailed' we mean DETAILED
+                    Instant metrics generated through interprebot with detailed scores on accuracy, fluency, reading comprehension and fluency, sentence structure and vocabulary, voice control and pace, amongst the many. When we say 'detailed' we mean DETAILED
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <Card className="glass p-4 text-center">
