@@ -1,5 +1,5 @@
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Shield,
   Mail,
@@ -11,7 +11,7 @@ import {
   Chrome,
   Stethoscope,
   Scale,
-  Globe
+  Globe,
 } from "lucide-react";
 
 export const Footer = () => {
@@ -19,7 +19,6 @@ export const Footer = () => {
     <footer className="relative border-t border-border/50 bg-card/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -28,13 +27,16 @@ export const Footer = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold">InterpreLab</h3>
-                <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
+                <p className="text-xs text-muted-foreground">
+                  Advanced Interpretation
+                </p>
               </div>
             </div>
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Revolutionizing medical and legal interpretation through advanced AI technology
-              while preserving the essential human element in critical communication.
+              Revolutionizing medical and legal interpretation through advanced
+              AI technology while preserving the essential human element in
+              critical communication.
             </p>
 
             <div className="flex gap-2">
@@ -51,21 +53,34 @@ export const Footer = () => {
 
           {/* Products */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Services</h4>
+            <h4 className="text-sm font-semibold text-foreground">Products</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="/interprebot" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  InterpreBot
+                <a
+                  href="#"
+                  className="hover:text-foreground transition-colors flex items-center gap-2"
+                >
+                  <Chrome className="w-3 h-3" />
+                  InterpreCoach Extension
                 </a>
               </li>
               <li>
-                <a href="/interprecoach" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  InterpreCoach
+                <a
+                  href="#"
+                  className="hover:text-foreground transition-colors flex items-center gap-2"
+                >
+                  <Shield className="w-3 h-3" />
+                  Enterprise Platform
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-foreground transition-colors">
-                  Certification Courses
+                  API Integration
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Custom Solutions
                 </a>
               </li>
             </ul>
@@ -73,21 +88,26 @@ export const Footer = () => {
 
           {/* Solutions */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Resources</h4>
+            <h4 className="text-sm font-semibold text-foreground">Solutions</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="https://www.certifiedmedicalinterpreters.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                  NBCMI
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Healthcare Systems
                 </a>
               </li>
               <li>
-                <a href="https://cchicertification.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                  CCHI
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Legal Firms
                 </a>
               </li>
               <li>
-                <a href="/careers" className="hover:text-foreground transition-colors">
-                  Careers
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Government Agencies
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Educational Institutions
                 </a>
               </li>
             </ul>
@@ -99,7 +119,7 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>admin.ceo@interprelab.com</span>
+                <span>support@interprelab.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -107,7 +127,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Houston, Texas</span>
+                <span>Houston, TX</span>
               </div>
             </div>
 
@@ -129,10 +149,16 @@ export const Footer = () => {
         <div className="border-t border-border/50 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-6 text-xs text-muted-foreground">
-              <span>© 2024 InterpreLab. All rights reserved.</span>
-              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-foreground transition-colors">Security</a>
+              <span>© 2025 InterpreLab. All rights reserved.</span>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Terms of Service
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Security
+              </a>
             </div>
 
             <div className="flex items-center gap-4">
