@@ -22,7 +22,10 @@ export type Database = {
           earnings: number | null
           end_time: string | null
           id: string
+          import_source: string | null
+          is_imported: boolean
           notes: string | null
+          platform_name: string | null
           start_time: string
           updated_at: string
           user_id: string
@@ -34,7 +37,10 @@ export type Database = {
           earnings?: number | null
           end_time?: string | null
           id?: string
+          import_source?: string | null
+          is_imported?: boolean
           notes?: string | null
+          platform_name?: string | null
           start_time: string
           updated_at?: string
           user_id: string
@@ -46,7 +52,10 @@ export type Database = {
           earnings?: number | null
           end_time?: string | null
           id?: string
+          import_source?: string | null
+          is_imported?: boolean
           notes?: string | null
+          platform_name?: string | null
           start_time?: string
           updated_at?: string
           user_id?: string
@@ -89,6 +98,39 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_rates: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          is_active: boolean
+          platform_name: string
+          rate_per_minute: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          platform_name: string
+          rate_per_minute?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string
+          rate_per_minute?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -110,6 +152,84 @@ export type Database = {
           id?: string
           last_name?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          goal_type: string
+          id: string
+          is_active: boolean
+          platform_name: string | null
+          target_amount: number
+          target_currency: string | null
+          target_period: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          goal_type: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string | null
+          target_amount: number
+          target_currency?: string | null
+          target_period: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string | null
+          target_amount?: number
+          target_currency?: string | null
+          target_period?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_insights: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          insight_type: string
+          is_read: boolean
+          metadata: Json | null
+          priority: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          insight_type: string
+          is_read?: boolean
+          metadata?: Json | null
+          priority?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          insight_type?: string
+          is_read?: boolean
+          metadata?: Json | null
+          priority?: string
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
