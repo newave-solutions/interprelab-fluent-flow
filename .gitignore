@@ -7,10 +7,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
-*.local
+build
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+.env.*.gcp
 
 # Editor directories and files
 .vscode/*
@@ -21,4 +33,40 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
+
+# Temporary files
 *.sw?
+*.swp
+*.swo
+*~
+.tmp
+.temp
+
+# Lock files (if using npm, ignore others)
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+
+# Archives
+*.tar.gz
+*.zip
+*.rar
+
+# Supabase CLI (if installed globally)
+supabase_cli/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Test coverage
+coverage
+.nyc_output
+
+# Cache
+.cache
+.parcel-cache
+.eslintcache
+
+# Misc
+*.local

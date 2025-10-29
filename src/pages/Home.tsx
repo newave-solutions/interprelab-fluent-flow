@@ -1,4 +1,4 @@
-import Navigation from "../components/Navigation";
+import { Navigation } from "../components/Navigation";
 import { FullScreenVideoHero } from "../components/VideoSection";
 import { SolutionHero } from "../components/SolutionHero";
 import { StatsSection } from "../components/StatsSection";

@@ -1,18 +1,16 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { supabase } from '../integrations/supabase/client';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
-interface Translations {
-  [key: string]: {
-    [key: string]: string;
-  };
+type Language = 'en' | 'es' | 'fr' | 'zh' | 'ar';
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
 }
 
-const translations: Translations = {
+const translations: Record<Language, Record<string, string>> = {
   en: {
     solutions: 'Solutions',
-    interpreHub: 'InterpreHub',
-    dashboard: 'Dashboard',
-    settings: 'Settings',
     resources: 'Resources',
     about: 'About',
     contact: 'Contact',
@@ -21,9 +19,6 @@ const translations: Translations = {
   },
   es: {
     solutions: 'Soluciones',
-    interpreHub: 'InterpreHub',
-    dashboard: 'Panel',
-    settings: 'Configuración',
     resources: 'Recursos',
     about: 'Acerca de',
     contact: 'Contacto',
@@ -32,57 +27,41 @@ const translations: Translations = {
   },
   fr: {
     solutions: 'Solutions',
-    interpreHub: 'InterpreHub',
-    dashboard: 'Tableau de bord',
-    settings: 'Paramètres',
     resources: 'Ressources',
     about: 'À propos',
     contact: 'Contact',
     signIn: 'Se connecter',
     signOut: 'Se déconnecter',
   },
+  zh: {
+    solutions: '解决方案',
+    resources: '资源',
+    about: '关于',
+    contact: '联系',
+    signIn: '登录',
+    signOut: '登出',
+  },
+  ar: {
+    solutions: 'الحلول',
+    resources: 'الموارد',
+    about: 'حول',
+    contact: 'اتصل',
+    signIn: 'تسجيل الدخول',
+    signOut: 'تسجيل الخروج',
+  },
 };
-
-interface LanguageContextType {
-  language: string;
-  setLanguage: (lang: string) => void;
-  t: (key: string) => string;
-  availableLanguages: { code: string; name: string }[];
-}
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState('en');
-
-  // Load language from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('preferred_language');
-    if (savedLanguage) {
-      setLanguageState(savedLanguage);
-    }
-  }, []);
-
-  const setLanguage = async (lang: string) => {
-    setLanguageState(lang);
-    localStorage.setItem('preferred_language', lang);
-
-    // TODO: Save to user settings when user is available
-    // This will be handled by a separate hook or service
-  };
+  const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
-    return translations[language]?.[key] || translations['en'][key] || key;
+    return translations[language][key] || key;
   };
 
-  const availableLanguages = [
-    { code: 'en', name: 'English' },
-    { code: 'es', name: 'Español' },
-    { code: 'fr', name: 'Français' },
-  ];
-
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, availableLanguages }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

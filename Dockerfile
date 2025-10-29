@@ -1,24 +1,31 @@
-# Stage 1: Build the React application
-FROM node:20-alpine as builder
+# Build stage
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+# Copy package files
+COPY package*.json ./
 
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY . .
-RUN bun run build
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:stable-alpine
+# Build the application
+RUN npm run build
 
-# Copy the build output from the builder stage
+# Production stage
+FROM nginx:alpine
+
+# Copy built assets from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy custom Nginx configuration (optional, but good practice)
-# If you have a custom nginx.conf, place it in your project root
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+# Expose port 8080 (Cloud Run default)
+EXPOSE 8080
 
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
