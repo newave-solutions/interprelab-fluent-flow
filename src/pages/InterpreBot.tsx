@@ -199,7 +199,7 @@ const InterpreBot = () => {
                     <h3 className="text-2xl font-semibold">Get Your Metrics</h3>
                   </div>
                   <p className="text-muted-foreground mb-4">
-                    Receive instant AI analysis with detailed scores on accuracy, fluency, medical terminology, and cultural competence.
+                    Instant metrics generated thorugh interprebot with detailed scores on accuracy, fluency, reading comprehension and fluency, sentence structure and vocabulary, voice control and pace, amongst the many. When we say 'detailed' we mean DETAILED
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <Card className="glass p-4 text-center">
