@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { SettingsPanel } from '@/components/SettingsPanel';
+import { GoalsPanel } from '@/components/GoalsPanel';
+import { PlatformRatesPanel } from '@/components/PlatformRatesPanel';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
 
@@ -129,9 +134,20 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+    <ProtectedRoute>
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
+              <TabsTrigger value="platforms">Platforms</TabsTrigger>
+              <TabsTrigger value="goals">Goals</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="overview" className="space-y-8">{/* Existing dashboard content */}
 
         {/* Monthly & Yearly Totals */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -222,8 +238,23 @@ const Dashboard = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </Layout>
+            </TabsContent>
+
+            <TabsContent value="settings">
+              <SettingsPanel />
+            </TabsContent>
+
+            <TabsContent value="platforms">
+              <PlatformRatesPanel />
+            </TabsContent>
+
+            <TabsContent value="goals">
+              <GoalsPanel />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

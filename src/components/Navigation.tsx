@@ -138,11 +138,6 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                     Dashboard
                   </Button>
                 </Link>
-                <Link to="/settings">
-                  <Button variant="ghost" size="sm">
-                    Settings
-                  </Button>
-                </Link>
                 <Button onClick={handleSignOut} variant="glass" size="sm">
                   <LogOut className="w-4 h-4 mr-2" />
                   {t('signOut')}
