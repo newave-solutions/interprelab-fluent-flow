@@ -141,10 +141,14 @@ const InterpreTrack = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 relative">
+              <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground">Premium</Badge>
               <CardHeader>
                 <Clock className="w-12 h-12 text-primary mb-4" />
                 <CardTitle>Automatic Time Tracking</CardTitle>
+                <p className="text-sm font-medium text-primary mt-2 mb-3">
+                  Don't want to do it manually? Let InterpreTrack take care of everything for you! Just sit back and watch your money come in!
+                </p>
                 <CardDescription>
                   Start and stop tracking with one click. No manual timers or complicated setup.
                 </CardDescription>
