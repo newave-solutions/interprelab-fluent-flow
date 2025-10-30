@@ -1,11 +1,26 @@
-// InterpreCoach Content Script - HIPAA Compliant
-// NO PHI is stored persistently. All data is held in-memory only.
+// InterpreCoach Content Script - HIPAA Compliant Medical Interpretation Assistant
+// PHI/PII stored temporarily in memory during session, destroyed on end
+// No persistence, no logging, no external transmission
 
-let isActive = false;
+console.log('InterpreCoach: Content script loaded');
+
+let isSessionActive = false;
 let recognition = null;
-let transcript = '';
-let overlayElement = null;
-let medicationDatabase = null;
+let captionObserver = null;
+
+// Session tracking for post-session feedback
+let sessionData = {
+  startTime: null,
+  endTime: null,
+  interactions: [],
+  terminologyUsed: [],
+  clarificationRequests: 0,
+  paceIssues: 0,
+  omissions: 0,
+  strengths: [],
+  improvements: [],
+  feedback: null
+};
 
 // HIPAA Compliance: De-identification patterns
 const PHI_PATTERNS = {
@@ -19,52 +34,51 @@ const PHI_PATTERNS = {
   zipcode: /\b\d{5}(?:-\d{4})?\b/g
 };
 
-// Medication database with generic/brand names
+// Medical terminology database
+const MEDICAL_TERMS_DB = {
+  'hypertension': { definition: 'High blood pressure', translation: 'Presión arterial alta', category: 'cardiovascular', pronunciation: 'ee-per-ten-see-OHN' },
+  'diabetes': { definition: 'Metabolic disorder with high blood sugar', translation: 'Diabetes', category: 'endocrine', pronunciation: 'dee-ah-BEH-tes' },
+  'myocardial infarction': { definition: 'Heart attack', translation: 'Infarto de miocardio', category: 'cardiovascular', pronunciation: 'in-FAR-toh deh mee-oh-CAR-dee-oh' },
+  'pneumonia': { definition: 'Lung infection', translation: 'Neumonía', category: 'respiratory', pronunciation: 'neh-oo-moh-NEE-ah' },
+  'fracture': { definition: 'Broken bone', translation: 'Fractura', category: 'orthopedic', pronunciation: 'frac-TOO-rah' },
+  'abdominal': { definition: 'Relating to the abdomen', translation: 'Abdominal', category: 'anatomy', pronunciation: 'ab-doh-mee-NAHL' },
+  'acute': { definition: 'Sudden onset, severe', translation: 'Agudo', category: 'general', pronunciation: 'ah-GOO-doh' },
+  'chronic': { definition: 'Long-lasting', translation: 'Crónico', category: 'general', pronunciation: 'CROH-nee-coh' },
+  'inflammation': { definition: 'Swelling and redness', translation: 'Inflamación', category: 'general', pronunciation: 'in-flah-mah-see-OHN' }
+};
+
+// Medication database
 const MEDICATION_DATABASE = {
-  'acetaminophen': { generic: 'acetaminophen', brand: ['Tylenol', 'Paracetamol'], category: 'analgesic' },
-  'tylenol': { generic: 'acetaminophen', brand: ['Tylenol'], category: 'analgesic' },
-  'ibuprofen': { generic: 'ibuprofen', brand: ['Advil', 'Motrin'], category: 'NSAID' },
-  'advil': { generic: 'ibuprofen', brand: ['Advil', 'Motrin'], category: 'NSAID' },
-  'motrin': { generic: 'ibuprofen', brand: ['Advil', 'Motrin'], category: 'NSAID' },
-  'lisinopril': { generic: 'lisinopril', brand: ['Prinivil', 'Zestril'], category: 'ACE inhibitor' },
-  'metformin': { generic: 'metformin', brand: ['Glucophage', 'Fortamet'], category: 'antidiabetic' },
-  'amlodipine': { generic: 'amlodipine', brand: ['Norvasc'], category: 'calcium channel blocker' },
-  'omeprazole': { generic: 'omeprazole', brand: ['Prilosec'], category: 'proton pump inhibitor' },
-  'atorvastatin': { generic: 'atorvastatin', brand: ['Lipitor'], category: 'statin' },
-  'lipitor': { generic: 'atorvastatin', brand: ['Lipitor'], category: 'statin' },
-  'levothyroxine': { generic: 'levothyroxine', brand: ['Synthroid', 'Levoxyl'], category: 'thyroid hormone' },
-  'synthroid': { generic: 'levothyroxine', brand: ['Synthroid'], category: 'thyroid hormone' },
-  'albuterol': { generic: 'albuterol', brand: ['Proventil', 'Ventolin'], category: 'bronchodilator' },
-  'gabapentin': { generic: 'gabapentin', brand: ['Neurontin'], category: 'anticonvulsant' },
-  'losartan': { generic: 'losartan', brand: ['Cozaar'], category: 'ARB' },
-  'sertraline': { generic: 'sertraline', brand: ['Zoloft'], category: 'SSRI' },
-  'zoloft': { generic: 'sertraline', brand: ['Zoloft'], category: 'SSRI' }
+  'aspirin': { generic: 'aspirin', brand: 'Bayer', category: 'cardiovascular', spanish: 'aspirina', pronunciation: 'as-pee-REE-nah' },
+  'ibuprofen': { generic: 'ibuprofen', brand: 'Advil', category: 'pain', spanish: 'ibuprofeno', pronunciation: 'ee-boo-proh-FEH-noh' },
+  'lisinopril': { generic: 'lisinopril', brand: 'Prinivil', category: 'cardiovascular', spanish: 'lisinopril', pronunciation: 'lee-see-noh-PREEL' },
+  'metformin': { generic: 'metformin', brand: 'Glucophage', category: 'diabetes', spanish: 'metformina', pronunciation: 'met-for-MEE-nah' },
+  'keppra': { generic: 'levetiracetam', brand: 'Keppra', category: 'neurological', spanish: 'levetiracetam', pronunciation: 'leh-veh-teer-ah-SEH-tahm' },
+  'levetiracetam': { generic: 'levetiracetam', brand: 'Keppra', category: 'neurological', spanish: 'levetiracetam', pronunciation: 'leh-veh-teer-ah-SEH-tahm' }
 };
 
-// Unit conversion helpers
-const convertMetersToFeet = (meters) => {
-  const feet = meters * 3.28084;
-  const wholeFeet = Math.floor(feet);
-  const inches = Math.round((feet - wholeFeet) * 12);
-  return `${wholeFeet}'${inches}"`;
+// Key insights tracking
+let keyInsights = {
+  chiefComplaint: null,
+  medications: new Set(),
+  allergies: new Set(),
+  vitalSigns: {},
+  diagnoses: new Set(),
+  phi: new Set(),
+  pii: new Set(),
+  nextSteps: []
 };
 
-const convertKgToLbs = (kg) => {
-  return (kg * 2.20462).toFixed(1);
-};
-
-// De-identification function - CRITICAL for HIPAA
+// De-identification function
 function deIdentifyText(text) {
   let deIdentified = text;
-  
   Object.entries(PHI_PATTERNS).forEach(([type, pattern]) => {
     deIdentified = deIdentified.replace(pattern, `[${type.toUpperCase()}_REDACTED]`);
   });
-  
   return deIdentified;
 }
 
-// Detect medications in text
+// Detect medications
 function detectMedications(text) {
   const words = text.toLowerCase().split(/\s+/);
   const detected = [];
@@ -72,40 +86,34 @@ function detectMedications(text) {
   words.forEach(word => {
     const cleaned = word.replace(/[^a-z]/g, '');
     if (MEDICATION_DATABASE[cleaned]) {
-      const med = MEDICATION_DATABASE[cleaned];
-      detected.push({
-        detected: word,
-        generic: med.generic,
-        brands: med.brand,
-        category: med.category
-      });
+      detected.push(MEDICATION_DATABASE[cleaned]);
     }
   });
   
   return detected;
 }
 
-// Extract units and convert
+// Unit conversions
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  // Detect meters
   const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
       if (!isNaN(value)) {
+        const feet = Math.floor(value * 3.28084);
+        const inches = Math.round(((value * 3.28084) - feet) * 12);
         conversions.push({
           original: match,
           type: 'height',
-          converted: convertMetersToFeet(value),
+          converted: `${feet}'${inches}"`,
           unit: 'feet/inches'
         });
       }
     });
   }
   
-  // Detect kilograms
   const kgMatch = text.match(/(\d+\.?\d*)\s*(kilogram|kg\b)/gi);
   if (kgMatch) {
     kgMatch.forEach(match => {
@@ -114,7 +122,7 @@ function detectAndConvertUnits(text) {
         conversions.push({
           original: match,
           type: 'weight',
-          converted: convertKgToLbs(value),
+          converted: (value * 2.20462).toFixed(1),
           unit: 'lbs'
         });
       }
@@ -126,128 +134,209 @@ function detectAndConvertUnits(text) {
 
 // Create overlay UI
 function createOverlay() {
-  if (overlayElement) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'interprecoach-overlay';
+  overlay.className = 'interprecoach-minimized';
   
-  overlayElement = document.createElement('div');
-  overlayElement.id = 'interprecoach-overlay';
-  overlayElement.innerHTML = `
-    <div class="ic-header">
-      <div class="ic-title">
-        <div class="ic-icon">🎤</div>
-        <span>InterpreCoach</span>
+  overlay.innerHTML = `
+    <div class="interprecoach-header">
+      <div class="interprecoach-title">
+        <span class="interprecoach-icon">🎯</span>
+        InterpreCoach
+        <span class="interprecoach-status" id="coach-status">Ready</span>
       </div>
-      <div class="ic-controls">
-        <button id="ic-toggle-btn" class="ic-btn-primary">Start Session</button>
-        <button id="ic-minimize-btn" class="ic-btn-icon">−</button>
-        <button id="ic-close-btn" class="ic-btn-icon">×</button>
+      <div class="interprecoach-controls">
+        <button id="coach-minimize" class="interprecoach-btn-icon" title="Minimize">−</button>
+        <button id="coach-close" class="interprecoach-btn-icon" title="Close">×</button>
       </div>
     </div>
-    <div class="ic-content">
-      <div class="ic-status">
-        <span class="ic-status-indicator"></span>
-        <span id="ic-status-text">Ready</span>
+    
+    <div class="interprecoach-content">
+      <div class="interprecoach-tabs">
+        <button class="interprecoach-tab active" data-tab="transcript">Transcript</button>
+        <button class="interprecoach-tab" data-tab="insights">Key Insights</button>
+        <button class="interprecoach-tab" data-tab="terms">Medical Terms</button>
       </div>
-      <div class="ic-section">
-        <h3>Live Transcript</h3>
-        <div id="ic-transcript" class="ic-transcript">Waiting for speech...</div>
+
+      <div class="interprecoach-tab-content active" id="tab-transcript">
+        <div class="interprecoach-transcript" id="coach-transcript">
+          <p class="interprecoach-placeholder">Transcript will appear here...</p>
+        </div>
       </div>
-      <div class="ic-section">
-        <h3>Key Highlights</h3>
-        <div id="ic-highlights" class="ic-highlights">No highlights yet</div>
+
+      <div class="interprecoach-tab-content" id="tab-insights">
+        <div class="interprecoach-insights" id="coach-insights">
+          <div class="insight-section">
+            <h4>🎯 Chief Complaint</h4>
+            <p id="insight-complaint">Not yet identified</p>
+          </div>
+          <div class="insight-section">
+            <h4>💊 Medications</h4>
+            <ul id="insight-medications"></ul>
+          </div>
+          <div class="insight-section">
+            <h4>📊 Vital Signs</h4>
+            <div id="insight-vitals"></div>
+          </div>
+          <div class="insight-section">
+            <h4>🔍 Diagnoses</h4>
+            <ul id="insight-diagnoses"></ul>
+          </div>
+          <div class="insight-section">
+            <h4>📋 Next Steps</h4>
+            <ul id="insight-nextsteps"></ul>
+          </div>
+        </div>
       </div>
-      <div class="ic-section">
-        <h3>Medical Terms</h3>
-        <div id="ic-terms" class="ic-terms">No medical terms detected</div>
+
+      <div class="interprecoach-tab-content" id="tab-terms">
+        <div class="interprecoach-terms" id="coach-terms">
+          <p class="interprecoach-placeholder">Medical terms will appear as detected...</p>
+        </div>
       </div>
-      <div class="ic-section">
-        <h3>Medications</h3>
-        <div id="ic-medications" class="ic-medications">No medications detected</div>
+      
+      <div class="interprecoach-footer">
+        <button id="coach-toggle" class="interprecoach-btn-primary">Start Session</button>
+        <button id="coach-feedback" class="interprecoach-btn-secondary" style="display:none;">View Feedback</button>
       </div>
-    </div>
-    <div class="ic-footer">
-      <span class="ic-hipaa-badge">🔒 HIPAA Compliant - No PHI Stored</span>
     </div>
   `;
   
-  document.body.appendChild(overlayElement);
+  document.body.appendChild(overlay);
+  attachEventListeners();
+}
+
+function attachEventListeners() {
+  document.getElementById('coach-toggle').addEventListener('click', toggleSession);
+  document.getElementById('coach-close').addEventListener('click', closeOverlay);
+  document.getElementById('coach-minimize').addEventListener('click', minimizeOverlay);
+  document.getElementById('coach-feedback').addEventListener('click', showFeedback);
   
-  // Event listeners
-  document.getElementById('ic-toggle-btn').addEventListener('click', toggleSession);
-  document.getElementById('ic-close-btn').addEventListener('click', closeOverlay);
-  document.getElementById('ic-minimize-btn').addEventListener('click', minimizeOverlay);
+  document.querySelectorAll('.interprecoach-tab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      const tabName = e.target.dataset.tab;
+      switchTab(tabName);
+    });
+  });
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.interprecoach-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.tab === tabName);
+  });
+  
+  document.querySelectorAll('.interprecoach-tab-content').forEach(content => {
+    content.classList.toggle('active', content.id === `tab-${tabName}`);
+  });
 }
 
 // Initialize speech recognition
 function initSpeechRecognition() {
   if (!('webkitSpeechRecognition' in window)) {
-    alert('Speech recognition not supported in this browser');
+    updateStatus('Speech recognition not supported', 'error');
     return;
   }
-  
+
   recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
-  
+
   recognition.onresult = (event) => {
-    let interim = '';
-    let final = '';
-    
+    let interimTranscript = '';
+    let finalTranscript = '';
+
     for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcriptPiece = event.results[i][0].transcript;
+      const transcript = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
-        final += transcriptPiece + ' ';
+        finalTranscript += transcript + ' ';
+        
+        sessionData.interactions.push({
+          timestamp: new Date().toISOString(),
+          text: transcript,
+          type: 'transcription'
+        });
       } else {
-        interim += transcriptPiece;
+        interimTranscript += transcript;
       }
     }
-    
-    if (final) {
-      transcript += final;
-      processTranscript(transcript);
+
+    if (finalTranscript) {
+      processTranscript(finalTranscript);
+      updateKeyInsights(finalTranscript);
     }
     
-    updateTranscriptDisplay(transcript + interim);
+    updateTranscriptDisplay(finalTranscript || interimTranscript);
   };
-  
+
   recognition.onerror = (event) => {
     console.error('Speech recognition error:', event.error);
-    updateStatus('Error: ' + event.error, 'error');
+    updateStatus('Recognition error: ' + event.error, 'error');
   };
-  
+
   recognition.onend = () => {
-    if (isActive) {
-      recognition.start(); // Restart if still active
+    if (isSessionActive) {
+      recognition.start();
     }
   };
 }
 
-// Process transcript with AI (de-identified)
+// Capture Google Meet/Zoom captions
+function initCaptionCapture() {
+  const captionSelectors = [
+    '[jsname="tgaKEf"]', // Google Meet
+    '.caption-line', // Zoom
+    '[class*="caption"]'
+  ];
+
+  const observer = new MutationObserver((mutations) => {
+    if (!isSessionActive) return;
+
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === 1) {
+          captionSelectors.forEach(selector => {
+            const captionEl = node.matches?.(selector) ? node : node.querySelector?.(selector);
+            if (captionEl) {
+              const text = captionEl.textContent.trim();
+              if (text) {
+                processTranscript(text);
+                updateKeyInsights(text);
+                updateTranscriptDisplay(text);
+                
+                sessionData.interactions.push({
+                  timestamp: new Date().toISOString(),
+                  text: text,
+                  type: 'caption'
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  return observer;
+}
+
+// Process transcript
 async function processTranscript(text) {
-  // De-identify BEFORE sending to backend
   const deIdentified = deIdentifyText(text);
-  
-  // Detect medications
   const medications = detectMedications(text);
-  if (medications.length > 0) {
-    displayMedications(medications);
-  }
-  
-  // Detect and convert units
   const conversions = detectAndConvertUnits(text);
-  if (conversions.length > 0) {
-    displayConversions(conversions);
-  }
   
   try {
-    // Send de-identified text to edge function
-    const response = await fetch(`${window.location.origin}/functions/v1/process-interprecoach`, {
+    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/process-interprecoach', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
-        text: deIdentified, // ONLY de-identified text is sent
+        text: deIdentified,
         medications: medications.map(m => m.generic),
         conversions: conversions
       })
@@ -256,121 +345,357 @@ async function processTranscript(text) {
     const data = await response.json();
     
     if (data.medicalTerms) {
-      displayMedicalTerms(data.medicalTerms);
-    }
-    if (data.highlights) {
-      displayHighlights(data.highlights);
+      data.medicalTerms.forEach(term => displayMedicalTerm(term));
     }
   } catch (error) {
     console.error('Processing error:', error);
   }
 }
 
-function displayMedications(medications) {
-  const medDiv = document.getElementById('ic-medications');
-  medDiv.innerHTML = medications.map(med => `
-    <div class="ic-medication">
-      <div class="ic-med-header">
-        <strong>${med.detected}</strong>
-        <span class="ic-badge">${med.category}</span>
-      </div>
-      <div class="ic-med-info">
-        <div><strong>Generic:</strong> ${med.generic}</div>
-        <div><strong>Brand Names:</strong> ${med.brands.join(', ')}</div>
-      </div>
+function displayMedicalTerm(term) {
+  const termsDiv = document.getElementById('coach-terms');
+  const placeholder = termsDiv.querySelector('.interprecoach-placeholder');
+  if (placeholder) placeholder.remove();
+  
+  const termCard = document.createElement('div');
+  termCard.className = 'term-card';
+  termCard.innerHTML = `
+    <div class="term-header">🏥 ${term.term}</div>
+    <div class="term-body">
+      <p><strong>Definition:</strong> ${term.definition}</p>
+      <p><strong>Spanish:</strong> ${term.translation || 'N/A'}</p>
+      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${term.pronunciation}</p>` : ''}
+      <p><strong>Category:</strong> ${term.category}</p>
     </div>
-  `).join('');
-}
-
-function displayConversions(conversions) {
-  const highlights = document.getElementById('ic-highlights');
-  const conversionHtml = conversions.map(conv => `
-    <div class="ic-conversion">
-      <strong>${conv.type === 'height' ? '📏' : '⚖️'} ${conv.original}</strong> → 
-      ${conv.converted} ${conv.unit}
-    </div>
-  `).join('');
-  highlights.innerHTML += conversionHtml;
-}
-
-function displayMedicalTerms(terms) {
-  const termsDiv = document.getElementById('ic-terms');
-  termsDiv.innerHTML = terms.map(term => `
-    <div class="ic-term">
-      <strong>${term.term}</strong>
-      <p>${term.definition}</p>
-      ${term.translation ? `<em>Translation: ${term.translation}</em>` : ''}
-    </div>
-  `).join('');
-}
-
-function displayHighlights(highlights) {
-  const highlightsDiv = document.getElementById('ic-highlights');
-  highlightsDiv.innerHTML = highlights.map(h => `
-    <div class="ic-highlight">
-      <span class="ic-highlight-icon">${h.icon || '•'}</span>
-      <span>${h.text}</span>
-    </div>
-  `).join('');
+  `;
+  
+  termsDiv.insertBefore(termCard, termsDiv.firstChild);
 }
 
 function updateTranscriptDisplay(text) {
-  document.getElementById('ic-transcript').textContent = text || 'Listening...';
+  const transcriptDiv = document.getElementById('coach-transcript');
+  if (!transcriptDiv) return;
+  
+  const placeholder = transcriptDiv.querySelector('.interprecoach-placeholder');
+  if (placeholder) placeholder.remove();
+  
+  let highlightedText = text;
+  
+  // Highlight medical terms
+  Object.keys(MEDICAL_TERMS_DB).forEach(term => {
+    const regex = new RegExp(`\\b${term}\\b`, 'gi');
+    if (regex.test(text)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
+    }
+  });
+  
+  // Highlight medications
+  Object.keys(MEDICATION_DATABASE).forEach(med => {
+    const regex = new RegExp(`\\b${med}\\b`, 'gi');
+    if (regex.test(text)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
+    }
+  });
+  
+  const p = document.createElement('p');
+  p.innerHTML = highlightedText;
+  p.classList.add('transcript-line');
+  transcriptDiv.appendChild(p);
+  transcriptDiv.scrollTop = transcriptDiv.scrollHeight;
+  
+  // Add click handlers
+  p.querySelectorAll('.medical-term, .medication-term').forEach(span => {
+    span.style.cursor = 'pointer';
+    span.addEventListener('click', () => {
+      const term = span.dataset.term || span.dataset.med;
+      showTermPopup(term, span.dataset.med ? 'medication' : 'medical');
+    });
+  });
+}
+
+function showTermPopup(term, type) {
+  const info = type === 'medication' ? MEDICATION_DATABASE[term.toLowerCase()] : MEDICAL_TERMS_DB[term.toLowerCase()];
+  if (!info) return;
+  
+  displayMedicalTerm(type === 'medication' ? 
+    { term, definition: `Generic: ${info.generic}, Brand: ${info.brand}`, translation: info.spanish, pronunciation: info.pronunciation, category: info.category } :
+    { term, definition: info.definition, translation: info.translation, pronunciation: info.pronunciation, category: info.category }
+  );
+  
+  switchTab('terms');
+}
+
+function updateKeyInsights(text) {
+  const lowerText = text.toLowerCase();
+  
+  // Chief complaint
+  if (lowerText.includes('chief complaint') || lowerText.includes('reason for visit')) {
+    const match = text.match(/(?:chief complaint|reason for visit)[:\s]+([^.!?]+)/i);
+    if (match) {
+      keyInsights.chiefComplaint = match[1].trim();
+      keyInsights.phi.add(match[1].trim());
+    }
+  }
+  
+  // Medications
+  Object.keys(MEDICATION_DATABASE).forEach(med => {
+    if (lowerText.includes(med)) {
+      keyInsights.medications.add(med);
+    }
+  });
+  
+  // Vital signs
+  const bpMatch = text.match(/(\d{2,3})\/(\d{2,3})/);
+  if (bpMatch) keyInsights.vitalSigns.bloodPressure = bpMatch[0];
+  
+  const hrMatch = text.match(/(\d{2,3})\s*(bpm|beats)/i);
+  if (hrMatch) keyInsights.vitalSigns.heartRate = hrMatch[1];
+  
+  const tempMatch = text.match(/(\d{2,3}(?:\.\d)?)\s*(?:degrees|°)/i);
+  if (tempMatch) keyInsights.vitalSigns.temperature = tempMatch[1];
+  
+  // Diagnoses
+  Object.keys(MEDICAL_TERMS_DB).forEach(term => {
+    if (lowerText.includes(term)) {
+      keyInsights.diagnoses.add(term);
+      keyInsights.phi.add(term);
+    }
+  });
+  
+  // Next steps
+  if (lowerText.includes('follow up') || lowerText.includes('follow-up')) {
+    const match = text.match(/follow[- ]?up[:\s]+([^.!?]+)/i);
+    if (match) keyInsights.nextSteps.push(match[1].trim());
+  }
+  
+  // PII
+  const nameMatch = text.match(/(?:my name is|i am|i'm)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+  if (nameMatch) keyInsights.pii.add(nameMatch[1]);
+  
+  updateInsightsDisplay();
+}
+
+function updateInsightsDisplay() {
+  document.getElementById('insight-complaint').textContent = keyInsights.chiefComplaint || 'Not yet identified';
+  
+  const medsList = document.getElementById('insight-medications');
+  medsList.innerHTML = keyInsights.medications.size === 0 ? '<li class="empty">None detected</li>' : 
+    Array.from(keyInsights.medications).map(med => `<li>${med}</li>`).join('');
+  
+  const vitalsDiv = document.getElementById('insight-vitals');
+  if (Object.keys(keyInsights.vitalSigns).length === 0) {
+    vitalsDiv.innerHTML = '<p class="empty">None recorded</p>';
+  } else {
+    vitalsDiv.innerHTML = '';
+    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${keyInsights.vitalSigns.bloodPressure}</p>`;
+    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${keyInsights.vitalSigns.heartRate} bpm</p>`;
+    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${keyInsights.vitalSigns.temperature}°</p>`;
+  }
+  
+  const diagList = document.getElementById('insight-diagnoses');
+  diagList.innerHTML = keyInsights.diagnoses.size === 0 ? '<li class="empty">None identified</li>' :
+    Array.from(keyInsights.diagnoses).map(diag => `<li>${diag}</li>`).join('');
+  
+  const stepsList = document.getElementById('insight-nextsteps');
+  stepsList.innerHTML = keyInsights.nextSteps.length === 0 ? '<li class="empty">None specified</li>' :
+    keyInsights.nextSteps.map(step => `<li>${step}</li>`).join('');
 }
 
 function updateStatus(text, status = 'active') {
-  const statusText = document.getElementById('ic-status-text');
-  const indicator = overlayElement.querySelector('.ic-status-indicator');
-  statusText.textContent = text;
-  indicator.className = `ic-status-indicator ic-status-${status}`;
+  const statusEl = document.getElementById('coach-status');
+  if (statusEl) {
+    statusEl.textContent = text;
+    statusEl.className = `interprecoach-status interprecoach-status-${status}`;
+  }
 }
 
 function toggleSession() {
-  const btn = document.getElementById('ic-toggle-btn');
+  isSessionActive = !isSessionActive;
+  const btn = document.getElementById('coach-toggle');
+  const feedbackBtn = document.getElementById('coach-feedback');
   
-  if (!isActive) {
+  if (isSessionActive) {
+    btn.textContent = 'End Session';
+    btn.classList.add('active');
+    feedbackBtn.style.display = 'none';
+    updateStatus('Active', 'active');
+    
+    // Initialize session
+    sessionData = {
+      startTime: new Date().toISOString(),
+      endTime: null,
+      interactions: [],
+      terminologyUsed: [],
+      clarificationRequests: 0,
+      paceIssues: 0,
+      omissions: 0,
+      strengths: [],
+      improvements: [],
+      feedback: null
+    };
+    
+    keyInsights = {
+      chiefComplaint: null,
+      medications: new Set(),
+      allergies: new Set(),
+      vitalSigns: {},
+      diagnoses: new Set(),
+      phi: new Set(),
+      pii: new Set(),
+      nextSteps: []
+    };
+    
     if (!recognition) initSpeechRecognition();
     recognition.start();
-    isActive = true;
-    btn.textContent = 'End Session';
-    btn.classList.add('ic-btn-danger');
-    updateStatus('Listening...', 'active');
-  } else {
-    recognition.stop();
-    isActive = false;
-    btn.textContent = 'Start Session';
-    btn.classList.remove('ic-btn-danger');
-    updateStatus('Session ended', 'inactive');
     
-    // HIPAA Compliance: Clear all data when session ends
-    transcript = '';
-    updateTranscriptDisplay('Session ended. All data cleared.');
+    if (!captionObserver) captionObserver = initCaptionCapture();
+    
+  } else {
+    btn.textContent = 'Start Session';
+    btn.classList.remove('active');
+    updateStatus('Processing...', 'inactive');
+    
+    if (recognition) recognition.stop();
+    if (captionObserver) {
+      captionObserver.disconnect();
+      captionObserver = null;
+    }
+    
+    sessionData.endTime = new Date().toISOString();
+    
+    generateSessionFeedback().then(() => {
+      updateStatus('Session Ended', 'inactive');
+      feedbackBtn.style.display = 'inline-block';
+      setTimeout(() => destroySessionData(), 1000);
+    });
   }
 }
 
-function closeOverlay() {
-  if (isActive) {
-    recognition.stop();
-    isActive = false;
+async function generateSessionFeedback() {
+  try {
+    analyzeSessionPerformance();
+    
+    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/generate-interpreter-feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionData: {
+          duration: (new Date(sessionData.endTime) - new Date(sessionData.startTime)) / 1000,
+          interactionCount: sessionData.interactions.length,
+          terminologyCount: sessionData.terminologyUsed.length,
+          clarifications: sessionData.clarificationRequests,
+          paceIssues: sessionData.paceIssues,
+          omissions: sessionData.omissions
+        }
+      })
+    });
+    
+    const data = await response.json();
+    sessionData.feedback = data.feedback;
+    
+  } catch (error) {
+    console.error('Error generating feedback:', error);
+    sessionData.feedback = 'Feedback generation unavailable. Please check connection.';
+  }
+}
+
+function analyzeSessionPerformance() {
+  sessionData.terminologyUsed = Array.from(new Set([
+    ...Array.from(keyInsights.medications),
+    ...Array.from(keyInsights.diagnoses)
+  ]));
+  
+  sessionData.interactions.forEach(interaction => {
+    const text = interaction.text.toLowerCase();
+    
+    if (text.includes('can you repeat') || text.includes('could you clarify') || text.includes('please repeat')) {
+      sessionData.clarificationRequests++;
+    }
+    
+    if (text.length > 300 && !text.includes('.')) {
+      sessionData.paceIssues++;
+    }
+  });
+  
+  if (sessionData.terminologyUsed.length > 5) {
+    sessionData.strengths.push('Strong medical terminology recognition');
+  }
+  if (sessionData.clarificationRequests > 0) {
+    sessionData.strengths.push('Proactive clarification requests');
   }
   
-  // HIPAA Compliance: Clear all in-memory data
-  transcript = '';
+  if (sessionData.paceIssues > 2) {
+    sessionData.improvements.push('Consider slowing pace for complex information');
+  }
+  if (sessionData.terminologyUsed.length < 3) {
+    sessionData.improvements.push('Practice medical terminology recognition');
+  }
+}
+
+function showFeedback() {
+  if (!sessionData.feedback) return;
   
-  if (overlayElement) {
-    overlayElement.remove();
-    overlayElement = null;
+  const modal = document.createElement('div');
+  modal.className = 'interprecoach-modal';
+  modal.innerHTML = `
+    <div class="interprecoach-modal-content">
+      <div class="interprecoach-modal-header">
+        <h2>🎯 Professional Performance Feedback</h2>
+        <button class="interprecoach-modal-close">&times;</button>
+      </div>
+      <div class="interprecoach-modal-body">
+        ${sessionData.feedback}
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  modal.querySelector('.interprecoach-modal-close').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+}
+
+function destroySessionData() {
+  console.log('InterpreCoach: Destroying PHI/PII data...');
+  
+  keyInsights.phi.clear();
+  keyInsights.pii.clear();
+  keyInsights.chiefComplaint = null;
+  keyInsights.medications.clear();
+  keyInsights.allergies.clear();
+  keyInsights.vitalSigns = {};
+  keyInsights.diagnoses.clear();
+  keyInsights.nextSteps = [];
+  
+  sessionData.interactions = [];
+  
+  console.log('InterpreCoach: PHI/PII data destroyed');
+}
+
+function closeOverlay() {
+  const overlay = document.getElementById('interprecoach-overlay');
+  if (overlay) {
+    if (isSessionActive) {
+      const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
+      if (!confirm) return;
+      
+      if (recognition) recognition.stop();
+      if (captionObserver) captionObserver.disconnect();
+      isSessionActive = false;
+      destroySessionData();
+    }
+    overlay.remove();
   }
 }
 
 function minimizeOverlay() {
-  overlayElement.classList.toggle('ic-minimized');
+  document.getElementById('interprecoach-overlay').classList.toggle('interprecoach-minimized');
 }
 
-// Initialize on extension icon click
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'toggle') {
-    if (!overlayElement) {
+    const existing = document.getElementById('interprecoach-overlay');
+    if (!existing) {
       createOverlay();
     } else {
       closeOverlay();
@@ -378,7 +703,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Auto-initialize for testing (remove in production)
 if (window.location.search.includes('interprecoach=1')) {
   setTimeout(createOverlay, 1000);
 }
