@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { ArrowRight, Bot, BookOpen, BarChart3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Bot, BookOpen, BarChart3, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const SolutionHero = () => {
@@ -33,17 +33,17 @@ export const SolutionHero = () => {
       <div className="container mx-auto">
         {/* Headline */}
         <div className="text-center mb-16 space-y-6 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Embrace the Change,
             </span>
             <br />
             <span className="text-foreground">Don't Get Replaced By It</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground/90 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground/90 max-w-4xl mx-auto font-sans leading-relaxed">
             The InterpreLab Ecosystem: AI-powered solutions designed to eradicate the human margin of error in medical interpretation
           </p>
-          <p className="text-lg md:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground/80 max-w-3xl mx-auto font-sans leading-relaxed">
             We're contributing to the UN SDG 2030 goals by transforming healthcare communication on a global scale—ensuring every voice is heard, every diagnosis is clear, and every patient receives equitable care.
           </p>
         </div>
@@ -60,10 +60,10 @@ export const SolutionHero = () => {
                 <div className={`mb-3 ${solution.color}`}>
                   {solution.icon}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-foreground">
+                <h3 className="text-lg font-display font-bold mb-2 text-foreground">
                   {solution.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                <p className="text-sm text-muted-foreground mb-4 font-sans leading-relaxed">
                   {solution.description}
                 </p>
                 <Link to={solution.link}>
@@ -86,7 +86,7 @@ export const SolutionHero = () => {
             <Link to="/about">
               <Button
                 size="lg"
-                className="bg-gradient-primary hover:opacity-90 text-white shadow-glow group px-8 py-4"
+                className="bg-gradient-primary hover:opacity-90 text-white shadow-glow group px-8 py-4 font-display"
               >
                 Find Out More
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -98,15 +98,15 @@ export const SolutionHero = () => {
           <div className="pt-8 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span>HIPAA Compliant</span>
+              <span className="font-sans">HIPAA Compliant</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span>SOC 2 Certified</span>
+              <span className="font-sans">SOC 2 Certified</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span>ISO 27001</span>
+              <span className="font-sans">ISO 27001</span>
             </div>
           </div>
         </div>

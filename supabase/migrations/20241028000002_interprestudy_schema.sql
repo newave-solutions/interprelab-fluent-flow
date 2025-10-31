@@ -95,9 +95,12 @@ create table public.flashcard_reviews (
   repetitions integer default 0,
   next_review_date date not null,
   review_duration_seconds integer,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  unique(user_id, flashcard_id, created_at::date)
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Note: We allow multiple reviews per day for the same flashcard
+-- The application logic will handle review scheduling
+-- If you need one review per day, add this constraint at the application level
 
 -- Create ai_content_requests table to track LLM generation requests
 create table public.ai_content_requests (
@@ -176,57 +179,57 @@ alter table public.quizzes enable row level security;
 alter table public.quiz_attempts enable row level security;
 alter table public.study_streaks enable row level security;
 
--- Create RLS policies
+-- Create RLS policies (optimized with scalar subqueries)
 -- Learning paths policies
 create policy "Users can view own learning paths" on public.learning_paths
-  for select using (auth.uid() = user_id or is_public = true);
+  for select using ((select auth.uid()) = user_id or is_public = true);
 
 create policy "Users can manage own learning paths" on public.learning_paths
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Lessons policies
 create policy "Users can view own lessons" on public.lessons
-  for select using (auth.uid() = user_id or exists (
+  for select using ((select auth.uid()) = user_id or exists (
     select 1 from public.learning_paths lp
-    where lp.id = learning_path_id and (lp.user_id = auth.uid() or lp.is_public = true)
+    where lp.id = learning_path_id and (lp.user_id = (select auth.uid()) or lp.is_public = true)
   ));
 
 create policy "Users can manage own lessons" on public.lessons
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Lesson progress policies
 create policy "Users can manage own lesson progress" on public.lesson_progress
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Flashcards policies
 create policy "Users can view flashcards" on public.flashcards
-  for select using (auth.uid() = user_id or is_public = true);
+  for select using ((select auth.uid()) = user_id or is_public = true);
 
 create policy "Users can manage own flashcards" on public.flashcards
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Flashcard reviews policies
 create policy "Users can manage own flashcard reviews" on public.flashcard_reviews
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- AI content requests policies
 create policy "Users can manage own AI requests" on public.ai_content_requests
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Quizzes policies
 create policy "Users can view quizzes" on public.quizzes
-  for select using (auth.uid() = user_id or is_public = true);
+  for select using ((select auth.uid()) = user_id or is_public = true);
 
 create policy "Users can manage own quizzes" on public.quizzes
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Quiz attempts policies
 create policy "Users can manage own quiz attempts" on public.quiz_attempts
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Study streaks policies
 create policy "Users can manage own study streaks" on public.study_streaks
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create triggers for updated_at timestamps
 create trigger handle_updated_at before update on public.learning_paths

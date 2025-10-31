@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
-import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "lucide-react";
+import { Menu, Shield, Phone, Mail, User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-// import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -40,28 +39,29 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/');
+    navigate("/");
   };
 
   const navItems = [
     {
-      label: t('solutions'),
+      label: t("solutions"),
       submenu: [
-        { label: 'InterpreBot', href: '/interprebot' },
-        { label: 'InterpreCoach', href: '/interprecoach' },
-        { label: 'InterpreStudy', href: '/interprestudy' },
-        { label: 'InterpreLink', href: '/interprelink' },
-        { label: 'InterpreTrack', href: '/interpretrack' },
-      ]
+        { label: "InterpreBot", href: "/interprebot" },
+        { label: "InterpreCoach", href: "/interprecoach" },
+        { label: "InterpreStudy", href: "/interprestudy" },
+        { label: "InterpreLink", href: "/interprelink" },
+        { label: "InterpreTrack", href: "/interpretrack" },
+      ],
     },
-    { label: t('resources'), href: '/resources' },
-    { label: t('about'), href: '/about' },
-    { label: t('contact'), href: '/contact' },
+    { label: t("resources"), href: "/resources" },
+    { label: t("about"), href: "/about" },
+    { label: t("contact"), href: "/contact" },
   ];
 
-  const navClass = transparent && !isScrolled
-    ? "fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/10"
-    : "fixed top-0 left-0 right-0 z-50 glass border-b border-border/50";
+  const navClass =
+    transparent && !isScrolled
+      ? "fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/10"
+      : "fixed top-0 left-0 right-0 z-50 glass border-b border-border/50";
 
   return (
     <nav className={navClass}>
@@ -73,10 +73,20 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className={`text-xl font-bold ${transparent && !isScrolled ? "text-white" : ""}`}>
+              <h1
+                className={`text-xl font-bold ${
+                  transparent && !isScrolled ? "text-white" : ""
+                }`}
+              >
                 InterpreLab
               </h1>
-              <p className={`text-xs ${transparent && !isScrolled ? "text-white/70" : "text-muted-foreground"}`}>
+              <p
+                className={`text-xs ${
+                  transparent && !isScrolled
+                    ? "text-white/70"
+                    : "text-muted-foreground"
+                }`}
+              >
                 Advanced Interpretation
               </p>
             </div>
@@ -84,7 +94,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
+            {navItems.map((item) =>
               item.submenu ? (
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
@@ -102,11 +112,16 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                         <ul className="grid w-48 gap-2 p-2">
                           {item.submenu.map((subitem) => (
                             <li key={subitem.href}>
-                              <Link to={subitem.href}>
-                                <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                                  <div className="text-sm font-medium leading-none">{subitem.label}</div>
-                                </NavigationMenuLink>
-                              </Link>
+                              <NavigationMenuLink asChild>
+                                <Link
+                                  to={subitem.href}
+                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                >
+                                  <div className="text-sm font-medium leading-none">
+                                    {subitem.label}
+                                  </div>
+                                </Link>
+                              </NavigationMenuLink>
                             </li>
                           ))}
                         </ul>
@@ -127,7 +142,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                   {item.label}
                 </Link>
               )
-            ))}
+            )}
           </div>
 
           {/* CTA Buttons */}
@@ -141,25 +156,29 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                 </Link>
                 <Button onClick={handleSignOut} variant="glass" size="sm">
                   <LogOut className="w-4 h-4 mr-2" />
-                  {t('signOut')}
+                  {t("signOut")}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/waitlist">
-                  <Button variant="glass" size="sm" className="flex items-center gap-2">
+                  <Button
+                    variant="glass"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
                     Join Waitlist
                   </Button>
                 </Link>
                 <Link to="/signin">
                   <Button variant="hero" size="sm">
                     <User className="w-4 h-4 mr-2" />
-                    {t('signIn')}
+                    {t("signIn")}
                   </Button>
                 </Link>
               </>
             )}
-            {/* <ThemeToggle /> */}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu */}
@@ -171,10 +190,12 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
             </SheetTrigger>
             <SheetContent side="right" className="glass">
               <div className="space-y-6 mt-8">
-                {navItems.map((item) => (
+                {navItems.map((item) =>
                   item.submenu ? (
                     <div key={item.label} className="space-y-2">
-                      <p className="text-sm font-semibold text-muted-foreground">{item.label}</p>
+                      <p className="text-sm font-semibold text-muted-foreground">
+                        {item.label}
+                      </p>
                       {item.submenu.map((subitem) => (
                         <Link
                           key={subitem.href}
@@ -196,7 +217,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                       {item.label}
                     </Link>
                   )
-                ))}
+                )}
 
                 <div className="pt-6 space-y-3">
                   {user ? (
@@ -209,23 +230,34 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                       className="w-full"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
-                      {t('signOut')}
+                      {t("signOut")}
                     </Button>
                   ) : (
                     <>
                       <Link to="/waitlist">
-                        <Button variant="glass" className="w-full flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                        <Button
+                          variant="glass"
+                          className="w-full flex items-center gap-2"
+                          onClick={() => setIsOpen(false)}
+                        >
                           Join Waitlist
                         </Button>
                       </Link>
                       <Link to="/signin">
-                        <Button variant="hero" className="w-full" onClick={() => setIsOpen(false)}>
+                        <Button
+                          variant="hero"
+                          className="w-full"
+                          onClick={() => setIsOpen(false)}
+                        >
                           <User className="w-4 h-4 mr-2" />
-                          {t('signIn')}
+                          {t("signIn")}
                         </Button>
                       </Link>
                     </>
                   )}
+                  <div className="flex items-center justify-center pt-4">
+                    <ThemeToggle />
+                  </div>
                 </div>
 
                 <div className="pt-6 border-t border-border/50">

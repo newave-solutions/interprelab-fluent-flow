@@ -57,7 +57,7 @@ This guide will help you set up Google Cloud's Gemini API for AI-powered content
      - Choose "Generative Language API"
    - Under "Application restrictions" (optional but recommended):
      - Select "HTTP referrers" for web applications
-     - Add your domain(s): `https://yourdomain.com/*`
+     - Add your domain(s): `https://interprelab.com/*`
    - Click "Save"
 
 ## Step 4: Set Up Billing (Required)

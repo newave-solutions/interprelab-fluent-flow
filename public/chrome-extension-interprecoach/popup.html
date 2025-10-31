@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterpreCoach</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="9" x2="15" y2="9"></line>
+          <line x1="9" y1="15" x2="15" y2="15"></line>
+        </svg>
+        <h1 class="logo-text">Interpre<span class="logo-highlight">Coach</span></h1>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <button id="start-session-btn" class="icon-btn mic-btn" title="Start recording">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </button>
+        <button id="end-session-btn" class="icon-btn mic-btn recording hidden" title="Stop recording">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+          </svg>
+        </button>
+        <button id="menu-btn" class="icon-btn" title="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-grid">
+      <!-- Panel 1: Live Transcription -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Live Transcription</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content" id="transcription-panel">
+          <div class="transcription-content">
+            <div class="transcript-line">
+              <span class="speaker doctor">Doctor:</span>
+              <span class="text">Good morning, please have a seat. So, what seems to be the problem today?</span>
+            </div>
+            <div class="transcript-line">
+              <span class="speaker patient">Patient:</span>
+              <span class="text">He estado sintiendo un dolor agudo en el pecho y me falta el aire.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Terminology -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span>Terminology</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content" id="terminology-panel">
+          <div class="term-card">
+            <div class="term-header">
+              <h4>Myocardial Infarction</h4>
+              <button class="info-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12" stroke="white" stroke-width="2"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8" stroke="white" stroke-width="2"></line>
+                </svg>
+              </button>
+            </div>
+            <p class="term-definition">A blockage of blood flow to the heart muscle. (Heart Attack)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 3: Scratchpad -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span>Scratchpad</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content">
+          <textarea id="scratchpad" placeholder="Type your notes here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Panel 4: Audio Input -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+            <span>Audio Input</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content audio-visualizer">
+          <div class="audio-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 5: QA Tips -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>QA Tips</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content" id="qa-tips-panel">
+          <div class="qa-tip">
+            <span class="tip-label">Reminder:</span>
+            <span class="tip-text">Maintain transparency. Interpret everything that is said.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 6: My Dictionary -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            <span>My Dictionary</span>
+          </div>
+          <button class="minimize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="panel-content" id="dictionary-panel">
+          <div class="dictionary-entry">
+            <div class="dict-term">Angina - Angina de pecho</div>
+            <div class="dict-term">Rash - Sarpullido</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer Search -->
+    <footer class="footer">
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search terminology..." />
+      </div>
+    </footer>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="medical-terminology.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

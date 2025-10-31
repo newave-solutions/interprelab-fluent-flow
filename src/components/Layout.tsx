@@ -1,13 +1,19 @@
-import { Outlet } from "react-router-dom";
-import Navigation from "./Navigation";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
+import { ReactNode } from "react";
 
-export default function Layout() {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div>
+    <div className="min-h-screen bg-background">
       <Navigation />
-      <main>
-        <Outlet />
+      <main className="pt-20">
+        {children}
       </main>
+      <Footer />
     </div>
   );
-}
+};

@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "InterpreCoach",
+  "version": "1.0.0",
+  "description": "AI-powered interpreter copilot for medical interpretation with real-time transcription, medical terminology translation, and session highlights",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabCapture",
+    "offscreen",
+    "notifications"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Open InterpreCoach",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "exclude_matches": ["*://chrome.google.com/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "styles.css", "offscreen.html", "qa-feedback.html", "qa-feedback-styles.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

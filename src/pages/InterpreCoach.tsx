@@ -1,51 +1,67 @@
-import Navigation from "../components/Navigation";
+import { Navigation } from "../components/Navigation";
 import { Footer } from "../components/Footer";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 
 const InterpreCoach = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-subtle">
       <Navigation />
-      <main className="flex-grow container mx-auto px-6 py-24">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold">InterpreCoach</h1>
-          <p className="mt-4 text-lg text-muted-foreground">Your real-time AI assistant for medical interpretation.</p>
+
+      {/* Hero Section */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">InterpreCoach</h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Your real-time AI assistant for medical interpretation.
+          </p>
+        </div>
+      </section>
+
+      <main className="flex-grow container mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Your AI Companion in Live Sessions
+          </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto mt-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="text-center">
-              {/* Placeholder for an image or illustration */}
-              <div className="bg-muted rounded-lg h-64 flex items-center justify-center">
-                <p className="text-muted-foreground">InterpreCoach in action</p>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <Card className="glass border-border/50 hover-lift p-8">
+              <div className="text-center mb-6">
+                <div className="bg-gradient-primary rounded-lg h-64 flex items-center justify-center">
+                  <p className="text-white text-lg font-semibold">InterpreCoach in action</p>
+                </div>
               </div>
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold">Your AI Companion in Live Sessions</h2>
-              <p className="mt-4 text-muted-foreground">
+            </Card>
+
+            <Card className="glass border-border/50 hover-lift p-8">
+              <h3 className="text-2xl font-bold mb-4">Browser Extension Features</h3>
+              <p className="text-muted-foreground mb-6">
                 InterpreCoach is a browser extension that provides real-time assistance during your interpretation sessions. Get access to advanced terminology management, voice training, and key insights.
               </p>
-              <ul className="mt-6 space-y-2">
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">✔</span>
-                  <span>Advanced Terminology Management with images.</span>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <span className="text-primary text-xl">✔</span>
+                  <span>Advanced Terminology Management with images</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">✔</span>
-                  <span>Acoustic & Voice Training.</span>
+                <li className="flex items-center gap-3">
+                  <span className="text-primary text-xl">✔</span>
+                  <span>Acoustic & Voice Training</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">✔</span>
-                  <span>Key Insights & Summarization.</span>
+                <li className="flex items-center gap-3">
+                  <span className="text-primary text-xl">✔</span>
+                  <span>Key Insights & Summarization</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">✔</span>
-                  <span>Predictive Assistance.</span>
+                <li className="flex items-center gap-3">
+                  <span className="text-primary text-xl">✔</span>
+                  <span>Predictive Assistance</span>
                 </li>
               </ul>
-            </div>
+            </Card>
           </div>
         </div>
 

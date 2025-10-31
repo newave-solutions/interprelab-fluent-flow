@@ -1,153 +1,227 @@
-import { Badge } from "./ui/badge";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import {
-  Play,
-  Users,
-  BookOpen,
-  Scale,
-  Network,
-  Briefcase,
-  ArrowRight
-} from "lucide-react";
+import { Layout } from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star } from "lucide-react";
 
-export const Resources = () => {
+const Resources = () => {
   const resources = [
     {
-      icon: Play,
-      title: "Training Videos",
-      description: "Comprehensive video library for medical interpreters with real-world scenarios",
-      items: ["Medical Terminology", "Patient Communication", "Emergency Procedures"],
-      color: "bg-gradient-primary"
+      title: "Interpretation Techniques Masterclass",
+      description: "Advanced techniques for simultaneous and consecutive interpretation",
+      type: "Video Course",
+      duration: "4 hours",
+      level: "Advanced",
+      icon: Video,
+      featured: true
     },
     {
-      icon: Users,
-      title: "Roleplay Scenarios",
-      description: "Interactive practice sessions with AI-powered feedback",
-      items: ["Doctor-Patient Consults", "Legal Depositions", "Emergency Situations"],
-      color: "bg-gradient-success"
+      title: "Medical Terminology Guide",
+      description: "Comprehensive guide to medical interpretation terminology",
+      type: "PDF Guide",
+      pages: "120 pages",
+      level: "Intermediate",
+      icon: FileText,
+      featured: false
     },
     {
+      title: "Legal Interpretation Handbook",
+      description: "Essential guide for court and legal interpretation",
+      type: "eBook",
+      pages: "85 pages",
+      level: "Intermediate",
       icon: BookOpen,
-      title: "Multilingual Dictionaries",
-      description: "Specialized dictionaries for medical and legal terminology",
-      items: ["Spanish-English Medical", "Legal Terms Database", "Cultural Context Guide"],
-      color: "bg-gradient-to-r from-purple-500 to-pink-500"
+      featured: false
     },
     {
-      icon: Scale,
-      title: "Legal & Compliance",
-      description: "Stay updated with interpretation standards and regulations",
-      items: ["HIPAA Guidelines", "Court Interpretation Rules", "Ethics Standards"],
-      color: "bg-gradient-to-r from-orange-500 to-red-500"
+      title: "Community of Practice Webinars",
+      description: "Monthly webinars with industry experts and peers",
+      type: "Live Session",
+      duration: "1 hour",
+      level: "All Levels",
+      icon: Users,
+      featured: true
+    }
+  ];
+
+  const externalResources = [
+    {
+      title: "National Board of Certification for Medical Interpreters",
+      description: "Official certification body for medical interpreters",
+      url: "https://www.certifiedmedicalinterpreters.org/",
+      organization: "NBCMI"
+    },
+    {
+      title: "Certification Commission for Healthcare Interpreters",
+      description: "Professional certification for healthcare interpreters",
+      url: "https://www.cchipeaks.org/",
+      organization: "CCHI"
+    },
+    {
+      title: "International Association of Conference Interpreters",
+      description: "Global professional association for conference interpreters",
+      url: "https://aiic.org/",
+      organization: "AIIC"
+    },
+    {
+      title: "Registry of Interpreters for the Deaf",
+      description: "Professional organization for ASL interpreters",
+      url: "https://www.rid.org/",
+      organization: "RID"
     }
   ];
 
   return (
-    <section className="py-20 px-6 relative">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-
-      <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16 animate-fade-in">
-          <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
-            Learning Resources
+    <Layout>
+      {/* Hero Section */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6 text-center">
+          <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
+            Professional Development
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Everything You Need to Excel
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Access comprehensive training materials, practice scenarios, and professional development resources
-            designed specifically for medical and legal interpreters.
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
+            Resources & Training
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Access comprehensive training materials, industry resources, and professional
+            development tools to advance your interpretation career.
           </p>
+          <Button size="lg" className="glass-button">
+            <BookOpen className="w-5 h-5 mr-2" />
+            Explore Resources
+          </Button>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {resources.map((resource, index) => (
-            <Card
-              key={resource.title}
-              className="bg-card/50 border-border/50 backdrop-blur-sm hover-lift group"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <CardContent className="p-6 space-y-4">
-                <div className={`w-12 h-12 ${resource.color} rounded-lg flex items-center justify-center`}>
-                  <resource.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                  {resource.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {resource.description}
-                </p>
-                <div className="space-y-2">
-                  {resource.items.map((item) => (
-                    <div key={item} className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-xs text-muted-foreground">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <Button variant="outline" size="sm" className="w-full mt-4">
-                  Explore
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* InterpreterHub Section */}
-        <div className="bg-card/30 border border-border/50 backdrop-blur-sm rounded-lg p-8 text-center">
-          <div className="space-y-6">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <Network className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">InterpreterHub</h3>
-            </div>
-
+      {/* Featured Resources */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Featured Training Materials
+            </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Connect with the global interpreter community. Share experiences, discuss challenging situations,
-              and discover new opportunities in the field.
+              Curated content designed by industry experts to enhance your
+              interpretation skills and professional knowledge.
             </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              <Card className="bg-card/30 border-border/50">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Users className="w-8 h-8 mx-auto text-primary" />
-                  <h4 className="font-bold text-foreground">Community Wall</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Share field experiences, ask questions, and learn from fellow interpreters worldwide
-                  </p>
-                  <Button variant="outline" size="sm">
-                    Join Discussion
-                  </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {resources.map((resource, index) => (
+              <Card
+                key={index}
+                className={`glass border-border/50 hover:border-primary/50 transition-all duration-300 ${
+                  resource.featured ? 'ring-2 ring-primary/20' : ''
+                }`}
+              >
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <resource.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <Badge variant={resource.featured ? "default" : "secondary"} className="mb-2">
+                          {resource.type}
+                        </Badge>
+                        {resource.featured && (
+                          <Badge className="ml-2 bg-amber-500/10 text-amber-500 border-amber-500/20">
+                            <Star className="w-3 h-3 mr-1" />
+                            Featured
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <CardTitle className="text-xl">{resource.title}</CardTitle>
+                  <CardDescription className="text-base">
+                    {resource.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>{resource.duration || resource.pages}</span>
+                      <span>•</span>
+                      <span>{resource.level}</span>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Access
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
-
-              <Card className="bg-card/30 border-border/50">
-                <CardContent className="p-6 text-center space-y-3">
-                  <Briefcase className="w-8 h-8 mx-auto text-success" />
-                  <h4 className="font-bold text-foreground">Job Opportunities</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Stay updated on the latest interpreter positions and contract opportunities
-                  </p>
-                  <Button variant="outline" size="sm">
-                    View Jobs
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Button size="lg" className="bg-gradient-primary border-0 text-white hover:opacity-90">
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Access InterpreterHub
-            </Button>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* External Resources */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Industry Organizations & Certifications
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Connect with professional organizations and pursue industry-recognized
+              certifications to advance your career.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {externalResources.map((resource, index) => (
+              <Card key={index} className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline">{resource.organization}</Badge>
+                    <ExternalLink className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <CardTitle className="text-lg">{resource.title}</CardTitle>
+                  <CardDescription>
+                    {resource.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="ghost" className="w-full justify-start p-0" asChild>
+                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Signup */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="glass rounded-2xl p-12 text-center border border-border/50">
+            <Calendar className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Get the latest resources, industry insights, and training materials
+              delivered to your inbox monthly.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <Button size="lg">
+                Subscribe
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Layout>
   );
 };
+
+export default Resources;

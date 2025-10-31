@@ -143,110 +143,110 @@ alter table public.discussion_replies enable row level security;
 alter table public.job_postings enable row level security;
 alter table public.user_goals enable row level security;
 
--- RLS Policies for posts
+-- RLS Policies for posts (optimized with scalar subqueries)
 create policy "Users can view public posts" on public.posts
-  for select using (visibility = 'public' or auth.uid() = user_id);
+  for select using (visibility = 'public' or (select auth.uid()) = user_id);
 
 create policy "Users can create own posts" on public.posts
-  for insert with check (auth.uid() = user_id);
+  for insert with check ((select auth.uid()) = user_id);
 
 create policy "Users can update own posts" on public.posts
-  for update using (auth.uid() = user_id);
+  for update using ((select auth.uid()) = user_id);
 
 create policy "Users can delete own posts" on public.posts
-  for delete using (auth.uid() = user_id);
+  for delete using ((select auth.uid()) = user_id);
 
 -- RLS Policies for post_likes
 create policy "Users can view all likes" on public.post_likes
   for select using (true);
 
 create policy "Users can manage own likes" on public.post_likes
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- RLS Policies for post_comments
 create policy "Users can view comments on visible posts" on public.post_comments
   for select using (exists (
     select 1 from public.posts p
-    where p.id = post_id and (p.visibility = 'public' or p.user_id = auth.uid())
+    where p.id = post_id and (p.visibility = 'public' or p.user_id = (select auth.uid()))
   ));
 
 create policy "Users can create comments" on public.post_comments
-  for insert with check (auth.uid() = user_id);
+  for insert with check ((select auth.uid()) = user_id);
 
 create policy "Users can update own comments" on public.post_comments
-  for update using (auth.uid() = user_id);
+  for update using ((select auth.uid()) = user_id);
 
 create policy "Users can delete own comments" on public.post_comments
-  for delete using (auth.uid() = user_id);
+  for delete using ((select auth.uid()) = user_id);
 
 -- RLS Policies for connections
 create policy "Users can view own connections" on public.connections
-  for select using (auth.uid() = requester_id or auth.uid() = recipient_id);
+  for select using ((select auth.uid()) = requester_id or (select auth.uid()) = recipient_id);
 
 create policy "Users can create connection requests" on public.connections
-  for insert with check (auth.uid() = requester_id);
+  for insert with check ((select auth.uid()) = requester_id);
 
 create policy "Users can update connections they're part of" on public.connections
-  for update using (auth.uid() = requester_id or auth.uid() = recipient_id);
+  for update using ((select auth.uid()) = requester_id or (select auth.uid()) = recipient_id);
 
 create policy "Users can delete own connection requests" on public.connections
-  for delete using (auth.uid() = requester_id);
+  for delete using ((select auth.uid()) = requester_id);
 
 -- RLS Policies for reels
 create policy "Users can view all reels" on public.reels
   for select using (true);
 
 create policy "Users can create own reels" on public.reels
-  for insert with check (auth.uid() = user_id);
+  for insert with check ((select auth.uid()) = user_id);
 
 create policy "Users can update own reels" on public.reels
-  for update using (auth.uid() = user_id);
+  for update using ((select auth.uid()) = user_id);
 
 create policy "Users can delete own reels" on public.reels
-  for delete using (auth.uid() = user_id);
+  for delete using ((select auth.uid()) = user_id);
 
 -- RLS Policies for discussions
 create policy "Users can view all discussions" on public.discussions
   for select using (true);
 
 create policy "Users can create discussions" on public.discussions
-  for insert with check (auth.uid() = user_id);
+  for insert with check ((select auth.uid()) = user_id);
 
 create policy "Users can update own discussions" on public.discussions
-  for update using (auth.uid() = user_id);
+  for update using ((select auth.uid()) = user_id);
 
 create policy "Users can delete own discussions" on public.discussions
-  for delete using (auth.uid() = user_id);
+  for delete using ((select auth.uid()) = user_id);
 
 -- RLS Policies for discussion_replies
 create policy "Users can view all replies" on public.discussion_replies
   for select using (true);
 
 create policy "Users can create replies" on public.discussion_replies
-  for insert with check (auth.uid() = user_id);
+  for insert with check ((select auth.uid()) = user_id);
 
 create policy "Users can update own replies" on public.discussion_replies
-  for update using (auth.uid() = user_id);
+  for update using ((select auth.uid()) = user_id);
 
 create policy "Users can delete own replies" on public.discussion_replies
-  for delete using (auth.uid() = user_id);
+  for delete using ((select auth.uid()) = user_id);
 
 -- RLS Policies for job_postings
 create policy "Users can view active job postings" on public.job_postings
-  for select using (is_active = true or auth.uid() = posted_by_user_id);
+  for select using (is_active = true or (select auth.uid()) = posted_by_user_id);
 
 create policy "Users can create job postings" on public.job_postings
-  for insert with check (auth.uid() = posted_by_user_id);
+  for insert with check ((select auth.uid()) = posted_by_user_id);
 
 create policy "Users can update own job postings" on public.job_postings
-  for update using (auth.uid() = posted_by_user_id);
+  for update using ((select auth.uid()) = posted_by_user_id);
 
 create policy "Users can delete own job postings" on public.job_postings
-  for delete using (auth.uid() = posted_by_user_id);
+  for delete using ((select auth.uid()) = posted_by_user_id);
 
 -- RLS Policies for user_goals
 create policy "Users can manage own goals" on public.user_goals
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Triggers for updated_at
 create trigger handle_updated_at before update on public.posts
@@ -291,14 +291,14 @@ create index idx_user_goals_user_active on public.user_goals(user_id, is_active)
 
 -- Function to increment post likes count
 create or replace function increment_post_likes()
-returns trigger as $
+returns trigger as $$
 begin
   update public.posts
   set likes_count = likes_count + 1
   where id = new.post_id;
   return new;
 end;
-$ language plpgsql security definer;
+$$ language plpgsql security definer;
 
 create trigger on_post_like_created
   after insert on public.post_likes
@@ -306,14 +306,14 @@ create trigger on_post_like_created
 
 -- Function to decrement post likes count
 create or replace function decrement_post_likes()
-returns trigger as $
+returns trigger as $$
 begin
   update public.posts
   set likes_count = likes_count - 1
   where id = old.post_id;
   return old;
 end;
-$ language plpgsql security definer;
+$$ language plpgsql security definer;
 
 create trigger on_post_like_deleted
   after delete on public.post_likes
@@ -321,14 +321,14 @@ create trigger on_post_like_deleted
 
 -- Function to increment post comments count
 create or replace function increment_post_comments()
-returns trigger as $
+returns trigger as $$
 begin
   update public.posts
   set comments_count = comments_count + 1
   where id = new.post_id;
   return new;
 end;
-$ language plpgsql security definer;
+$$ language plpgsql security definer;
 
 create trigger on_post_comment_created
   after insert on public.post_comments
@@ -336,14 +336,14 @@ create trigger on_post_comment_created
 
 -- Function to increment discussion replies count
 create or replace function increment_discussion_replies()
-returns trigger as $
+returns trigger as $$
 begin
   update public.discussions
   set replies_count = replies_count + 1
   where id = new.discussion_id;
   return new;
 end;
-$ language plpgsql security definer;
+$$ language plpgsql security definer;
 
 create trigger on_discussion_reply_created
   after insert on public.discussion_replies

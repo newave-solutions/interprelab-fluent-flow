@@ -156,50 +156,50 @@ alter table public.study_sessions enable row level security;
 alter table public.coaching_sessions enable row level security;
 alter table public.user_achievements enable row level security;
 
--- Create policies for profiles
+-- Create policies for profiles (optimized with scalar subqueries)
 create policy "Users can view own profile" on public.profiles
-  for select using (auth.uid() = id);
+  for select using ((select auth.uid()) = id);
 
 create policy "Users can update own profile" on public.profiles
-  for update using (auth.uid() = id);
+  for update using ((select auth.uid()) = id);
 
 create policy "Users can insert own profile" on public.profiles
-  for insert with check (auth.uid() = id);
+  for insert with check ((select auth.uid()) = id);
 
 -- Create policies for user_roles
 create policy "Users can view own roles" on public.user_roles
-  for select using (auth.uid() = user_id);
+  for select using ((select auth.uid()) = user_id);
 
 -- Create policies for user_settings
 create policy "Users can manage own settings" on public.user_settings
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create policies for call_logs
 create policy "Users can manage own call logs" on public.call_logs
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create policies for assessment_results
 create policy "Users can manage own assessment results" on public.assessment_results
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create policies for glossary_terms
 create policy "Users can manage own glossary terms" on public.glossary_terms
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 create policy "Users can view public glossary terms" on public.glossary_terms
   for select using (is_public = true);
 
 -- Create policies for study_sessions
 create policy "Users can manage own study sessions" on public.study_sessions
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create policies for coaching_sessions
 create policy "Users can manage own coaching sessions" on public.coaching_sessions
-  for all using (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id);
 
 -- Create policies for user_achievements
 create policy "Users can view own achievements" on public.user_achievements
-  for select using (auth.uid() = user_id);
+  for select using ((select auth.uid()) = user_id);
 
 create policy "System can insert achievements" on public.user_achievements
   for insert with check (true);
@@ -259,27 +259,66 @@ create index idx_glossary_terms_public on public.glossary_terms(is_public) where
 create index idx_study_sessions_user_id_created on public.study_sessions(user_id, created_at desc);
 create index idx_coaching_sessions_user_id_created on public.coaching_sessions(user_id, created_at desc);
 
--- Create views for analytics
-create or replace view public.user_stats as
-select
-  u.id as user_id,
-  p.first_name,
-  p.last_name,
-  count(cl.id) as total_calls,
-  sum(cl.duration_seconds) as total_duration_seconds,
-  sum(cl.earnings) as total_earnings,
-  avg(cl.duration_seconds) as avg_call_duration,
-  count(ar.id) as total_assessments,
-  avg(ar.percentage) as avg_assessment_score,
-  count(ss.id) as total_study_sessions,
-  count(cs.id) as total_coaching_sessions
-from auth.users u
-left join public.profiles p on u.id = p.id
-left join public.call_logs cl on u.id = cl.user_id
-left join public.assessment_results ar on u.id = ar.user_id
-left join public.study_sessions ss on u.id = ss.user_id
-left join public.coaching_sessions cs on u.id = cs.user_id
-group by u.id, p.first_name, p.last_name;
+-- Create secure function for user stats (replaces insecure view)
+-- This function only returns stats for the authenticated user, preventing data exposure
+create or replace function public.get_user_stats(target_user_id uuid default null)
+returns table (
+  user_id uuid,
+  first_name text,
+  last_name text,
+  total_calls bigint,
+  total_duration_seconds bigint,
+  total_earnings numeric,
+  avg_call_duration numeric,
+  total_assessments bigint,
+  avg_assessment_score numeric,
+  total_study_sessions bigint,
+  total_coaching_sessions bigint
+) as $
+declare
+  query_user_id uuid;
+begin
+  -- Use provided user_id or default to authenticated user
+  query_user_id := coalesce(target_user_id, (select auth.uid()));
+
+  -- Security check: users can only query their own stats unless they're admin
+  if query_user_id != (select auth.uid()) then
+    -- Check if user is admin
+    if not exists (
+      select 1 from public.user_roles
+      where user_roles.user_id = (select auth.uid()) and role = 'admin'
+    ) then
+      raise exception 'Unauthorized: You can only view your own statistics';
+    end if;
+  end if;
+
+  return query
+  select
+    u.id as user_id,
+    p.first_name,
+    p.last_name,
+    count(cl.id) as total_calls,
+    sum(cl.duration_seconds) as total_duration_seconds,
+    sum(cl.earnings) as total_earnings,
+    avg(cl.duration_seconds) as avg_call_duration,
+    count(ar.id) as total_assessments,
+    avg(ar.percentage) as avg_assessment_score,
+    count(ss.id) as total_study_sessions,
+    count(cs.id) as total_coaching_sessions
+  from auth.users u
+  left join public.profiles p on u.id = p.id
+  left join public.call_logs cl on u.id = cl.user_id
+  left join public.assessment_results ar on u.id = ar.user_id
+  left join public.study_sessions ss on u.id = ss.user_id
+  left join public.coaching_sessions cs on u.id = cs.user_id
+  where u.id = query_user_id
+  group by u.id, p.first_name, p.last_name;
+end;
+$ language plpgsql security definer;
+
+-- Grant execute permission only to authenticated users
+grant execute on function public.get_user_stats(uuid) to authenticated;
+revoke execute on function public.get_user_stats(uuid) from anon, public;
 
 -- Grant necessary permissions
 grant usage on schema public to anon, authenticated;

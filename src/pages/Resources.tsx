@@ -1,63 +1,193 @@
-import Navigation from "../components/Navigation";
-import { Footer } from "../components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Layout } from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star } from "lucide-react";
 
 const Resources = () => {
-  const articles = [
+  const resources = [
     {
-      title: "The Rise of AI in Interpretation",
-      summary: "Artificial Intelligence is revolutionizing the language industry by enhancing speed and efficiency. Tools like Neural Machine Translation (NMT) are becoming essential, but human oversight remains critical to ensure cultural nuance and contextual accuracy.",
-      href: "https://langpros.net/blog/the-latest-trends-in-the-translation-and-interpretation-industry/",
-      image: "/placeholder.svg"
+      title: "Interpretation Techniques Masterclass",
+      description: "Advanced techniques for simultaneous and consecutive interpretation",
+      type: "Video Course",
+      duration: "4 hours",
+      level: "Advanced",
+      icon: Video,
+      featured: true
     },
     {
-      title: "Hybrid and Remote Interpreting is the New Norm",
-      summary: "The global shift to remote work has accelerated the adoption of Video Remote Interpreting (VRI) and Over-the-Phone Interpreting (OPI). These hybrid solutions combine the scalability of technology with the precision of human interpreters.",
-      href: "https://www.ititranslates.com/blog/translation-and-interpretation-industry-trends/",
-      image: "/placeholder.svg"
+      title: "Medical Terminology Guide",
+      description: "Comprehensive guide to medical interpretation terminology",
+      type: "PDF Guide",
+      pages: "120 pages",
+      level: "Intermediate",
+      icon: FileText,
+      featured: false
     },
     {
-      title: "The Future is Specialized and Ethical",
-      summary: "As AI tools become more common, there's a growing demand for hyper-localization and ethical AI practices. Future developments focus on adapting AI for specific domains like medical and legal fields, and even developing emotionally intelligent AI.",
-      href: "https://interpretcloud.com/ai-in-language-interpretation-trends-and-future-developments/",
-      image: "/placeholder.svg"
+      title: "Legal Interpretation Handbook",
+      description: "Essential guide for court and legal interpretation",
+      type: "eBook",
+      pages: "85 pages",
+      level: "Intermediate",
+      icon: BookOpen,
+      featured: false
+    },
+    {
+      title: "Community of Practice Webinars",
+      description: "Monthly webinars with industry experts and peers",
+      type: "Live Session",
+      duration: "1 hour",
+      level: "All Levels",
+      icon: Users,
+      featured: true
     }
   ];
 
   const externalResources = [
-    { title: "National Board of Certification for Medical Interpreters (NBCMI)", href: "https://www.certifiedmedicalinterpreters.org/" },
-    { title: "Certification Commission for Healthcare Interpreters (CCHI)", href: "https://cchicertification.org/" },
-    { title: "American Translators Association (ATA)", href: "https://www.atanet.org/" },
-    { title: "International Medical Interpreters Association (IMIA)", href: "https://www.imiaweb.org/" },
+    {
+      title: "National Board of Certification for Medical Interpreters",
+      description: "Official certification body for medical interpreters",
+      url: "https://www.certifiedmedicalinterpreters.org/",
+      organization: "NBCMI"
+    },
+    {
+      title: "Certification Commission for Healthcare Interpreters",
+      description: "Professional certification for healthcare interpreters",
+      url: "https://www.cchipeaks.org/",
+      organization: "CCHI"
+    },
+    {
+      title: "International Association of Conference Interpreters",
+      description: "Global professional association for conference interpreters",
+      url: "https://aiic.org/",
+      organization: "AIIC"
+    },
+    {
+      title: "Registry of Interpreters for the Deaf",
+      description: "Professional organization for ASL interpreters",
+      url: "https://www.rid.org/",
+      organization: "RID"
+    }
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Navigation />
-      <main className="flex-grow container mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground">Resources</h1>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            A curated library of industry insights, articles, and essential links for professional interpreters.
+    <Layout>
+      {/* Hero Section */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6 text-center">
+          <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
+            Professional Development
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
+            Resources & Training
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Access comprehensive training materials, industry resources, and professional
+            development tools to advance your interpretation career.
           </p>
+          <Button size="lg" className="glass-button">
+            <BookOpen className="w-5 h-5 mr-2" />
+            Explore Resources
+          </Button>
         </div>
+      </section>
 
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Industry Insights</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-              <Card key={article.title} className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                <img src={article.image} alt={article.title} className="w-full h-48 object-cover"/>
+      {/* Featured Resources */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Featured Training Materials
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Curated content designed by industry experts to enhance your
+              interpretation skills and professional knowledge.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {resources.map((resource, index) => (
+              <Card
+                key={index}
+                className={`glass border-border/50 hover:border-primary/50 transition-all duration-300 ${
+                  resource.featured ? 'ring-2 ring-primary/20' : ''
+                }`}
+              >
                 <CardHeader>
-                  <CardTitle>{article.title}</CardTitle>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <resource.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <Badge variant={resource.featured ? "default" : "secondary"} className="mb-2">
+                          {resource.type}
+                        </Badge>
+                        {resource.featured && (
+                          <Badge className="ml-2 bg-amber-500/10 text-amber-500 border-amber-500/20">
+                            <Star className="w-3 h-3 mr-1" />
+                            Featured
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <CardTitle className="text-xl">{resource.title}</CardTitle>
+                  <CardDescription className="text-base">
+                    {resource.description}
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow flex flex-col">
-                  <p className="text-muted-foreground mb-4 flex-grow">{article.summary}</p>
-                  <Button asChild variant="outline" className="mt-auto">
-                    <a href={article.href} target="_blank" rel="noopener noreferrer">
-                      Read More <ArrowRight className="w-4 h-4 ml-2" />
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>{resource.duration || resource.pages}</span>
+                      <span>•</span>
+                      <span>{resource.level}</span>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Access
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* External Resources */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Industry Organizations & Certifications
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Connect with professional organizations and pursue industry-recognized
+              certifications to advance your career.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {externalResources.map((resource, index) => (
+              <Card key={index} className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline">{resource.organization}</Badge>
+                    <ExternalLink className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <CardTitle className="text-lg">{resource.title}</CardTitle>
+                  <CardDescription>
+                    {resource.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="ghost" className="w-full justify-start p-0" asChild>
+                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                      <ExternalLink className="w-4 h-4 ml-2" />
                     </a>
                   </Button>
                 </CardContent>
@@ -65,21 +195,32 @@ const Resources = () => {
             ))}
           </div>
         </div>
+      </section>
 
-        <div className="max-w-5xl mx-auto mt-24">
-          <h2 className="text-3xl font-bold text-center mb-12">Professional Organizations</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {externalResources.map((resource) => (
-              <a href={resource.href} target="_blank" rel="noopener noreferrer" key={resource.title} className="block p-6 bg-card rounded-lg border hover:bg-muted hover:shadow-md transition-all duration-300">
-                <h3 className="text-lg font-semibold text-foreground">{resource.title}</h3>
-                <p className="text-sm text-primary mt-2">Visit Site →</p>
-              </a>
-            ))}
+      {/* Newsletter Signup */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="glass rounded-2xl p-12 text-center border border-border/50">
+            <Calendar className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Get the latest resources, industry insights, and training materials
+              delivered to your inbox monthly.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <Button size="lg">
+                Subscribe
+              </Button>
+            </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </section>
+    </Layout>
   );
 };
 
