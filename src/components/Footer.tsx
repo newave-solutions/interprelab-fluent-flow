@@ -11,7 +11,7 @@ import {
   Chrome,
   Stethoscope,
   Scale,
-  Globe,
+  Globe
 } from "lucide-react";
 
 export const Footer = () => {
@@ -19,6 +19,7 @@ export const Footer = () => {
     <footer className="relative border-t border-border/50 bg-card/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -27,16 +28,13 @@ export const Footer = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold">InterpreLab</h3>
-                <p className="text-xs text-muted-foreground">
-                  Advanced Interpretation
-                </p>
+                <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
               </div>
             </div>
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Revolutionizing medical and legal interpretation through advanced
-              AI technology while preserving the essential human element in
-              critical communication.
+              Revolutionizing medical and legal interpretation through advanced AI technology
+              while preserving the essential human element in critical communication.
             </p>
 
             <div className="flex gap-2">
@@ -56,19 +54,13 @@ export const Footer = () => {
             <h4 className="text-sm font-semibold text-foreground">Products</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a
-                  href="#"
-                  className="hover:text-foreground transition-colors flex items-center gap-2"
-                >
+                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
                   <Chrome className="w-3 h-3" />
                   InterpreCoach Extension
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="hover:text-foreground transition-colors flex items-center gap-2"
-                >
+                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
                   <Shield className="w-3 h-3" />
                   Enterprise Platform
                 </a>
@@ -119,7 +111,7 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>support@interprelab.com</span>
+                <span>hello@interprelab.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -127,7 +119,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Houston, TX</span>
+                <span>San Francisco, CA</span>
               </div>
             </div>
 
@@ -149,16 +141,10 @@ export const Footer = () => {
         <div className="border-t border-border/50 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-6 text-xs text-muted-foreground">
-              <span>© 2025 InterpreLab. All rights reserved.</span>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Security
-              </a>
+              <span>© 2024 InterpreLab. All rights reserved.</span>
+              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-foreground transition-colors">Security</a>
             </div>
 
             <div className="flex items-center gap-4">

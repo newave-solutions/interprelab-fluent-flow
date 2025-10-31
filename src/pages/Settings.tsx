@@ -1,46 +1,34 @@
-import { useEffect, useState } from "react";
-import { Layout } from "@/components/Layout";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useToast } from "@/hooks/use-toast";
-import { DollarSign, Globe, Settings2 } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { Layout } from '@/components/Layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useToast } from '@/hooks/use-toast';
+import { DollarSign, Globe, Settings2 } from 'lucide-react';
 
 const Settings = () => {
-  const [payRate, setPayRate] = useState("0");
-  const [payRateType, setPayRateType] = useState("per_hour");
-  const [currency, setCurrency] = useState("USD");
+  const [payRate, setPayRate] = useState('0');
+  const [payRateType, setPayRateType] = useState('per_hour');
+  const [currency, setCurrency] = useState('USD');
   const { user } = useAuth();
   const { language, setLanguage, availableLanguages } = useLanguage();
   const { toast } = useToast();
 
   const currencies = [
-    { code: "USD", name: "US Dollar" },
-    { code: "EUR", name: "Euro" },
-    { code: "GBP", name: "British Pound" },
-    { code: "JPY", name: "Japanese Yen" },
-    { code: "CAD", name: "Canadian Dollar" },
-    { code: "AUD", name: "Australian Dollar" },
-    { code: "CHF", name: "Swiss Franc" },
-    { code: "CNY", name: "Chinese Yuan" },
-    { code: "MXN", name: "Mexican Peso" },
+    { code: 'USD', name: 'US Dollar' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'CAD', name: 'Canadian Dollar' },
+    { code: 'AUD', name: 'Australian Dollar' },
+    { code: 'CHF', name: 'Swiss Franc' },
+    { code: 'CNY', name: 'Chinese Yuan' },
+    { code: 'MXN', name: 'Mexican Peso' },
   ];
 
   useEffect(() => {
@@ -50,18 +38,16 @@ const Settings = () => {
   }, [user]);
 
   const loadSettings = async () => {
-    if (!user?.id) return;
-
     const { data } = await supabase
-      .from("user_settings")
-      .select("*")
-      .eq("user_id", user.id)
+      .from('user_settings')
+      .select('*')
+      .eq('user_id', user?.id)
       .maybeSingle();
 
     if (data) {
-      setPayRate(data.pay_rate?.toString() || "0");
-      setPayRateType(data.pay_rate_type || "per_hour");
-      setCurrency(data.preferred_currency || "USD");
+      setPayRate(data.pay_rate?.toString() || '0');
+      setPayRateType(data.pay_rate_type || 'per_hour');
+      setCurrency(data.preferred_currency || 'USD');
     }
   };
 
@@ -72,38 +58,37 @@ const Settings = () => {
     const payRateValue = parseFloat(payRate);
     if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
       toast({
-        title: "Invalid Pay Rate",
-        description: "Pay rate must be between 0 and 10,000",
-        variant: "destructive",
+        title: 'Invalid Pay Rate',
+        description: 'Pay rate must be between 0 and 10,000',
+        variant: 'destructive',
       });
       return;
     }
 
-    const { error } = await supabase.from("user_settings").upsert(
-      {
+    const { error } = await supabase
+      .from('user_settings')
+      .upsert({
         user_id: user.id,
         pay_rate: payRateValue,
         pay_rate_type: payRateType,
         preferred_currency: currency,
         preferred_language: language,
-      },
-      {
-        onConflict: "user_id",
-      }
-    );
+      }, {
+        onConflict: 'user_id'
+      });
 
     if (error) {
       toast({
-        title: "Error",
-        description: "Failed to save settings",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to save settings',
+        variant: 'destructive',
       });
       return;
     }
 
     toast({
-      title: "Success",
-      description: "Settings saved successfully",
+      title: 'Success',
+      description: 'Settings saved successfully',
     });
   };
 

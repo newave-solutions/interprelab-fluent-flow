@@ -80,11 +80,11 @@ export const FullScreenVideoHero = ({
             textVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight">
             {title}
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto">
-            {description}
+          <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-sans max-w-3xl mx-auto">
+            Despite legal requirements under Title VI and Section 1557 of the ACA, Limited English Proficiency (LEP) patients face increased health risks due to interpretation quality issues.
           </p>
         </div>
       </div>
