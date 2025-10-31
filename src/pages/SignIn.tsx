@@ -1,27 +1,12 @@
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import {
-  Eye,
-  EyeOff,
-  Mail,
-  Lock,
-  User,
-  Shield,
-  Chrome,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Shield, Chrome, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -50,7 +35,7 @@ const SignIn = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -65,13 +50,13 @@ const SignIn = () => {
       const { error } = await signIn(validated.email, validated.password);
 
       if (error) {
-        if (error.message.includes("Invalid login credentials")) {
+        if (error.message.includes('Invalid login credentials')) {
           toast({
             title: "Error",
             description: "Invalid email or password. Please try again.",
             variant: "destructive",
           });
-        } else if (error.message.includes("Email not confirmed")) {
+        } else if (error.message.includes('Email not confirmed')) {
           toast({
             title: "Error",
             description: "Please confirm your email address before signing in.",
@@ -80,8 +65,7 @@ const SignIn = () => {
         } else {
           toast({
             title: "Error",
-            description:
-              error.message || "Failed to sign in. Please try again.",
+            description: error.message || "Failed to sign in. Please try again.",
             variant: "destructive",
           });
         }
@@ -90,7 +74,7 @@ const SignIn = () => {
           title: "Success!",
           description: "You have successfully signed in.",
         });
-        navigate("/");
+        navigate('/');
       }
     } catch (error: any) {
       if (error.errors) {
@@ -128,33 +112,29 @@ const SignIn = () => {
       );
 
       if (error) {
-        if (error.message.includes("already registered")) {
+        if (error.message.includes('already registered')) {
           toast({
             title: "Error",
-            description:
-              "This email is already registered. Please sign in instead.",
+            description: "This email is already registered. Please sign in instead.",
             variant: "destructive",
           });
-        } else if (error.message.includes("Password")) {
+        } else if (error.message.includes('Password')) {
           toast({
             title: "Error",
-            description:
-              "Password does not meet requirements. Please use a stronger password.",
+            description: "Password does not meet requirements. Please use a stronger password.",
             variant: "destructive",
           });
         } else {
           toast({
             title: "Error",
-            description:
-              error.message || "Failed to create account. Please try again.",
+            description: error.message || "Failed to create account. Please try again.",
             variant: "destructive",
           });
         }
       } else {
         toast({
           title: "Success!",
-          description:
-            "Your account has been created successfully. You can now sign in.",
+          description: "Your account has been created successfully. You can now sign in.",
         });
         // Reset form
         setSignUpData({
@@ -199,8 +179,7 @@ const SignIn = () => {
                 Welcome to InterpreLab
               </h1>
               <p className="text-muted-foreground">
-                Access your professional interpretation tools and training
-                platform
+                Access your professional interpretation tools and training platform
               </p>
             </div>
 
@@ -224,12 +203,7 @@ const SignIn = () => {
                             placeholder="your.email@example.com"
                             className="pl-10"
                             value={signInData.email}
-                            onChange={(e) =>
-                              setSignInData((prev) => ({
-                                ...prev,
-                                email: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
                             required
                           />
                         </div>
@@ -245,12 +219,7 @@ const SignIn = () => {
                             placeholder="Enter your password"
                             className="pl-10 pr-10"
                             value={signInData.password}
-                            onChange={(e) =>
-                              setSignInData((prev) => ({
-                                ...prev,
-                                password: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
                             required
                           />
                           <Button
@@ -271,28 +240,15 @@ const SignIn = () => {
 
                       <div className="flex items-center justify-between text-sm">
                         <label className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            className="rounded border-border"
-                          />
-                          <span className="text-muted-foreground">
-                            Remember me
-                          </span>
+                          <input type="checkbox" className="rounded border-border" />
+                          <span className="text-muted-foreground">Remember me</span>
                         </label>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-0 text-primary"
-                        >
+                        <Button variant="link" size="sm" className="p-0 text-primary">
                           Forgot password?
                         </Button>
                       </div>
 
-                      <Button
-                        type="submit"
-                        className="w-full glass-button"
-                        disabled={isLoading}
-                      >
+                      <Button type="submit" className="w-full glass-button" disabled={isLoading}>
                         {isLoading ? "Signing in..." : "Sign In"}
                       </Button>
                     </form>
@@ -307,12 +263,7 @@ const SignIn = () => {
                             id="first-name"
                             placeholder="John"
                             value={signUpData.firstName}
-                            onChange={(e) =>
-                              setSignUpData((prev) => ({
-                                ...prev,
-                                firstName: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, firstName: e.target.value }))}
                             required
                           />
                         </div>
@@ -322,12 +273,7 @@ const SignIn = () => {
                             id="last-name"
                             placeholder="Doe"
                             value={signUpData.lastName}
-                            onChange={(e) =>
-                              setSignUpData((prev) => ({
-                                ...prev,
-                                lastName: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, lastName: e.target.value }))}
                             required
                           />
                         </div>
@@ -343,12 +289,7 @@ const SignIn = () => {
                             placeholder="your.email@example.com"
                             className="pl-10"
                             value={signUpData.email}
-                            onChange={(e) =>
-                              setSignUpData((prev) => ({
-                                ...prev,
-                                email: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
                             required
                           />
                         </div>
@@ -364,12 +305,7 @@ const SignIn = () => {
                             placeholder="Create a strong password"
                             className="pl-10 pr-10"
                             value={signUpData.password}
-                            onChange={(e) =>
-                              setSignUpData((prev) => ({
-                                ...prev,
-                                password: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
                             required
                           />
                           <Button
@@ -389,9 +325,7 @@ const SignIn = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="confirm-password">
-                          Confirm Password
-                        </Label>
+                        <Label htmlFor="confirm-password">Confirm Password</Label>
                         <div className="relative">
                           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                           <Input
@@ -400,12 +334,7 @@ const SignIn = () => {
                             placeholder="Confirm your password"
                             className="pl-10"
                             value={signUpData.confirmPassword}
-                            onChange={(e) =>
-                              setSignUpData((prev) => ({
-                                ...prev,
-                                confirmPassword: e.target.value,
-                              }))
-                            }
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                             required
                           />
                         </div>
@@ -413,28 +342,16 @@ const SignIn = () => {
 
                       <div className="text-xs text-muted-foreground">
                         By creating an account, you agree to our{" "}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-0 text-primary text-xs"
-                        >
+                        <Button variant="link" size="sm" className="p-0 text-primary text-xs">
                           Terms of Service
                         </Button>{" "}
                         and{" "}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-0 text-primary text-xs"
-                        >
+                        <Button variant="link" size="sm" className="p-0 text-primary text-xs">
                           Privacy Policy
                         </Button>
                       </div>
 
-                      <Button
-                        type="submit"
-                        className="w-full glass-button"
-                        disabled={isLoading}
-                      >
+                      <Button type="submit" className="w-full glass-button" disabled={isLoading}>
                         {isLoading ? "Creating account..." : "Create Account"}
                       </Button>
                     </form>
@@ -462,21 +379,13 @@ const SignIn = () => {
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card className="glass border-border/50 p-4 text-center">
                 <Chrome className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h3 className="font-semibold text-sm">
-                  InterpreCoach Extension
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  AI-powered interpretation assistant
-                </p>
+                <h3 className="font-semibold text-sm">InterpreCoach Extension</h3>
+                <p className="text-xs text-muted-foreground">AI-powered interpretation assistant</p>
               </Card>
               <Card className="glass border-border/50 p-4 text-center">
                 <Shield className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h3 className="font-semibold text-sm">
-                  Professional Dashboard
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  Track progress and performance
-                </p>
+                <h3 className="font-semibold text-sm">Professional Dashboard</h3>
+                <p className="text-xs text-muted-foreground">Track progress and performance</p>
               </Card>
             </div>
           </div>

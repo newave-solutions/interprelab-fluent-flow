@@ -1,58 +1,16 @@
-import { useState, useEffect } from "react";
-import { Navigation } from "../components/Navigation";
-import { Footer } from "../components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Button } from "../components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Textarea } from "../components/ui/textarea";
-import {
-  Phone,
-  PhoneOff,
-  Clock,
-  DollarSign,
-  BarChart3,
-  Calendar,
-  Timer,
-  TrendingUp,
-  Lightbulb,
-  Settings,
-  CheckCircle,
-  Zap
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import { useCallTracker } from "../hooks/useCallTracker";
-import { CallLogService, AnalyticsService } from "../integrations/supabase/services";
+import { useState, useEffect } from 'react';
+import { Layout } from '@/components/Layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { useCallTracker } from '@/hooks/useCallTracker';
+import { Phone, PhoneOff, Clock, BarChart3, DollarSign, Calendar, TrendingUp, Settings, CheckCircle, Star } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
-// Real-time stats interface
-interface StatsData {
-  monthEarnings: number;
-  monthCalls: number;
-  monthTotal: number;
-  yearEarnings: number;
-  yearCalls: number;
-  avgCallDuration: number;
-  totalCalls: number;
-}
-
-// Default stats for loading state
-const defaultStats: StatsData = {
-  monthEarnings: 0,
-  monthCalls: 0,
-  monthTotal: 0,
-  yearEarnings: 0,
-  yearCalls: 0,
-  avgCallDuration: 0,
-  totalCalls: 0
-};
-
-const InterpreTrackEnhanced = () => {
-  const [activeTab, setActiveTab] = useState("tracker");
+const InterpreTrack = () => {
   const [notes, setNotes] = useState('');
-  const [stats, setStats] = useState<StatsData>(defaultStats);
-  const [recentCalls, setRecentCalls] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const {
     isTracking,
@@ -65,85 +23,19 @@ const InterpreTrackEnhanced = () => {
     userSettings,
   } = useCallTracker();
 
-  useEffect(() => {
-    if (user) {
-      loadDashboardData();
-    }
-  }, [user]);
-
-  const loadDashboardData = async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      // Load recent calls
-      const { data: callsData } = await CallLogService.getCallLogs(user.id, 10);
-      if (callsData) {
-        setRecentCalls(callsData);
-      }
-
-      // Load monthly stats
-      const currentDate = new Date();
-      const { data: monthlyData } = await CallLogService.getMonthlyStats(
-        user.id,
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1
-      );
-
-      // Load yearly stats
-      const { data: yearlyData } = await AnalyticsService.getYearlyStats(
-        user.id,
-        currentDate.getFullYear()
-      );
-
-      if (monthlyData && yearlyData) {
-        setStats({
-          monthEarnings: monthlyData.totalEarnings,
-          monthCalls: monthlyData.totalCalls,
-          monthTotal: monthlyData.totalSeconds,
-          yearEarnings: yearlyData.totalEarnings,
-          yearCalls: yearlyData.totalCalls,
-          avgCallDuration: yearlyData.averageDuration,
-          totalCalls: yearlyData.totalCalls,
-        });
-      }
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEndCall = async () => {
-    const result = await endCall(notes);
-    if (!result?.error) {
-      setNotes('');
-      // Reload data after successful call log
-      loadDashboardData();
-    }
+    await endCall(notes);
+    setNotes('');
   };
 
   const currentEarnings = calculateEarnings(elapsedSeconds);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-subtle">
-      <Navigation />
-
+    <Layout>
       {/* Hero Section */}
       <section className="py-20 bg-gradient-subtle">
         <div className="container mx-auto px-6 text-center">
-          <Badge className="mb-6 glass px-6 py-3 border-primary/20">
-            <Timer className="w-4 h-4 mr-2" />
+          <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
             Time & Earnings Tracker
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
@@ -155,322 +47,173 @@ const InterpreTrackEnhanced = () => {
         </div>
       </section>
 
-      <main className="container mx-auto px-6 py-12">
-        {/* Main Content Tabs */}
-        <div className="max-w-6xl mx-auto">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-8 h-auto p-2 glass border-border/50">
-              <TabsTrigger
-                value="tracker"
-                className="h-14 text-sm lg:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <Timer className="w-4 h-4 mr-2" />
-                Call Tracker
-              </TabsTrigger>
-              <TabsTrigger
-                value="dashboard"
-                className="h-14 text-sm lg:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Dashboard
-              </TabsTrigger>
-              <TabsTrigger
-                value="analytics"
-                className="h-14 text-sm lg:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger
-                value="history"
-                className="h-14 text-sm lg:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                History
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="tracker" className="mt-0">
-              <div className="max-w-4xl mx-auto">
-                <Card className="mb-8 glass border-border/50 hover-lift">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Clock className="h-6 w-6" />
-                      Current Session
-                    </CardTitle>
-                    <CardDescription>
-                      Track your interpretation calls and earnings in real-time
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="text-center">
-                      <div className="text-6xl font-mono font-bold mb-4 gradient-text">
-                        {formatDuration(elapsedSeconds)}
-                      </div>
-                      {isTracking && (
-                        <div className="text-2xl text-muted-foreground">
-                          Earnings: {formatCurrency(currentEarnings, userSettings?.preferred_currency)}
-                        </div>
-                      )}
-                    </div>
-
-                    {isTracking && (
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Call Notes (Optional)</label>
-                        <Textarea
-                          placeholder="Add notes about this call..."
-                          value={notes}
-                          onChange={(e) => setNotes(e.target.value)}
-                          rows={4}
-                          className="glass"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex gap-4 justify-center">
-                      {!isTracking ? (
-                        <Button
-                          onClick={startCall}
-                          size="lg"
-                          className="w-full max-w-xs glass-button hover-lift"
-                        >
-                          <Phone className="mr-2 h-5 w-5" />
-                          Start Call
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={handleEndCall}
-                          variant="destructive"
-                          size="lg"
-                          className="w-full max-w-xs hover-lift"
-                        >
-                          <PhoneOff className="mr-2 h-5 w-5" />
-                          End Call
-                        </Button>
-                      )}
-                    </div>
-
-                    {userSettings && (
-                      <div className="text-center text-sm text-muted-foreground pt-4 border-t border-border/50">
-                        Current Rate: {formatCurrency(userSettings.pay_rate, userSettings.preferred_currency)} {userSettings.pay_rate_type === 'per_hour' ? 'per hour' : 'per minute'}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="dashboard" className="mt-0">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">This Month</CardTitle>
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{formatCurrency(stats.monthEarnings, userSettings?.preferred_currency)}</div>
-                    <p className="text-xs text-muted-foreground">
-                      {stats.monthCalls} calls • {formatDuration(stats.monthTotal)}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">This Year</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{formatCurrency(stats.yearEarnings, userSettings?.preferred_currency)}</div>
-                    <p className="text-xs text-muted-foreground">
-                      {stats.yearCalls} calls • {formatDuration(stats.monthTotal * 12)}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Avg Call Duration</CardTitle>
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{formatDuration(Math.round(stats.avgCallDuration))}</div>
-                    <p className="text-xs text-muted-foreground">Across all calls</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Calls</CardTitle>
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{stats.totalCalls}</div>
-                    <p className="text-xs text-muted-foreground">All time</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Recent Calls */}
-              <Card className="glass border-border/50">
-                <CardHeader>
-                  <CardTitle>Recent Calls</CardTitle>
-                  <CardDescription>Your latest interpretation sessions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {loading ? (
-                      <div className="text-center py-8 text-muted-foreground">
-                        Loading recent calls...
-                      </div>
-                    ) : recentCalls.length > 0 ? (
-                      recentCalls.map((call) => (
-                        <div
-                          key={call.id}
-                          className="flex items-center justify-between p-4 glass rounded-lg hover-lift"
-                        >
-                          <div className="flex-1">
-                            <div className="font-medium">
-                              {formatDate(call.start_time)}
-                            </div>
-                            {call.notes && (
-                              <div className="text-sm text-muted-foreground mt-1">{call.notes}</div>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold">{formatCurrency(call.earnings || 0, call.currency)}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {formatDuration(call.duration_seconds || 0)}
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-8 text-muted-foreground">
-                        No calls logged yet. Start tracking your first call!
-                      </div>
-                    )}
+      {/* Call Tracker Section */}
+      {user ? (
+        <section className="py-12">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <Card className="mb-8 glass border-border/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-6 w-6" />
+                  Current Session
+                </CardTitle>
+                <CardDescription>
+                  Track your interpretation calls and earnings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center">
+                  <div className="text-6xl font-mono font-bold mb-4">
+                    {formatDuration(elapsedSeconds)}
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="analytics" className="mt-0">
-              <div className="grid gap-6 lg:grid-cols-2">
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Lightbulb className="text-primary" />
-                      AI-Powered Insights
-                    </CardTitle>
-                    <CardDescription>Performance analysis and recommendations</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="p-4 border-l-4 border-primary glass rounded-r-lg">
-                        <p className="text-muted-foreground italic">
-                          "Your earnings have increased by 23% this month compared to last month, with medical consultations showing the strongest growth."
-                        </p>
-                      </div>
-                      <div className="p-4 border-l-4 border-green-500 glass rounded-r-lg">
-                        <p className="text-muted-foreground italic">
-                          "Peak performance hours are between 10 AM - 2 PM. Consider scheduling more availability during these times."
-                        </p>
-                      </div>
-                      <div className="p-4 border-l-4 border-blue-500 glass rounded-r-lg">
-                        <p className="text-muted-foreground italic">
-                          "Medical interpretations generate 35% higher earnings per minute compared to other types."
-                        </p>
-                      </div>
+                  {isTracking && (
+                    <div className="text-2xl text-muted-foreground">
+                      Earnings: {formatCurrency(currentEarnings, userSettings?.preferred_currency)}
                     </div>
-                  </CardContent>
-                </Card>
+                  )}
+                </div>
 
-                <Card className="glass border-border/50 hover-lift">
-                  <CardHeader>
-                    <CardTitle>Performance Metrics</CardTitle>
-                    <CardDescription>Key performance indicators</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Timer className="h-5 w-5 text-blue-600" />
-                          <span className="font-medium">Average Session</span>
-                        </div>
-                        <span className="text-2xl font-bold">{formatDuration(Math.round(stats.avgCallDuration))}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <DollarSign className="h-5 w-5 text-green-600" />
-                          <span className="font-medium">Hourly Rate</span>
-                        </div>
-                        <span className="text-2xl font-bold">{formatCurrency(userSettings?.pay_rate || 0, userSettings?.preferred_currency)}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <TrendingUp className="h-5 w-5 text-purple-600" />
-                          <span className="font-medium">Growth Rate</span>
-                        </div>
-                        <span className="text-2xl font-bold text-green-600">+23%</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="history" className="mt-0">
-              <Card className="glass border-border/50">
-                <CardHeader>
-                  <CardTitle>Call History</CardTitle>
-                  <CardDescription>Complete log of your interpretation sessions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {loading ? (
-                      <div className="text-center py-8 text-muted-foreground">
-                        Loading call history...
-                      </div>
-                    ) : recentCalls.length > 0 ? (
-                      recentCalls.map((call) => (
-                        <div
-                          key={call.id}
-                          className="flex items-center justify-between p-4 glass rounded-lg hover-lift"
-                        >
-                          <div className="flex-1">
-                            <div className="font-medium">
-                              {formatDate(call.start_time)}
-                            </div>
-                            <div className="text-sm text-muted-foreground mt-1">
-                              Duration: {formatDuration(call.duration_seconds || 0)}
-                            </div>
-                            {call.notes && (
-                              <div className="text-sm text-muted-foreground mt-1 italic">
-                                "{call.notes}"
-                              </div>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold text-lg">{formatCurrency(call.earnings || 0, call.currency)}</div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-8 text-muted-foreground">
-                        No call history available. Start tracking calls to see your history here!
-                      </div>
-                    )}
+                {isTracking && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Call Notes (Optional)</label>
+                    <Textarea
+                      placeholder="Add notes about this call..."
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      rows={4}
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                )}
+
+                <div className="flex gap-4 justify-center">
+                  {!isTracking ? (
+                    <Button
+                      onClick={startCall}
+                      size="lg"
+                      className="w-full max-w-xs glass-button"
+                    >
+                      <Phone className="mr-2 h-5 w-5" />
+                      Start Call
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleEndCall}
+                      variant="destructive"
+                      size="lg"
+                      className="w-full max-w-xs"
+                    >
+                      <PhoneOff className="mr-2 h-5 w-5" />
+                      End Call
+                    </Button>
+                  )}
+                </div>
+
+                {userSettings && (
+                  <div className="text-center text-sm text-muted-foreground pt-4 border-t">
+                    Current Rate: {formatCurrency(userSettings.pay_rate, userSettings.preferred_currency)} {userSettings.pay_rate_type === 'per_hour' ? 'per hour' : 'per minute'}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <div className="text-center mb-8">
+              <Link to="/dashboard">
+                <Button variant="outline" size="lg">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  View Full Dashboard
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* Features Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Track Everything That Matters
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Comprehensive tracking and analytics for professional interpreters
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="glass border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:border-purple-400 transition-all duration-300 relative">
+              <Badge className="absolute top-4 right-4 bg-purple-600 text-white border-purple-500">
+                <Star className="w-3 h-3 mr-1 fill-white" />
+                Premium
+              </Badge>
+              <CardHeader className="border-b border-purple-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <Clock className="w-12 h-12 text-purple-500" />
+                  <Star className="w-6 h-6 text-purple-500 fill-purple-500" />
+                </div>
+                <CardTitle>Automatic Time Tracking</CardTitle>
+                <p className="text-sm font-medium text-purple-500 mt-2 mb-3">
+                  Don't want to do it manually? Let InterpreTrack take care of everything for you! Just sit back and watch your money come in!
+                </p>
+              </CardHeader>
+            </Card>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <DollarSign className="w-12 h-12 text-primary mb-4" />
+                <CardTitle>Earnings Calculator</CardTitle>
+                <CardDescription>
+                  Set your pay rate and see real-time earnings calculations during each session.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <BarChart3 className="w-12 h-12 text-primary mb-4" />
+                <CardTitle>Performance Dashboard</CardTitle>
+                <CardDescription>
+                  View detailed analytics, monthly earnings, and session history at a glance.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <Calendar className="w-12 h-12 text-primary mb-4" />
+                <CardTitle>Session History</CardTitle>
+                <CardDescription>
+                  Access complete logs of all your interpretation sessions with notes and details.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <TrendingUp className="w-12 h-12 text-primary mb-4" />
+                <CardTitle>Trend Analysis</CardTitle>
+                <CardDescription>
+                  Track your productivity trends and earnings over time with visual charts.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <Settings className="w-12 h-12 text-primary mb-4" />
+                <CardTitle>Custom Settings</CardTitle>
+                <CardDescription>
+                  Configure pay rates, currency preferences, and personalize your tracking experience.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
+      </section>
 
-        {/* Getting Started Section */}
-        <section className="py-20">
+      {/* Getting Started Timeline */}
+      <section className="py-20 bg-gradient-subtle">
+        <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Get Started in 3 Steps
@@ -485,7 +228,7 @@ const InterpreTrackEnhanced = () => {
               {/* Step 1 */}
               <div className="flex gap-8 items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 glass rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-2xl font-bold text-primary">1</span>
                   </div>
                 </div>
@@ -497,17 +240,19 @@ const InterpreTrackEnhanced = () => {
                   <p className="text-muted-foreground mb-4">
                     Configure your hourly or per-minute rate in your preferred currency. Update anytime in Settings.
                   </p>
-                  <Button className="glass-button hover-lift">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Configure Settings
-                  </Button>
+                  <Link to="/settings">
+                    <Button className="glass-button">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Configure Settings
+                    </Button>
+                  </Link>
                 </div>
               </div>
 
               {/* Step 2 */}
               <div className="flex gap-8 items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 glass rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-2xl font-bold text-primary">2</span>
                   </div>
                 </div>
@@ -532,7 +277,7 @@ const InterpreTrackEnhanced = () => {
               {/* Step 3 */}
               <div className="flex gap-8 items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 glass rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-2xl font-bold text-primary">3</span>
                   </div>
                 </div>
@@ -562,31 +307,27 @@ const InterpreTrackEnhanced = () => {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* CTA Section */}
-        <div className="text-center mt-16">
-          <Card className="p-8 glass border-primary/30 max-w-2xl mx-auto hover-lift">
-            <h3 className="text-2xl font-bold mb-4">Ready to Optimize Your Practice?</h3>
-            <p className="text-muted-foreground mb-6">
-              Start tracking your calls today and gain insights into your interpretation business.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="glass-button hover-lift">
-                <Zap className="w-4 h-4 mr-2" />
-                Start Tracking Now
-              </Button>
-              <Button size="lg" variant="outline" className="glass hover-lift">
-                Learn More
-              </Button>
-            </div>
-          </Card>
+          <div className="text-center mt-12">
+            {user ? (
+              <Link to="/dashboard">
+                <Button size="lg" className="glass-button">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Go to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/signin">
+                <Button size="lg" className="glass-button">
+                  Sign In to Get Started
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </section>
+    </Layout>
   );
 };
 
-export default InterpreTrackEnhanced;
+export default InterpreTrack;

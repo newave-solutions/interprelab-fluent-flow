@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-const ThemeToggle = () => {
+export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -35,7 +35,3 @@ const ThemeToggle = () => {
     </Button>
   );
 };
-
-
-export { ThemeToggle };
-export default ThemeToggle;

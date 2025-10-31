@@ -164,7 +164,7 @@ export const FlashcardDeck = ({ cardType }: FlashcardDeckProps) => {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 mt-6">
-        <Button variant="default" className="hover-lift bg-green-600 hover:bg-green-700">
+        <Button variant="success" className="hover-lift">
           Know It
         </Button>
         <Button variant="destructive" className="hover-lift">

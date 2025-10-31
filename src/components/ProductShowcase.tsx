@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Brain,
   Chrome,
@@ -102,7 +102,7 @@ export const ProductShowcase = () => {
 
         {/* Bottom CTA */}
         <div className="text-center mt-20">
-          <Link to="/signin">
+          <Link to="/waitlist">
             <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow px-8">
               Start Your Free Trial
               <ArrowRight className="w-5 h-5 ml-2" />
