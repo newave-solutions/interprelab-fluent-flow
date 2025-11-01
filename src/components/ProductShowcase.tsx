@@ -1,12 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Brain,
-  Chrome,
-  Clock,
-  ArrowRight
-} from "lucide-react";
+import { Brain, Chrome, Clock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ProductShowcase = () => {
@@ -15,32 +10,35 @@ export const ProductShowcase = () => {
       id: "interprebot",
       name: "InterpreBot",
       tagline: "Skills Assessment",
-      description: "AI-powered evaluation of your interpretation skills with personalized improvement paths.",
+      description:
+        "AI-powered evaluation of your interpretation skills with personalized improvement paths.",
       icon: Brain,
       gradient: "from-primary to-primary-glow",
       link: "/interprebot",
-      cta: "Take Assessment"
+      cta: "Take Assessment",
     },
     {
       id: "interprecoach",
       name: "InterpreCoach",
       tagline: "Real-Time Assistant",
-      description: "Browser extension providing instant terminology support during live sessions.",
+      description:
+        "Browser extension providing instant terminology support during live sessions.",
       icon: Chrome,
       gradient: "from-success to-primary",
       link: "/interprecoach",
-      cta: "Install Extension"
+      cta: "Install Extension",
     },
     {
       id: "interpretrack",
       name: "InterpreTrack",
       tagline: "Session Tracking",
-      description: "Automated logging and earnings tracking for freelance interpreters.",
+      description:
+        "Automated logging and earnings tracking for freelance interpreters.",
       icon: Clock,
       gradient: "from-secondary to-accent",
       link: "/interpretrack",
-      cta: "Start Tracking"
-    }
+      cta: "Start Tracking",
+    },
   ];
 
   return (
@@ -54,7 +52,9 @@ export const ProductShowcase = () => {
           <h2 className="text-5xl md:text-6xl font-bold">
             <span className="text-foreground">Three Tools.</span>
             <br />
-            <span className="bg-gradient-primary bg-clip-text text-transparent">One Platform.</span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              One Platform.
+            </span>
           </h2>
         </div>
 
@@ -70,7 +70,9 @@ export const ProductShowcase = () => {
               >
                 <CardContent className="p-8 space-y-6">
                   {/* Icon */}
-                  <div className={`w-14 h-14 bg-gradient-to-br ${product.gradient} rounded-xl flex items-center justify-center shadow-lg`}>
+                  <div
+                    className={`w-14 h-14 bg-gradient-to-br ${product.gradient} rounded-xl flex items-center justify-center shadow-lg`}
+                  >
                     <Icon className="w-7 h-7 text-white" />
                   </div>
 
@@ -89,7 +91,10 @@ export const ProductShowcase = () => {
 
                   {/* CTA */}
                   <Link to={product.link}>
-                    <Button className="w-full group/btn bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 border border-primary/20" variant="outline">
+                    <Button
+                      className="w-full group/btn bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 border border-primary/20"
+                      variant="outline"
+                    >
                       {product.cta}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>
@@ -103,7 +108,10 @@ export const ProductShowcase = () => {
         {/* Bottom CTA */}
         <div className="text-center mt-20">
           <Link to="/waitlist">
-            <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow px-8">
+            <Button
+              size="lg"
+              className="bg-gradient-primary hover:opacity-90 text-white shadow-glow px-8"
+            >
               Start Your Free Trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>

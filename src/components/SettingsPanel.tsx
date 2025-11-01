@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
-import { DollarSign, Globe, Save } from 'lucide-react';
+import { DollarSign, Globe, Save, User, Upload } from 'lucide-react';
 
 export const SettingsPanel = () => {
   const [payRate, setPayRate] = useState('0');
@@ -37,10 +37,12 @@ export const SettingsPanel = () => {
   }, [user]);
 
   const loadSettings = async () => {
+    if (!user?.id) return;
+
     const { data } = await supabase
       .from('user_settings')
       .select('*')
-      .eq('user_id', user?.id)
+      .eq('user_id', user.id)
       .maybeSingle();
 
     if (data) {
@@ -53,6 +55,7 @@ export const SettingsPanel = () => {
   const handleSave = async () => {
     if (!user) return;
 
+    // Validate pay rate
     const payRateValue = parseFloat(payRate);
     if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
       toast({
@@ -113,7 +116,7 @@ export const SettingsPanel = () => {
               max="10000"
               value={payRate}
               onChange={(e) => setPayRate(e.target.value)}
-              placeholder="Enter your pay rate"
+              placeholder="Enter your pay rate (0-10,000)"
             />
           </div>
 
@@ -173,6 +176,41 @@ export const SettingsPanel = () => {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Profile Picture
+          </CardTitle>
+          <CardDescription>
+            Upload a profile picture for your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="avatar">Avatar Image</Label>
+            <Input
+              id="avatar"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  // TODO: Implement file upload to Supabase storage
+                  toast({
+                    title: 'Coming Soon',
+                    description: 'Profile picture upload will be available soon!',
+                  });
+                }
+              }}
+            />
+            <p className="text-xs text-muted-foreground">
+              Supported formats: JPG, PNG, GIF (max 5MB)
+            </p>
           </div>
         </CardContent>
       </Card>

@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "lucide-react";
+import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ThemeToggle } from "@/components/ThemeToggle";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,6 +20,39 @@ import {
 interface NavigationProps {
   transparent?: boolean;
 }
+
+const ThemeToggleButton = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="glass">
+        <Sun className="h-5 w-5" />
+      </Button>
+    );
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="glass hover:bg-accent transition-all duration-300"
+    >
+      {theme === "dark" ? (
+        <Sun className="h-5 w-5 rotate-0 scale-100 transition-all" />
+      ) : (
+        <Moon className="h-5 w-5 rotate-0 scale-100 transition-all" />
+      )}
+      <span className="sr-only">Toggle theme</span>
+    </Button>
+  );
+};
 
 export const Navigation = ({ transparent = false }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -159,7 +193,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                 </Link>
               </>
             )}
-            <ThemeToggle />
+            <ThemeToggleButton />
           </div>
 
           {/* Mobile Menu */}

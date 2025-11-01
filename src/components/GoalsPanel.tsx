@@ -8,18 +8,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Target, Plus, Trash2 } from 'lucide-react';
+import { Target, Plus, Trash2, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface Goal {
   id: string;
+  user_id: string;
   goal_type: string;
   target_amount: number;
-  target_currency: string;
+  target_currency: string | null;
   target_period: string;
-  platform_name?: string;
-  description?: string;
-  is_active: boolean;
+  platform_name: string | null;
+  description: string | null;
+  is_active: boolean | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export const GoalsPanel = () => {
@@ -43,13 +46,26 @@ export const GoalsPanel = () => {
   }, [user]);
 
   const loadGoals = async () => {
+    if (!user?.id) return;
+
     const { data, error } = await supabase
       .from('user_goals')
       .select('*')
-      .eq('user_id', user?.id)
+      .eq('user_id', user.id)
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
+    if (error) {
+      console.error('Error loading goals:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load goals',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (data) {
       setGoals(data);
     }
   };
@@ -97,18 +113,32 @@ export const GoalsPanel = () => {
   };
 
   const deleteGoal = async (goalId: string) => {
+    // Soft delete by setting is_active to false
     const { error } = await supabase
       .from('user_goals')
-      .delete()
+      .update({ is_active: false })
       .eq('id', goalId);
 
-    if (!error) {
+    if (error) {
       toast({
-        title: 'Success',
-        description: 'Goal deleted successfully',
+        title: 'Error',
+        description: 'Failed to delete goal',
+        variant: 'destructive',
       });
-      loadGoals();
+      return;
     }
+
+    toast({
+      title: 'Success',
+      description: 'Goal deleted successfully',
+    });
+    loadGoals();
+  };
+
+  const getGoalProgress = (goal: Goal) => {
+    // This would be calculated based on actual call logs and earnings
+    // For now, return a placeholder
+    return Math.floor(Math.random() * 100);
   };
 
   return (
@@ -217,35 +247,79 @@ export const GoalsPanel = () => {
 
           <div className="space-y-4">
             {goals.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">
-                No goals set yet. Create your first goal to start tracking!
-              </p>
+              <div className="text-center py-12">
+                <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
+                <h3 className="text-lg font-semibold mb-2">No goals set yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Create your first goal to start tracking your interpretation progress!
+                </p>
+                <Button onClick={() => setShowForm(true)} className="mt-2">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Your First Goal
+                </Button>
+              </div>
             ) : (
-              goals.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold">
-                        {goal.target_amount} {goal.target_currency}
-                      </h4>
-                      <Badge variant="outline">{goal.target_period}</Badge>
-                      {goal.platform_name && (
-                        <Badge variant="secondary">{goal.platform_name}</Badge>
-                      )}
-                    </div>
-                    {goal.description && (
-                      <p className="text-sm text-muted-foreground">{goal.description}</p>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteGoal(goal.id)}
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
-                </div>
-              ))
+              goals.map((goal) => {
+                const progress = getGoalProgress(goal);
+                return (
+                  <Card key={goal.id} className="glass border-border/50">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h4 className="text-xl font-bold">
+                              ${goal.target_amount} {goal.target_currency || 'USD'}
+                            </h4>
+                            <Badge variant="outline" className="capitalize">
+                              {goal.target_period}
+                            </Badge>
+                            <Badge variant="secondary" className="capitalize">
+                              {goal.goal_type.replace('_', ' ')}
+                            </Badge>
+                            {goal.platform_name && (
+                              <Badge variant="outline">{goal.platform_name}</Badge>
+                            )}
+                          </div>
+                          {goal.description && (
+                            <p className="text-sm text-muted-foreground mb-3">
+                              {goal.description}
+                            </p>
+                          )}
+
+                          {/* Progress Bar */}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Progress</span>
+                              <span className="font-medium">{progress}%</span>
+                            </div>
+                            <div className="w-full bg-secondary rounded-full h-2">
+                              <div
+                                className="bg-primary h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(progress, 100)}%` }}
+                              />
+                            </div>
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <TrendingUp className="w-3 h-3" />
+                              <span>
+                                ${(goal.target_amount * progress / 100).toFixed(2)} of ${goal.target_amount}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteGoal(goal.id)}
+                          className="text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })
             )}
           </div>
         </CardContent>

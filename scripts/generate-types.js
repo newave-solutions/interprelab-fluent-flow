@@ -12,9 +12,13 @@
  * - Project linked to Supabase
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log('🔄 Generating TypeScript types from Supabase...');
 
@@ -29,7 +33,7 @@ try {
   console.log('📁 Types saved to: integrations/supabase/types.ts');
 
   // Verify the file was created
-  const typesPath = path.join(process.cwd(), 'integrations', 'supabase', 'types.ts');
+  const typesPath = path.join(path.dirname(__dirname), 'integrations', 'supabase', 'types.ts');
   if (fs.existsSync(typesPath)) {
     const stats = fs.statSync(typesPath);
     console.log(`📊 File size: ${Math.round(stats.size / 1024)}KB`);

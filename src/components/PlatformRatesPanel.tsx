@@ -11,10 +11,13 @@ import { Badge } from '@/components/ui/badge';
 
 interface PlatformRate {
   id: string;
+  user_id: string;
   platform_name: string;
   rate_per_minute: number;
   currency: string;
-  is_active: boolean;
+  is_active: boolean | null;
+  created_at: string;
+  updated_at: string;
 }
 
 const COMMON_PLATFORMS = ['Globo', 'BoostLingo', 'LSA', 'LanguageLine', 'Martti', 'Voyce'];
@@ -38,13 +41,25 @@ export const PlatformRatesPanel = () => {
   }, [user]);
 
   const loadPlatforms = async () => {
+    if (!user?.id) return;
+
     const { data, error } = await supabase
       .from('platform_rates')
       .select('*')
-      .eq('user_id', user?.id)
+      .eq('user_id', user.id)
+      .eq('is_active', true)
       .order('platform_name');
 
-    if (!error && data) {
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load platform rates',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (data) {
       setPlatforms(data);
     }
   };
@@ -127,18 +142,26 @@ export const PlatformRatesPanel = () => {
   };
 
   const deletePlatform = async (platformId: string) => {
+    // Soft delete by setting is_active to false
     const { error } = await supabase
       .from('platform_rates')
-      .delete()
+      .update({ is_active: false })
       .eq('id', platformId);
 
-    if (!error) {
+    if (error) {
       toast({
-        title: 'Success',
-        description: 'Platform deleted successfully',
+        title: 'Error',
+        description: 'Failed to delete platform',
+        variant: 'destructive',
       });
-      loadPlatforms();
+      return;
     }
+
+    toast({
+      title: 'Success',
+      description: 'Platform deleted successfully',
+    });
+    loadPlatforms();
   };
 
   return (

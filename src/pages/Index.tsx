@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { FullScreenVideoHero } from "@/components/VideoSection";
 import { SolutionHero } from "@/components/SolutionHero";
+import { ProductShowcase } from "@/components/ProductShowcase";
 import { TrustedPartners } from "@/components/TrustedPartners";
 import { Testimonials } from "@/components/Testimonials";
 import { FAQ } from "@/components/FAQ";
@@ -48,6 +49,7 @@ const Index = () => {
       {/* Main content */}
       <main>
         <SolutionHero />
+        <ProductShowcase />
         <Testimonials />
         <FAQ />
         <TrustedPartners />

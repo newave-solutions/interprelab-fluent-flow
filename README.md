@@ -99,18 +99,24 @@ Visit `http://localhost:5173` to see the application.
 
 ## 📚 Documentation
 
-### Essential Guides
+### 📁 [Complete Documentation](./docs/)
+All technical documentation is now organized in the `/docs` folder by category:
 
-| Document | Purpose | Time Required |
+| Category | Purpose | Key Documents |
 |----------|---------|---------------|
-| **[ACTION_GUIDE.md](ACTION_GUIDE.md)** | Complete step-by-step guide for all tasks | 2-3 hours |
-| **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** | Production deployment instructions | 30 minutes |
-| **[CHROME_EXTENSION_SETUP.md](CHROME_EXTENSION_SETUP.md)** | Chrome extension installation | 10 minutes |
+| **[🚀 Deployment](./docs/deployment/)** | Production deployment guides | Deployment Guide, Checklists, Cloud Setup |
+| **[🏗️ Architecture](./docs/architecture/)** | System design & database schemas | Architecture Analysis, S3 Integration |
+| **[🔒 Security](./docs/security/)** | Security fixes & optimizations | RLS Optimization, Security Patches |
+| **[🔌 Extensions](./docs/extensions/)** | Chrome extension documentation | Setup Guide, Architecture, Troubleshooting |
+| **[📊 Project Status](./docs/project-status/)** | Implementation & status reports | Final Status, QA Reports, Summaries |
+| **[📖 Guides](./docs/guides/)** | Step-by-step tutorials | Quick Start, Action Guide, Setup Guides |
 
-### Additional Documentation
+### Quick Start
+- **New Developers**: Start with [Quick Start Guide](./docs/guides/QUICK_START.md)
+- **Deployment**: Follow [Deployment Guide](./docs/deployment/DEPLOYMENT_GUIDE.md)
+- **Extensions**: Setup [Chrome Extension](./docs/extensions/CHROME_EXTENSION_SETUP.md)
 
-- **[PROJECT_COMPLETION_SUMMARY.md](PROJECT_COMPLETION_SUMMARY.md)** - Project overview and achievements
-- **[OPTIMIZATION_SUMMARY.md](OPTIMIZATION_SUMMARY.md)** - Performance optimization details
+### Additional Resources
 - **[public/chrome-extension/README.md](public/chrome-extension/README.md)** - Extension documentation
 - **[public/videos/README.md](public/videos/README.md)** - Video creation guide
 - **[supabase/functions/README.md](supabase/functions/README.md)** - Edge Functions documentation
