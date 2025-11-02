@@ -2,19 +2,43 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Menu, Shield, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   const navItems = [
-    { label: "InterpreBot", href: "/interprebot" },
-    { label: "InterpreCoach", href: "/interprecoach" },
-    { label: "Resources", href: "/resources" },
-    { label: "About us", href: "/about" },
-    { label: "Get in touch", href: "/contact" },
-    { label: "Sign in", href: "/signin" }
+    {
+      label: t('solutions'),
+      submenu: [
+        { label: 'InterpreBot', href: '/interprebot' },
+        { label: 'InterpreCoach', href: '/interprecoach' },
+        { label: 'InterpreTrack', href: '/interpretrack' },
+        { label: 'InterpreHub', href: '/interpre-hub' },
+      ]
+    },
+    { label: t('resources'), href: '/resources' },
+    { label: t('about'), href: '/about' },
+    { label: t('contact'), href: '/contact' },
   ];
 
   return (
@@ -35,21 +59,75 @@ export const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-              >
-                {item.label}
-              </Link>
+              item.submenu ? (
+                <NavigationMenu key={item.label}>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="text-sm font-medium text-foreground/80 hover:text-foreground bg-transparent">
+                        {item.label}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-48 gap-2 p-2">
+                          {item.submenu.map((subitem) => (
+                            <li key={subitem.href}>
+                              <Link to={subitem.href}>
+                                <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                  <div className="text-sm font-medium leading-none">{subitem.label}</div>
+                                </NavigationMenuLink>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              ) : (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
           </div>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button asChild variant="hero" size="sm">
-              <Link to="/interprecoach">Join the Waitlist <ArrowRight className="w-4 h-4 ml-1" /></Link>
-            </Button>
+            {user ? (
+              <>
+                <Link to="/dashboard">
+                  <Button variant="ghost" size="sm">
+                    Dashboard
+                  </Button>
+                </Link>
+                <Link to="/settings">
+                  <Button variant="ghost" size="sm">
+                    Settings
+                  </Button>
+                </Link>
+                <Button onClick={handleSignOut} variant="glass" size="sm">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  {t('signOut')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/waitlist">
+                  <Button variant="glass" size="sm" className="flex items-center gap-2">
+                    Join Waitlist
+                  </Button>
+                </Link>
+                <Link to="/signin">
+                  <Button variant="hero" size="sm">
+                    <User className="w-4 h-4 mr-2" />
+                    {t('signIn')}
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -62,20 +140,60 @@ export const Navigation = () => {
             <SheetContent side="right" className="glass">
               <div className="space-y-6 mt-8">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.href}
-                    className="block text-lg font-medium text-foreground hover:text-primary transition-colors"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
+                  item.submenu ? (
+                    <div key={item.label} className="space-y-2">
+                      <p className="text-sm font-semibold text-muted-foreground">{item.label}</p>
+                      {item.submenu.map((subitem) => (
+                        <Link
+                          key={subitem.href}
+                          to={subitem.href}
+                          className="block text-base font-medium text-foreground hover:text-primary transition-colors pl-4"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {subitem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.label}
+                      to={item.href}
+                      className="block text-lg font-medium text-foreground hover:text-primary transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  )
                 ))}
-                
+
                 <div className="pt-6 space-y-3">
-                  <Button asChild variant="hero" className="w-full">
-                    <Link to="/interprecoach">Join the Waitlist <ArrowRight className="w-4 h-4 ml-2" /></Link>
-                  </Button>
+                  {user ? (
+                    <Button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsOpen(false);
+                      }}
+                      variant="glass"
+                      className="w-full"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {t('signOut')}
+                    </Button>
+                  ) : (
+                    <>
+                      <Link to="/waitlist">
+                        <Button variant="glass" className="w-full flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                          Join Waitlist
+                        </Button>
+                      </Link>
+                      <Link to="/signin">
+                        <Button variant="hero" className="w-full" onClick={() => setIsOpen(false)}>
+                          <User className="w-4 h-4 mr-2" />
+                          {t('signIn')}
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>

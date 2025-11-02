@@ -83,27 +83,21 @@ export const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 px-6 relative">
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-      
+    <section className="py-32 px-6 relative">      
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16 animate-fade-in">
-          <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
-            Client Success Stories
+          <Badge className="glass px-6 py-3 mb-6 border-primary/20">
+            Testimonials
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Trusted by Professional Interpreters Worldwide
+          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
+            Loved by <span className="bg-gradient-primary bg-clip-text text-transparent">Interpreters</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Hear from interpreters who have transformed their practice with InterpreLab's AI-powered ecosystem.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Join thousands of professionals who've transformed their practice.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="relative overflow-hidden">
             <div 
               className="flex transition-transform duration-500 ease-in-out"
@@ -111,35 +105,37 @@ export const Testimonials = () => {
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
-                    <CardContent className="p-8">
+                  <Card className="glass border-border/30 hover-lift">
+                    <CardContent className="p-8 md:p-12">
                       <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                          <Avatar className="w-16 h-16">
+                        {/* Quote */}
+                        <div className="relative">
+                          <Quote className="w-10 h-10 text-primary/20 absolute -top-4 -left-4" />
+                          <blockquote className="text-lg md:text-xl text-foreground leading-relaxed pl-8">
+                            "{testimonial.quote}"
+                          </blockquote>
+                        </div>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-1">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <span key={i} className="text-warning text-xl">★</span>
+                          ))}
+                        </div>
+
+                        {/* Author */}
+                        <div className="flex items-center gap-4 pt-4 border-t border-border/50">
+                          <Avatar className="w-14 h-14">
                             <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
                             <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
-                            <h4 className="text-xl font-bold text-foreground">{testimonial.name}</h4>
-                            <p className="text-muted-foreground">{testimonial.role}</p>
-                            <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                            <h4 className="text-lg font-bold text-foreground">{testimonial.name}</h4>
+                            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                           </div>
-                          <Badge className={`${getSpecialtyColor(testimonial.specialty)} border-0 text-white`}>
+                          <Badge className="bg-gradient-to-r from-primary/20 to-primary/10 border-primary/30 text-primary">
                             {testimonial.specialty}
                           </Badge>
-                        </div>
-
-                        <div className="relative">
-                          <Quote className="w-8 h-8 text-primary/30 absolute -top-2 -left-2" />
-                          <blockquote className="text-lg text-muted-foreground leading-relaxed pl-6">
-                            {testimonial.quote}
-                          </blockquote>
-                        </div>
-
-                        <div className="flex items-center gap-1">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <span key={i} className="text-yellow-400 text-lg">★</span>
-                          ))}
                         </div>
                       </div>
                     </CardContent>
@@ -150,12 +146,12 @@ export const Testimonials = () => {
           </div>
 
           {/* Dots indicator */}
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-2 mt-10">
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-primary' : 'bg-primary/30'
+                className={`h-2 rounded-full transition-all ${
+                  index === currentIndex ? 'w-8 bg-primary' : 'w-2 bg-primary/30'
                 }`}
                 onClick={() => setCurrentIndex(index)}
               />

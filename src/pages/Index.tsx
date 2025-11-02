@@ -1,10 +1,8 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { ProductShowcase } from "@/components/ProductShowcase";
-import { Resources } from "@/components/Resources";
+import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
-import { InterpreBotUI } from "@/components/ExtensionUI";
-import { InterpreCoachButton } from "@/components/InterpreCoachButton";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -14,16 +12,10 @@ const Index = () => {
       <main>
         <Hero />
         <ProductShowcase />
-        <Resources />
+        <StatsSection />
         <Testimonials />
       </main>
       <Footer />
-      
-      {/* InterpreBot - AI Assessment (First Contact) */}
-      <InterpreBotUI />
-      
-      {/* InterpreCoach Extension Button */}
-      <InterpreCoachButton />
     </div>
   );
 };
