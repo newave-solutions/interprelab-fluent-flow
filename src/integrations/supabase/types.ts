@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      call_records: {
+        Row: {
+          id: string
+          user_id: string
+          start_time: string
+          end_time: string
+          duration: number
+          earnings: number
+          platform: string | null
+          call_type: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          start_time: string
+          end_time: string
+          duration: number
+          earnings: number
+          platform?: string | null
+          call_type: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          start_time?: string
+          end_time?: string
+          duration?: number
+          earnings?: number
+          platform?: string | null
+          call_type?: string
+          created_at?: string | null
+        }
+        Relationships: []
+      }
       call_logs: {
         Row: {
           created_at: string
@@ -131,6 +167,27 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          user_id: string
+          pay_per_minute_usd: number | null
+          target_currency: string | null
+          rounding: string | null
+        }
+        Insert: {
+          user_id: string
+          pay_per_minute_usd?: number | null
+          target_currency?: string | null
+          rounding?: string | null
+        }
+        Update: {
+          user_id?: string
+          pay_per_minute_usd?: number | null
+          target_currency?: string | null
+          rounding?: string | null
         }
         Relationships: []
       }
