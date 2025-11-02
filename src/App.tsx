@@ -1,4 +1,3 @@
-import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,16 +16,11 @@ import Settings from "./pages/Settings";
 import Resources from "./pages/Resources";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import GetInTouch from "./pages/GetInTouch";
+import Careers from "./pages/Careers";
 import SignIn from "./pages/SignIn";
 import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
-import InterpreBot from "./pages/InterpreBot";
-import InterpreCoach from "./pages/InterpreCoach";
-import Resources from "./pages/Resources";
-import About from "./pages/About";
-import GetInTouch from "./pages/GetInTouch";
-import SignIn from "./pages/SignIn";
-import Careers from "./pages/Careers";
 
 const queryClient = new QueryClient();
 
@@ -59,8 +53,10 @@ const App = () => (
                 </ProtectedRoute>
               } />
               <Route path="/resources" element={<Resources />} />
+              <Route path="/careers" element={<Careers />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/get-in-touch" element={<GetInTouch />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/waitlist" element={<Waitlist />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
