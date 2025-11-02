@@ -1,50 +1,61 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Chrome, 
-  Download, 
-  Server, 
-  Calendar, 
-  ArrowRight,
-  Cloud,
-  Cpu,
-  BarChart3,
-  GraduationCap,
-  Bot,
-  BookOpen,
-  TrendingUp,
-  Database,
-  Shield,
+import {
   Brain,
-  Sparkles,
-  Zap,
-  Eye,
-  Waves
+  Chrome,
+  Clock,
+  ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ProductShowcase = () => {
+  const products = [
+    {
+      id: "interprebot",
+      name: "InterpreBot",
+      tagline: "Skills Assessment",
+      description: "AI-powered evaluation of your interpretation skills with personalized improvement paths.",
+      icon: Brain,
+      gradient: "from-primary to-primary-glow",
+      link: "/interprebot",
+      cta: "Take Assessment"
+    },
+    {
+      id: "interprecoach",
+      name: "InterpreCoach",
+      tagline: "Real-Time Assistant",
+      description: "Browser extension providing instant terminology support during live sessions.",
+      icon: Chrome,
+      gradient: "from-success to-primary",
+      link: "/interprecoach",
+      cta: "Install Extension"
+    },
+    {
+      id: "interpretrack",
+      name: "InterpreTrack",
+      tagline: "Session Tracking",
+      description: "Automated logging and earnings tracking for freelance interpreters.",
+      icon: Clock,
+      gradient: "from-secondary to-accent",
+      link: "/interpretrack",
+      cta: "Start Tracking"
+    }
+  ];
+
   return (
-    <section id="products" className="py-20 px-6 relative">
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/src/assets/tech-background.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95" />
-      
+    <section className="py-32 px-6 relative">
       <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16 animate-fade-in">
-          <Badge className="bg-gradient-primary border-0 text-white px-4 py-2 mb-4">
-            Complete AI Ecosystem
+        {/* Header - Simplified */}
+        <div className="text-center mb-20 space-y-4 animate-fade-in">
+          <Badge className="glass px-6 py-3 border-primary/20">
+            Complete Ecosystem
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Three Integrated Solutions, One Ecosystem
+          <h2 className="text-5xl md:text-6xl font-bold">
+            <span className="text-foreground">Three Tools.</span>
+            <br />
+            <span className="bg-gradient-primary bg-clip-text text-transparent">One Platform.</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            From personalized training and real-time assistance to comprehensive analytics, 
-            InterpreLab delivers the complete AI-powered interpretation ecosystem for medical and legal professionals.
-          </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -61,10 +72,10 @@ export const ProductShowcase = () => {
                     <p className="text-muted-foreground">Training & Certification Hub</p>
                   </div>
                 </div>
-                
+
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
-                  <img 
-                    src="src/assets/tech-background.jpg" 
+                  <img
+                    src="src/assets/tech-background.jpg"
                     alt="InterpreLab Platform Dashboard"
                     className="w-full h-full object-cover"
                   />
@@ -126,10 +137,10 @@ export const ProductShowcase = () => {
                     <p className="text-muted-foreground">Live Session Assistant</p>
                   </div>
                 </div>
-                
+
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
-                  <img 
-                    src="src/assets/extension-preview.jpg" 
+                  <img
+                    src="src/assets/extension-preview.jpg"
                     alt="InterpreCoach Extension Preview"
                     className="w-full h-full object-cover"
                   />
@@ -196,7 +207,7 @@ export const ProductShowcase = () => {
                     <p className="text-muted-foreground">Personal AI Analyst</p>
                   </div>
                 </div>
-                
+
                 {/* Enhanced 3D Scene */}
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-gradient-to-br from-purple-900/40 to-pink-900/40">
                   {/* 3D Computer Scene */}
@@ -205,7 +216,7 @@ export const ProductShowcase = () => {
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="relative transform-gpu hover:scale-105 transition-transform duration-500">
                         {/* Computer Base */}
-                        <div 
+                        <div
                           className="w-32 h-20 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg shadow-xl"
                           style={{ transform: 'rotateX(15deg) rotateY(-10deg)' }}
                         >
@@ -240,17 +251,17 @@ export const ProductShowcase = () => {
                             <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 0.2 }} />
                           </linearGradient>
                         </defs>
-                        <path 
-                          d="M20,40 Q80,20 140,60 Q180,80 220,40" 
-                          stroke="url(#flowGradient)" 
-                          strokeWidth="2" 
+                        <path
+                          d="M20,40 Q80,20 140,60 Q180,80 220,40"
+                          stroke="url(#flowGradient)"
+                          strokeWidth="2"
                           fill="none"
                           className="animate-pulse"
                         />
-                        <path 
-                          d="M40,80 Q100,100 160,80 Q200,60 240,80" 
-                          stroke="url(#flowGradient)" 
-                          strokeWidth="1" 
+                        <path
+                          d="M40,80 Q100,100 160,80 Q200,60 240,80"
+                          stroke="url(#flowGradient)"
+                          strokeWidth="1"
                           fill="none"
                           className="animate-pulse"
                           style={{ animationDelay: '0.5s' }}
@@ -261,10 +272,10 @@ export const ProductShowcase = () => {
                     {/* Voice Wave Animation */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <div 
+                        <div
                           key={i}
                           className="w-1 bg-gradient-to-t from-cyan-400 to-purple-400 rounded-full animate-pulse"
-                          style={{ 
+                          style={{
                             height: `${8 + Math.sin(i) * 4}px`,
                             animationDelay: `${i * 0.1}s`,
                             animationDuration: '1s'
@@ -275,7 +286,7 @@ export const ProductShowcase = () => {
 
                     {/* Holographic Interface Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-cyan-400/5 to-purple-400/5" />
-                    
+
                     {/* Status Badge */}
                     <div className="absolute top-4 left-4">
                       <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 border-0 text-white text-xs">
