@@ -33,6 +33,7 @@ export const Navigation = () => {
         { label: 'InterpreBot', href: '/interprebot' },
         { label: 'InterpreCoach', href: '/interprecoach' },
         { label: 'InterpreTrack', href: '/interpretrack' },
+        { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreHub', href: '/interpre-hub' },
       ]
     },
