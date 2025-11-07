@@ -72,8 +72,8 @@ const CallTracker = () => {
     if (monthData) {
       const totalDuration = monthData.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
       const totalRounded = monthData.reduce((sum, call) => sum + (call.rounded_duration_seconds || call.duration_seconds || 0), 0);
-      const totalEarnings = monthData.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0);
-      const totalRoundedEarnings = monthData.reduce((sum, call) => sum + (parseFloat(call.rounded_earnings) || parseFloat(call.earnings) || 0), 0);
+      const totalEarnings = monthData.reduce((sum, call) => sum + (call.earnings || 0), 0);
+      const totalRoundedEarnings = monthData.reduce((sum, call) => sum + (call.rounded_earnings || call.earnings || 0), 0);
       
       // Calculate time lost to rounding
       const timeLost = totalDuration - totalRounded;
@@ -88,26 +88,31 @@ const CallTracker = () => {
           type: 'VRI',
           count: vriCalls.length,
           duration: vriCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: vriCalls.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0),
+          earnings: vriCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
           color: 'hsl(217, 91%, 60%)', // blue
         },
         {
           type: 'OPI',
           count: opiCalls.length,
           duration: opiCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: opiCalls.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0),
+          earnings: opiCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
           color: 'hsl(271, 81%, 56%)', // purple
         }
       ]);
 
       setStats({
         monthCalls: monthData.length,
-        totalDuration,
-        totalRounded,
-        totalEarnings,
-        totalRoundedEarnings,
+        totalSeconds: totalDuration,
+        roundedSeconds: totalRounded,
+        totalEarnings: totalEarnings,
+        roundedEarnings: totalRoundedEarnings,
+        projectedEarnings: totalEarnings, // Could calculate based on remaining days
         timeLost,
         earningsLost,
+        roundingMethod,
+        totalDuration,
+        totalRounded,
+        totalRoundedEarnings,
       });
     }
 
@@ -397,7 +402,7 @@ const CallTracker = () => {
                       )}
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold">{formatCurrency(parseFloat(call.earnings), userSettings?.preferred_currency || 'USD')}</div>
+                      <div className="font-semibold">{formatCurrency(call.earnings || 0, userSettings?.preferred_currency || 'USD')}</div>
                       <div className="text-sm text-muted-foreground">
                         {formatDurationMinutes(call.duration_seconds)}
                       </div>
