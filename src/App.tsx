@@ -17,7 +17,7 @@ import CallTracker from "./pages/CallTracker";
 import Settings from "./pages/Settings";
 import Resources from "./pages/Resources";
 import About from "./pages/About";
-import InterpreWellbeing from "./pages/InterpreWellbeing";
+import InterpreWellness from "./pages/InterpreWellness";
 import Contact from "./pages/Contact";
 import GetInTouch from "./pages/GetInTouch";
 import Careers from "./pages/Careers";
@@ -71,7 +71,8 @@ const App = () => (
                 <Route path="/get-in-touch" element={<GetInTouch />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/waitlist" element={<Waitlist />} />
-                <Route path="/interprewellbeing" element={<InterpreWellbeing />} />
+                <Route path="/interpre-wellness" element={<InterpreWellness />} />
+                <Route path="/interprewellbeing" element={<InterpreWellness />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
