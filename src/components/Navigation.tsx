@@ -34,7 +34,8 @@ export const Navigation = () => {
         { label: 'InterpreCoach', href: '/interprecoach' },
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreStudy', href: '/interprestudy' },
-        { label: 'InterpreWellbeing', href: '/interprewellbeing' },
+        { label: 'Interpre-Wellness', href: '/interpre-wellness' },
+        { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
     { label: t('resources'), href: '/resources' },
