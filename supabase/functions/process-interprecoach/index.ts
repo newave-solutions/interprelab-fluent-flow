@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.192.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
+import { ApiError } from "../_shared/types.ts";
 
 // Medical terminology database
 const MEDICAL_TERMS_DB: Record<string, { definition: string; translation?: string; category: string }> = {
@@ -100,8 +101,7 @@ async function generateHighlightsWithGoogleAI(text: string, medications: string[
   const GOOGLE_PROJECT_ID = Deno.env.get('GOOGLE_CLOUD_PROJECT_ID');
 
   if (!GOOGLE_API_KEY || !GOOGLE_PROJECT_ID) {
-    console.log('Google Cloud credentials not set, using fallback');
-    return generateBasicHighlights(text, medications, conversions);
+    throw new ApiError("Google Cloud credentials not set.", 500);
   }
 
   try {
@@ -136,8 +136,7 @@ Respond in JSON format: { "highlights": [{ "icon": "emoji", "text": "highlight t
     });
 
     if (!response.ok) {
-      console.error('Google AI API error:', response.status);
-      return generateBasicHighlights(text, medications, conversions);
+      throw new ApiError(`Google AI API error: ${response.status}`, 500);
     }
 
     const data = await response.json();
@@ -154,8 +153,7 @@ Respond in JSON format: { "highlights": [{ "icon": "emoji", "text": "highlight t
 
     return generateBasicHighlights(text, medications, conversions);
   } catch (error) {
-    console.error('Error generating highlights with Google AI:', error);
-    return generateBasicHighlights(text, medications, conversions);
+    throw new ApiError(`Error generating highlights with Google AI: ${error.message}`, 500);
   }
 }
 
@@ -210,10 +208,8 @@ serve(async (req) => {
   try {
     const { text, medications = [], conversions = [], useGoogleMedicalAI = false } = await req.json();
 
-    console.log('Processing de-identified text:', text?.substring(0, 100));
-
     if (!text) {
-      throw new Error('No text provided');
+      throw new ApiError('No text provided', 400);
     }
 
     // Process de-identified text only
@@ -237,10 +233,11 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Processing error:', error);
+    const status = error instanceof ApiError ? error.status : 500;
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: error.message }),
       {
-        status: 500,
+        status,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );

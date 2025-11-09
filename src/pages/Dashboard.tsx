@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react";
-import { Layout } from "@/components/Layout";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { SettingsPanel } from "@/components/SettingsPannel";
-import { GoalsPanel } from "@/components/GoalsPannel";
-import { PlatformRatesPanel } from "@/components/PlatformRatesPanel";
-import { Calendar, DollarSign, Clock, TrendingUp, Phone } from "lucide-react";
-import {
-  format,
-  startOfMonth,
-  startOfYear,
-  endOfMonth,
-  endOfYear,
-} from "date-fns";
+import { useEffect, useState } from 'react';
+import { Layout } from '@/components/Layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { SettingsPanel } from '@/components/SettingsPanel';
+import { GoalsPanel } from '@/components/GoalsPanel';
+import { PlatformRatesPanel } from '@/components/PlatformRatesPanel';
+import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface Stats {
   monthTotal: number;
@@ -46,7 +34,7 @@ const Dashboard = () => {
     totalCalls: 0,
   });
   const [recentCalls, setRecentCalls] = useState<any[]>([]);
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState('USD');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -58,84 +46,33 @@ const Dashboard = () => {
   const loadDashboardData = async () => {
     if (!user) return;
 
-    // Get user currency
-    const { data: settings } = await supabase
-      .from("user_settings")
-      .select("preferred_currency")
-      .eq("user_id", user.id)
-      .maybeSingle();
+    const { data, error } = await supabase.rpc('get_dashboard_stats');
 
-    if (settings?.preferred_currency) {
-      setCurrency(settings.preferred_currency);
+    if (error) {
+      console.error('Error fetching dashboard stats:', error);
+      return;
     }
 
-    const now = new Date();
-    const monthStart = startOfMonth(now);
-    const monthEnd = endOfMonth(now);
-    const yearStart = startOfYear(now);
-    const yearEnd = endOfYear(now);
+    if (data) {
+      const { settings, month_stats, year_stats, all_time_stats, recent_calls } = data;
 
-    // Get month stats
-    const { data: monthData } = await supabase
-      .from("call_logs")
-      .select("duration_seconds, earnings")
-      .eq("user_id", user.id)
-      .gte("start_time", monthStart.toISOString())
-      .lte("start_time", monthEnd.toISOString());
+      if (settings) {
+        setCurrency(settings.preferred_currency);
+      }
 
-    // Get year stats
-    const { data: yearData } = await supabase
-      .from("call_logs")
-      .select("duration_seconds, earnings")
-      .eq("user_id", user.id)
-      .gte("start_time", yearStart.toISOString())
-      .lte("start_time", yearEnd.toISOString());
+      setStats({
+        monthTotal: month_stats.totalDuration,
+        monthEarnings: month_stats.totalEarnings,
+        monthCalls: month_stats.callCount,
+        yearTotal: year_stats.totalDuration,
+        yearEarnings: year_stats.totalEarnings,
+        yearCalls: year_stats.callCount,
+        avgCallDuration: all_time_stats.avgDuration,
+        totalCalls: all_time_stats.callCount,
+      });
 
-    // Get all time stats
-    const { data: allData } = await supabase
-      .from("call_logs")
-      .select("duration_seconds, earnings")
-      .eq("user_id", user.id);
-
-    // Get recent calls
-    const { data: recent } = await supabase
-      .from("call_logs")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("start_time", { ascending: false })
-      .limit(5);
-
-    const monthStats = calculateStats(monthData || []);
-    const yearStats = calculateStats(yearData || []);
-    const allStats = calculateStats(allData || []);
-
-    setStats({
-      monthTotal: monthStats.totalDuration,
-      monthEarnings: monthStats.totalEarnings,
-      monthCalls: monthStats.callCount,
-      yearTotal: yearStats.totalDuration,
-      yearEarnings: yearStats.totalEarnings,
-      yearCalls: yearStats.callCount,
-      avgCallDuration: allStats.avgDuration,
-      totalCalls: allStats.callCount,
-    });
-
-    setRecentCalls(recent || []);
-  };
-
-  const calculateStats = (data: any[]) => {
-    const totalDuration = data.reduce(
-      (sum, call) => sum + (call.duration_seconds || 0),
-      0
-    );
-    const totalEarnings = data.reduce(
-      (sum, call) => sum + (parseFloat(call.earnings) || 0),
-      0
-    );
-    const callCount = data.length;
-    const avgDuration = callCount > 0 ? totalDuration / callCount : 0;
-
-    return { totalDuration, totalEarnings, callCount, avgDuration };
+      setRecentCalls(recent_calls || []);
+    }
   };
 
   const formatDuration = (seconds: number): string => {
@@ -145,8 +82,8 @@ const Dashboard = () => {
   };
 
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: currency,
     }).format(amount);
   };
@@ -165,126 +102,97 @@ const Dashboard = () => {
               <TabsTrigger value="goals">Goals</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-8">
-              {/* Existing dashboard content */}
+            <TabsContent value="overview" className="space-y-8">{/* Existing dashboard content */}
 
-              {/* Monthly & Yearly Totals */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      This Month
-                    </CardTitle>
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {formatCurrency(stats.monthEarnings)}
+        {/* Monthly & Yearly Totals */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">This Month</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(stats.monthEarnings)}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.monthCalls} calls • {formatDuration(stats.monthTotal)}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">This Year</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(stats.yearEarnings)}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.yearCalls} calls • {formatDuration(stats.yearTotal)}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Avg Call Duration</CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatDuration(stats.avgCallDuration)}</div>
+              <p className="text-xs text-muted-foreground">Across all calls</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Calls</CardTitle>
+              <Phone className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.totalCalls}</div>
+              <p className="text-xs text-muted-foreground">All time</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Calls */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Calls</CardTitle>
+            <CardDescription>Your latest interpretation sessions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentCalls.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">
+                  No calls logged yet. Start tracking your calls to see them here.
+                </p>
+              ) : (
+                recentCalls.map((call) => (
+                  <div
+                    key={call.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
+                    <div className="flex-1">
+                      <div className="font-medium">
+                        {format(new Date(call.start_time), 'MMM dd, yyyy • hh:mm a')}
+                      </div>
+                      {call.notes && (
+                        <div className="text-sm text-muted-foreground mt-1">{call.notes}</div>
+                      )}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      {stats.monthCalls} calls •{" "}
-                      {formatDuration(stats.monthTotal)}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      This Year
-                    </CardTitle>
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {formatCurrency(stats.yearEarnings)}
+                    <div className="text-right">
+                      <div className="font-semibold">{formatCurrency(parseFloat(call.earnings))}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {formatDuration(call.duration_seconds)}
+                      </div>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      {stats.yearCalls} calls •{" "}
-                      {formatDuration(stats.yearTotal)}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Avg Call Duration
-                    </CardTitle>
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {formatDuration(stats.avgCallDuration)}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Across all calls
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Calls
-                    </CardTitle>
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{stats.totalCalls}</div>
-                    <p className="text-xs text-muted-foreground">All time</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Recent Calls */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Calls</CardTitle>
-                  <CardDescription>
-                    Your latest interpretation sessions
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {recentCalls.length === 0 ? (
-                      <p className="text-center text-muted-foreground py-8">
-                        No calls logged yet. Start tracking your calls to see
-                        them here.
-                      </p>
-                    ) : (
-                      recentCalls.map((call) => (
-                        <div
-                          key={call.id}
-                          className="flex items-center justify-between p-4 border rounded-lg"
-                        >
-                          <div className="flex-1">
-                            <div className="font-medium">
-                              {format(
-                                new Date(call.start_time),
-                                "MMM dd, yyyy • hh:mm a"
-                              )}
-                            </div>
-                            {call.notes && (
-                              <div className="text-sm text-muted-foreground mt-1">
-                                {call.notes}
-                              </div>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold">
-                              {formatCurrency(parseFloat(call.earnings))}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {formatDuration(call.duration_seconds)}
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    )}
                   </div>
-                </CardContent>
-              </Card>
+                ))
+              )}
+            </div>
+          </CardContent>
+        </Card>
             </TabsContent>
 
             <TabsContent value="settings">

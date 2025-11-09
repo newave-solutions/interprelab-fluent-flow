@@ -83,7 +83,8 @@ export default {
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
-        'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
+        'display': ['Poppins', 'sans-serif'],
+        'mono': ['Space Grotesk', 'monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",
