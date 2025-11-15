@@ -67,52 +67,91 @@ export type Database = {
       }
       call_logs: {
         Row: {
+<<<<<<< HEAD
           client_name: string | null
           client_phone: string | null
+=======
+          call_type: string | null
+>>>>>>> newave-solutions/lovable
           created_at: string
           currency: string
           duration_seconds: number | null
           earnings: number | null
           end_time: string | null
           id: string
+<<<<<<< HEAD
           interpretation_type: string | null
           language_pair: string | null
           notes: string | null
           rating: number | null
+=======
+          import_source: string | null
+          is_imported: boolean
+          notes: string | null
+          platform_name: string | null
+          rounded_duration_seconds: number | null
+          rounded_earnings: number | null
+>>>>>>> newave-solutions/lovable
           start_time: string
           updated_at: string
           user_id: string
         }
         Insert: {
+<<<<<<< HEAD
           client_name?: string | null
           client_phone?: string | null
+=======
+          call_type?: string | null
+>>>>>>> newave-solutions/lovable
           created_at?: string
           currency?: string
           duration_seconds?: number | null
           earnings?: number | null
           end_time?: string | null
           id?: string
+<<<<<<< HEAD
           interpretation_type?: string | null
           language_pair?: string | null
           notes?: string | null
           rating?: number | null
+=======
+          import_source?: string | null
+          is_imported?: boolean
+          notes?: string | null
+          platform_name?: string | null
+          rounded_duration_seconds?: number | null
+          rounded_earnings?: number | null
+>>>>>>> newave-solutions/lovable
           start_time: string
           updated_at?: string
           user_id: string
         }
         Update: {
+<<<<<<< HEAD
           client_name?: string | null
           client_phone?: string | null
+=======
+          call_type?: string | null
+>>>>>>> newave-solutions/lovable
           created_at?: string
           currency?: string
           duration_seconds?: number | null
           earnings?: number | null
           end_time?: string | null
           id?: string
+<<<<<<< HEAD
           interpretation_type?: string | null
           language_pair?: string | null
           notes?: string | null
           rating?: number | null
+=======
+          import_source?: string | null
+          is_imported?: boolean
+          notes?: string | null
+          platform_name?: string | null
+          rounded_duration_seconds?: number | null
+          rounded_earnings?: number | null
+>>>>>>> newave-solutions/lovable
           start_time?: string
           updated_at?: string
           user_id?: string
@@ -203,6 +242,7 @@ export type Database = {
         }
         Relationships: []
       }
+<<<<<<< HEAD
       glossary_terms: {
         Row: {
           category: string | null
@@ -266,6 +306,38 @@ export type Database = {
           usage_count?: number | null
           usage_example?: string | null
           user_id?: string | null
+=======
+      platform_rates: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          is_active: boolean
+          platform_name: string
+          rate_per_minute: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          platform_name: string
+          rate_per_minute?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string
+          rate_per_minute?: number
+          updated_at?: string
+          user_id?: string
+>>>>>>> newave-solutions/lovable
         }
         Relationships: []
       }
@@ -386,6 +458,84 @@ export type Database = {
         }
         Relationships: []
       }
+      user_goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          goal_type: string
+          id: string
+          is_active: boolean
+          platform_name: string | null
+          target_amount: number
+          target_currency: string | null
+          target_period: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          goal_type: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string | null
+          target_amount: number
+          target_currency?: string | null
+          target_period: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          is_active?: boolean
+          platform_name?: string | null
+          target_amount?: number
+          target_currency?: string | null
+          target_period?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_insights: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          insight_type: string
+          is_read: boolean
+          metadata: Json | null
+          priority: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          insight_type: string
+          is_read?: boolean
+          metadata?: Json | null
+          priority?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          insight_type?: string
+          is_read?: boolean
+          metadata?: Json | null
+          priority?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -412,12 +562,20 @@ export type Database = {
           created_at: string
           email_notifications: boolean | null
           id: string
+<<<<<<< HEAD
           notifications_enabled: boolean | null
           pay_rate: number | null
           pay_rate_type: string | null
           preferred_currency: string | null
           preferred_language: string | null
           timezone: string | null
+=======
+          pay_rate: number
+          pay_rate_type: string
+          preferred_currency: string
+          preferred_language: string
+          time_rounding_method: string | null
+>>>>>>> newave-solutions/lovable
           updated_at: string
           user_id: string
         }
@@ -425,12 +583,20 @@ export type Database = {
           created_at?: string
           email_notifications?: boolean | null
           id?: string
+<<<<<<< HEAD
           notifications_enabled?: boolean | null
           pay_rate?: number | null
           pay_rate_type?: string | null
           preferred_currency?: string | null
           preferred_language?: string | null
           timezone?: string | null
+=======
+          pay_rate?: number
+          pay_rate_type?: string
+          preferred_currency?: string
+          preferred_language?: string
+          time_rounding_method?: string | null
+>>>>>>> newave-solutions/lovable
           updated_at?: string
           user_id: string
         }
@@ -438,12 +604,20 @@ export type Database = {
           created_at?: string
           email_notifications?: boolean | null
           id?: string
+<<<<<<< HEAD
           notifications_enabled?: boolean | null
           pay_rate?: number | null
           pay_rate_type?: string | null
           preferred_currency?: string | null
           preferred_language?: string | null
           timezone?: string | null
+=======
+          pay_rate?: number
+          pay_rate_type?: string
+          preferred_currency?: string
+          preferred_language?: string
+          time_rounding_method?: string | null
+>>>>>>> newave-solutions/lovable
           updated_at?: string
           user_id?: string
         }
@@ -478,6 +652,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_rounded_duration: {
+        Args: { actual_seconds: number; rounding_method: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

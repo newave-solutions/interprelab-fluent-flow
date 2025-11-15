@@ -6,6 +6,10 @@ import {
   Chrome,
   Clock,
   ArrowRight,
+<<<<<<< HEAD
+=======
+  GraduationCap,
+>>>>>>> newave-solutions/lovable
   BookOpen,
   Download,
   Sparkles,

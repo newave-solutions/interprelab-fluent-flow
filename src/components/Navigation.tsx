@@ -55,6 +55,20 @@ export const Navigation = () => {
   };
 
   const navItems = [
+<<<<<<< HEAD
+=======
+    {
+      label: t('solutions'),
+      submenu: [
+        { label: 'InterpreBot', href: '/interprebot' },
+        { label: 'InterpreCoach', href: '/interprecoach' },
+        { label: 'InterpreTrack', href: '/interpretrack' },
+        { label: 'InterpreStudy', href: '/interprestudy' },
+        { label: 'Interpre-Wellness', href: '/interpre-wellness' },
+        { label: 'InterpreLink', href: '/interprelink' },
+      ]
+    },
+>>>>>>> newave-solutions/lovable
     { label: t('resources'), href: '/resources' },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },

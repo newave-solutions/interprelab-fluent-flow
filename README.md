@@ -4,6 +4,22 @@
 
 **URL**: https://lovable.dev/projects/61694cb5-bbd8-44b1-aa9e-2b4cead1a91a
 
+## A/B Testing Note
+
+**InterpreCoach Implementation:**
+This project implements two different versions of the InterpreCoach solution for A/B testing purposes:
+
+1. **Current Version** (in `/interprecoach` route): Standard solution with AI coaching features
+2. **Agentic Version** (removed from Extension UI): Multi-agent system implementation with distributed AI agents
+
+The agentic version with multi-agent architecture has been removed to allow for performance comparison. Future A/B testing will help determine which approach users prefer and which performs better in real-world scenarios.
+
+Key differences to test:
+- Single AI model vs. multi-agent system
+- User experience and response quality
+- Performance and resource usage
+- User preference and satisfaction
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
