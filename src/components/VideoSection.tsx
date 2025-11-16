@@ -1,10 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { TrendingDown, Users, DollarSign, Brain } from "lucide-react";
+
+interface DataOverlay {
+  stat: string;
+  label: string;
+  icon?: React.ReactNode;
+}
 
 interface FullScreenVideoHeroProps {
   videoSrc: string;
   title: string;
   description: string;
   index: number;
+  dataOverlays?: DataOverlay[];
 }
 
 export const FullScreenVideoHero = ({
@@ -12,6 +21,7 @@ export const FullScreenVideoHero = ({
   title,
   description,
   index,
+  dataOverlays,
 }: FullScreenVideoHeroProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -55,7 +65,7 @@ export const FullScreenVideoHero = ({
   return (
     <section
       ref={sectionRef}
-      className="h-screen w-full relative snap-start snap-always overflow-hidden"
+      className="h-screen w-full relative snap-start snap-always overflow-hidden transition-opacity duration-700 ease-in-out"
     >
       {/* Full-screen video background */}
       <video
@@ -70,23 +80,66 @@ export const FullScreenVideoHero = ({
         <source src={videoSrc} type="video/mp4" />
       </video>
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/60 z-10" />
+      {/* Dark overlay with gradient fade */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70 z-10 transition-opacity duration-1000" />
 
       {/* Content */}
-      <div className="relative z-20 h-full flex items-center justify-center px-6">
+      <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">
+        {/* Data Overlays - Top Corners */}
+        {dataOverlays && textVisible && (
+          <div className="absolute top-8 left-0 right-0 px-6 flex justify-between max-w-7xl mx-auto">
+            {dataOverlays.slice(0, 2).map((overlay, idx) => (
+              <div
+                key={idx}
+                className={`glass px-6 py-4 rounded-xl border border-white/20 backdrop-blur-md transition-all duration-1000 delay-${(idx + 1) * 200} ${
+                  textVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {overlay.icon && <div className="text-white">{overlay.icon}</div>}
+                  <div>
+                    <div className="text-3xl font-bold text-white">{overlay.stat}</div>
+                    <div className="text-sm text-white/80">{overlay.label}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Main Content */}
         <div
           className={`max-w-4xl text-center space-y-6 transition-all duration-1000 ${
             textVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white leading-tight drop-shadow-2xl">
             {title}
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-sans max-w-3xl mx-auto">
-            Despite legal requirements under Title VI and Section 1557 of the ACA, Limited English Proficiency (LEP) patients face increased health risks due to interpretation quality issues.
+          <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-sans max-w-3xl mx-auto drop-shadow-lg">
+            {description}
           </p>
         </div>
+
+        {/* Additional Data Overlays - Bottom */}
+        {dataOverlays && dataOverlays.length > 2 && textVisible && (
+          <div className="absolute bottom-24 left-0 right-0 px-6">
+            <div className="max-w-4xl mx-auto flex justify-center gap-4">
+              {dataOverlays.slice(2).map((overlay, idx) => (
+                <Badge
+                  key={idx}
+                  className={`glass px-6 py-3 text-base border-white/20 transition-all duration-1000 delay-${(idx + 3) * 200} ${
+                    textVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  }`}
+                >
+                  {overlay.icon && <span className="mr-2">{overlay.icon}</span>}
+                  <span className="font-bold">{overlay.stat}</span>
+                  <span className="ml-2 opacity-80">{overlay.label}</span>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Scroll indicator (only on first section) */}
