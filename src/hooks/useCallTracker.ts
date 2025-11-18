@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { CallLogService, UserSettingsService } from '../integrations/supabase/services';
 
@@ -28,31 +28,7 @@ export const useCallTracker = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      loadUserSettings();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (isTracking) {
-      intervalRef.current = setInterval(() => {
-        setElapsedSeconds(prev => prev + 1);
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isTracking]);
-
-  const loadUserSettings = async () => {
+  const loadUserSettings = useCallback(async () => {
     if (!user) return;
 
     const { data, error } = await UserSettingsService.getUserSettings(user.id);
@@ -85,7 +61,31 @@ export const useCallTracker = () => {
         });
       }
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserSettings();
+    }
+  }, [user, loadUserSettings]);
+
+  useEffect(() => {
+    if (isTracking) {
+      intervalRef.current = setInterval(() => {
+        setElapsedSeconds(prev => prev + 1);
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isTracking]);
 
   const calculateEarnings = (durationSeconds: number): number => {
     if (!userSettings || !userSettings.pay_rate) return 0;
