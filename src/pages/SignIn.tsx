@@ -76,12 +76,13 @@ const SignIn = () => {
         });
         navigate('/');
       }
-    } catch (error: any) {
-      if (error.errors) {
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'errors' in error) {
         // Zod validation errors
+        const zodError = error as { errors: Array<{ message: string }> };
         toast({
           title: "Validation Error",
-          description: error.errors[0]?.message || "Please check your input.",
+          description: zodError.errors[0]?.message || "Please check your input.",
           variant: "destructive",
         });
       } else {
@@ -145,12 +146,13 @@ const SignIn = () => {
           confirmPassword: "",
         });
       }
-    } catch (error: any) {
-      if (error.errors) {
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'errors' in error) {
         // Zod validation errors
+        const zodError = error as { errors: Array<{ message: string }> };
         toast({
           title: "Validation Error",
-          description: error.errors[0]?.message || "Please check your input.",
+          description: zodError.errors[0]?.message || "Please check your input.",
           variant: "destructive",
         });
       } else {
