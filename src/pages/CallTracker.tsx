@@ -12,12 +12,34 @@ import { useAuth } from '@/contexts/AuthContext';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
+interface CallStats {
+  totalCalls: number;
+  totalMinutes: number;
+  totalEarnings: number;
+  averageCallLength: number;
+}
+
+interface RecentCall {
+  id: string;
+  call_type: 'VRI' | 'OPI';
+  duration: number;
+  earnings: number;
+  notes: string;
+  created_at: string;
+}
+
+interface CallTypeStats {
+  name: string;
+  value: number;
+  earnings: number;
+}
+
 const CallTracker = () => {
   const [notes, setNotes] = useState('');
   const [callType, setCallType] = useState<'VRI' | 'OPI'>('VRI');
-  const [stats, setStats] = useState<any>(null);
-  const [recentCalls, setRecentCalls] = useState<any[]>([]);
-  const [callTypeStats, setCallTypeStats] = useState<any[]>([]);
+  const [stats, setStats] = useState<CallStats | null>(null);
+  const [recentCalls, setRecentCalls] = useState<RecentCall[]>([]);
+  const [callTypeStats, setCallTypeStats] = useState<CallTypeStats[]>([]);
   const [roundingMethod, setRoundingMethod] = useState<string>('actual');
   
   const {
@@ -321,9 +343,9 @@ const CallTracker = () => {
                   <XAxis dataKey="type" />
                   <YAxis />
                   <Tooltip 
-                    formatter={(value: any, name: string) => {
-                      if (name === 'duration') return [formatDurationMinutes(value), 'Duration'];
-                      if (name === 'earnings') return [formatCurrency(value, userSettings?.preferred_currency || 'USD'), 'Earnings'];
+                    formatter={(value: number | string, name: string) => {
+                      if (name === 'duration') return [formatDurationMinutes(Number(value)), 'Duration'];
+                      if (name === 'earnings') return [formatCurrency(Number(value), userSettings?.preferred_currency || 'USD'), 'Earnings'];
                       return [value, name];
                     }}
                   />
