@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Bot, BookOpen, BarChart3, MessageSquare } from "lucide-react";
+import { ArrowRight, Bot, BookOpen, BarChart3, MessageSquare, Heart, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const SolutionHero = () => {
@@ -25,6 +25,20 @@ export const SolutionHero = () => {
       description: "Track your performance, analyze patterns, and measure your growth over time",
       link: "/interpretrack",
       color: "text-warning",
+    },
+    {
+      icon: <Heart className="w-6 h-6" />,
+      title: "Interpre-Wellness",
+      description: "AI-powered emotional support and debriefing for mental health and wellbeing",
+      link: "/interpre-wellness",
+      color: "text-pink-500",
+    },
+    {
+      icon: <Users className="w-6 h-6" />,
+      title: "InterpreLink",
+      description: "Professional networking community for interpreters to connect and collaborate",
+      link: "/interprelink",
+      color: "text-blue-500",
     },
   ];
 
