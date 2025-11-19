@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { LucideIcon } from "lucide-react";
 import {
   Search, Plus, MessageCircle, Heart, Share2, MoreHorizontal,
   Users, BookOpen, HelpCircle, Briefcase, Network, Video,
@@ -16,7 +17,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface SidebarItem {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   active?: boolean;
   badge?: string;
