@@ -6,6 +6,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
 
+interface CallRecord {
+  id: string;
+  duration_seconds: number;
+  earnings: string;
+  call_type: string;
+  created_at: string;
+  notes?: string;
+}
+
 interface Stats {
   monthTotal: number;
   monthEarnings: number;
@@ -28,7 +37,7 @@ const Dashboard = () => {
     avgCallDuration: 0,
     totalCalls: 0,
   });
-  const [recentCalls, setRecentCalls] = useState<any[]>([]);
+  const [recentCalls, setRecentCalls] = useState<CallRecord[]>([]);
   const [currency, setCurrency] = useState('USD');
   const { user } = useAuth();
 
@@ -106,7 +115,7 @@ const Dashboard = () => {
     setRecentCalls(recent || []);
   };
 
-  const calculateStats = (data: any[]) => {
+  const calculateStats = (data: CallRecord[]) => {
     const totalDuration = data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
     const totalEarnings = data.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0);
     const callCount = data.length;

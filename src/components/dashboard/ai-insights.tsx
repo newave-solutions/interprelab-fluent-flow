@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Lightbulb, TrendingUp, AlertTriangle } from 'lucide-react';
 
@@ -9,11 +9,11 @@ interface AIInsightsProps {
 
 export default function AIInsights({ stats, error }: AIInsightsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const allInsights = [
+  const allInsights = useMemo(() => [
     "You're doing great! Keep up the good work.",
     "You've had a busy week! Make sure to take a break.",
     "Your earnings are up this week! Congratulations!",
-  ];
+  ], []);
 
   useEffect(() => {
     if (allInsights.length === 0) return;

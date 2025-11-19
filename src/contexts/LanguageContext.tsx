@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
@@ -57,23 +57,25 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState('en');
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      loadUserLanguage();
-    }
-  }, [user]);
-
-  const loadUserLanguage = async () => {
+  const loadUserLanguage = useCallback(async () => {
+    if (!user?.id) return;
+    
     const { data } = await supabase
       .from('user_settings')
       .select('preferred_language')
-      .eq('user_id', user?.id)
+      .eq('user_id', user.id)
       .maybeSingle();
 
     if (data?.preferred_language) {
       setLanguageState(data.preferred_language);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserLanguage();
+    }
+  }, [user, loadUserLanguage]);
 
   const setLanguage = async (lang: string) => {
     setLanguageState(lang);
