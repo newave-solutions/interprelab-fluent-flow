@@ -2,7 +2,8 @@ import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star } from "lucide-react";
+import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star, Brain, Newspaper } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Resources = () => {
   const resources = [
@@ -93,9 +94,57 @@ const Resources = () => {
         </div>
       </section>
 
-      {/* Featured Resources */}
+      {/* Quick Links to Key Resources */}
       <section className="py-20">
         <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <Link to="/resources/industry-insights">
+              <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 h-full cursor-pointer hover:scale-105">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Brain className="w-6 h-6 text-primary" />
+                    </div>
+                    <Badge variant="default">Industry Research</Badge>
+                  </div>
+                  <CardTitle className="text-2xl">Industry Pain Points & Insights</CardTitle>
+                  <CardDescription className="text-base">
+                    Research-backed insights exposing systemic challenges facing interpreters and LEP communities. 
+                    Understand the compensation crisis, workforce exploitation, and psychological toll.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" className="w-full">
+                    Explore Insights
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 h-full">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Newspaper className="w-6 h-6 text-primary" />
+                  </div>
+                  <Badge variant="secondary">Research & Articles</Badge>
+                </div>
+                <CardTitle className="text-2xl">Articles & News</CardTitle>
+                <CardDescription className="text-base">
+                  Latest research on vicarious trauma, compassion fatigue, language services news, 
+                  and legislative updates affecting medical interpreters.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" className="w-full">
+                  Read Articles
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Featured Training Materials
