@@ -1,49 +1,56 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { FullScreenVideoHero } from "@/components/VideoSection";
-import { SolutionTransition } from "@/components/SolutionTransition";
-import { InteractiveInsights } from "@/components/InteractiveInsights";
-import { ProductShowcase } from "@/components/ProductShowcase";
+import { SolutionsShowcase } from "@/components/SolutionsShowcase";
 import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { TrendingDown, Users, DollarSign, Brain, AlertTriangle, Wifi } from "lucide-react";
+import { Brain, AlertTriangle, DollarSign, TrendingDown } from "lucide-react";
+import cognitiveOverloadImg from "@/assets/pain-point-cognitive-overload.png";
+import healthcareCrisisImg from "@/assets/pain-point-healthcare-crisis.png";
+import exploitationImg from "@/assets/pain-point-exploitation.png";
 
 const Index = () => {
   const painPoints = [
     {
       videoSrc: "/videos/lep-statistics.mp4",
-      title: "20 Million Voices at Risk",
+      title: "30 Seconds to Reset, Lives on the Line",
       description:
-        "Despite federal mandates under Section 1557, Limited English Proficiency patients face increased health risks due to chronic interpretation quality failures and systemic gaps in care.",
+        "Back-to-back calls across diverse medical specialties. Interpreters have 30 seconds or less to completely reset their brain, begin active listening and note-taking, search unfamiliar terminology while continuing to absorb the message, and start interpreting within seconds—all while preserving every word without additions, omissions, or summarizations. Voice clarity, pacing, and smoothness are non-negotiable. In healthcare, lives are directly in their hands. Every. Single. Call.",
       dataOverlays: [
-        { stat: "20M", label: "LEP Patients in U.S.", icon: <Users className="w-5 h-5" /> },
-        { stat: "67%", label: "Annual Turnover Rate", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "$71M", label: "Largest Malpractice Settlement", icon: <AlertTriangle className="w-5 h-5" /> },
+        { stat: "30 SEC", label: "Reset Time", icon: <Brain className="w-5 h-5" /> },
+        { stat: "5-10", label: "Specialties Per Day", icon: <AlertTriangle className="w-5 h-5" /> },
+        { stat: "100%", label: "Accuracy Required" },
       ],
+      illustrationSrc: cognitiveOverloadImg,
+      illustrationPosition: 'center' as const,
     },
     {
       videoSrc: "/videos/interpreter-stress.mp4",
-      title: "The Compensation Crisis",
+      title: "20 Million Lives, Double the Risk",
       description:
-        "Language Service Providers charge clients $1.50-$4.95/min while paying interpreters as little as $0.10/min—an 89% pay gap enabled by global wage arbitrage and workforce misclassification.",
+        "Over 20 million Limited English Proficient individuals in the U.S. (not counting undocumented immigrants) face a stark reality: they are twice as likely to die when hospitalized compared to English-speaking patients due to language barriers. Despite these alarming mortality rates, interpreters are being onboarded with little to no true training—thrown into life-or-death situations unprepared.",
       dataOverlays: [
-        { stat: "$4.95", label: "LSP Charge (per min)", icon: <DollarSign className="w-5 h-5" /> },
-        { stat: "$0.10", label: "Interpreter Pay (offshore)", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "89%", label: "Pay Gap Margin", icon: <AlertTriangle className="w-5 h-5" /> },
+        { stat: "20M+", label: "LEP Patients in U.S.", icon: <AlertTriangle className="w-5 h-5" /> },
+        { stat: "2x", label: "Mortality Risk", icon: <TrendingDown className="w-5 h-5" /> },
+        { stat: "Minimal", label: "Training Provided" },
       ],
+      illustrationSrc: healthcareCrisisImg,
+      illustrationPosition: 'center' as const,
     },
     {
       videoSrc: "/videos/terminology-gap.mp4",
-      title: "Technology Failures Meet Human Toll",
+      title: "Undervalued, Underpaid, Overworked",
       description:
-        "Interpreters battle daily tech failures—unstable connections, audio lag, frozen video—while absorbing psychological trauma with no systemic support. 73% report burnout.",
+        "Major Language Service Providers justify extreme undercompensation with the excuse: 'Pay ranges according to interpreter's location and economy.' Meanwhile, they're meeting demand and maximizing profits—all at the expense of LEP communities who deserve qualified, fairly-compensated professionals. The interpreters bearing this impossible burden deserve better. The LEP patients depending on them deserve better.",
       dataOverlays: [
-        { stat: "73%", label: "Burnout Rate", icon: <Brain className="w-5 h-5" /> },
-        { stat: "Daily", label: "Tech Disruptions", icon: <Wifi className="w-5 h-5" /> },
-        { stat: "$100s-$1000s", label: "Training Costs", icon: <DollarSign className="w-5 h-5" /> },
+        { stat: "$0.10/min", label: "Offshore Pay", icon: <DollarSign className="w-5 h-5" /> },
+        { stat: "$4.95/min", label: "LSP Charges", icon: <TrendingDown className="w-5 h-5" /> },
+        { stat: "89%", label: "Pay Gap" },
       ],
+      illustrationSrc: exploitationImg,
+      illustrationPosition: 'center' as const,
     },
   ];
 
@@ -65,18 +72,16 @@ const Index = () => {
               description={painPoint.description}
               index={index}
               dataOverlays={painPoint.dataOverlays}
+              illustrationSrc={painPoint.illustrationSrc}
+              illustrationPosition={painPoint.illustrationPosition}
             />
           ))}
+          
+          {/* Solutions Showcase - 4th section */}
+          <SolutionsShowcase />
         </div>
 
-        {/* Solution Transition - Bridges pain points to solutions */}
-        <SolutionTransition />
-
-        {/* Interactive Research Insights */}
-        <InteractiveInsights />
-
-        {/* Solutions & Social Proof */}
-        <ProductShowcase />
+        {/* Social Proof & Stats */}
         <StatsSection />
         <Testimonials />
       </main>

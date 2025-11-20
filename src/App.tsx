@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import CallTracker from "./pages/CallTracker";
 import Settings from "./pages/Settings";
 import Resources from "./pages/Resources";
+import IndustryInsights from "./pages/IndustryInsights";
 import About from "./pages/About";
 import InterpreWellness from "./pages/InterpreWellness";
 import Contact from "./pages/Contact";
@@ -65,6 +66,7 @@ const App = () => (
                   </ProtectedRoute>
                 } />
                 <Route path="/resources" element={<Resources />} />
+                <Route path="/resources/industry-insights" element={<IndustryInsights />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
