@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Brain, Target, BarChart, Users, ArrowRight, Play, MessageSquare, CheckCircle, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
@@ -12,6 +12,7 @@ import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 
 const InterpreBot = () => {
+  const navigate = useNavigate();
   const [userQuestion, setUserQuestion] = useState("");
   const [showChat, setShowChat] = useState(false);
 
@@ -166,7 +167,7 @@ const InterpreBot = () => {
             title: "Take the Assessment",
             description: "Complete a 30-minute comprehensive assessment covering various interpretation scenarios in your target language pair.",
             buttonText: "Start Assessment",
-            buttonAction: () => console.log("Start assessment"),
+            buttonAction: () => navigate("/waitlist"),
           },
           {
             icon: BarChart,
@@ -217,7 +218,7 @@ const InterpreBot = () => {
         ]}
         finalCTAText="Start Your Journey Now"
         finalCTAIcon={Play}
-        finalCTAAction={() => console.log("Start journey")}
+        finalCTAAction={() => navigate("/waitlist")}
       />
 
       {/* Mission & Collaboration CTA */}
