@@ -3,13 +3,13 @@ import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 interface Step {
-  number?: number;
   icon: LucideIcon;
   title: string;
   description: string;
   content?: ReactNode;
   buttonText?: string;
   buttonAction?: () => void;
+  showIcon?: boolean; // If true, shows icon instead of step number in the circle
 }
 
 interface GetStartedStepsProps {
@@ -47,16 +47,16 @@ export const GetStartedSteps = ({
           <div className="space-y-12">
             {steps.map((step, index) => {
               const StepIcon = step.icon;
-              const displayNumber = step.number !== undefined ? step.number : index + 1;
+              const stepNumber = index + 1;
               
               return (
                 <div key={index} className="flex gap-8 items-start">
                   <div className="flex-shrink-0">
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                      {typeof displayNumber === 'number' ? (
-                        <span className="text-2xl font-bold text-primary">{displayNumber}</span>
-                      ) : (
+                      {step.showIcon ? (
                         <StepIcon className="w-8 h-8 text-primary" />
+                      ) : (
+                        <span className="text-2xl font-bold text-primary">{stepNumber}</span>
                       )}
                     </div>
                   </div>

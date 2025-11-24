@@ -99,7 +99,7 @@ const InterpreCoach = () => {
         subtitle="Your path to real-time interpretation assistance"
         steps={[
           {
-            number: 0,
+            showIcon: true,
             icon: Chrome,
             title: "Install Extension",
             description: "Add InterpreCoach to Chrome from the Web Store. One-click installation, no complex setup required.",
@@ -130,7 +130,7 @@ const InterpreCoach = () => {
             ),
           },
           {
-            number: 0,
+            showIcon: true,
             icon: Zap,
             title: "Start Your Session",
             description: "Join a video call and activate InterpreCoach. Get instant terminology support and cultural context suggestions.",
