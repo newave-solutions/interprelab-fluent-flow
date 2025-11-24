@@ -17,12 +17,12 @@ import CallTracker from "./pages/CallTracker";
 import Settings from "./pages/Settings";
 import Resources from "./pages/Resources";
 import IndustryInsights from "./pages/IndustryInsights";
+import Article from "./pages/Article";
 import About from "./pages/About";
 import InterpreWellness from "./pages/InterpreWellness";
 import Contact from "./pages/Contact";
 import GetInTouch from "./pages/GetInTouch";
 import Careers from "./pages/Careers";
-import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
@@ -40,7 +40,6 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/home" element={<Home />} />
                 <Route path="/interprebot" element={<InterpreBot />} />
                 <Route path="/interprecoach" element={<InterpreCoach />} />
                 <Route path="/interprestudy" element={<InterpreStudy />} />
@@ -67,6 +66,7 @@ const App = () => (
                 } />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/resources/industry-insights" element={<IndustryInsights />} />
+                <Route path="/resources/articles/:slug" element={<Article />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />

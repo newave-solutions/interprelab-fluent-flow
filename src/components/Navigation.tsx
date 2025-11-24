@@ -38,7 +38,15 @@ export const Navigation = () => {
         { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
-    { label: t('resources'), href: '/resources' },
+    {
+      label: t('resources'),
+      submenu: [
+        { label: 'Training Materials', href: '/resources' },
+        { label: 'Industry Insights', href: '/resources/industry-insights' },
+        { label: 'Research & Articles', href: '/resources' },
+        { label: 'Certification Bodies', href: '/resources' },
+      ]
+    },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },
   ];
@@ -49,9 +57,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-primary rounded-lg">
-              <Shield className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo-icon-2.png" alt="InterpreLab Logo" className="w-10 h-10 object-contain" />
             <div>
               <h1 className="text-xl font-bold">InterpreLab</h1>
               <p className="text-xs text-muted-foreground">Advanced Interpretation</p>

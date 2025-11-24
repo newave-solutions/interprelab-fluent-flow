@@ -33,8 +33,11 @@ const InterpreBot = () => {
           <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
             InterpreBot
           </h1>
+          <p className="text-2xl font-semibold text-primary mb-4">
+            Because professional development shouldn't cost $100s-$1000s
+          </p>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Professional development shouldn't cost $100s-$1000s or require guesswork. As working interpreters, we know the struggle. InterpreBot provides instant AI-powered assessment of your interpretation skills with detailed, personalized feedback—because you deserve to know exactly where you stand and how to improve.
+            It shouldn't require guesswork either. As working interpreters, we know the struggle. InterpreBot provides instant AI-powered assessment of your interpretation skills with detailed, personalized feedback—because you deserve to know exactly where you stand and how to improve.
           </p>
           <div className="glass p-6 rounded-lg max-w-2xl mx-auto mb-8">
             <p className="text-sm text-muted-foreground leading-relaxed">
