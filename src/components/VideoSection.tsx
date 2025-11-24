@@ -16,6 +16,7 @@ interface FullScreenVideoHeroProps {
   dataOverlays?: DataOverlay[];
   illustrationSrc?: string;
   illustrationPosition?: 'left' | 'right' | 'center';
+  isSolutionSection?: boolean;
 }
 
 export const FullScreenVideoHero = ({
@@ -26,6 +27,7 @@ export const FullScreenVideoHero = ({
   dataOverlays,
   illustrationSrc,
   illustrationPosition = 'center',
+  isSolutionSection = false,
 }: FullScreenVideoHeroProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -52,9 +54,13 @@ export const FullScreenVideoHero = ({
           });
           // Fade in text after 800ms
           setTimeout(() => setTextVisible(true), 800);
+          section.classList.remove('video-section-exit');
+          section.classList.add('video-section-enter');
         } else {
           video.pause();
           setTextVisible(false);
+          section.classList.remove('video-section-enter');
+          section.classList.add('video-section-exit');
         }
       });
     }, observerOptions);
@@ -69,8 +75,8 @@ export const FullScreenVideoHero = ({
   return (
     <section
       ref={sectionRef}
-      className="h-screen w-full relative snap-start snap-always overflow-hidden transition-opacity duration-700 ease-in-out"
-      aria-label={`Pain point ${index + 1}: ${title}`}
+      className="h-screen w-full relative snap-start snap-always overflow-hidden opacity-0"
+      aria-label={isSolutionSection ? "Solutions showcase" : `Pain point ${index + 1}: ${title}`}
     >
       {/* Full-screen video background */}
       <video
@@ -115,9 +121,10 @@ export const FullScreenVideoHero = ({
             {dataOverlays.slice(0, 2).map((overlay, idx) => (
               <div
                 key={idx}
-                className={`glass px-6 py-4 rounded-xl border border-white/20 backdrop-blur-md transition-all duration-1000 delay-${(idx + 1) * 200} ${
+                className={`glass px-6 py-4 rounded-xl border border-white/20 backdrop-blur-md transition-all duration-1000 ${
                   textVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
                 }`}
+                style={{ transitionDelay: `${(idx + 1) * 200}ms` }}
               >
                 <div className="flex items-center gap-3">
                   {overlay.icon && <div className="text-white">{overlay.icon}</div>}
@@ -152,9 +159,10 @@ export const FullScreenVideoHero = ({
               {dataOverlays.slice(2).map((overlay, idx) => (
                 <Badge
                   key={idx}
-                  className={`glass px-6 py-3 text-base border-white/20 transition-all duration-1000 delay-${(idx + 3) * 200} ${
+                  className={`glass px-6 py-3 text-base border-white/20 transition-all duration-1000 ${
                     textVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
+                  style={{ transitionDelay: `${(idx + 3) * 200}ms` }}
                 >
                   {overlay.icon && <span className="mr-2">{overlay.icon}</span>}
                   <span className="font-bold">{overlay.stat}</span>

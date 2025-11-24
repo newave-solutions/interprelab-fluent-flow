@@ -91,8 +91,8 @@ export const Testimonials = () => {
           <Badge className="glass px-6 py-3 mb-6 border-primary/20">
             Testimonials
           </Badge>
-          <h2 id="testimonials-heading" className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Loved by <span className="bg-gradient-primary bg-clip-text text-transparent">Interpreters</span>
+          <h2 id="testimonials-heading" className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Interpreters <span className="bg-gradient-primary bg-clip-text text-transparent">Reclaiming Their Power</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Join thousands of professionals who've transformed their practice.

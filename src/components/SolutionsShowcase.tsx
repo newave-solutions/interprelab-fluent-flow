@@ -108,9 +108,21 @@ export const SolutionsShowcase = () => {
 
   return (
     <section className="min-h-screen w-full relative flex items-center justify-center snap-start bg-gradient-to-b from-background via-background/95 to-primary/5 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsl(var(--primary)/0.1)_0%,_transparent_65%)]" />
-      
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          className="w-full h-full object-cover opacity-20"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/videos/solutions-poster.jpg"
+        >
+          <source src="/videos/solutions-background.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background/95" />
+      </div>
+
       <div className="container mx-auto px-4 py-20 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
@@ -122,15 +134,15 @@ export const SolutionsShowcase = () => {
           </p>
         </div>
 
-        {/* Solutions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {solutions.map((solution, index) => (
+        {/* Solutions Grid - 2-2-1 Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+          {solutions.slice(0, 4).map((solution, index) => (
             <Card
               key={solution.id}
               ref={(el) => {
                 if (el) cardsRef.current[index] = el;
               }}
-              className="group opacity-0 transition-all duration-500 hover:scale-105 hover:shadow-2xl bg-card/50 backdrop-blur-sm border-primary/20 hover:border-primary/50"
+              className="group opacity-0 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/40 backdrop-blur-md border-primary/20 hover:border-primary/50"
             >
               <CardHeader>
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
@@ -163,6 +175,47 @@ export const SolutionsShowcase = () => {
               </CardContent>
             </Card>
           ))}
+
+          {/* Last item centered/full width on larger screens if desired, or just part of the flow */}
+          <div className="md:col-span-2 lg:col-span-2 flex justify-center w-full">
+            <Card
+              key={solutions[4].id}
+              ref={(el) => {
+                if (el) cardsRef.current[4] = el;
+              }}
+              className="group opacity-0 w-full max-w-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/40 backdrop-blur-md border-primary/20 hover:border-primary/50"
+            >
+              <CardHeader>
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <div className="text-primary">
+                    {solutions[4].icon}
+                  </div>
+                </div>
+                <CardTitle className="text-2xl mb-2">{solutions[4].title}</CardTitle>
+                <CardDescription className="text-base">
+                  {solutions[4].description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 mb-6">
+                  {solutions[4].highlights.map((highlight, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link to={solutions[4].route}>
+                  <Button
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
+                    variant="outline"
+                  >
+                    Learn More
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </section>

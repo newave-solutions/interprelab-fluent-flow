@@ -47,7 +47,7 @@ const Index = () => {
       dataOverlays: [
         { stat: "$0.10/min", label: "Offshore Pay", icon: <DollarSign className="w-5 h-5" /> },
         { stat: "$4.95/min", label: "LSP Charges", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "89%", label: "Pay Gap" },
+        { stat: "4-6 MOS", label: "QA Feedback Gap" },
       ],
       illustrationSrc: exploitationImg,
       illustrationPosition: 'center' as const,
