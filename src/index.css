@@ -337,3 +337,32 @@ All colors MUST be HSL for consistency and theming.
 .animate-scale-in {
   animation: scaleIn 0.4s ease-out;
 }
+
+/* Video Section Animations */
+.video-section-enter {
+  animation: fadeInSection 1s ease-in-out forwards;
+}
+
+.video-section-exit {
+  animation: fadeOutSection 1s ease-in-out forwards;
+}
+
+/* Data Overlay Animations */
+.overlay-enter {
+  animation: slideInFromBottom 0.6s ease-out forwards;
+}
+
+.icon-rotate {
+  animation: iconRotate 1s ease-out forwards;
+}
+
+@keyframes iconRotate {
+  from {
+    transform: rotate(-180deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}

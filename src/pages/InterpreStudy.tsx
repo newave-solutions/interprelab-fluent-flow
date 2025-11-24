@@ -30,6 +30,9 @@ export default function InterpreStudy() {
               InterpreStudy
             </h1>
           </div>
+          <p className="text-2xl font-semibold text-primary mb-4">
+            Accessible, specialized training at your fingertips
+          </p>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
             Specialized training shouldn't be a luxury reserved for those who can afford $100s-$1000s. We've been there—struggling to find quality oncology, genetics, or legal terminology resources. InterpreStudy provides AI-powered learning, ethics training, and interactive scenarios tailored to your specialty, all in one accessible platform.
           </p>

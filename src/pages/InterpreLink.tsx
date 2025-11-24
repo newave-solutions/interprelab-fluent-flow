@@ -186,7 +186,10 @@ export default function InterpreLink() {
               />
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-4xl font-bold mb-2">InterpreLink: Your Professional Network</h1>
+                  <h1 className="text-4xl font-bold mb-2">InterpreLink</h1>
+                  <p className="text-2xl font-semibold text-primary mb-4">
+                    The professional network interpreters deserve
+                  </p>
                   <p className="text-muted-foreground mb-4">
                     We're working interpreters who understand the need for real connection, not just another social media clone. InterpreLink is where you find partnerships, share the emotional weight, and build the professional relationships that sustain your career and mental health.
                   </p>

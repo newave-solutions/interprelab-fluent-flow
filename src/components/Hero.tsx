@@ -27,13 +27,13 @@ export const Hero = () => {
           </Badge>
 
           {/* Main Headline - Simplified */}
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
-              Master Medical
+              Empowering Interpreters
             </span>
             <br />
             <span className="text-foreground">
-              Interpretation
+              in the Fight for Healthcare Equity
             </span>
           </h1>
 
