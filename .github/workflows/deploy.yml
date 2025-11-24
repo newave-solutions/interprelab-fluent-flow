@@ -78,4 +78,4 @@ jobs:
         SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format="value(status.url)")
         echo "🚀 Deployment successful!"
         echo "📱 Service URL: $SERVICE_URL"
-        echo "🌐 Custom domain: https://app.interprelab.com"
+  
