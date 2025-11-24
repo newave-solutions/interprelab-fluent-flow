@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Heart, MessageCircle, Users, Sparkles, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { PainPointBadge } from '@/components/PainPointBadge';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -181,9 +181,10 @@ export default function InterpreWellness() {
         <section className="relative py-20 px-4 overflow-hidden bg-cover bg-center" style={{ backgroundImage: "url('/src/assets/wellness-support.jpg')" }}>
           <div className="absolute inset-0 bg-black/60" />
           <div className="max-w-4xl mx-auto relative z-10">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-              Addressing Pain Point #5: Psychological Toll & Lack of Support
-            </Badge>
+            <PainPointBadge 
+              painPoint="Addressing Pain Point #5: Psychological Toll & Lack of Support"
+              className="mb-4 bg-primary/10 text-primary border-primary/20"
+            />
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Interpre-Wellness
             </h1>
