@@ -2,9 +2,11 @@ import interpreHubMockup from "@/assets/interpre-hub-mockup.png";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Chrome, Zap, Shield, Globe, Download, Star, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PainPointBadge } from "@/components/PainPointBadge";
+import { GetStartedSteps } from "@/components/GetStartedSteps";
+import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 
 const InterpreCoach = () => {
   return (
@@ -14,9 +16,7 @@ const InterpreCoach = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-                Addressing Pain Points #4 & #5: Real-Time Support & Psychological Relief
-              </Badge>
+              <PainPointBadge painPoint="Addressing Pain Points #4 & #5: Real-Time Support & Psychological Relief" />
               <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
                 InterpreCoach
               </h1>
@@ -137,140 +137,77 @@ const InterpreCoach = () => {
       </section>
 
       {/* Getting Started Timeline */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Get Started in 3 Steps
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Your path to real-time interpretation assistance
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-12">
-              {/* Step 1 */}
-              <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Chrome className="w-8 h-8 text-primary" />
-                  </div>
+      <GetStartedSteps
+        title="Get Started in 3 Steps"
+        subtitle="Your path to real-time interpretation assistance"
+        steps={[
+          {
+            number: 0,
+            icon: Chrome,
+            title: "Install Extension",
+            description: "Add InterpreCoach to Chrome from the Web Store. One-click installation, no complex setup required.",
+            buttonText: "Add to Chrome",
+            buttonAction: () => console.log("Add to Chrome"),
+            content: (
+              <Button className="glass-button">
+                <Chrome className="w-4 h-4 mr-2" />
+                Add to Chrome
+              </Button>
+            ),
+          },
+          {
+            icon: Star,
+            title: "Configure Your Profile",
+            description: "Set your language pairs, specialty areas, and preferences for personalized coaching suggestions.",
+            content: (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 glass rounded-lg">
+                  <p className="text-sm font-semibold mb-1">Language Pairs</p>
+                  <p className="text-xs text-muted-foreground">EN ↔ ES, EN ↔ FR</p>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Download className="w-6 h-6 text-primary" />
-                    <h3 className="text-2xl font-semibold">Install Extension</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    Add InterpreCoach to Chrome from the Web Store. One-click installation, no complex setup required.
-                  </p>
-                  <Button className="glass-button">
-                    <Chrome className="w-4 h-4 mr-2" />
-                    Add to Chrome
-                  </Button>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">2</span>
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Star className="w-6 h-6 text-primary" />
-                    <h3 className="text-2xl font-semibold">Configure Your Profile</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    Set your language pairs, specialty areas, and preferences for personalized coaching suggestions.
-                  </p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 glass rounded-lg">
-                      <p className="text-sm font-semibold mb-1">Language Pairs</p>
-                      <p className="text-xs text-muted-foreground">EN ↔ ES, EN ↔ FR</p>
-                    </div>
-                    <div className="p-4 glass rounded-lg">
-                      <p className="text-sm font-semibold mb-1">Specialty</p>
-                      <p className="text-xs text-muted-foreground">Medical, Legal</p>
-                    </div>
-                  </div>
+                <div className="p-4 glass rounded-lg">
+                  <p className="text-sm font-semibold mb-1">Specialty</p>
+                  <p className="text-xs text-muted-foreground">Medical, Legal</p>
                 </div>
               </div>
-
-              {/* Step 3 */}
-              <div className="flex gap-8 items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-primary" />
-                  </div>
+            ),
+          },
+          {
+            number: 0,
+            icon: Zap,
+            title: "Start Your Session",
+            description: "Join a video call and activate InterpreCoach. Get instant terminology support and cultural context suggestions.",
+            content: (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full" />
+                  <span className="text-sm">Click the extension icon</span>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Globe className="w-6 h-6 text-primary" />
-                    <h3 className="text-2xl font-semibold">Start Your Session</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    Join a video call and activate InterpreCoach. Get instant terminology support and cultural context suggestions.
-                  </p>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Click the extension icon</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Activate coaching mode</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Get real-time assistance</span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full" />
+                  <span className="text-sm">Activate coaching mode</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full" />
+                  <span className="text-sm">Get real-time assistance</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <Button size="lg" className="glass-button">
-              <Chrome className="w-5 h-5 mr-2" />
-              Get InterpreCoach
-            </Button>
-          </div>
-        </div>
-      </section>
+            ),
+          },
+        ]}
+        finalCTAText="Get InterpreCoach"
+        finalCTAIcon={Chrome}
+        finalCTAAction={() => console.log("Get InterpreCoach")}
+      />
 
       {/* Mission & Collaboration CTA */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <Card className="glass border-primary/20 max-w-4xl mx-auto">
-            <CardContent className="p-8 md:p-12 text-center space-y-6">
-              <h2 className="text-3xl font-bold">We're In This Together</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                InterpreLab isn't a corporate solution—it's a lifeline built by working professionals who understand the psychological toll, the isolation, and the pressure of live interpretation. We're passionate about helping vulnerable populations and reducing the burden on interpreters. But we need your voice, your connections, and your collaboration to reach more interpreters who need support.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Link to="/contact">
-                  <Button size="lg" variant="hero">
-                    Partner With Us
-                  </Button>
-                </Link>
-                <Link to="/interprelink">
-                  <Button size="lg" variant="glass">
-                    Connect on InterpreLink
-                  </Button>
-                </Link>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Let's broaden our reach together. Get in touch to discuss partnerships, collaboration opportunities, or share feedback from the field.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      <MissionCollaborationCTA
+        title="We're In This Together"
+        description="InterpreLab isn't a corporate solution—it's a lifeline built by working professionals who understand the psychological toll, the isolation, and the pressure of live interpretation. We're passionate about helping vulnerable populations and reducing the burden on interpreters. But we need your voice, your connections, and your collaboration to reach more interpreters who need support."
+        primaryButtonText="Partner With Us"
+        secondaryButtonText="Connect on InterpreLink"
+        footerText="Let's broaden our reach together. Get in touch to discuss partnerships, collaboration opportunities, or share feedback from the field."
+      />
     </Layout>
   );
 };
