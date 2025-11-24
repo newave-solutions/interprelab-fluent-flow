@@ -1,12 +1,13 @@
 import interpreHubMockup from "@/assets/interpre-hub-mockup.png";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Chrome, Zap, Shield, Globe, Download, Star, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
+import { FeatureGrid } from "@/components/FeatureGrid";
 
 const InterpreCoach = () => {
   return (
@@ -55,86 +56,42 @@ const InterpreCoach = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Key Features
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Seamless browser integration for real-time assistance during video calls.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Zap className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Real-time Assistance</CardTitle>
-                <CardDescription>
-                  Get instant terminology suggestions, context clues, and cultural references 
-                  while you interpret.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Globe className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Multi-language Support</CardTitle>
-                <CardDescription>
-                  Support for 50+ language pairs with specialized terminology 
-                  databases for medical, legal, and technical fields.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Shield className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Privacy Secured</CardTitle>
-                <CardDescription>
-                  HIPAA-compliant with end-to-end encryption. Your sessions 
-                  remain completely confidential and secure.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Star className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Performance Analytics</CardTitle>
-                <CardDescription>
-                  Track your improvement with detailed session analytics and 
-                  personalized feedback reports.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Download className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Offline Capability</CardTitle>
-                <CardDescription>
-                  Access core features even without internet connection for 
-                  uninterrupted interpretation sessions.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Chrome className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Easy Integration</CardTitle>
-                <CardDescription>
-                  Works with popular video conferencing platforms and 
-                  interpretation management systems.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
+      <FeatureGrid
+        title="Key Features"
+        subtitle="Seamless browser integration for real-time assistance during video calls."
+        features={[
+          {
+            icon: Zap,
+            title: "Real-time Assistance",
+            description: "Get instant terminology suggestions, context clues, and cultural references while you interpret.",
+          },
+          {
+            icon: Globe,
+            title: "Multi-language Support",
+            description: "Support for 50+ language pairs with specialized terminology databases for medical, legal, and technical fields.",
+          },
+          {
+            icon: Shield,
+            title: "Privacy Secured",
+            description: "HIPAA-compliant with end-to-end encryption. Your sessions remain completely confidential and secure.",
+          },
+          {
+            icon: Star,
+            title: "Performance Analytics",
+            description: "Track your improvement with detailed session analytics and personalized feedback reports.",
+          },
+          {
+            icon: Download,
+            title: "Offline Capability",
+            description: "Access core features even without internet connection for uninterrupted interpretation sessions.",
+          },
+          {
+            icon: Chrome,
+            title: "Easy Integration",
+            description: "Works with popular video conferencing platforms and interpretation management systems.",
+          },
+        ]}
+      />
 
       {/* Getting Started Timeline */}
       <GetStartedSteps

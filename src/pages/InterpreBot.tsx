@@ -9,6 +9,7 @@ import { useState } from "react";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
+import { FeatureGrid } from "@/components/FeatureGrid";
 
 const InterpreBot = () => {
   const [userQuestion, setUserQuestion] = useState("");
@@ -102,60 +103,33 @@ const InterpreBot = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              What We Measure
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive analysis of linguistics, terminology, and communication effectiveness.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Brain className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Cognitive Analysis</CardTitle>
-                <CardDescription>
-                  Assess cognitive load, processing speed, and mental agility during interpretation.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Target className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Accuracy Metrics</CardTitle>
-                <CardDescription>
-                  Measure precision in terminology, context preservation, and cultural adaptation.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <BarChart className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Performance Tracking</CardTitle>
-                <CardDescription>
-                  Monitor progress with detailed analytics and improvement suggestions.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-              <CardHeader>
-                <Users className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>Peer Comparison</CardTitle>
-                <CardDescription>
-                  Compare your performance with industry standards and peer benchmarks.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
+      <FeatureGrid
+        title="What We Measure"
+        subtitle="Comprehensive analysis of linguistics, terminology, and communication effectiveness."
+        columns="4"
+        features={[
+          {
+            icon: Brain,
+            title: "Cognitive Analysis",
+            description: "Assess cognitive load, processing speed, and mental agility during interpretation.",
+          },
+          {
+            icon: Target,
+            title: "Accuracy Metrics",
+            description: "Measure precision in terminology, context preservation, and cultural adaptation.",
+          },
+          {
+            icon: BarChart,
+            title: "Performance Tracking",
+            description: "Monitor progress with detailed analytics and improvement suggestions.",
+          },
+          {
+            icon: Users,
+            title: "Peer Comparison",
+            description: "Compare your performance with industry standards and peer benchmarks.",
+          },
+        ]}
+      />
 
       {/* Assessment Dashboard Preview */}
       <section className="py-20">
