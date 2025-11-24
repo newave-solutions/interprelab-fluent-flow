@@ -16,6 +16,9 @@ dist-ssr
 .env.*.local
 .env.production
 
+# Supabase
+supabase/.temp/
+supabase/.branches/
 
 # Editor directories and files
 .vscode/*

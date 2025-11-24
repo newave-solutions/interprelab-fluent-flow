@@ -3,7 +3,7 @@
 To apply these database migrations manually, please follow these steps:
 
 1.  **Navigate to the Supabase SQL Editor:**
-    Open the SQL Editor for your project by clicking [here](https://supabase.com/dashboard/project/ggyzlvbtkibqnkfhgnbe/sql).
+    Open the SQL Editor for your project by clicking [here](https://supabase.com/dashboard/project/ojldyekximxrxfflvgen/sql).
 
 2.  **Create a New Query:**
     Click on the "+ New query" button in the SQL Editor.
