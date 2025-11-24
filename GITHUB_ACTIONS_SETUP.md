@@ -12,7 +12,7 @@ gcloud iam service-accounts create github-actions \
     --display-name="GitHub Actions"
 
 # Get your project ID
-export PROJECT_ID="interprelab-eco-landing-page"
+export PROJECT_ID="interprelab-fluent-flow"
 
 # Grant necessary roles
 gcloud projects add-iam-policy-binding $PROJECT_ID \
@@ -54,7 +54,7 @@ Go to your GitHub repository → Settings → Secrets and variables → Actions
    - Value: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlva2drcm5iYXdoaXptdWVqbHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2Mjg5ODcsImV4cCI6MjA3NzIwNDk4N30.GTIKRwPUu44PA209OFLj1WaEEGgKwbBaO0iTc7P-UtY`
 
 ### **How to Add Secrets:**
-1. Go to `https://github.com/YOUR_USERNAME/interprelab-eco-landing-page/settings/secrets/actions`
+1. Go to `https://github.com/YOUR_USERNAME/interprelab-fluent-flow/settings/secrets/actions`
 2. Click "New repository secret"
 3. Add each secret with the exact name and value above
 
@@ -94,10 +94,10 @@ git push origin main
 ### **Google Cloud Logs**
 ```bash
 # View service logs
-gcloud run services logs tail interprelab-app --region=us-central1
+gcloud run services logs tail interprelab-fluent-flow-image --region=us-central1
 
 # View recent deployments
-gcloud run revisions list --service=interprelab-app --region=us-central1
+gcloud run revisions list --service=interprelab-fluent-flow-image --region=us-central1
 ```
 
 ## 🛠️ **Troubleshooting**
@@ -119,7 +119,7 @@ gcloud run revisions list --service=interprelab-app --region=us-central1
 ### **Debug Commands:**
 ```bash
 # Check service account permissions
-gcloud projects get-iam-policy interprelab-eco-landing-page
+gcloud projects get-iam-policy interprelab-fluent-flow
 
 # Test local build
 npm ci && npm run build
