@@ -14,6 +14,8 @@ interface FullScreenVideoHeroProps {
   description: string;
   index: number;
   dataOverlays?: DataOverlay[];
+  illustrationSrc?: string;
+  illustrationPosition?: 'left' | 'right' | 'center';
 }
 
 export const FullScreenVideoHero = ({
@@ -22,6 +24,8 @@ export const FullScreenVideoHero = ({
   description,
   index,
   dataOverlays,
+  illustrationSrc,
+  illustrationPosition = 'center',
 }: FullScreenVideoHeroProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -66,6 +70,7 @@ export const FullScreenVideoHero = ({
     <section
       ref={sectionRef}
       className="h-screen w-full relative snap-start snap-always overflow-hidden transition-opacity duration-700 ease-in-out"
+      aria-label={`Pain point ${index + 1}: ${title}`}
     >
       {/* Full-screen video background */}
       <video
@@ -76,12 +81,31 @@ export const FullScreenVideoHero = ({
         loop
         preload="auto"
         poster={index === 0 ? "/videos/lep-statistics-poster.jpg" : index === 1 ? "/videos/interpreter-stress-poster.jpg" : "/videos/terminology-gap-poster.jpg"}
+        aria-hidden="true"
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
 
       {/* Dark overlay with gradient fade */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70 z-10 transition-opacity duration-1000" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70 z-10 transition-opacity duration-1000" aria-hidden="true" />
+
+      {/* Feature Illustration Overlay */}
+      {illustrationSrc && (
+        <div 
+          className={`absolute inset-0 z-15 flex items-center ${
+            illustrationPosition === 'left' ? 'justify-start pl-12' : 
+            illustrationPosition === 'right' ? 'justify-end pr-12' : 
+            'justify-center'
+          } transition-opacity duration-1000 ${textVisible ? 'opacity-30' : 'opacity-0'}`}
+        >
+          <img 
+            src={illustrationSrc} 
+            alt="" 
+            className="max-w-2xl max-h-[70vh] object-contain"
+            aria-hidden="true"
+          />
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-20 h-full flex flex-col items-center justify-center px-6">

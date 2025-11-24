@@ -1,7 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,6 +9,8 @@ import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup'
 import { FlashcardBuilder } from '@/components/interprestudy/FlashcardBuilder';
 import { MockScenarios } from '@/components/interprestudy/MockScenarios';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
+import { PainPointBadge } from '@/components/PainPointBadge';
+import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
 
 export default function InterpreStudy() {
   return (
@@ -22,9 +23,7 @@ export default function InterpreStudy() {
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
           <div className="relative z-10">
-            <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-              Addressing Pain Point #4: Accessible, Specialized Training
-            </Badge>
+            <PainPointBadge painPoint="Addressing Pain Point #4: Accessible, Specialized Training" />
           <div className="flex items-center justify-center gap-3 mb-4">
             <Brain className="w-12 h-12 text-primary" />
             <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
@@ -134,31 +133,12 @@ export default function InterpreStudy() {
         </div>
 
         {/* Mission & Collaboration CTA */}
-        <section className="py-20">
-          <Card className="glass border-primary/20 max-w-4xl mx-auto">
-            <CardContent className="p-8 md:p-12 text-center space-y-6">
-              <h2 className="text-3xl font-bold">InterpreLab: Your Lifeline in the Field</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                We're not building tools from an ivory tower. We're interpreters who've experienced the frustration of inaccessible training, the anxiety of specialized terminology, and the weight of serving vulnerable patients. Our mission is to use our skills to create solutions that actually help—but we need your partnership to reach every interpreter who needs these resources.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Link to="/contact">
-                  <Button size="lg" variant="hero">
-                    Collaborate With Us
-                  </Button>
-                </Link>
-                <Link to="/interprelink">
-                  <Button size="lg" variant="glass">
-                    Join Our Community
-                  </Button>
-                </Link>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Have connections to interpreter networks? Want to discuss bulk training programs? Let's talk—together we can make professional development accessible to all.
-              </p>
-            </CardContent>
-          </Card>
-        </section>
+        <MissionCollaborationCTA
+          title="InterpreLab: Your Lifeline in the Field"
+          description="We're not building tools from an ivory tower. We're interpreters who've experienced the frustration of inaccessible training, the anxiety of specialized terminology, and the weight of serving vulnerable patients. Our mission is to use our skills to create solutions that actually help—but we need your partnership to reach every interpreter who needs these resources."
+          secondaryButtonText="Join Our Community"
+          footerText="Have connections to interpreter networks? Want to discuss bulk training programs? Let's talk—together we can make professional development accessible to all."
+        />
       </div>
     </Layout>
   );
