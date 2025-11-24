@@ -33,16 +33,16 @@ export const MissionCollaborationCTA = ({
               {description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link to={primaryButtonLink}>
-                <Button size="lg" variant="hero">
+              <Button size="lg" variant="hero" asChild>
+                <Link to={primaryButtonLink}>
                   {primaryButtonText}
-                </Button>
-              </Link>
-              <Link to={secondaryButtonLink}>
-                <Button size="lg" variant="glass">
+                </Link>
+              </Button>
+              <Button size="lg" variant="glass" asChild>
+                <Link to={secondaryButtonLink}>
                   {secondaryButtonText}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
             {footerText && (
               <p className="text-sm text-muted-foreground">
