@@ -4,13 +4,13 @@ project_id = "ggyzlvbtkibqnkfhgnbe"
 verify_jwt = true
 
 [functions.wellness-chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.debriefing-questionnaire]
-verify_jwt = false
+verify_jwt = true
 
 [functions.study-chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-flashcards]
-verify_jwt = false
+verify_jwt = true
