@@ -78,7 +78,7 @@ const solutions: Solution[] = [
       "Understanding your unique burden"
     ],
     icon: <Heart className="w-8 h-8" />,
-    route: "/interpreewellness"
+    route: "/interpre-wellness"
   }
 ];
 
