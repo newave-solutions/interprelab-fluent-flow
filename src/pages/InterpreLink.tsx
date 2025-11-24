@@ -180,7 +180,10 @@ export default function InterpreLink() {
           <div className="flex-1 p-8 max-w-4xl">
             {/* Header */}
             <div className="mb-8">
-              <PainPointBadge painPoint="Addressing Pain Point #5: Professional Community & Support" />
+              <PainPointBadge 
+                painPoint="Addressing Pain Point #5: Professional Community & Support" 
+                className="mb-6 bg-primary/10 text-primary border-primary/20"
+              />
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h1 className="text-4xl font-bold mb-2">InterpreLink: Your Professional Network</h1>

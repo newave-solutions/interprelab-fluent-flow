@@ -50,7 +50,7 @@ export const GetStartedSteps = ({
               const stepNumber = index + 1;
               
               return (
-                <div key={index} className="flex gap-8 items-start">
+                <div key={step.title} className="flex gap-8 items-start">
                   <div className="flex-shrink-0">
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                       {step.showIcon ? (

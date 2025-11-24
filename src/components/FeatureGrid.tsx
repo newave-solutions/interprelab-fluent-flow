@@ -39,11 +39,11 @@ export const FeatureGrid = ({
         </div>
 
         <div className={gridClass}>
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <Card 
-                key={index} 
+                key={feature.title} 
                 className="glass border-border/50 hover:border-primary/50 transition-all duration-300"
               >
                 <CardHeader>
