@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -15,6 +14,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { PainPointBadge } from "@/components/PainPointBadge";
+import { Badge } from "@/components/ui/badge";
 
 interface SidebarItem {
   icon: LucideIcon;
@@ -180,9 +181,10 @@ export default function InterpreLink() {
           <div className="flex-1 p-8 max-w-4xl">
             {/* Header */}
             <div className="mb-8">
-              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-                Addressing Pain Point #5: Professional Community & Support
-              </Badge>
+              <PainPointBadge 
+                painPoint="Addressing Pain Point #5: Professional Community & Support" 
+                className="mb-6 bg-primary/10 text-primary border-primary/20"
+              />
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h1 className="text-4xl font-bold mb-2">InterpreLink: Your Professional Network</h1>
