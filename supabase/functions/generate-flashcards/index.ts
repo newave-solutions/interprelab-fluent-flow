@@ -29,7 +29,7 @@ serve(async (req) => {
       );
     }
 
-    const { cardType, specialty, count = 10 } = validationResult.data;
+    const { cardType, specialty, count } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
