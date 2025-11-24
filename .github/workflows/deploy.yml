@@ -7,8 +7,8 @@ on:
     branches: [ main, master ]
 
 env:
-  PROJECT_ID: interprelab-eco-landing-page
-  SERVICE_NAME: interprelab-app
+  PROJECT_ID: interprelab-fluent-flow
+  SERVICE_NAME: interprelab-fluent-flow-image
   REGION: us-central1
 
 jobs:
