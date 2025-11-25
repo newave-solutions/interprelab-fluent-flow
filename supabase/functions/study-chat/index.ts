@@ -13,6 +13,19 @@ serve(async (req) => {
 
   try {
     const { messages, specialty } = await req.json();
+
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "Invalid 'messages' provided." }), { status: 400, headers: corsHeaders });
+    }
+    for (const message of messages) {
+      if (!message.role || !message.content || typeof message.role !== 'string' || typeof message.content !== 'string') {
+        return new Response(JSON.stringify({ error: "Invalid message structure." }), { status: 400, headers: corsHeaders });
+      }
+    }
+    if (specialty && typeof specialty !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid 'specialty' provided." }), { status: 400, headers: corsHeaders });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
