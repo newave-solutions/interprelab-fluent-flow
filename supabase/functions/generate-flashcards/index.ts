@@ -13,6 +13,17 @@ serve(async (req) => {
 
   try {
     const { cardType, specialty, count = 10 } = await req.json();
+
+    if (!cardType || typeof cardType !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid 'cardType' provided." }), { status: 400, headers: corsHeaders });
+    }
+    if (specialty && typeof specialty !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid 'specialty' provided." }), { status: 400, headers: corsHeaders });
+    }
+    if (typeof count !== 'number' || count < 1 || count > 50) {
+      return new Response(JSON.stringify({ error: "Invalid 'count' provided. Must be a number between 1 and 50." }), { status: 400, headers: corsHeaders });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
