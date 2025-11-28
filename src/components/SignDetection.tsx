@@ -1,37 +1,39 @@
 import React, { useRef, useEffect, useState } from 'react';
-import * as posenet from '@tensorflow-models/posenet';
-import '@tensorflow/tfjs-backend-webgl';
+import ASLRecognitionService from '../services/ASLRecognitionService';
 
-// NOTE: This component currently implements pose estimation, which is a foundational
-// step for sign language detection. The full sign language detection feature
-// will be built on top of this in future development.
+interface SignDetectionProps {
+  onSignDetected: (sign: string) => void;
+}
 
-const SignDetection: React.FC = () => {
+const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const intervalRef = useRef<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [detectedSign, setDetectedSign] = useState<string | null>(null);
 
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     const startDetection = async () => {
       try {
+        await ASLRecognitionService.loadModel();
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         streamRef.current = stream;
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           await videoRef.current.play();
         }
-
-        const net = await posenet.load();
         setIsLoading(false);
 
         if (videoRef.current) {
           const video = videoRef.current;
           intervalRef.current = window.setInterval(async () => {
-            const pose = await net.estimateSinglePose(video);
-            // console.log(pose); // Pose data is available here
+            const sign = await ASLRecognitionService.estimateSign(video);
+            if (sign) {
+              setDetectedSign(sign);
+              onSignDetected(sign);
+            }
           }, 100);
         }
       } catch (err) {
@@ -59,7 +61,7 @@ const SignDetection: React.FC = () => {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
+  }, [onSignDetected]);
 
   return (
     <div className="relative">
@@ -82,6 +84,11 @@ const SignDetection: React.FC = () => {
         playsInline
         muted
       />
+      {detectedSign && !isLoading && !error && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-md">
+          Detected Sign: {detectedSign}
+        </div>
+      )}
     </div>
   );
 };
