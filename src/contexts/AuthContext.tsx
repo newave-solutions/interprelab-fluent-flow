@@ -21,7 +21,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
+        if (import.meta.env.DEV) {
+          console.log('Auth state changed:', event);
+        }
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
