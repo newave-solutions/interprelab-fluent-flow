@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Heart, MessageCircle, Users, Sparkles, Send, Loader2, CheckCircle2 } from 'lucide-react';
@@ -189,6 +188,9 @@ export default function InterpreWellness() {
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Interpre-Wellness
             </h1>
+            <p className="text-2xl font-semibold text-primary mb-4">
+              Mental health support that understands your unique burden
+            </p>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               We understand the weight you carry. The emotional toll of absorbing trauma, speaking in first person, feeling isolated after difficult calls—we've been there. Interpre-Wellness is your compassionate companion, a safe space to process, reflect, and heal.
             </p>

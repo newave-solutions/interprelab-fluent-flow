@@ -30,3 +30,4 @@ supabase/.branches/
 *.njsproj
 *.sln
 *.sw?
+node_modules

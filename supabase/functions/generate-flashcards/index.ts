@@ -1,6 +1,5 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,23 +12,18 @@ serve(async (req) => {
   }
 
   try {
-    const flashcardSchema = z.object({
-      cardType: z.enum(['root-words', 'term-translation', 'term-definition', 'custom']),
-      specialty: z.string().max(50).optional(),
-      count: z.number().int().min(1).max(50).default(10)
-    });
+    const { cardType, specialty, count = 10 } = await req.json();
 
-    const rawData = await req.json();
-    const validationResult = flashcardSchema.safeParse(rawData);
-    
-    if (!validationResult.success) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (!cardType || typeof cardType !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid 'cardType' provided." }), { status: 400, headers: corsHeaders });
+    }
+    if (specialty && typeof specialty !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid 'specialty' provided." }), { status: 400, headers: corsHeaders });
+    }
+    if (typeof count !== 'number' || count < 1 || count > 50) {
+      return new Response(JSON.stringify({ error: "Invalid 'count' provided. Must be a number between 1 and 50." }), { status: 400, headers: corsHeaders });
     }
 
-    const { cardType, specialty, count } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {

@@ -59,22 +59,18 @@ const Waitlist = () => {
         lastName: "",
         email: "",
       });
-    } catch (error: unknown) {
-      if (error && typeof error === 'object' && 'errors' in error) {
+    } catch (error: any) {
+      if (error.errors) {
         // Zod validation errors
-        const zodError = error as { errors: Array<{ message: string }> };
         toast({
           title: "Validation Error",
-          description: zodError.errors[0]?.message || "Please check your input.",
+          description: error.errors[0]?.message || "Please check your input.",
           variant: "destructive",
         });
       } else {
-        const errorMessage = error && typeof error === 'object' && 'message' in error 
-          ? (error as { message: string }).message 
-          : "Failed to join waitlist. Please try again.";
         toast({
           title: "Error",
-          description: errorMessage,
+          description: error.message || "Failed to join waitlist. Please try again.",
           variant: "destructive",
         });
       }

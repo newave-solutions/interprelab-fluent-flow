@@ -38,7 +38,15 @@ export const Navigation = () => {
         { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
-    { label: t('resources'), href: '/resources' },
+    {
+      label: t('resources'),
+      submenu: [
+        { label: 'Training Materials', href: '/resources' },
+        { label: 'Industry Insights', href: '/resources/industry-insights' },
+        { label: 'Research & Articles', href: '/resources' },
+        { label: 'Certification Bodies', href: '/resources' },
+      ]
+    },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },
   ];
@@ -49,9 +57,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-primary rounded-lg">
-              <Shield className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo-icon-2.png" alt="InterpreLab Logo" className="w-10 h-10 object-contain" />
             <div>
               <h1 className="text-xl font-bold">InterpreLab</h1>
               <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
@@ -72,11 +78,11 @@ export const Navigation = () => {
                         <ul className="grid w-48 gap-2 p-2">
                           {item.submenu.map((subitem) => (
                             <li key={subitem.href}>
-                              <NavigationMenuLink asChild>
-                                <Link to={subitem.href} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                              <Link to={subitem.href}>
+                                <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                                   <div className="text-sm font-medium leading-none">{subitem.label}</div>
-                                </Link>
-                              </NavigationMenuLink>
+                                </NavigationMenuLink>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -100,16 +106,16 @@ export const Navigation = () => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/dashboard">
+                <Link to="/dashboard">
+                  <Button variant="ghost" size="sm">
                     Dashboard
-                  </Link>
-                </Button>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/settings">
+                  </Button>
+                </Link>
+                <Link to="/settings">
+                  <Button variant="ghost" size="sm">
                     Settings
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
                 <Button onClick={handleSignOut} variant="glass" size="sm">
                   <LogOut className="w-4 h-4 mr-2" />
                   {t('signOut')}
@@ -117,17 +123,17 @@ export const Navigation = () => {
               </>
             ) : (
               <>
-                <Button variant="glass" size="sm" className="flex items-center gap-2" asChild>
-                  <Link to="/waitlist">
+                <Link to="/waitlist">
+                  <Button variant="glass" size="sm" className="flex items-center gap-2">
                     Join Waitlist
-                  </Link>
-                </Button>
-                <Button variant="hero" size="sm" asChild>
-                  <Link to="/signin">
+                  </Button>
+                </Link>
+                <Link to="/signin">
+                  <Button variant="hero" size="sm">
                     <User className="w-4 h-4 mr-2" />
                     {t('signIn')}
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </>
             )}
           </div>
@@ -183,17 +189,17 @@ export const Navigation = () => {
                     </Button>
                   ) : (
                     <>
-                      <Button variant="glass" className="w-full flex items-center gap-2" asChild>
-                        <Link to="/waitlist" onClick={() => setIsOpen(false)}>
+                      <Link to="/waitlist">
+                        <Button variant="glass" className="w-full flex items-center gap-2" onClick={() => setIsOpen(false)}>
                           Join Waitlist
-                        </Link>
-                      </Button>
-                      <Button variant="hero" className="w-full" asChild>
-                        <Link to="/signin" onClick={() => setIsOpen(false)}>
+                        </Button>
+                      </Link>
+                      <Link to="/signin">
+                        <Button variant="hero" className="w-full" onClick={() => setIsOpen(false)}>
                           <User className="w-4 h-4 mr-2" />
                           {t('signIn')}
-                        </Link>
-                      </Button>
+                        </Button>
+                      </Link>
                     </>
                   )}
                 </div>

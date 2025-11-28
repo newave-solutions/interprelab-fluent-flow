@@ -1,7 +1,7 @@
 # InterpreLab Domain Strategy & Deployment Plan
 
 ## 🎯 **Current Situation**
-- **Two Cloud Run services**: `interprelab-fluent-flow-image` and `interprelab-frontend`
+- **Two Cloud Run services**: `interprelab-app` and `interprelab-frontend`
 - **App deployment errors**: Nginx permission issues
 - **Domain confusion**: Need clear separation between marketing and app
 
@@ -9,7 +9,7 @@
 
 ### **Single Repository, Dual Purpose**
 ```
-interprelab-fluent-flow (this repo)
+interprelab-eco-landing-page (this repo)
 ├── Marketing Pages (Public)
 │   ├── / (Index) - Landing page
 │   ├── /about - Company info
@@ -44,12 +44,12 @@ interprelab-fluent-flow (this repo)
 ### **1. Fix Current App Deployment**
 ```bash
 # Rebuild with fixed nginx config
-docker build -t gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest .
-docker push gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest
+docker build -t gcr.io/interprelab-eco-landing-page/interprelab-app:latest .
+docker push gcr.io/interprelab-eco-landing-page/interprelab-app:latest
 
 # Redeploy
-gcloud run deploy interprelab-fluent-flow-image \
-  --image=gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest \
+gcloud run deploy interprelab-app \
+  --image=gcr.io/interprelab-eco-landing-page/interprelab-app:latest \
   --region=us-central1
 ```
 
@@ -69,7 +69,7 @@ gcloud beta run domain-mappings list --region=us-central1
 
 # Update if needed
 gcloud beta run domain-mappings create \
-  --service=interprelab-fluent-flow-image \
+  --service=interprelab-app \
   --domain=interprelab.com \
   --region=us-central1
 ```
@@ -119,9 +119,9 @@ gcloud beta run domain-mappings create \
 1. **Fix deployment errors**:
    ```bash
    # Rebuild with fixed config
-   docker build -t gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest .
-   docker push gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest
-   gcloud run deploy interprelab-fluent-flow-image --image=gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest --region=us-central1
+   docker build -t gcr.io/interprelab-eco-landing-page/interprelab-app:latest .
+   docker push gcr.io/interprelab-eco-landing-page/interprelab-app:latest
+   gcloud run deploy interprelab-app --image=gcr.io/interprelab-eco-landing-page/interprelab-app:latest --region=us-central1
    ```
 
 2. **Test the deployment**:
@@ -134,7 +134,7 @@ gcloud beta run domain-mappings create \
    ```bash
    # Map main domain to the app
    gcloud beta run domain-mappings create \
-     --service=interprelab-fluent-flow-image \
+     --service=interprelab-app \
      --domain=interprelab.com \
      --region=us-central1
    ```

@@ -21,8 +21,11 @@ const InterpreCoach = () => {
               <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
                 InterpreCoach
               </h1>
+              <p className="text-2xl font-semibold text-primary mb-4">
+                Your AI companion during high-stakes calls
+              </p>
               <p className="text-xl text-muted-foreground mb-8">
-                We know the cognitive overload of live sessions—searching for terminology while maintaining accuracy, the isolation of working alone with no backup. InterpreCoach is your AI companion during calls, reducing stress and providing the support system that's been missing from our profession.
+                We know the cognitive overload of live sessions—searching for terminology while maintaining accuracy, the isolation of working alone with no backup. InterpreCoach reduces stress and provides the support system that's been missing from our profession.
               </p>
               <div className="glass p-4 rounded-lg mb-6">
                 <p className="text-sm text-muted-foreground">
@@ -45,7 +48,7 @@ const InterpreCoach = () => {
             <div className="relative">
               <div className="glass rounded-2xl p-8 border border-border/50">
                 <img
-                  src="/interpre-hub-mockup.png"
+                  src="/coach-frontned-design.png"
                   alt="InterpreCoach Extension Preview"
                   className="w-full rounded-lg shadow-2xl"
                 />

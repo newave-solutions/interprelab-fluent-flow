@@ -3,10 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { LucideIcon } from "lucide-react";
 import {
   Search, Plus, MessageCircle, Heart, Share2, MoreHorizontal,
   Users, BookOpen, HelpCircle, Briefcase, Network, Video,
@@ -16,36 +15,19 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { Badge } from "@/components/ui/badge";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
-import { formatDistanceToNow } from "date-fns";
 
 interface SidebarItem {
-  icon: LucideIcon;
+  icon: any;
   label: string;
   active?: boolean;
   badge?: string;
   badgeColor?: string;
 }
 
-interface Post {
-  id: string;
-  content: string;
-  created_at: string;
-  media_url?: string;
-  media_type?: string;
-  tags?: string[];
-  user_id: string;
-}
-
 export default function InterpreLink() {
   const [searchQuery, setSearchQuery] = useState("");
   const [newPostContent, setNewPostContent] = useState("");
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
 
   const sidebarSections = [
     {
@@ -76,49 +58,52 @@ export default function InterpreLink() {
     }
   ];
 
-  // Fetch posts
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ['posts'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return data as Post[];
-    }
-  });
-
-  // Create post mutation
-  const createPostMutation = useMutation({
-    mutationFn: async (content: string) => {
-      if (!user) throw new Error("Must be logged in");
-
-      const { error } = await supabase
-        .from('posts')
-        .insert({
-          content,
-          user_id: user.id
-        });
-
-      if (error) throw error;
+  const posts = [
+    {
+      id: 1,
+      author: "Maria Rodriguez",
+      role: "Medical Interpreter - CMI",
+      avatar: "MR",
+      avatarColor: "bg-blue-500",
+      timeAgo: "2 hours ago",
+      content: "Just wrapped up the most challenging ER shift of my career. A patient came in with chest pain, and the medical team was moving FAST. I had to interpret complex cardiac terminology while keeping up with the urgency. Moments like these remind me why we do what we do - we're literally the bridge between life-saving care and understanding. 💙 #MedicalInterpreting #ERLife",
+      likes: 24,
+      comments: 8,
+      shares: 3,
+      type: "text",
+      tags: ["Medical", "Emergency"]
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
-      setIsCreatePostOpen(false);
-      setNewPostContent("");
-      toast.success("Post created successfully!");
+    {
+      id: 2,
+      author: "James Chen",
+      role: "Legal Interpreter",
+      avatar: "JC",
+      avatarColor: "bg-purple-500",
+      timeAgo: "5 hours ago",
+      content: "Quick tip for fellow interpreters: I created a color-coded system for my terminology flashcards. Red for urgent/emergency terms, blue for routine medical, green for legal, yellow for technical. Game changer for quick reference! 📚✨",
+      likes: 45,
+      comments: 12,
+      shares: 18,
+      type: "text",
+      tags: ["Tips", "Terminology"],
+      image: "/placeholder-flashcards.jpg"
     },
-    onError: (error) => {
-      toast.error("Failed to create post: " + error.message);
+    {
+      id: 3,
+      author: "Sofia Martinez",
+      role: "Community Interpreter",
+      avatar: "SM",
+      avatarColor: "bg-pink-500",
+      timeAgo: "1 day ago",
+      content: "New reel: 'When the doctor uses 5 medical terms in one sentence' 😅 Check out my latest video on handling rapid-fire terminology!",
+      likes: 156,
+      comments: 34,
+      shares: 67,
+      type: "reel",
+      tags: ["Humor", "Reels"],
+      videoThumbnail: "/placeholder-reel.jpg"
     }
-  });
-
-  const handleCreatePost = () => {
-    if (!newPostContent.trim()) return;
-    createPostMutation.mutate(newPostContent);
-  };
+  ];
 
   const reels = [
     {
@@ -152,7 +137,7 @@ export default function InterpreLink() {
       <div className="min-h-screen bg-background">
         <div className="flex">
           {/* Sidebar */}
-          <div className="w-72 bg-card border-r min-h-screen p-6 sticky top-0 hidden lg:block">
+          <div className="w-72 bg-card border-r min-h-screen p-6 sticky top-0">
             <div className="mb-8">
               <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 InterpreLink
@@ -192,19 +177,27 @@ export default function InterpreLink() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-4 md:p-8 max-w-4xl">
+          <div className="flex-1 p-8 max-w-4xl">
             {/* Header */}
             <div className="mb-8">
               <PainPointBadge 
                 painPoint="Addressing Pain Point #5: Professional Community & Support" 
                 className="mb-6 bg-primary/10 text-primary border-primary/20"
               />
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+              <div className="flex items-center justify-between mb-6">
                 <div>
                   <h1 className="text-4xl font-bold mb-2">InterpreLink</h1>
-                  <p className="text-muted-foreground mb-4">
-                    Your professional network for connection and support.
+                  <p className="text-2xl font-semibold text-primary mb-4">
+                    The professional network interpreters deserve
                   </p>
+                  <p className="text-muted-foreground mb-4">
+                    We're working interpreters who understand the need for real connection, not just another social media clone. InterpreLink is where you find partnerships, share the emotional weight, and build the professional relationships that sustain your career and mental health.
+                  </p>
+                  <div className="glass p-4 rounded-lg max-w-2xl">
+                    <p className="text-sm text-muted-foreground">
+                      🤝 <strong>More than networking:</strong> This is where collaborations are born, where you find your next referral partner, and where InterpreLab connects with interpreters to broaden our reach together.
+                    </p>
+                  </div>
                 </div>
                 <Dialog open={isCreatePostOpen} onOpenChange={setIsCreatePostOpen}>
                   <DialogTrigger asChild>
@@ -238,13 +231,13 @@ export default function InterpreLink() {
                         <Button variant="outline" onClick={() => setIsCreatePostOpen(false)}>
                           Cancel
                         </Button>
-                        <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
-                          {createPostMutation.isPending ? "Posting..." : (
-                            <>
-                              <Send className="w-4 h-4 mr-2" />
-                              Post
-                            </>
-                          )}
+                        <Button onClick={() => {
+                          // Handle post creation
+                          setIsCreatePostOpen(false);
+                          setNewPostContent("");
+                        }}>
+                          <Send className="w-4 h-4 mr-2" />
+                          Post
                         </Button>
                       </div>
                     </div>
@@ -273,76 +266,80 @@ export default function InterpreLink() {
               </TabsList>
 
               <TabsContent value="feed" className="space-y-6">
-                {isLoading ? (
-                  <div className="text-center py-8 text-muted-foreground">Loading posts...</div>
-                ) : posts?.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">No posts yet. Be the first to share!</div>
-                ) : (
-                  posts?.map((post) => (
-                    <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex items-start gap-4">
-                          <Avatar className="w-12 h-12">
-                            <AvatarFallback>U</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h3 className="font-semibold">User</h3>
-                                <p className="text-sm text-muted-foreground">Interpreter</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                  {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
-                                </span>
-                                <Button variant="ghost" size="icon">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </div>
+                {posts.map((post) => (
+                  <Card key={post.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start gap-4">
+                        <Avatar className="w-12 h-12">
+                          <AvatarFallback className={post.avatarColor}>
+                            {post.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="font-semibold">{post.author}</h3>
+                              <p className="text-sm text-muted-foreground">{post.role}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">{post.timeAgo}</span>
+                              <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="w-4 h-4" />
+                              </Button>
                             </div>
                           </div>
                         </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-foreground leading-relaxed">{post.content}</p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-foreground leading-relaxed">{post.content}</p>
 
-                        {post.tags && (
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.map((tag, index) => (
-                              <Badge key={index} variant="secondary">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-
-                        <div className="flex items-center justify-between pt-4 border-t">
-                          <div className="flex items-center gap-6">
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <Heart className="w-4 h-4" />
-                              <span>0</span>
-                            </Button>
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <MessageCircle className="w-4 h-4" />
-                              <span>0</span>
-                            </Button>
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <Share2 className="w-4 h-4" />
-                              <span>0</span>
+                      {post.type === "reel" && (
+                        <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center">
+                          <Video className="w-16 h-16 text-muted-foreground" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Button size="lg" className="rounded-full">
+                              <Video className="w-6 h-6 mr-2" />
+                              Watch Reel
                             </Button>
                           </div>
-                          <Button variant="ghost" size="sm">
-                            <Bookmark className="w-4 h-4" />
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.map((tag, index) => (
+                          <Badge key={index} variant="secondary">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t">
+                        <div className="flex items-center gap-6">
+                          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                            <Heart className="w-4 h-4" />
+                            <span>{post.likes}</span>
+                          </Button>
+                          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                            <MessageCircle className="w-4 h-4" />
+                            <span>{post.comments}</span>
+                          </Button>
+                          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                            <Share2 className="w-4 h-4" />
+                            <span>{post.shares}</span>
                           </Button>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))
-                )}
+                        <Button variant="ghost" size="sm">
+                          <Bookmark className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </TabsContent>
 
               <TabsContent value="reels" className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   {reels.map((reel) => (
                     <Card key={reel.id} className="cursor-pointer hover:shadow-lg transition-shadow">
                       <div className="relative aspect-[9/16] bg-muted rounded-t-lg flex items-center justify-center">
@@ -382,7 +379,7 @@ export default function InterpreLink() {
           </div>
 
           {/* Right Sidebar - Trending & Suggestions */}
-          <div className="w-80 p-6 border-l sticky top-0 h-screen overflow-y-auto hidden xl:block">
+          <div className="w-80 p-6 border-l sticky top-0 h-screen overflow-y-auto">
             {/* Mission Card */}
             <Card className="mb-6 glass border-primary/20">
               <CardContent className="p-6 space-y-4">
