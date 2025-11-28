@@ -218,7 +218,7 @@ vSign.addDirection(Finger.Index, FingerDirection.VerticalUp, 1.0);
 vSign.addCurl(Finger.Middle, FingerCurl.NoCurl, 1.0);
 vSign.addDirection(Finger.Middle, FingerDirection.VerticalUp, 1.0);
 for(let finger of [Finger.Ring, Finger.Pinky]) {
-    vSign.addCurl(finger, FingerCurl.FullCurl, .9);
+    vSign.addCurl(finger, FingerCurl.FullCurl, 0.9);
     vSign.addDirection(finger, FingerDirection.VerticalUp, 1.0);
 }
 vSign.addCurl(Finger.Thumb, FingerCurl.HalfCurl, 0.9);
