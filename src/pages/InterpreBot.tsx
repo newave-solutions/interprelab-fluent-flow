@@ -1,4 +1,3 @@
-import interpreHubMockup from "@/assets/interpre-hub-mockup.png";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
