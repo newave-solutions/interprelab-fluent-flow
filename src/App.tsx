@@ -26,6 +26,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
+import ASLTeacher from "./pages/ASLTeacher";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
                 <Route path="/interprebot" element={<InterpreBot />} />
                 <Route path="/interprecoach" element={<InterpreCoach />} />
                 <Route path="/interprestudy" element={<InterpreStudy />} />
+                <Route path="/asl-teacher" element={<ASLTeacher />} />
                 <Route path="/interprelink" element={<InterpreLink />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
