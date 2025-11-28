@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Bot, BookOpen, Users, Heart } from "lucide-react";
+import { Brain, Bot, BookOpen, Users, Heart, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
@@ -121,6 +121,13 @@ export const SolutionsShowcase = () => {
           <source src="/videos/solutions-background.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background/95" />
+      </div>
+
+      {/* Visual Divider / Transition */}
+      <div className="absolute top-8 left-0 right-0 flex justify-center z-20">
+        <div className="animate-bounce p-3 bg-background/20 rounded-full backdrop-blur-md border border-primary/20 shadow-lg">
+          <ChevronDown className="w-6 h-6 text-primary" />
+        </div>
       </div>
 
       <div className="container mx-auto px-4 py-20 relative z-10">
