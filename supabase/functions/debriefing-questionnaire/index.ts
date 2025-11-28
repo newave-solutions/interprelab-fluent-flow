@@ -13,6 +13,17 @@ serve(async (req) => {
 
   try {
     const { responses } = await req.json();
+
+    if (!responses || typeof responses !== 'string' || responses.trim() === '') {
+      return new Response(
+        JSON.stringify({ error: "Invalid input: 'responses' must be a non-empty string." }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
