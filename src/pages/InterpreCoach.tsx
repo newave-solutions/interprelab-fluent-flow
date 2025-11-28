@@ -7,6 +7,7 @@ import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
+import SignDetection from "@/components/SignDetection";
 
 const InterpreCoach = () => {
   return (
@@ -94,6 +95,25 @@ const InterpreCoach = () => {
           },
         ]}
       />
+
+      {/* Pose Estimation Section */}
+      <section className="py-20 text-center">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-4">Real-Time Pose Estimation</h2>
+          <p className="text-muted-foreground mb-8">
+            Experience the power of our AI-driven pose estimation.
+            <br />
+            Enable your camera to see real-time pose estimation in action.
+          </p>
+          <div className="flex justify-center">
+            <Card className="w-full max-w-2xl glass">
+              <CardContent className="p-6">
+                <SignDetection />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* Getting Started Timeline */}
       <GetStartedSteps
