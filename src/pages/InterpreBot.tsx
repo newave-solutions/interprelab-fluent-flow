@@ -150,8 +150,8 @@ const InterpreBot = () => {
             <Card className="glass border-border/50">
               <CardContent className="p-4">
                 <img
-                  src={interpreHubMockup}
-                  alt="InterpreBot Assessment Dashboard"
+                  src="/src/assets/ai-assessment.png"
+                  alt="AI assessment illustration"
                   className="w-full rounded-lg"
                 />
               </CardContent>
