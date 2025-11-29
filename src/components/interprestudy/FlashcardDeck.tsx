@@ -75,7 +75,7 @@ export const FlashcardDeck = ({ cardType }: FlashcardDeckProps) => {
           Card {currentIndex + 1} of {sampleCards.length}
         </p>
         <div className="w-full bg-muted rounded-full h-2">
-          <div 
+          <div
             className="bg-primary rounded-full h-2 transition-all duration-300"
             style={{ width: `${((currentIndex + 1) / sampleCards.length) * 100}%` }}
           />
@@ -93,7 +93,7 @@ export const FlashcardDeck = ({ cardType }: FlashcardDeckProps) => {
         )}
 
         {/* Main Card */}
-        <div 
+        <div
           className={`flashcard-3d ${isFlipped ? 'flipped' : ''} ${direction === 'next' ? 'slide-out-left' : ''} ${direction === 'prev' ? 'slide-out-right' : ''}`}
           onClick={handleFlip}
         >

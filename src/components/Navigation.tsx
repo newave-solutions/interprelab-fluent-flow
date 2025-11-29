@@ -44,17 +44,27 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
   };
 
   const navItems = [
-    { 
-      label: t('solutions'), 
+    {
+      label: t('solutions'),
       submenu: [
         { label: 'InterpreBot', href: '/interprebot' },
         { label: 'InterpreCoach', href: '/interprecoach' },
         { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreTrack', href: '/interpretrack' },
-        { label: 'InterpreHub', href: '/interpre-hub' },
+        { label: 'InterpreStudy', href: '/interprestudy' },
+        { label: 'Interpre-Wellness', href: '/interpre-wellness' },
+        { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
-    { label: t('resources'), href: '/resources' },
+    {
+      label: t('resources'),
+      submenu: [
+        { label: 'Training Materials', href: '/resources' },
+        { label: 'Industry Insights', href: '/resources/industry-insights' },
+        { label: 'Research & Articles', href: '/resources' },
+        { label: 'Certification Bodies', href: '/resources' },
+      ]
+    },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },
   ];
@@ -69,9 +79,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-primary rounded-lg">
-              <Shield className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo-icon-2.png" alt="InterpreLab Logo" className="w-10 h-10 object-contain" />
             <div>
               <h1 className={`text-xl font-bold ${transparent && !isScrolled ? "text-white" : ""}`}>
                 InterpreLab
@@ -197,10 +205,10 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                     </Link>
                   )
                 ))}
-                
+
                 <div className="pt-6 space-y-3">
                   {user ? (
-                    <Button 
+                    <Button
                       onClick={() => {
                         handleSignOut();
                         setIsOpen(false);
@@ -226,20 +234,6 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                       </Link>
                     </>
                   )}
-                </div>
-
-                <div className="pt-6 border-t border-border/50">
-                  <p className="text-sm text-muted-foreground mb-3">Contact</p>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4" />
-                      <span>+1 (555) 123-4567</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      <span>hello@interprelab.com</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </SheetContent>

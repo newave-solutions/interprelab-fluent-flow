@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Shield, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Twitter, 
-  Linkedin, 
+import { Link } from "react-router-dom";
+import {
+  Shield,
+  Mail,
+  Phone,
+  MapPin,
+  Twitter,
+  Linkedin,
   Github,
   Chrome,
   Stethoscope,
@@ -19,7 +20,7 @@ export const Footer = () => {
     <footer className="relative border-t border-border/50 bg-card/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
+
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -31,9 +32,9 @@ export const Footer = () => {
                 <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
               </div>
             </div>
-            
+
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Revolutionizing medical and legal interpretation through advanced AI technology 
+              Revolutionizing medical and legal interpretation through advanced AI technology
               while preserving the essential human element in critical communication.
             </p>
 
@@ -51,56 +52,44 @@ export const Footer = () => {
 
           {/* Products */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Products</h4>
+            <h4 className="text-sm font-semibold text-foreground">Services</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  <Chrome className="w-3 h-3" />
-                  InterpreCoach Extension
-                </a>
+                <Link to="/interprebot" className="hover:text-foreground transition-colors flex items-center gap-2">
+                  InterpreBot
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors flex items-center gap-2">
-                  <Shield className="w-3 h-3" />
-                  Enterprise Platform
-                </a>
+                <Link to="/interprecoach" className="hover:text-foreground transition-colors flex items-center gap-2">
+                  InterpreCoach
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  API Integration
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Custom Solutions
-                </a>
+                <Link to="/interprestudy" className="hover:text-foreground transition-colors">
+                  InterpreStudy
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Solutions */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-foreground">Solutions</h4>
+            <h4 className="text-sm font-semibold text-foreground">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Healthcare Systems
+                <a href="https://www.certifiedmedicalinterpreters.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  NBCMI
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Legal Firms
+                <a href="https://cchicertification.org/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  CCHI
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Government Agencies
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Educational Institutions
-                </a>
+                <Link to="/careers" className="hover:text-foreground transition-colors">
+                  Careers
+                </Link>
               </li>
             </ul>
           </div>
@@ -111,7 +100,7 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>hello@interprelab.com</span>
+                <span>admin.ceo@interprelab.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -119,7 +108,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>San Francisco, CA</span>
+                <span>Houston, Texas</span>
               </div>
             </div>
 
@@ -142,11 +131,11 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-6 text-xs text-muted-foreground">
               <span>© 2024 InterpreLab. All rights reserved.</span>
-              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-foreground transition-colors">Security</a>
+              <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
+              <Link to="/security" className="hover:text-foreground transition-colors">Security</Link>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <Badge variant="outline" className="text-xs">
                 <Shield className="w-3 h-3 mr-1" />
