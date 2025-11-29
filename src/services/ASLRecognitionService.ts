@@ -48,9 +48,9 @@ class ASLRecognitionService {
       
       const estimatedGestures: EstimateResult = this.gestureEstimator!.estimate(landmarks, 6.5);
       if (estimatedGestures.gestures && estimatedGestures.gestures.length > 0) {
-        const confidence = estimatedGestures.gestures.map((p: GestureEstimate) => p.score);
-        const maxConfidence = confidence.indexOf(Math.max(...confidence));
-        return estimatedGestures.gestures[maxConfidence].name;
+        const scores = estimatedGestures.gestures.map((p: GestureEstimate) => p.score);
+        const maxScoreIndex = scores.indexOf(Math.max(...scores));
+        return estimatedGestures.gestures[maxScoreIndex].name;
       }
     }
     return null;
