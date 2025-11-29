@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -41,6 +41,8 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
+                {/* Redirect /home to / for backwards compatibility */}
+                <Route path="/home" element={<Navigate to="/" replace />} />
                 <Route path="/interprebot" element={<InterpreBot />} />
                 <Route path="/interprecoach" element={<InterpreCoach />} />
                 <Route path="/interprestudy" element={<InterpreStudy />} />
