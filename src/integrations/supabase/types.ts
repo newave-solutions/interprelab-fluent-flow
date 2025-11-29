@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       call_logs: {
         Row: {
+          call_type: string | null
           created_at: string
           currency: string
           duration_seconds: number | null
@@ -26,11 +27,14 @@ export type Database = {
           is_imported: boolean
           notes: string | null
           platform_name: string | null
+          rounded_duration_seconds: number | null
+          rounded_earnings: number | null
           start_time: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          call_type?: string | null
           created_at?: string
           currency?: string
           duration_seconds?: number | null
@@ -41,11 +45,14 @@ export type Database = {
           is_imported?: boolean
           notes?: string | null
           platform_name?: string | null
+          rounded_duration_seconds?: number | null
+          rounded_earnings?: number | null
           start_time: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          call_type?: string | null
           created_at?: string
           currency?: string
           duration_seconds?: number | null
@@ -56,6 +63,8 @@ export type Database = {
           is_imported?: boolean
           notes?: string | null
           platform_name?: string | null
+          rounded_duration_seconds?: number | null
+          rounded_earnings?: number | null
           start_time?: string
           updated_at?: string
           user_id?: string
@@ -262,6 +271,7 @@ export type Database = {
           pay_rate_type: string
           preferred_currency: string
           preferred_language: string
+          time_rounding_method: string | null
           updated_at: string
           user_id: string
         }
@@ -272,6 +282,7 @@ export type Database = {
           pay_rate_type?: string
           preferred_currency?: string
           preferred_language?: string
+          time_rounding_method?: string | null
           updated_at?: string
           user_id: string
         }
@@ -282,6 +293,7 @@ export type Database = {
           pay_rate_type?: string
           preferred_currency?: string
           preferred_language?: string
+          time_rounding_method?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -316,6 +328,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_rounded_duration: {
+        Args: { actual_seconds: number; rounding_method: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

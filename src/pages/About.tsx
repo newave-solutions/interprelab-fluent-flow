@@ -70,8 +70,8 @@ const About = () => {
                 About InterpreLab
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Founded by interpreters, for interpreters. We're on a mission to revolutionize 
-                the interpretation industry through innovative AI technology and comprehensive 
+                Founded by interpreters, for interpreters. We're on a mission to revolutionize
+                the interpretation industry through innovative AI technology and comprehensive
                 professional development.
               </p>
               <div className="flex items-center gap-6 text-sm text-muted-foreground">
@@ -108,8 +108,8 @@ const About = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  To empower interpreters worldwide with cutting-edge AI technology that enhances 
-                  their skills, improves accuracy, and ensures equitable access to essential 
+                  To empower interpreters worldwide with cutting-edge AI technology that enhances
+                  their skills, improves accuracy, and ensures equitable access to essential
                   services across language barriers.
                 </p>
               </CardContent>
@@ -121,8 +121,8 @@ const About = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  A world where language is never a barrier to accessing healthcare, justice, 
-                  education, or any essential service, powered by the perfect collaboration 
+                  A world where language is never a barrier to accessing healthcare, justice,
+                  education, or any essential service, powered by the perfect collaboration
                   between human expertise and artificial intelligence.
                 </p>
               </CardContent>
@@ -171,7 +171,7 @@ const About = () => {
               Meet Our Leadership Team
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Experienced interpreters and technology experts working together to 
+              Experienced interpreters and technology experts working together to
               advance the interpretation profession.
             </p>
           </div>
@@ -234,7 +234,7 @@ const About = () => {
           <div className="glass rounded-2xl p-12 text-center border border-border/50">
             <h2 className="text-3xl font-bold mb-4">Join Our Mission</h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Whether you're an interpreter looking to enhance your skills or an organization 
+              Whether you're an interpreter looking to enhance your skills or an organization
               seeking interpretation services, we're here to help.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

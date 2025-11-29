@@ -9,23 +9,39 @@ import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup'
 import { FlashcardBuilder } from '@/components/interprestudy/FlashcardBuilder';
 import { MockScenarios } from '@/components/interprestudy/MockScenarios';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
+import { PainPointBadge } from '@/components/PainPointBadge';
+import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
 
 export default function InterpreStudy() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div
+          className="text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
+          style={{ backgroundImage: "url('/src/assets/studying-learning.jpg')" }}
+        >
+          <div className="absolute inset-0 bg-black/70 rounded-3xl" />
+          <div className="relative z-10">
+            <PainPointBadge painPoint="Addressing Pain Point #4: Accessible, Specialized Training" />
           <div className="flex items-center justify-center gap-3 mb-4">
             <Brain className="w-12 h-12 text-primary" />
             <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               InterpreStudy
             </h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Master your craft with AI-powered learning. Study ethics, practice terminology, 
-            and train with interactive scenarios designed for professional interpreters.
+          <p className="text-2xl font-semibold text-primary mb-4">
+            Accessible, specialized training at your fingertips
           </p>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
+            Specialized training shouldn't be a luxury reserved for those who can afford $100s-$1000s. We've been there—struggling to find quality oncology, genetics, or legal terminology resources. InterpreStudy provides AI-powered learning, ethics training, and interactive scenarios tailored to your specialty, all in one accessible platform.
+          </p>
+          <div className="glass p-6 rounded-lg max-w-2xl mx-auto">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              🎯 <strong>Why This Matters:</strong> As working interpreters, we know the desperation of entering a specialized call unprepared. We built InterpreStudy to democratize access to the training that should have always been available—because every interpreter deserves to feel confident and prepared.
+            </p>
+          </div>
+          </div>
         </div>
 
         {/* Main Content Tabs */}
@@ -118,6 +134,14 @@ export default function InterpreStudy() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Mission & Collaboration CTA */}
+        <MissionCollaborationCTA
+          title="InterpreLab: Your Lifeline in the Field"
+          description="We're not building tools from an ivory tower. We're interpreters who've experienced the frustration of inaccessible training, the anxiety of specialized terminology, and the weight of serving vulnerable patients. Our mission is to use our skills to create solutions that actually help—but we need your partnership to reach every interpreter who needs these resources."
+          secondaryButtonText="Join Our Community"
+          footerText="Have connections to interpreter networks? Want to discuss bulk training programs? Let's talk—together we can make professional development accessible to all."
+        />
       </div>
     </Layout>
   );

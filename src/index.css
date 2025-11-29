@@ -140,6 +140,28 @@ All colors MUST be HSL for consistency and theming.
     font-family: 'Space Grotesk', monospace;
   }
 
+  /* Accessibility improvements */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary ring-2 ring-primary/20;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Glass morphism utilities */
   .glass {
     background: hsl(var(--glass-bg));
@@ -176,6 +198,37 @@ All colors MUST be HSL for consistency and theming.
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-card);
+  }
+
+  /* Enhanced Button Interactions */
+  .glass-button {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .glass-button::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent;
+    @apply translate-x-[-200%] transition-transform duration-700;
+  }
+
+  .glass-button:hover::before {
+    @apply translate-x-[200%];
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    @apply animate-pulse bg-muted/50 rounded;
+  }
+
+  /* Smooth scroll snap */
+  .scroll-snap-container {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .scroll-snap-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   /* Extension window styles */
@@ -233,5 +286,92 @@ All colors MUST be HSL for consistency and theming.
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+/* Enhanced Animations for Pain Points & Solutions */
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeOutSection {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(10px);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation utilities */
+.animate-fade-in-section {
+  animation: fadeInSection 1s ease-in-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+/* Video Section Animations */
+.video-section-enter {
+  animation: fadeInSection 1s ease-in-out forwards;
+}
+
+.video-section-exit {
+  animation: fadeOutSection 1s ease-in-out forwards;
+}
+
+/* Data Overlay Animations */
+.overlay-enter {
+  animation: slideInFromBottom 0.6s ease-out forwards;
+}
+
+.icon-rotate {
+  animation: iconRotate 1s ease-out forwards;
+}
+
+@keyframes iconRotate {
+  from {
+    transform: rotate(-180deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
   }
 }

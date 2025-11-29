@@ -18,6 +18,10 @@ export const FlashcardBuilder = () => {
     { value: 'custom', label: 'Custom Flashcards' },
   ];
 
+  const generateDeck = async () => {
+    setShowDeck(true);
+  };
+
   return (
     <div className="space-y-8">
       <Card className="glass border-border/50">
@@ -45,12 +49,12 @@ export const FlashcardBuilder = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button 
-              onClick={() => setShowDeck(true)} 
+            <Button
+              onClick={generateDeck}
               className="w-full"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Create New Deck
+              Generate AI Deck
             </Button>
             <Button variant="outline" className="w-full">
               <Layers className="w-4 h-4 mr-2" />
@@ -69,7 +73,7 @@ export const FlashcardBuilder = () => {
       {/* Info Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {cardTypes.map((type, index) => (
-          <Card 
+          <Card
             key={type.value}
             className="glass border-border/50 hover:border-primary/50 transition-all duration-300 cursor-pointer hover-lift"
             onClick={() => setSelectedType(type.value as CardType)}
