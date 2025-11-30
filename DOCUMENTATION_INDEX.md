@@ -8,14 +8,16 @@
 
 ### For New Team Members
 1. Start with [README.md](./README.md) - Project overview and getting started
-2. Read [PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md) - Complete technical guide
-3. Review [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md) - Project status and achievements
+2. Read [PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md) - Project structure and scaffold
+3. Read [PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md) - Complete technical guide
+4. Review [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md) - Project status and achievements
 
 ### For Developers
-1. [PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md) - Complete technical reference
-2. [IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md) - Step-by-step deployment guide
-3. [OPTIMIZATION_ROADMAP.md](./OPTIMIZATION_ROADMAP.md) - Future development plans
-4. [GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md) - CI/CD configuration
+1. [PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md) - Project structure and organization
+2. [PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md) - Complete technical reference
+3. [IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md) - Step-by-step deployment guide
+4. [OPTIMIZATION_ROADMAP.md](./OPTIMIZATION_ROADMAP.md) - Future development plans
+5. [GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md) - CI/CD configuration
 
 ### For Product Managers
 1. [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md) - High-level overview
@@ -38,6 +40,24 @@
 ## 📖 Complete Documentation Catalog
 
 ### 🎯 Core Documentation (New!)
+
+#### [PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md) ⭐ NEW
+**Size:** 855 lines | 27 KB  
+**Purpose:** Organizational architecture and project scaffold documentation  
+**Audience:** Developers, New Team Members, Technical Leads  
+
+**Contents:**
+- Project Overview & Core Products
+- Technology Stack Reference
+- Directory Structure Visualization
+- Frontend Architecture (Components, Routing, State)
+- Backend Architecture (Supabase, Edge Functions)
+- Data Flow Diagrams
+- Naming Conventions & Coding Standards
+- Module Organization Patterns
+- Development Setup Instructions
+- Build & Deployment Guide
+- Configuration Files Reference
 
 #### [PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md) ⭐ NEW
 **Size:** 1,296 lines | 33 KB  
@@ -305,6 +325,7 @@
 |----------|-------|------|----------|----------|
 | OPTIMIZATION_ROADMAP.md | 1,488 | 38 KB | Planning | ⭐ HIGH |
 | PLATFORM_DOCUMENTATION.md | 1,296 | 33 KB | Technical | ⭐ HIGH |
+| PROJECT_ARCHITECTURE.md | 855 | 27 KB | Architecture | ⭐ HIGH |
 | PROJECT_OPTIMIZATION_REPORT.md | 720 | 22 KB | Analysis | MEDIUM |
 | IMPLEMENTATION_GUIDE.md | 429 | 9.5 KB | Guide | HIGH |
 | EXECUTIVE_SUMMARY.md | 320 | 9.4 KB | Overview | HIGH |
@@ -316,7 +337,7 @@
 | README.md | 122 | 4.2 KB | General | ⭐ HIGH |
 | GEMINI.md | 86 | 5.5 KB | Strategy | LOW |
 
-**Total Documentation:** 5,237 lines | ~140 KB
+**Total Documentation:** 5,937+ lines | ~167 KB
 
 ---
 
@@ -324,7 +345,7 @@
 
 ### Update Schedule
 - **Weekly:** README.md (as features are added)
-- **Monthly:** PLATFORM_DOCUMENTATION.md (as architecture changes)
+- **Monthly:** PLATFORM_DOCUMENTATION.md, PROJECT_ARCHITECTURE.md (as architecture changes)
 - **Quarterly:** OPTIMIZATION_ROADMAP.md (roadmap review)
 - **As Needed:** All other documentation
 
