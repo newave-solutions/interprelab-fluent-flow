@@ -1,81 +1,16 @@
-# supabase/config.toml
+project_id = "ojldyekximxrxfflvgen"
 
-# This is the project identifier. It's used to link your local development setup to your Supabase project.
-project_id = "ggyzlvbtkibqnkfhgnbe"
-
-# This block configures the API settings for your project.
-[api]
-# The port number for the API gateway.
-port = 54321
-# A list of schemas that are exposed in the API.
-schemas = ["public", "storage", "graphql"]
-# The maximum number of rows that can be returned in a single API request.
-max_rows = 1000
-
-# This block configures the database settings.
-[db]
-# The port number for the PostgreSQL database.
-port = 54322
-# This flag enables the use of pgbouncer, a connection pooler for PostgreSQL.
-use_pg_graphql = true
-
-# This block configures the Studio, the web-based UI for managing your Supabase project.
-[studio]
-# The port number for the Studio.
-port = 54323
-
-# This block configures the in-memory authentication server.
-[auth]
-# The port number for the authentication server.
-port = 9999
-# The URL of your site. This is used for constructing confirmation and password reset links.
-site_url = "http://localhost:3000"
-# A list of additional redirect URLs that are allowed.
-additional_redirect_urls = ["http://localhost:3000"]
-# This flag enables the JWT verification for all edge functions by default.
-jwt_expiry = 3600
-# This flag enables the use of a custom SMTP server for sending emails.
-enable_smtp = false
-
-# This block configures the password requirements for your project.
-[auth.password]
-# The minimum length of a password.
-min_length = 8
-# This flag requires at least one uppercase letter in the password.
-require_uppercase = true
-# This flag requires at least one lowercase letter in the password.
-require_lowercase = true
-# This flag requires at least one number in the password.
-require_numeric = true
-# This flag requires at least one special character in the password.
-require_special = true
-# This flag prevents the use of leaked passwords.
-prevent_leaked_passwords = true
-
-# This block configures the settings for the local development environment.
-[dev]
-# This flag enables the automatic update of the Supabase CLI.
-auto_update = true
-
-# This block configures the settings for your edge functions.
-[functions]
-# This block configures the "generate-interpreter-feedback" function.
 [functions.generate-interpreter-feedback]
-# This flag enables JWT verification for this function.
 verify_jwt = true
-# This block configures the "wellness-chat" function.
+
 [functions.wellness-chat]
-# This flag enables JWT verification for this function.
 verify_jwt = true
-# This block configures the "debriefing-questionnaire" function.
+
 [functions.debriefing-questionnaire]
-# This flag enables JWT verification for this function.
 verify_jwt = true
-# This block configures the "study-chat" function.
+
 [functions.study-chat]
-# This flag enables JWT verification for this function.
 verify_jwt = true
-# This block configures the "generate-flashcards" function.
+
 [functions.generate-flashcards]
-# This flag enables JWT verification for this function.
 verify_jwt = true

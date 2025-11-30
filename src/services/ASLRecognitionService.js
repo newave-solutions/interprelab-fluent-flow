@@ -29,7 +29,7 @@ class ASLRecognitionService {
       const estimatedGestures = await this.gestureEstimator.estimate(hand[0].landmarks, 6.5);
       if (estimatedGestures.gestures && estimatedGestures.gestures.length > 0) {
         const confidence = estimatedGestures.gestures.map(p => p.confidence);
-        const maxConfidence = confidence.indexOf(Math.max(...confidence));
+        const maxConfidence = confidence.indexOf(Math.max.apply(undefined, confidence));
         return estimatedGestures.gestures[maxConfidence].name;
       }
     }

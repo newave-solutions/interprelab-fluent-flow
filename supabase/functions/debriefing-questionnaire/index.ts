@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,18 +13,21 @@ serve(async (req) => {
   }
 
   try {
-    const { responses } = await req.json();
+    const debriefingSchema = z.object({
+      responses: z.string().min(10).max(10000)
+    });
 
-    if (!responses || typeof responses !== 'string' || responses.trim() === '') {
+    const rawData = await req.json();
+    const validationResult = debriefingSchema.safeParse(rawData);
+    
+    if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ error: "Invalid input: 'responses' must be a non-empty string." }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    const { responses } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {

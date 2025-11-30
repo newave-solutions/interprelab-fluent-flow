@@ -51,7 +51,7 @@ export const StatsSection = () => {
                 Trusted Globally
               </Badge>
               <h2 id="stats-heading" className="text-3xl md:text-5xl font-bold text-foreground">
-                The Impact We're Making Together
+                Transforming Interpretation
               </h2>
             </div>
 

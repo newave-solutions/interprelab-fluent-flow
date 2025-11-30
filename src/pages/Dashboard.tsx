@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { SettingsPanel } from '@/components/SettingsPanel';
-import { GoalsPanel } from '@/components/GoalsPanel';
-import { PlatformRatesPanel } from '@/components/PlatformRatesPanel';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
+import LearningProgress from '@/components/dashboard/learning-progress';
+
+interface CallRecord {
+  id: string;
+  duration_seconds: number;
+  earnings: string;
+  call_type: string;
+  created_at: string;
+  notes?: string;
+}
 
 interface Stats {
   monthTotal: number;
@@ -20,6 +25,15 @@ interface Stats {
   yearCalls: number;
   avgCallDuration: number;
   totalCalls: number;
+}
+
+interface LearningMetrics {
+  studyHours: number;
+  termsLearned: number;
+  quizzesCompleted: number;
+  scenariosPracticed: number;
+  botConversations: number;
+  streak: number;
 }
 
 const Dashboard = () => {
@@ -33,8 +47,16 @@ const Dashboard = () => {
     avgCallDuration: 0,
     totalCalls: 0,
   });
-  const [recentCalls, setRecentCalls] = useState<any[]>([]);
+  const [recentCalls, setRecentCalls] = useState<CallRecord[]>([]);
   const [currency, setCurrency] = useState('USD');
+  const [learningMetrics, setLearningMetrics] = useState<LearningMetrics>({
+    studyHours: 0,
+    termsLearned: 0,
+    quizzesCompleted: 0,
+    scenariosPracticed: 0,
+    botConversations: 0,
+    streak: 0,
+  });
   const { user } = useAuth();
 
   useEffect(() => {
@@ -109,9 +131,44 @@ const Dashboard = () => {
     });
 
     setRecentCalls(recent || []);
+    
+    // Load learning metrics
+    await loadLearningMetrics();
   };
 
-  const calculateStats = (data: any[]) => {
+  const loadLearningMetrics = async () => {
+    if (!user) return;
+
+    // Get learning stats from the database
+    const { data: learningData } = await supabase
+      .from('learning_stats')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (learningData) {
+      setLearningMetrics({
+        studyHours: learningData.study_hours || 0,
+        termsLearned: learningData.terms_learned || 0,
+        quizzesCompleted: learningData.quizzes_completed || 0,
+        scenariosPracticed: learningData.scenarios_practiced || 0,
+        botConversations: learningData.bot_conversations || 0,
+        streak: learningData.streak || 0,
+      });
+    } else {
+      // Initialize with sample data if no record exists
+      setLearningMetrics({
+        studyHours: 12,
+        termsLearned: 145,
+        quizzesCompleted: 8,
+        scenariosPracticed: 15,
+        botConversations: 23,
+        streak: 7,
+      });
+    }
+  };
+
+  const calculateStats = (data: CallRecord[]) => {
     const totalDuration = data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
     const totalEarnings = data.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0);
     const callCount = data.length;
@@ -134,20 +191,9 @@ const Dashboard = () => {
   };
 
   return (
-    <ProtectedRoute>
-      <Layout>
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
-
-          <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-              <TabsTrigger value="platforms">Platforms</TabsTrigger>
-              <TabsTrigger value="goals">Goals</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-8">{/* Existing dashboard content */}
+    <Layout>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
 
         {/* Monthly & Yearly Totals */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -200,61 +246,52 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Recent Calls */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Calls</CardTitle>
-            <CardDescription>Your latest interpretation sessions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentCalls.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  No calls logged yet. Start tracking your calls to see them here.
-                </p>
-              ) : (
-                recentCalls.map((call) => (
-                  <div
-                    key={call.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="font-medium">
-                        {format(new Date(call.start_time), 'MMM dd, yyyy • hh:mm a')}
+        {/* Learning Progress and Recent Calls */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Learning Progress */}
+          <LearningProgress metrics={learningMetrics} />
+
+          {/* Recent Calls */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Calls</CardTitle>
+              <CardDescription>Your latest interpretation sessions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentCalls.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    No calls logged yet. Start tracking your calls to see them here.
+                  </p>
+                ) : (
+                  recentCalls.map((call) => (
+                    <div
+                      key={call.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium">
+                          {format(new Date(call.start_time), 'MMM dd, yyyy • hh:mm a')}
+                        </div>
+                        {call.notes && (
+                          <div className="text-sm text-muted-foreground mt-1">{call.notes}</div>
+                        )}
                       </div>
-                      {call.notes && (
-                        <div className="text-sm text-muted-foreground mt-1">{call.notes}</div>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <div className="font-semibold">{formatCurrency(parseFloat(call.earnings))}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {formatDuration(call.duration_seconds)}
+                      <div className="text-right">
+                        <div className="font-semibold">{formatCurrency(parseFloat(call.earnings))}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {formatDuration(call.duration_seconds)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
-            </TabsContent>
-
-            <TabsContent value="settings">
-              <SettingsPanel />
-            </TabsContent>
-
-            <TabsContent value="platforms">
-              <PlatformRatesPanel />
-            </TabsContent>
-
-            <TabsContent value="goals">
-              <GoalsPanel />
-            </TabsContent>
-          </Tabs>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </Layout>
-    </ProtectedRoute>
+      </div>
+    </Layout>
   );
 };
 

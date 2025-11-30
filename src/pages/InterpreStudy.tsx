@@ -1,16 +1,18 @@
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle } from 'lucide-react';
 import { InteractiveChat } from '@/components/interprestudy/InteractiveChat';
 import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup';
-import { FlashcardBuilder } from '@/components/interprestudy/FlashcardBuilder';
-import { MockScenarios } from '@/components/interprestudy/MockScenarios';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
 import { PainPointBadge } from '@/components/PainPointBadge';
 import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
+import { SmartFlashcards } from '@/components/interprestudy/modules/SmartFlashcards';
+import { ConversationMode } from '@/components/interprestudy/modules/ConversationMode';
+import { BodyMapper } from '@/components/interprestudy/modules/BodyMapper';
+import { ScenarioGenerator } from '@/components/interprestudy/modules/ScenarioGenerator';
+import { AiQuiz } from '@/components/interprestudy/modules/AiQuiz';
+import { CoreDynamicsTraining } from '@/components/interprestudy/modules/CoreDynamicsTraining';
 
 export default function InterpreStudy() {
   return (
@@ -24,65 +26,89 @@ export default function InterpreStudy() {
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
           <div className="relative z-10">
             <PainPointBadge painPoint="Addressing Pain Point #4: Accessible, Specialized Training" />
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-12 h-12 text-primary" />
-            <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              InterpreStudy
-            </h1>
-          </div>
-          <p className="text-2xl font-semibold text-primary mb-4">
-            Accessible, specialized training at your fingertips
-          </p>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-            Specialized training shouldn't be a luxury reserved for those who can afford $100s-$1000s. We've been there—struggling to find quality oncology, genetics, or legal terminology resources. InterpreStudy provides AI-powered learning, ethics training, and interactive scenarios tailored to your specialty, all in one accessible platform.
-          </p>
-          <div className="glass p-6 rounded-lg max-w-2xl mx-auto">
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              🎯 <strong>Why This Matters:</strong> As working interpreters, we know the desperation of entering a specialized call unprepared. We built InterpreStudy to democratize access to the training that should have always been available—because every interpreter deserves to feel confident and prepared.
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Brain className="w-12 h-12 text-primary" />
+              <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                InterpreStudy
+              </h1>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
+              Specialized training shouldn't be a luxury. Access AI-powered learning, ethics training, and interactive scenarios tailored to your specialty.
             </p>
-          </div>
           </div>
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="chat" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
-            <TabsTrigger value="chat" className="flex items-center gap-2">
+        <Tabs defaultValue="training" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-9 h-auto mb-8 p-1">
+            <TabsTrigger value="training" className="flex items-center gap-2 py-2">
+              <GraduationCap className="w-4 h-4" />
+              <span className="hidden lg:inline">Training</span>
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="flex items-center gap-2 py-2">
               <MessageSquare className="w-4 h-4" />
-              AI Chat
+              <span className="hidden lg:inline">Sim</span>
             </TabsTrigger>
-            <TabsTrigger value="terminology" className="flex items-center gap-2">
-              <Languages className="w-4 h-4" />
-              Terminology
-            </TabsTrigger>
-            <TabsTrigger value="flashcards" className="flex items-center gap-2">
+            <TabsTrigger value="flashcards" className="flex items-center gap-2 py-2">
               <Layers className="w-4 h-4" />
-              Flashcards
+              <span className="hidden lg:inline">Cards</span>
             </TabsTrigger>
-            <TabsTrigger value="scenarios" className="flex items-center gap-2">
+            <TabsTrigger value="quiz" className="flex items-center gap-2 py-2">
+              <HelpCircle className="w-4 h-4" />
+              <span className="hidden lg:inline">Quiz</span>
+            </TabsTrigger>
+            <TabsTrigger value="body" className="flex items-center gap-2 py-2">
+              <Accessibility className="w-4 h-4" />
+              <span className="hidden lg:inline">Body</span>
+            </TabsTrigger>
+            <TabsTrigger value="scenarios" className="flex items-center gap-2 py-2">
               <BookOpen className="w-4 h-4" />
-              Scenarios
+              <span className="hidden lg:inline">Scripts</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
+            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2">
+              <Languages className="w-4 h-4" />
+              <span className="hidden lg:inline">Terms</span>
+            </TabsTrigger>
+            <TabsTrigger value="interactive_chat" className="flex items-center gap-2 py-2">
+               <MessageSquare className="w-4 h-4" />
+               <span className="hidden lg:inline">AI Chat</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2 py-2">
               <Settings className="w-4 h-4" />
-              Settings
+              <span className="hidden lg:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="training" className="animate-fade-in">
+             <CoreDynamicsTraining />
+          </TabsContent>
+
           <TabsContent value="chat" className="animate-fade-in">
-            <InteractiveChat />
+            <ConversationMode />
+          </TabsContent>
+
+          <TabsContent value="flashcards" className="animate-fade-in">
+            <SmartFlashcards />
+          </TabsContent>
+
+          <TabsContent value="quiz" className="animate-fade-in">
+             <AiQuiz />
+          </TabsContent>
+
+          <TabsContent value="body" className="animate-fade-in">
+             <BodyMapper />
+          </TabsContent>
+
+          <TabsContent value="scenarios" className="animate-fade-in">
+            <ScenarioGenerator />
           </TabsContent>
 
           <TabsContent value="terminology" className="animate-fade-in">
             <TerminologyLookup />
           </TabsContent>
 
-          <TabsContent value="flashcards" className="animate-fade-in">
-            <FlashcardBuilder />
-          </TabsContent>
-
-          <TabsContent value="scenarios" className="animate-fade-in">
-            <MockScenarios />
+          <TabsContent value="interactive_chat" className="animate-fade-in">
+            <InteractiveChat />
           </TabsContent>
 
           <TabsContent value="settings" className="animate-fade-in">
@@ -90,7 +116,7 @@ export default function InterpreStudy() {
           </TabsContent>
         </Tabs>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Only show if not on Training tab ideally, but keeping for footer access */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
             <CardHeader>

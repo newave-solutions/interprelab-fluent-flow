@@ -5,7 +5,7 @@
 
 set -e
 
-PROJECT_ID="interprelab-eco-landing-page"
+PROJECT_ID="interprelab-fluent-flow"
 SERVICE_ACCOUNT_NAME="github-actions"
 SERVICE_ACCOUNT_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
@@ -80,7 +80,7 @@ echo "1. Copy the content of $KEY_FILE:"
 echo "   cat $KEY_FILE"
 echo ""
 echo "2. Go to your GitHub repository settings:"
-echo "   https://github.com/YOUR_USERNAME/interprelab-eco-landing-page/settings/secrets/actions"
+echo "   https://github.com/YOUR_USERNAME/interprelab-fluent-flow/settings/secrets/actions"
 echo ""
 echo "3. Add these secrets:"
 echo "   - GCP_SA_KEY: (paste the entire content of $KEY_FILE)"

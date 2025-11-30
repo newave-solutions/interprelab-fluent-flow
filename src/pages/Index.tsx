@@ -47,7 +47,7 @@ const Index = () => {
       dataOverlays: [
         { stat: "$0.10/min", label: "Offshore Pay", icon: <DollarSign className="w-5 h-5" /> },
         { stat: "$4.95/min", label: "LSP Charges", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "4-6 MOS", label: "QA Feedback Gap" },
+        { stat: "89%", label: "Pay Gap" },
       ],
       illustrationSrc: exploitationImg,
       illustrationPosition: 'center' as const,
@@ -58,13 +58,12 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <ThemeToggle />
-
-      {/* Main content wrapper with snap scrolling */}
-      <div className="snap-y snap-mandatory overflow-y-scroll h-screen">
-        <main>
-          <Hero />
-
-          {/* Pain Points Video Sections with Data Overlays */}
+      
+      <main>
+        <Hero />
+        
+        {/* Pain Points Video Sections with Data Overlays */}
+        <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
           {painPoints.map((painPoint, index) => (
             <FullScreenVideoHero
               key={index}
@@ -77,19 +76,17 @@ const Index = () => {
               illustrationPosition={painPoint.illustrationPosition}
             />
           ))}
-
+          
           {/* Solutions Showcase - 4th section */}
           <SolutionsShowcase />
+        </div>
 
-          {/* Social Proof & Stats */}
-          <div className="snap-start">
-            <StatsSection />
-            <Testimonials />
-          </div>
-        </main>
-
-        <Footer />
-      </div>
+        {/* Social Proof & Stats */}
+        <StatsSection />
+        <Testimonials />
+      </main>
+      
+      <Footer />
     </div>
   );
 };
