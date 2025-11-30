@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import ASLRecognitionService from '../services/ASLRecognitionService';
 
 interface SignDetectionProps {
-  onSignDetected?: (sign: string) => void;
+  onSignDetected: (sign: string) => void;
 }
 
 const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
@@ -32,9 +32,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
             const sign = await ASLRecognitionService.estimateSign(video);
             if (sign) {
               setDetectedSign(sign);
-              if (onSignDetected) {
-                onSignDetected(sign);
-              }
+              onSignDetected(sign);
             }
           }, 100);
         }

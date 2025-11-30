@@ -1,9 +1,10 @@
+import interpreHubMockup from "@/assets/interpre-hub-mockup.png";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Brain, Target, BarChart, Users, ArrowRight, Play, MessageSquare, CheckCircle, TrendingUp } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
@@ -11,7 +12,6 @@ import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 
 const InterpreBot = () => {
-  const navigate = useNavigate();
   const [userQuestion, setUserQuestion] = useState("");
   const [showChat, setShowChat] = useState(false);
 
@@ -32,11 +32,8 @@ const InterpreBot = () => {
           <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
             InterpreBot
           </h1>
-          <p className="text-2xl font-semibold text-primary mb-4">
-            Because professional development shouldn't cost $100s-$1000s
-          </p>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            It shouldn't require guesswork either. As working interpreters, we know the struggle. InterpreBot provides instant AI-powered assessment of your interpretation skills with detailed, personalized feedback—because you deserve to know exactly where you stand and how to improve.
+            Professional development shouldn't cost $100s-$1000s or require guesswork. As working interpreters, we know the struggle. InterpreBot provides instant AI-powered assessment of your interpretation skills with detailed, personalized feedback—because you deserve to know exactly where you stand and how to improve.
           </p>
           <div className="glass p-6 rounded-lg max-w-2xl mx-auto mb-8">
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -149,8 +146,8 @@ const InterpreBot = () => {
             <Card className="glass border-border/50">
               <CardContent className="p-4">
                 <img
-                  src="/src/assets/ai-assessment.png"
-                  alt="AI assessment illustration"
+                  src={interpreHubMockup}
+                  alt="InterpreBot Assessment Dashboard"
                   className="w-full rounded-lg"
                 />
               </CardContent>
@@ -169,7 +166,7 @@ const InterpreBot = () => {
             title: "Take the Assessment",
             description: "Complete a 30-minute comprehensive assessment covering various interpretation scenarios in your target language pair.",
             buttonText: "Start Assessment",
-            buttonAction: () => navigate("/waitlist"),
+            buttonAction: () => console.log("Start assessment"),
           },
           {
             icon: BarChart,
@@ -220,7 +217,7 @@ const InterpreBot = () => {
         ]}
         finalCTAText="Start Your Journey Now"
         finalCTAIcon={Play}
-        finalCTAAction={() => navigate("/waitlist")}
+        finalCTAAction={() => console.log("Start journey")}
       />
 
       {/* Mission & Collaboration CTA */}

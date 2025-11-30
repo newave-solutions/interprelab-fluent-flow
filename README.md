@@ -1,4 +1,14 @@
+# InterpreLab - AI-Driven Medical Interpreter Platform
 
+## 📚 Documentation
+
+**Complete Documentation:** See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all available documentation.
+
+**Key Documentation:**
+- 📖 [**Platform Documentation**](./PLATFORM_DOCUMENTATION.md) - Complete technical reference (33 KB)
+- 🗺️ [**Optimization Roadmap**](./OPTIMIZATION_ROADMAP.md) - Strategic planning Q1-Q4 2026 (38 KB)
+- 🚀 [**Implementation Guide**](./IMPLEMENTATION_GUIDE.md) - Step-by-step deployment
+- 📊 [**Executive Summary**](./EXECUTIVE_SUMMARY.md) - Project overview and metrics
 
 ## Project info
 
@@ -120,3 +130,29 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+---
+
+## 📖 Additional Resources
+
+For comprehensive platform information, please refer to our documentation:
+
+- **[Documentation Index](./DOCUMENTATION_INDEX.md)** - Central hub for all documentation
+- **[Platform Documentation](./PLATFORM_DOCUMENTATION.md)** - Complete technical guide
+  - All 6 product features (InterpreBot, InterpreCoach, InterpreStudy, InterpreWellness, InterpreTrack, InterpreLink)
+  - Technical architecture and database schema
+  - API reference and authentication
+  - Deployment guide and development workflow
+  
+- **[Optimization Roadmap](./OPTIMIZATION_ROADMAP.md)** - Strategic planning for 2026
+  - Performance optimization strategy
+  - Code quality improvements
+  - Security enhancements
+  - Feature prioritization timeline
+  - Testing & QA strategy
+  
+- **[Implementation Guide](./IMPLEMENTATION_GUIDE.md)** - Production deployment steps
+- **[Executive Summary](./EXECUTIVE_SUMMARY.md)** - Project status and achievements
+- **[Project Optimization Report](./PROJECT_OPTIMIZATION_REPORT.md)** - Technical analysis
+
+**Support:** admin.ceo@interprelab.com

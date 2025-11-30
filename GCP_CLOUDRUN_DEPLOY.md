@@ -5,7 +5,7 @@ This guide will walk you through containerizing your React application and deplo
 ## Prerequisites
 
 -   **Docker:** Ensure Docker is installed and running on your local machine.
--   **Google Cloud SDK (`gcloud` CLI):** Ensure `gcloud` is installed and configured for your project (`interprelab-eco-landing-page`).
+-   **Google Cloud SDK (`gcloud` CLI):** Ensure `gcloud` is installed and configured for your project (`interprelab-fluent-flow`).
     -   You can verify your configuration with `gcloud config list`.
     -   If not configured, run `gcloud init`.
 
@@ -69,19 +69,19 @@ Open your terminal in the project root directory and run the following commands:
 2.  **Build the Docker image:**
 
     ```bash
-    docker build -t gcr.io/interprelab-eco-landing-page/interprelab-frontend:latest .
+    docker build -t gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest .
     ```
 
     -   `gcr.io`: Specifies Google Container Registry.
-    -   `interprelab-eco-landing-page`: Your Google Cloud Project ID.
-    -   `interprelab-frontend`: The name of your Docker image.
+    -   `interprelab-fluent-flow`: Your Google Cloud Project ID.
+    -   `interprelab-fluent-flow-image`: The name of your Docker image.
     -   `latest`: The tag for your image (you can use version numbers instead of `latest`).
     -   `.`: Indicates that the Dockerfile is in the current directory.
 
 3.  **Push the Docker image to Google Container Registry:**
 
     ```bash
-    docker push gcr.io/interprelab-eco-landing-page/interprelab-frontend:latest
+    docker push gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest
     ```
 
 ## Step 3: Deploy to Cloud Run
@@ -89,22 +89,22 @@ Open your terminal in the project root directory and run the following commands:
 Now that your Docker image is in Google Container Registry, you can deploy it to Cloud Run:
 
 ```bash
-gcloud run deploy interprelab-frontend \
-  --image gcr.io/interprelab-eco-landing-page/interprelab-frontend:latest \
+gcloud run deploy interprelab-fluent-flow-image \
+  --image gcr.io/interprelab-fluent-flow/interprelab-fluent-flow-image:latest \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated \
-  --project interprelab-eco-landing-page
+  --project interprelab-fluent-flow
 ```
 
 **Explanation of the `gcloud run deploy` command:**
 
--   `interprelab-frontend`: The name of the Cloud Run service.
+-   `interprelab-fluent-flow-image`: The name of the Cloud Run service.
 -   `--image`: Specifies the Docker image to deploy.
 -   `--platform managed`: Uses the fully managed Cloud Run environment.
 -   `--region us-central1`: Specifies the GCP region to deploy to. You can choose a region closer to your users.
 -   `--allow-unauthenticated`: Allows public access to your service. If you need authentication, you would omit this flag.
--   `--project interprelab-eco-landing-page`: Specifies your Google Cloud Project ID.
+-   `--project interprelab-fluent-flow`: Specifies your Google Cloud Project ID.
 
 After running this command, `gcloud` will provide you with the URL of your deployed service. You can access your application through this URL.
 
@@ -116,10 +116,10 @@ If you want to use a custom domain (e.g., `interprelab.com`) with your Cloud Run
 
     ```bash
     gcloud run domains add interprelab.com \
-      --service interprelab-frontend \
+      --service interprelab-fluent-flow-image \
       --platform managed \
       --region us-central1 \
-      --project interprelab-eco-landing-page
+      --project interprelab-fluent-flow
     ```
 
 2.  **Update DNS records:** `gcloud` will provide you with the necessary DNS records (A and TXT records) that you need to add to your domain registrar (e.g., GoDaddy, Namecheap). Follow their instructions to update your DNS settings.

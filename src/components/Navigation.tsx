@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +6,6 @@ import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "luc
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,27 +15,11 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-interface NavigationProps {
-  transparent?: boolean;
-}
-
-export const Navigation = ({ transparent = false }: NavigationProps) => {
+export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
-
-  useEffect(() => {
-    if (!transparent) return;
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [transparent]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -49,44 +32,29 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
       submenu: [
         { label: 'InterpreBot', href: '/interprebot' },
         { label: 'InterpreCoach', href: '/interprecoach' },
-        { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'Interpre-Wellness', href: '/interpre-wellness' },
         { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
-    {
-      label: t('resources'),
-      submenu: [
-        { label: 'Training Materials', href: '/resources' },
-        { label: 'Industry Insights', href: '/resources/industry-insights' },
-        { label: 'Research & Articles', href: '/resources' },
-        { label: 'Certification Bodies', href: '/resources' },
-      ]
-    },
+    { label: t('resources'), href: '/resources' },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },
   ];
 
-  const navClass = transparent && !isScrolled
-    ? "fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/10"
-    : "fixed top-0 left-0 right-0 z-50 glass border-b border-border/50";
-
   return (
-    <nav className={navClass}>
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <img src="/logo-icon-2.png" alt="InterpreLab Logo" className="w-10 h-10 object-contain" />
+            <div className="p-2 bg-gradient-primary rounded-lg">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
             <div>
-              <h1 className={`text-xl font-bold ${transparent && !isScrolled ? "text-white" : ""}`}>
-                InterpreLab
-              </h1>
-              <p className={`text-xs ${transparent && !isScrolled ? "text-white/70" : "text-muted-foreground"}`}>
-                Advanced Interpretation
-              </p>
+              <h1 className="text-xl font-bold">InterpreLab</h1>
+              <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
             </div>
           </Link>
 
@@ -97,24 +65,18 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger 
-                        className={`text-sm font-medium bg-transparent ${
-                          transparent && !isScrolled 
-                            ? "text-white/90 hover:text-white" 
-                            : "text-foreground/80 hover:text-foreground"
-                        }`}
-                      >
+                      <NavigationMenuTrigger className="text-sm font-medium text-foreground/80 hover:text-foreground bg-transparent">
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <ul className="grid w-48 gap-2 p-2">
                           {item.submenu.map((subitem) => (
                             <li key={subitem.href}>
-                              <Link to={subitem.href}>
-                                <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                              <NavigationMenuLink asChild>
+                                <Link to={subitem.href} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                                   <div className="text-sm font-medium leading-none">{subitem.label}</div>
-                                </NavigationMenuLink>
-                              </Link>
+                                </Link>
+                              </NavigationMenuLink>
                             </li>
                           ))}
                         </ul>
@@ -126,11 +88,7 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`text-sm font-medium transition-colors ${
-                    transparent && !isScrolled
-                      ? "text-white/90 hover:text-white"
-                      : "text-foreground hover:text-primary"
-                  }`}
+                  className="text-sm font-medium text-foreground hover:text-primary transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -142,11 +100,16 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <Link to="/dashboard">
-                  <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/dashboard">
                     Dashboard
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/settings">
+                    Settings
+                  </Link>
+                </Button>
                 <Button onClick={handleSignOut} variant="glass" size="sm">
                   <LogOut className="w-4 h-4 mr-2" />
                   {t('signOut')}
@@ -154,20 +117,19 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
               </>
             ) : (
               <>
-                <Link to="/waitlist">
-                  <Button variant="glass" size="sm" className="flex items-center gap-2">
+                <Button variant="glass" size="sm" className="flex items-center gap-2" asChild>
+                  <Link to="/waitlist">
                     Join Waitlist
-                  </Button>
-                </Link>
-                <Link to="/signin">
-                  <Button variant="hero" size="sm">
+                  </Link>
+                </Button>
+                <Button variant="hero" size="sm" asChild>
+                  <Link to="/signin">
                     <User className="w-4 h-4 mr-2" />
                     {t('signIn')}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </>
             )}
-            <ThemeToggle />
           </div>
 
           {/* Mobile Menu */}
@@ -221,17 +183,17 @@ export const Navigation = ({ transparent = false }: NavigationProps) => {
                     </Button>
                   ) : (
                     <>
-                      <Link to="/waitlist">
-                        <Button variant="glass" className="w-full flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                      <Button variant="glass" className="w-full flex items-center gap-2" asChild>
+                        <Link to="/waitlist" onClick={() => setIsOpen(false)}>
                           Join Waitlist
-                        </Button>
-                      </Link>
-                      <Link to="/signin">
-                        <Button variant="hero" className="w-full" onClick={() => setIsOpen(false)}>
+                        </Link>
+                      </Button>
+                      <Button variant="hero" className="w-full" asChild>
+                        <Link to="/signin" onClick={() => setIsOpen(false)}>
                           <User className="w-4 h-4 mr-2" />
                           {t('signIn')}
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                     </>
                   )}
                 </div>

@@ -3,8 +3,6 @@ import { Layout } from "@/components/Layout";
 import SignDetection from "@/components/SignDetection";
 import React, { useState, useEffect } from "react";
 
-// Signs to practice - subset of available gestures focusing on easy-to-learn letters
-// Full gesture set available in asl-gestures.js for expansion
 const signsToPractice = ['A', 'B', 'C', 'L', 'Y'];
 
 const ASLTeacher = () => {
