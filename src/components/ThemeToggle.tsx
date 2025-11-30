@@ -1,39 +1,37 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    const initialTheme = root.classList.contains("light") ? "light" : "dark";
-    setTheme(initialTheme);
+    setMounted(true);
   }, []);
 
-  const toggleTheme = () => {
-    const root = window.document.documentElement;
-    const newTheme = theme === "dark" ? "light" : "dark";
-    
-    root.classList.remove(theme);
-    root.classList.add(newTheme);
-    setTheme(newTheme);
-    
-    localStorage.setItem("theme", newTheme);
-  };
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="glass">
+        <Sun className="h-5 w-5" />
+      </Button>
+    );
+  }
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggleTheme}
-      className="fixed top-20 right-6 z-50 glass rounded-full w-12 h-12"
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="glass hover:bg-accent transition-all duration-300"
     >
       {theme === "dark" ? (
-        <Sun className="w-5 h-5 text-warning" />
+        <Sun className="h-5 w-5 rotate-0 scale-100 transition-all" />
       ) : (
-        <Moon className="w-5 h-5 text-primary" />
+        <Moon className="h-5 w-5 rotate-0 scale-100 transition-all" />
       )}
+      <span className="sr-only">Toggle theme</span>
     </Button>
   );
 };

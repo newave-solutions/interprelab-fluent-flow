@@ -17,7 +17,7 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className="relative border-t border-border/50 bg-card/50 backdrop-blur-sm">
+    <footer className="relative border-t border-border/50 bg-card/50 backdrop-blur-sm snap-start">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
