@@ -232,7 +232,7 @@ function switchTab(tabName) {
 
 // Initialize speech recognition
 function initSpeechRecognition() {
-  if (!('webkitSpeechRecognition' in window)) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
     updateStatus('Speech recognition not supported', 'error');
     return;
   }
