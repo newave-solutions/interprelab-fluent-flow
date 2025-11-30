@@ -57,11 +57,22 @@ const Settings = () => {
   const handleSave = async () => {
     if (!user) return;
 
+    // Validate pay rate
+    const payRateValue = parseFloat(payRate);
+    if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
+      toast({
+        title: 'Invalid Pay Rate',
+        description: 'Pay rate must be between 0 and 10,000',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const { error } = await supabase
       .from('user_settings')
       .upsert({
         user_id: user.id,
-        pay_rate: parseFloat(payRate),
+        pay_rate: payRateValue,
         pay_rate_type: payRateType,
         preferred_currency: currency,
         preferred_language: language,
@@ -112,9 +123,10 @@ const Settings = () => {
                   type="number"
                   step="0.01"
                   min="0"
+                  max="10000"
                   value={payRate}
                   onChange={(e) => setPayRate(e.target.value)}
-                  placeholder="Enter your pay rate"
+                  placeholder="Enter your pay rate (0-10,000)"
                 />
               </div>
 
