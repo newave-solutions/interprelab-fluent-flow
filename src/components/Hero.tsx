@@ -42,10 +42,10 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-            <Button 
-              variant="hero" 
-              size="xl" 
-              className="group hover:shadow-glow transition-all duration-300 hover:scale-105" 
+            <Button
+              variant="hero"
+              size="xl"
+              className="group hover:shadow-glow transition-all duration-300 hover:scale-105"
               asChild
             >
               <Link to="/interprebot" aria-label="Start your assessment with InterpreBot">
@@ -54,10 +54,10 @@ export const Hero = () => {
               </Link>
             </Button>
 
-            <Button 
-              variant="glass" 
-              size="xl" 
-              className="group hover:bg-white/10 transition-all duration-300 hover:scale-105" 
+            <Button
+              variant="glass"
+              size="xl"
+              className="group hover:bg-white/10 transition-all duration-300 hover:scale-105"
               asChild
             >
               <Link to="/interprecoach" aria-label="Learn more about InterpreCoach AI assistant">
