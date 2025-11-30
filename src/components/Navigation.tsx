@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "luc
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,11 +16,27 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-export const Navigation = () => {
+interface NavigationProps {
+  transparent?: boolean;
+}
+
+export const Navigation = ({ transparent = false }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  useEffect(() => {
+    if (!transparent) return;
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [transparent]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -32,6 +49,7 @@ export const Navigation = () => {
       submenu: [
         { label: 'InterpreBot', href: '/interprebot' },
         { label: 'InterpreCoach', href: '/interprecoach' },
+        { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'Interpre-Wellness', href: '/interpre-wellness' },
@@ -51,16 +69,24 @@ export const Navigation = () => {
     { label: t('contact'), href: '/contact' },
   ];
 
+  const navClass = transparent && !isScrolled
+    ? "fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/10"
+    : "fixed top-0 left-0 right-0 z-50 glass border-b border-border/50";
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+    <nav className={navClass}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img src="/logo-icon-2.png" alt="InterpreLab Logo" className="w-10 h-10 object-contain" />
             <div>
-              <h1 className="text-xl font-bold">InterpreLab</h1>
-              <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
+              <h1 className={`text-xl font-bold ${transparent && !isScrolled ? "text-white" : ""}`}>
+                InterpreLab
+              </h1>
+              <p className={`text-xs ${transparent && !isScrolled ? "text-white/70" : "text-muted-foreground"}`}>
+                Advanced Interpretation
+              </p>
             </div>
           </Link>
 
@@ -71,7 +97,13 @@ export const Navigation = () => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="text-sm font-medium text-foreground/80 hover:text-foreground bg-transparent">
+                      <NavigationMenuTrigger 
+                        className={`text-sm font-medium bg-transparent ${
+                          transparent && !isScrolled 
+                            ? "text-white/90 hover:text-white" 
+                            : "text-foreground/80 hover:text-foreground"
+                        }`}
+                      >
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -94,7 +126,11 @@ export const Navigation = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    transparent && !isScrolled
+                      ? "text-white/90 hover:text-white"
+                      : "text-foreground hover:text-primary"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -109,11 +145,6 @@ export const Navigation = () => {
                 <Link to="/dashboard">
                   <Button variant="ghost" size="sm">
                     Dashboard
-                  </Button>
-                </Link>
-                <Link to="/settings">
-                  <Button variant="ghost" size="sm">
-                    Settings
                   </Button>
                 </Link>
                 <Button onClick={handleSignOut} variant="glass" size="sm">
@@ -136,6 +167,7 @@ export const Navigation = () => {
                 </Link>
               </>
             )}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu */}
