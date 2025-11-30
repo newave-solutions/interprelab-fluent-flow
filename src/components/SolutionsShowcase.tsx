@@ -107,7 +107,7 @@ export const SolutionsShowcase = () => {
   }, []);
 
   return (
-    <section className="min-h-screen w-full relative flex items-center justify-center snap-start bg-gradient-to-b from-background via-background/95 to-primary/5 overflow-hidden">
+    <section className="min-h-screen w-full relative flex items-center justify-center snap-start snap-always bg-gradient-to-b from-background via-background/95 to-primary/5 overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
         <video
@@ -172,7 +172,7 @@ export const SolutionsShowcase = () => {
                   ))}
                 </ul>
                 <Link to={solution.route}>
-                  <Button 
+                  <Button
                     className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
                     variant="outline"
                   >

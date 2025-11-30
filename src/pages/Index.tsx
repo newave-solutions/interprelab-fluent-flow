@@ -58,12 +58,13 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <ThemeToggle />
-      
-      <main>
-        <Hero />
-        
-        {/* Pain Points Video Sections with Data Overlays */}
-        <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
+
+      {/* Main content wrapper with snap scrolling */}
+      <div className="snap-y snap-mandatory overflow-y-scroll h-screen">
+        <main>
+          <Hero />
+
+          {/* Pain Points Video Sections with Data Overlays */}
           {painPoints.map((painPoint, index) => (
             <FullScreenVideoHero
               key={index}
@@ -76,17 +77,19 @@ const Index = () => {
               illustrationPosition={painPoint.illustrationPosition}
             />
           ))}
-          
+
           {/* Solutions Showcase - 4th section */}
           <SolutionsShowcase />
-        </div>
 
-        {/* Social Proof & Stats */}
-        <StatsSection />
-        <Testimonials />
-      </main>
-      
-      <Footer />
+          {/* Social Proof & Stats */}
+          <div className="snap-start">
+            <StatsSection />
+            <Testimonials />
+          </div>
+        </main>
+
+        <Footer />
+      </div>
     </div>
   );
 };
