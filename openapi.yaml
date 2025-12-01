@@ -1,0 +1,632 @@
+openapi: 3.0.0
+info:
+  title: InterpreHub API
+  description: API for medical interpreter support platform with AI-powered assistance
+  version: 1.0.0
+  contact:
+    name: InterpreHub Support
+    email: support@interprehub.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://0ec90b57d6e95fcbda19832f.supabase.co
+    description: Production server
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints
+  - name: Edge Functions
+    description: AI-powered Edge Functions
+  - name: Database Services
+    description: Client-side database operations
+
+paths:
+  /auth/v1/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Sign up new user
+      description: Create a new user account with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+                  example: secure_password123
+                options:
+                  type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                          example: John
+                        last_name:
+                          type: string
+                          example: Doe
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/v1/token:
+    post:
+      tags:
+        - Authentication
+      summary: Sign in user
+      description: Authenticate user with email and password
+      security: []
+      parameters:
+        - in: query
+          name: grant_type
+          required: true
+          schema:
+            type: string
+            enum: [password]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/v1/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Sign out user
+      description: End the current user session
+      responses:
+        '204':
+          description: Successfully signed out
+
+  /functions/v1/wellness-chat:
+    post:
+      tags:
+        - Edge Functions
+      summary: Wellness counseling chat
+      description: AI-powered counseling support for medical interpreters dealing with emotional stress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - messages
+              properties:
+                messages:
+                  type: array
+                  minItems: 1
+                  maxItems: 50
+                  items:
+                    $ref: '#/components/schemas/ChatMessage'
+            example:
+              messages:
+                - role: user
+                  content: I've been feeling emotionally drained after interpreting difficult medical cases.
+      responses:
+        '200':
+          description: Streaming response with AI counseling
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /functions/v1/study-chat:
+    post:
+      tags:
+        - Edge Functions
+      summary: Study assistant chat
+      description: Educational AI assistant for medical terminology and interpretation techniques
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - messages
+              properties:
+                messages:
+                  type: array
+                  minItems: 1
+                  maxItems: 50
+                  items:
+                    $ref: '#/components/schemas/ChatMessage'
+                specialty:
+                  type: string
+                  maxLength: 100
+                  enum:
+                    - cardiology
+                    - oncology
+                    - genetics
+                    - orthopedic
+                    - respiratory
+                    - general medical
+                  example: cardiology
+            example:
+              messages:
+                - role: user
+                  content: Can you explain what 'myocardial infarction' means in simple terms?
+              specialty: cardiology
+      responses:
+        '200':
+          description: Streaming response with educational content
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /functions/v1/process-interprecoach:
+    post:
+      tags:
+        - Edge Functions
+      summary: Process medical text
+      description: Analyzes de-identified medical text and provides real-time assistance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  description: De-identified medical text to analyze
+                  example: The patient presents with acute abdominal pain. Blood pressure is 140/90.
+                medications:
+                  type: array
+                  items:
+                    type: string
+                  example: [medication]
+                conversions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        type: number
+                      unit:
+                        type: string
+                  example:
+                    - value: 500
+                      unit: mg
+      responses:
+        '200':
+          description: Analysis results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  medicalTerms:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MedicalTerm'
+                  highlights:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Highlight'
+                  processed:
+                    type: boolean
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /functions/v1/generate-interpreter-feedback:
+    post:
+      tags:
+        - Edge Functions
+      summary: Generate coaching feedback
+      description: Generates professional coaching feedback based on interpretation session data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sessionData
+              properties:
+                sessionData:
+                  $ref: '#/components/schemas/SessionData'
+            example:
+              sessionData:
+                duration: 1800
+                interactionCount: 25
+                terminologyCount: 15
+                clarifications: 3
+                paceIssues: 2
+                omissions: 1
+      responses:
+        '200':
+          description: Generated feedback in HTML format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feedback:
+                    type: string
+                    description: HTML-formatted feedback
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /functions/v1/generate-flashcards:
+    post:
+      tags:
+        - Edge Functions
+      summary: Generate flashcards
+      description: AI-generated flashcards for medical interpreter training
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardType
+              properties:
+                cardType:
+                  type: string
+                  enum:
+                    - root-words
+                    - term-translation
+                    - term-definition
+                    - custom
+                  example: term-translation
+                specialty:
+                  type: string
+                  maxLength: 50
+                  example: cardiology
+                count:
+                  type: integer
+                  minimum: 1
+                  maximum: 50
+                  default: 10
+                  example: 10
+      responses:
+        '200':
+          description: Generated flashcards
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flashcards:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Flashcard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /functions/v1/debriefing-questionnaire:
+    post:
+      tags:
+        - Edge Functions
+      summary: Analyze debriefing responses
+      description: Analyzes interpreter debriefing responses and provides compassionate insights
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - responses
+              properties:
+                responses:
+                  type: string
+                  minLength: 10
+                  maxLength: 10000
+                  example: Today's session was emotionally challenging. I interpreted for a terminal cancer diagnosis.
+      responses:
+        '200':
+          description: Analysis and recommendations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  analysis:
+                    type: string
+                    description: Compassionate analysis and recommendations
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase authentication token
+
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+        token_type:
+          type: string
+          example: bearer
+        expires_in:
+          type: integer
+          example: 3600
+        refresh_token:
+          type: string
+          description: Refresh token
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        created_at:
+          type: string
+          format: date-time
+
+    ChatMessage:
+      type: object
+      required:
+        - role
+        - content
+      properties:
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+
+    MedicalTerm:
+      type: object
+      properties:
+        term:
+          type: string
+          example: acute
+        definition:
+          type: string
+          example: Sudden onset, severe
+        translation:
+          type: string
+          example: Agudo
+        category:
+          type: string
+          example: general
+
+    Highlight:
+      type: object
+      properties:
+        icon:
+          type: string
+          example: 💊
+        text:
+          type: string
+          example: 1 medication(s) mentioned
+
+    SessionData:
+      type: object
+      properties:
+        duration:
+          type: integer
+          description: Session duration in seconds
+        interactionCount:
+          type: integer
+          description: Number of interactions
+        terminologyCount:
+          type: integer
+          description: Medical terms used
+        clarifications:
+          type: integer
+          description: Clarification requests made
+        paceIssues:
+          type: integer
+          description: Pacing problems detected
+        omissions:
+          type: integer
+          description: Potential omissions
+
+    Flashcard:
+      type: object
+      properties:
+        front:
+          type: string
+          example: Myocardial Infarction
+        back:
+          type: string
+          example: Infarto de miocardio
+        pronunciation:
+          type: string
+          example: in-FAR-toh deh mee-oh-CAR-dee-oh
+        example:
+          type: string
+          example: The patient suffered a myocardial infarction
+
+    CallLog:
+      type: object
+      required:
+        - user_id
+        - start_time
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        duration_seconds:
+          type: integer
+        call_type:
+          type: string
+          example: medical
+        platform_name:
+          type: string
+          example: Zoom
+        earnings:
+          type: number
+          format: float
+        currency:
+          type: string
+          default: USD
+        notes:
+          type: string
+        is_imported:
+          type: boolean
+          default: false
+        import_source:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: array
+                items:
+                  type: string
+              message:
+                type: string
+
+  responses:
+    BadRequest:
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Invalid input
+            details:
+              - path: [messages, 0, content]
+                message: String must contain at least 1 character(s)
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Rate limits exceeded, please try again later.
+
+    PaymentRequired:
+      description: Payment or credits required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Payment required, please add funds to your Lovable AI workspace.
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Internal server error
