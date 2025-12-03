@@ -1,0 +1,285 @@
+{
+  "info": {
+    "name": "InterpreHub API",
+    "description": "API collection for medical interpreter support platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{SUPABASE_ANON_KEY}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "https://0ec90b57d6e95fcbda19832f.supabase.co",
+      "type": "string"
+    },
+    {
+      "key": "SUPABASE_ANON_KEY",
+      "value": "your_anon_key_here",
+      "type": "string"
+    },
+    {
+      "key": "ACCESS_TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Sign Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secure_password123\",\n  \"options\": {\n    \"data\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/v1/signup",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "v1", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('ACCESS_TOKEN', response.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secure_password123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/v1/token?grant_type=password",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "v1", "token"],
+              "query": [
+                {
+                  "key": "grant_type",
+                  "value": "password"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign Out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ACCESS_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/v1/logout",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "v1", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Edge Functions",
+      "item": [
+        {
+          "name": "Wellness Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"I've been feeling emotionally drained after interpreting difficult medical cases.\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/wellness-chat",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "wellness-chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Study Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Can you explain what 'myocardial infarction' means in simple terms?\"\n    }\n  ],\n  \"specialty\": \"cardiology\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/study-chat",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "study-chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Process InterpreCoach",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"The patient presents with acute abdominal pain. Blood pressure is 140/90. Administer 500mg of medication.\",\n  \"medications\": [\"medication\"],\n  \"conversions\": [\n    {\n      \"value\": 500,\n      \"unit\": \"mg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/process-interprecoach",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "process-interprecoach"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Interpreter Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionData\": {\n    \"duration\": 1800,\n    \"interactionCount\": 25,\n    \"terminologyCount\": 15,\n    \"clarifications\": 3,\n    \"paceIssues\": 2,\n    \"omissions\": 1\n  }\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/generate-interpreter-feedback",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "generate-interpreter-feedback"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Flashcards",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardType\": \"term-translation\",\n  \"specialty\": \"cardiology\",\n  \"count\": 10\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/generate-flashcards",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "generate-flashcards"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Debriefing Questionnaire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{SUPABASE_ANON_KEY}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responses\": \"Today's session was emotionally challenging. I interpreted for a terminal cancer diagnosis. I felt the patient's pain deeply and found it difficult to maintain professional distance. I'm concerned about carrying this emotional weight.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/functions/v1/debriefing-questionnaire",
+              "host": ["{{BASE_URL}}"],
+              "path": ["functions", "v1", "debriefing-questionnaire"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
