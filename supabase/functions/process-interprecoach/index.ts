@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { AI_MODEL } from "../_shared/constants.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -124,7 +125,7 @@ Important: The text is already de-identified. Do not reference any PHI.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: AI_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze this de-identified medical text:\n\n${text}\n\nMedications mentioned: ${medications.join(', ')}\nUnit conversions needed: ${JSON.stringify(conversions)}` }
