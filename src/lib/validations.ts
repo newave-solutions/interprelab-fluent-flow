@@ -44,3 +44,18 @@ export type ContactFormData = z.infer<typeof contactSchema>;
 export type WaitlistFormData = z.infer<typeof waitlistSchema>;
 export type SignInFormData = z.infer<typeof signInSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
+
+// Pay rate validation utility
+export const validatePayRate = (value: string | number): { isValid: boolean; error?: string; value?: number } => {
+  const payRateValue = typeof value === 'string' ? parseFloat(value) : value;
+  
+  if (isNaN(payRateValue)) {
+    return { isValid: false, error: 'Pay rate must be a valid number' };
+  }
+  
+  if (payRateValue < 0 || payRateValue > 10000) {
+    return { isValid: false, error: 'Pay rate must be between 0 and 10,000' };
+  }
+  
+  return { isValid: true, value: payRateValue };
+};
