@@ -13,6 +13,9 @@ const API_CONFIG = {
   }
 };
 
+// Cleanup delay to ensure async operations complete before UI removal
+const CLEANUP_DELAY_MS = 100;
+
 let isSessionActive = false;
 let recognition = null;
 let captionObserver = null;
@@ -111,7 +114,7 @@ function detectAndConvertUnits(text) {
   const conversions = [];
   
   // More specific pattern to avoid matching 'm' in words like "I'm" or "am"
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|(?:\s|^)m(?:\s|$))/gi);
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|\bm\b)/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
@@ -711,7 +714,7 @@ function closeOverlay() {
       // Small delay to ensure cleanup completes
       setTimeout(() => {
         overlay.remove();
-      }, 100);
+      }, CLEANUP_DELAY_MS);
       return;
     }
     overlay.remove();
