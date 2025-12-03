@@ -108,7 +108,8 @@ function detectAndConvertUnits(text) {
   const conversions = [];
   
   // Match meters with more specific pattern to avoid false positives like "I'm" or "am"
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meters?|metres?)\b/gi);
+  // Pattern matches integers and decimals correctly
+  const meterMatch = text.match(/(\d+(?:\.\d+)?)\s*(meters?|metres?)\b/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
