@@ -11,6 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Settings2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { validatePayRate } from '@/lib/validations';
 
 const Settings = () => {
   const [payRate, setPayRate] = useState('0');
@@ -58,11 +59,11 @@ const Settings = () => {
     if (!user) return;
 
     // Validate pay rate
-    const payRateValue = parseFloat(payRate);
-    if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
+    const validation = validatePayRate(payRate);
+    if (!validation.isValid) {
       toast({
         title: 'Invalid Pay Rate',
-        description: 'Pay rate must be between 0 and 10,000',
+        description: validation.error,
         variant: 'destructive',
       });
       return;
@@ -72,7 +73,7 @@ const Settings = () => {
       .from('user_settings')
       .upsert({
         user_id: user.id,
-        pay_rate: payRateValue,
+        pay_rate: validation.value,
         pay_rate_type: payRateType,
         preferred_currency: currency,
         preferred_language: language,
