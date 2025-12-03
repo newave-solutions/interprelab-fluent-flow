@@ -97,7 +97,7 @@ function detectMedications(text) {
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m)(?:\s|$|[^a-zA-Z])/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
@@ -332,7 +332,7 @@ async function processTranscript(text) {
   const conversions = detectAndConvertUnits(text);
   
   try {
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/process-interprecoach', {
+    const response = await fetch(API_ENDPOINTS.PROCESS_INTERPRECOACH, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -575,7 +575,7 @@ async function generateSessionFeedback() {
   try {
     analyzeSessionPerformance();
     
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/generate-interpreter-feedback', {
+    const response = await fetch(API_ENDPOINTS.GENERATE_INTERPRETER_FEEDBACK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -672,19 +672,105 @@ function destroySessionData() {
   console.log('InterpreCoach: PHI/PII data destroyed');
 }
 
+function showCustomConfirmDialog(message, onConfirm, onCancel) {
+  // Create custom modal
+  const modal = document.createElement('div');
+  modal.id = 'interprecoach-confirm-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  `;
+  
+  const dialog = document.createElement('div');
+  dialog.style.cssText = `
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  `;
+  
+  const messageText = document.createElement('p');
+  messageText.textContent = message;
+  messageText.style.cssText = `
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  `;
+  
+  const buttonContainer = document.createElement('div');
+  buttonContainer.style.cssText = `
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  `;
+  
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = `
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+  `;
+  cancelBtn.onclick = () => {
+    modal.remove();
+    if (onCancel) onCancel();
+  };
+  
+  const confirmBtn = document.createElement('button');
+  confirmBtn.textContent = 'Continue';
+  confirmBtn.style.cssText = `
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: #dc2626;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  `;
+  confirmBtn.onclick = () => {
+    modal.remove();
+    if (onConfirm) onConfirm();
+  };
+  
+  buttonContainer.appendChild(cancelBtn);
+  buttonContainer.appendChild(confirmBtn);
+  dialog.appendChild(messageText);
+  dialog.appendChild(buttonContainer);
+  modal.appendChild(dialog);
+  document.body.appendChild(modal);
+}
+
 function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
     if (isSessionActive) {
-      const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
-      if (!confirm) return;
-      
-      if (recognition) recognition.stop();
-      if (captionObserver) captionObserver.disconnect();
-      isSessionActive = false;
-      destroySessionData();
+      showCustomConfirmDialog(
+        'Session is active. Closing will destroy all PHI/PII data. Continue?',
+        () => {
+          if (recognition) recognition.stop();
+          if (captionObserver) captionObserver.disconnect();
+          isSessionActive = false;
+          destroySessionData();
+          overlay.remove();
+        }
+      );
+    } else {
+      overlay.remove();
     }
-    overlay.remove();
   }
 }
 
