@@ -206,7 +206,7 @@ serve(async (req) => {
     console.log('Processing de-identified text:', text.substring(0, 100));
     
     if (!text) {
-      throw new Error('No text provided');
+      throw new Error('Request must include a "text" field with de-identified medical text to process');
     }
 
     // Process de-identified text only
