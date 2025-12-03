@@ -128,7 +128,7 @@ function detectMedications(text) {
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m)(?:\s|$|[^a-zA-Z])/gi);
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meters?|metres?)\b/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
