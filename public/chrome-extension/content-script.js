@@ -4,6 +4,10 @@
 
 console.log('InterpreCoach: Content script loaded');
 
+// Configuration constants
+const SUPABASE_URL = 'https://ggyzlvbtkibqnkfhgnbe.supabase.co';
+const SUPABASE_FUNCTIONS_PATH = '/functions/v1';
+
 let isSessionActive = false;
 let recognition = null;
 let captionObserver = null;
@@ -23,6 +27,12 @@ let sessionData = {
 };
 
 // HIPAA Compliance: De-identification patterns
+// NOTE: These are basic regex patterns for common PHI elements. They may not catch all variations.
+// For production HIPAA compliance, consider using a validated de-identification library or service
+// that has been tested for medical use. Current patterns have limitations:
+// - Names: Only catches titles + names, misses informal names
+// - Dates: May not catch all date formats (e.g., written dates, relative dates)
+// - Addresses: Pattern may miss non-standard address formats
 const PHI_PATTERNS = {
   names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
   phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
@@ -97,7 +107,8 @@ function detectMedications(text) {
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
+  // Match meters with more specific pattern to avoid false positives like "I'm" or "am"
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meters?|metres?)\b/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
@@ -332,7 +343,7 @@ async function processTranscript(text) {
   const conversions = detectAndConvertUnits(text);
   
   try {
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/process-interprecoach', {
+    const response = await fetch(`${SUPABASE_URL}${SUPABASE_FUNCTIONS_PATH}/process-interprecoach`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -381,16 +392,20 @@ function updateTranscriptDisplay(text) {
   
   let highlightedText = text;
   
-  // Highlight medical terms
-  Object.keys(MEDICAL_TERMS_DB).forEach(term => {
+  // Sort terms by length (longest first) to handle substring overlaps correctly
+  const allMedicalTerms = Object.keys(MEDICAL_TERMS_DB).sort((a, b) => b.length - a.length);
+  const allMedications = Object.keys(MEDICATION_DATABASE).sort((a, b) => b.length - a.length);
+  
+  // Highlight medical terms (longest first to avoid substring issues)
+  allMedicalTerms.forEach(term => {
     const regex = new RegExp(`\\b${term}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
     }
   });
   
-  // Highlight medications
-  Object.keys(MEDICATION_DATABASE).forEach(med => {
+  // Highlight medications (longest first to avoid substring issues)
+  allMedications.forEach(med => {
     const regex = new RegExp(`\\b${med}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
@@ -575,7 +590,7 @@ async function generateSessionFeedback() {
   try {
     analyzeSessionPerformance();
     
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/generate-interpreter-feedback', {
+    const response = await fetch(`${SUPABASE_URL}${SUPABASE_FUNCTIONS_PATH}/generate-interpreter-feedback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -676,6 +691,8 @@ function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
     if (isSessionActive) {
+      // TODO: Replace window.confirm() with a custom non-blocking modal for better UX
+      // Current implementation uses blocking confirm which is not ideal for modern web apps
       const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
       if (!confirm) return;
       
