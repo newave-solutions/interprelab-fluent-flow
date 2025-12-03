@@ -11,6 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Settings2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { validatePayRate } from '@/lib/validations';
 
 const Settings = () => {
   const [payRate, setPayRate] = useState('0');
@@ -57,16 +58,18 @@ const Settings = () => {
   const handleSave = async () => {
     if (!user) return;
 
-    // Validate pay rate
-    const payRateValue = parseFloat(payRate);
-    if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
+    // Validate pay rate using shared validation
+    const validation = validatePayRate(payRate);
+    if (!validation.isValid) {
       toast({
         title: 'Invalid Pay Rate',
-        description: 'Pay rate must be between 0 and 10,000',
+        description: validation.error,
         variant: 'destructive',
       });
       return;
     }
+    
+    const payRateValue = parseFloat(payRate);
 
     const { error } = await supabase
       .from('user_settings')

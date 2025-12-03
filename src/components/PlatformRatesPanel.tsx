@@ -54,10 +54,12 @@ export const PlatformRatesPanel = () => {
     if (!user) return;
 
     const rateValue = parseFloat(formData.rate_per_minute);
+    // Platform rates are per-minute and can vary widely across platforms
+    // No upper limit is enforced to support high-value specialist interpretation services
     if (isNaN(rateValue) || rateValue < 0) {
       toast({
         title: 'Invalid Rate',
-        description: 'Please enter a valid rate per minute',
+        description: 'Please enter a valid rate per minute (must be 0 or greater)',
         variant: 'destructive',
       });
       return;
