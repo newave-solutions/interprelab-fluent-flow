@@ -54,10 +54,10 @@ export const PlatformRatesPanel = () => {
     if (!user) return;
 
     const rateValue = parseFloat(formData.rate_per_minute);
-    if (isNaN(rateValue) || rateValue < 0) {
+    if (isNaN(rateValue) || rateValue < 0 || rateValue > 10000) {
       toast({
         title: 'Invalid Rate',
-        description: 'Please enter a valid rate per minute',
+        description: 'Rate per minute must be between 0 and 10,000',
         variant: 'destructive',
       });
       return;
