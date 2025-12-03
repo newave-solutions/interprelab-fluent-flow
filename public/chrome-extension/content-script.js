@@ -22,16 +22,47 @@ let sessionData = {
   feedback: null
 };
 
-// HIPAA Compliance: De-identification patterns
+/**
+ * HIPAA Compliance: De-identification patterns
+ * 
+ * IMPORTANT: These patterns provide basic PHI redaction but may not catch all variations.
+ * For production use in HIPAA-regulated environments, consider using a validated 
+ * de-identification library or service that meets Safe Harbor or Expert Determination standards.
+ * 
+ * Current patterns cover HIPAA's 18 PHI identifiers (partial coverage):
+ * 1. Names (with titles) - Limited to formal names with titles
+ * 2. Phone numbers - Common US formats
+ * 3. Email addresses - Standard email patterns
+ * 4. SSN - Standard format with dashes
+ * 5. Dates - Multiple common formats
+ * 6. Medical record numbers - Common identifiers
+ * 7. Addresses - Street addresses only
+ * 8. ZIP codes - 5 and 9 digit formats
+ * 
+ * NOT currently covered: Device IDs, URLs, IP addresses, Biometric IDs, Photos, 
+ * Account numbers (except MRN), Certificate numbers, Vehicle IDs, License plates, etc.
+ */
 const PHI_PATTERNS = {
-  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
-  phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
+  // Enhanced name pattern - includes titles and common name formats
+  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss|Prof\.|Rev\.)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
+  // Enhanced phone pattern - multiple formats including international
+  phone: /\b(\+\d{1,3}\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  // Email addresses
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-  ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
-  dates: /\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b/gi,
-  mrn: /\b(MRN|Medical Record|Patient ID|Record Number)[\s:]*[A-Z0-9-]+\b/gi,
-  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir)\b/gi,
-  zipcode: /\b\d{5}(?:-\d{4})?\b/g
+  // SSN with various formats
+  ssn: /\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/g,
+  // Enhanced date patterns - multiple formats
+  dates: /\b(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\d{4}[-\/]\d{2}[-\/]\d{2})\b/gi,
+  // Medical record numbers and patient IDs
+  mrn: /\b(MRN|Medical Record|Patient ID|Record Number|Account Number|ID Number)[\s:]*[A-Z0-9-]+\b/gi,
+  // Street addresses
+  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir|Way|Place|Pl|Parkway|Pkwy)\b/gi,
+  // ZIP codes
+  zipcode: /\b\d{5}(?:-\d{4})?\b/g,
+  // IP addresses
+  ipAddress: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
+  // URLs and web addresses
+  urls: /https?:\/\/[^\s<>"{}|\\^`\[\]]+/gi
 };
 
 // Medical terminology database
