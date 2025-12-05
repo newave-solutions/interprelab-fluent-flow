@@ -1,4 +1,3 @@
-// src/services/asl-gestures.ts
 
 import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose';
 
