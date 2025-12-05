@@ -40,14 +40,26 @@ let sessionData = {
 // that has been tested for medical use cases (e.g., Philter, AWS Comprehend Medical).
 // Current patterns may not catch all PHI variations (informal names, all date formats, etc.)
 const PHI_PATTERNS = {
-  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
-  phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
+  // Enhanced name pattern - includes titles and common name formats
+  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss|Prof\.|Rev\.)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
+  // Enhanced phone pattern - multiple formats including international
+  phone: /\b(\+\d{1,3}\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  // Email addresses
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-  ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
-  dates: /\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b/gi,
-  mrn: /\b(MRN|Medical Record|Patient ID|Record Number)[\s:]*[A-Z0-9-]+\b/gi,
-  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir)\b/gi,
-  zipcode: /\b\d{5}(?:-\d{4})?\b/g
+  // SSN with various formats
+  ssn: /\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/g,
+  // Enhanced date patterns - multiple formats
+  dates: /\b(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\d{4}[-\/]\d{2}[-\/]\d{2})\b/gi,
+  // Medical record numbers and patient IDs
+  mrn: /\b(MRN|Medical Record|Patient ID|Record Number|Account Number|ID Number)[\s:]*[A-Z0-9-]+\b/gi,
+  // Street addresses
+  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir|Way|Place|Pl|Parkway|Pkwy)\b/gi,
+  // ZIP codes
+  zipcode: /\b\d{5}(?:-\d{4})?\b/g,
+  // IP addresses
+  ipAddress: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
+  // URLs and web addresses
+  urls: /https?:\/\/[^\s<>"{}|\\^`\[\]]+/gi
 };
 
 // Medical terminology database
@@ -693,6 +705,88 @@ function destroySessionData() {
   console.log('InterpreCoach: PHI/PII data destroyed');
 }
 
+function showCustomConfirmDialog(message, onConfirm, onCancel) {
+  // Create custom modal
+  const modal = document.createElement('div');
+  modal.id = 'interprecoach-confirm-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  `;
+  
+  const dialog = document.createElement('div');
+  dialog.style.cssText = `
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  `;
+  
+  const messageText = document.createElement('p');
+  messageText.textContent = message;
+  messageText.style.cssText = `
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  `;
+  
+  const buttonContainer = document.createElement('div');
+  buttonContainer.style.cssText = `
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  `;
+  
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = `
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+  `;
+  cancelBtn.onclick = () => {
+    modal.remove();
+    if (onCancel) onCancel();
+  };
+  
+  const confirmBtn = document.createElement('button');
+  confirmBtn.textContent = 'Continue';
+  confirmBtn.style.cssText = `
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: #dc2626;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  `;
+  confirmBtn.onclick = () => {
+    modal.remove();
+    if (onConfirm) onConfirm();
+  };
+  
+  buttonContainer.appendChild(cancelBtn);
+  buttonContainer.appendChild(confirmBtn);
+  dialog.appendChild(messageText);
+  dialog.appendChild(buttonContainer);
+  modal.appendChild(dialog);
+  document.body.appendChild(modal);
+}
+
 function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
@@ -717,7 +811,6 @@ function closeOverlay() {
       }, CLEANUP_DELAY_MS);
       return;
     }
-    overlay.remove();
   }
 }
 
