@@ -13,25 +13,36 @@ import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 interface CallStats {
-  totalCalls: number;
-  totalMinutes: number;
+  monthCalls: number;
+  totalSeconds: number;
+  totalDuration: number;
+  roundedSeconds: number;
+  totalRounded: number;
   totalEarnings: number;
-  averageCallLength: number;
+  totalRoundedEarnings: number;
+  roundedEarnings: number;
+  projectedEarnings: number;
+  timeLost: number;
+  earningsLost: number;
+  roundingMethod: string;
 }
 
 interface RecentCall {
   id: string;
-  call_type: 'VRI' | 'OPI';
-  duration: number;
-  earnings: number;
-  notes: string;
-  created_at: string;
+  call_type: string | null;
+  duration_seconds: number | null;
+  rounded_duration_seconds: number | null;
+  earnings: number | null;
+  notes: string | null;
+  start_time: string;
 }
 
 interface CallTypeStats {
-  name: string;
-  value: number;
+  type: string;
+  count: number;
+  duration: number;
   earnings: number;
+  color: string;
 }
 
 const CallTracker = () => {

@@ -75,7 +75,7 @@ const Settings = () => {
       .from('user_settings')
       .upsert({
         user_id: user.id,
-        pay_rate: payRateValue,
+        pay_rate: validation.value,
         pay_rate_type: payRateType,
         preferred_currency: currency,
         preferred_language: language,
