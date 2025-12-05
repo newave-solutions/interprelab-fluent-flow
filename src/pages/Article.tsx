@@ -117,12 +117,6 @@ const Article = () => {
 
         {/* Article Content */}
         <div className="container mx-auto px-6 max-w-3xl py-12">
-          {/* 
-            WARNING: If `article.content` is ever sourced from user input or an untrusted API,
-            it MUST be sanitized before rendering with `dangerouslySetInnerHTML` to prevent XSS.
-            The content is currently hardcoded and safe, but future maintainers should ensure
-            proper sanitization of any dynamic content.
-          */}
           <div
             className="prose prose-invert prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: article.content }}

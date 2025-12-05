@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { AI_MODEL } from "../_shared/constants.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -118,14 +117,14 @@ Respond in JSON format: { "highlights": [{ "icon": "emoji", "text": "highlight t
 
 Important: The text is already de-identified. Do not reference any PHI.`;
 
-    const response = await fetch(LOVABLE_API_ENDPOINT, {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: AI_MODEL,
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze this de-identified medical text:\n\n${text}\n\nMedications mentioned: ${medications.join(', ')}\nUnit conversions needed: ${JSON.stringify(conversions)}` }
@@ -206,7 +205,7 @@ serve(async (req) => {
     console.log('Processing de-identified text:', text.substring(0, 100));
     
     if (!text) {
-      throw new Error('Request must include a "text" field with de-identified medical text to process');
+      throw new Error('No text provided');
     }
 
     // Process de-identified text only
