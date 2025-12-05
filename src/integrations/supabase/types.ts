@@ -107,6 +107,45 @@ export type Database = {
         }
         Relationships: []
       }
+      learning_stats: {
+        Row: {
+          bot_conversations: number
+          created_at: string
+          id: string
+          quizzes_completed: number
+          scenarios_practiced: number
+          streak: number
+          study_hours: number
+          terms_learned: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bot_conversations?: number
+          created_at?: string
+          id?: string
+          quizzes_completed?: number
+          scenarios_practiced?: number
+          streak?: number
+          study_hours?: number
+          terms_learned?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bot_conversations?: number
+          created_at?: string
+          id?: string
+          quizzes_completed?: number
+          scenarios_practiced?: number
+          streak?: number
+          study_hours?: number
+          terms_learned?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       platform_rates: {
         Row: {
           created_at: string
@@ -140,6 +179,42 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          comments_count: number
+          content: string
+          created_at: string
+          id: string
+          likes_count: number
+          media_type: string | null
+          media_url: string | null
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          media_type?: string | null
+          media_url?: string | null
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          comments_count?: number
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          media_type?: string | null
+          media_url?: string | null
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -161,6 +236,87 @@ export type Database = {
           id?: string
           last_name?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      study_modules: {
+        Row: {
+          category: string
+          content: Json | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          module_id: string
+          order_index: number
+          title: string
+        }
+        Insert: {
+          category: string
+          content?: Json | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          module_id: string
+          order_index?: number
+          title: string
+        }
+        Update: {
+          category?: string
+          content?: Json | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          order_index?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      study_progress: {
+        Row: {
+          created_at: string
+          id: string
+          is_completed: boolean
+          metadata: Json | null
+          module_id: string
+          progress_percent: number
+          quizzes_passed: number
+          slides_completed: number
+          updated_at: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          metadata?: Json | null
+          module_id: string
+          progress_percent?: number
+          quizzes_passed?: number
+          slides_completed?: number
+          updated_at?: string
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          metadata?: Json | null
+          module_id?: string
+          progress_percent?: number
+          quizzes_passed?: number
+          slides_completed?: number
+          updated_at?: string
+          user_id?: string
+          xp_earned?: number
         }
         Relationships: []
       }

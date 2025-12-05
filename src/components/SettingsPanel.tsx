@@ -63,6 +63,8 @@ export const SettingsPanel = () => {
       });
       return;
     }
+    
+    const payRateValue = parseFloat(payRate);
 
     const { error } = await supabase
       .from('user_settings')
@@ -114,7 +116,7 @@ export const SettingsPanel = () => {
               max="10000"
               value={payRate}
               onChange={(e) => setPayRate(e.target.value)}
-              placeholder="Enter your pay rate"
+              placeholder="Enter your pay rate (0-10,000)"
             />
           </div>
 
