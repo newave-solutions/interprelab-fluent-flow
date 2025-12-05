@@ -11,6 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Settings2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { validatePayRate } from '@/lib/validations';
 
 const Settings = () => {
   const [payRate, setPayRate] = useState('0');
