@@ -54,13 +54,10 @@ export const PlatformRatesPanel = () => {
     if (!user) return;
 
     const rateValue = parseFloat(formData.rate_per_minute);
-    // Platform rates are per-minute and can vary widely across platforms
-    // No upper limit is enforced to support high-value specialist interpretation services
-    // Negative rates are rejected as they don't make business sense
-    if (isNaN(rateValue) || rateValue < 0) {
+    if (isNaN(rateValue) || rateValue < 0 || rateValue > 10000) {
       toast({
         title: 'Invalid Rate',
-        description: 'Please enter a valid rate per minute (must be 0 or greater)',
+        description: 'Rate per minute must be between 0 and 10,000',
         variant: 'destructive',
       });
       return;

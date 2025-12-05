@@ -45,27 +45,17 @@ export type WaitlistFormData = z.infer<typeof waitlistSchema>;
 export type SignInFormData = z.infer<typeof signInSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 
-/**
- * Validates pay rate value
- * @param payRate - The pay rate value as a string
- * @returns Object with isValid boolean and optional error message
- */
-export const validatePayRate = (payRate: string): { isValid: boolean; error?: string } => {
-  const payRateValue = parseFloat(payRate);
+// Pay rate validation utility
+export const validatePayRate = (value: string | number): { isValid: boolean; error?: string; value?: number } => {
+  const payRateValue = typeof value === 'string' ? parseFloat(value) : value;
   
   if (isNaN(payRateValue)) {
-    return {
-      isValid: false,
-      error: 'Pay rate must be a valid number'
-    };
+    return { isValid: false, error: 'Pay rate must be a valid number' };
   }
   
   if (payRateValue < 0 || payRateValue > 10000) {
-    return {
-      isValid: false,
-      error: 'Pay rate must be between 0 and 10,000'
-    };
+    return { isValid: false, error: 'Pay rate must be between 0 and 10,000' };
   }
   
-  return { isValid: true };
+  return { isValid: true, value: payRateValue };
 };
