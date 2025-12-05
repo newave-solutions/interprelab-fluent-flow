@@ -244,7 +244,7 @@ function switchTab(tabName) {
 
 // Initialize speech recognition
 function initSpeechRecognition() {
-  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+  if (!('webkitSpeechRecognition' in window)) {
     updateStatus('Speech recognition not supported', 'error');
     return;
   }
@@ -692,8 +692,6 @@ function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
     if (isSessionActive) {
-      // TODO: Replace window.confirm() with a custom non-blocking modal for better UX
-      // Current implementation uses blocking confirm which is not ideal for modern web apps
       const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
       if (!confirm) return;
       

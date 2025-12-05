@@ -76,7 +76,7 @@ Focus on:
 
 Provide professional coaching feedback following the format specified.`;
 
-    const response = await fetch(LOVABLE_API_ENDPOINT, {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
@@ -84,6 +84,7 @@ Provide professional coaching feedback following the format specified.`;
       },
       body: JSON.stringify({
         model: AI_MODEL,
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }

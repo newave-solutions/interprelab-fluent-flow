@@ -54,12 +54,11 @@ export const SettingsPanel = () => {
   const handleSave = async () => {
     if (!user) return;
 
-    // Validate pay rate using shared validation
-    const validation = validatePayRate(payRate);
-    if (!validation.isValid) {
+    const payRateValue = parseFloat(payRate);
+    if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
       toast({
         title: 'Invalid Pay Rate',
-        description: validation.error,
+        description: 'Pay rate must be between 0 and 10,000',
         variant: 'destructive',
       });
       return;
