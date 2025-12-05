@@ -4,6 +4,10 @@
 
 console.log('InterpreCoach: Content script loaded');
 
+// Configuration constants
+const SUPABASE_URL = 'https://ggyzlvbtkibqnkfhgnbe.supabase.co';
+const SUPABASE_FUNCTIONS_PATH = '/functions/v1';
+
 let isSessionActive = false;
 let recognition = null;
 let captionObserver = null;
@@ -412,16 +416,20 @@ function updateTranscriptDisplay(text) {
   
   let highlightedText = text;
   
-  // Highlight medical terms
-  Object.keys(MEDICAL_TERMS_DB).forEach(term => {
+  // Sort terms by length (longest first) to handle substring overlaps correctly
+  const allMedicalTerms = Object.keys(MEDICAL_TERMS_DB).sort((a, b) => b.length - a.length);
+  const allMedications = Object.keys(MEDICATION_DATABASE).sort((a, b) => b.length - a.length);
+  
+  // Highlight medical terms (longest first to avoid substring issues)
+  allMedicalTerms.forEach(term => {
     const regex = new RegExp(`\\b${term}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
     }
   });
   
-  // Highlight medications
-  Object.keys(MEDICATION_DATABASE).forEach(med => {
+  // Highlight medications (longest first to avoid substring issues)
+  allMedications.forEach(med => {
     const regex = new RegExp(`\\b${med}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);

@@ -9,11 +9,11 @@ import LearningProgress from '@/components/dashboard/learning-progress';
 
 interface CallRecord {
   id: string;
-  duration_seconds: number;
-  earnings: string;
-  call_type: string;
-  created_at: string;
-  notes?: string;
+  duration_seconds: number | null;
+  earnings: number | null;
+  call_type: string | null;
+  start_time: string;
+  notes?: string | null;
 }
 
 interface Stats {
@@ -168,9 +168,9 @@ const Dashboard = () => {
     }
   };
 
-  const calculateStats = (data: CallRecord[]) => {
+  const calculateStats = (data: { duration_seconds: number | null; earnings: number | null }[]) => {
     const totalDuration = data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
-    const totalEarnings = data.reduce((sum, call) => sum + (parseFloat(call.earnings) || 0), 0);
+    const totalEarnings = data.reduce((sum, call) => sum + (call.earnings || 0), 0);
     const callCount = data.length;
     const avgDuration = callCount > 0 ? totalDuration / callCount : 0;
 
@@ -278,7 +278,7 @@ const Dashboard = () => {
                         )}
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold">{formatCurrency(parseFloat(call.earnings))}</div>
+                        <div className="font-semibold">{formatCurrency(call.earnings || 0)}</div>
                         <div className="text-sm text-muted-foreground">
                           {formatDuration(call.duration_seconds)}
                         </div>

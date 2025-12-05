@@ -118,7 +118,7 @@ Respond in JSON format: { "highlights": [{ "icon": "emoji", "text": "highlight t
 
 Important: The text is already de-identified. Do not reference any PHI.`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch(LOVABLE_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
