@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Bot, BookOpen, BarChart3 } from "lucide-react";
+import { ArrowRight, Bot, BookOpen, BarChart3, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const SolutionHero = () => {
