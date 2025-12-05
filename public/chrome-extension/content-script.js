@@ -5,8 +5,16 @@
 console.log('InterpreCoach: Content script loaded');
 
 // Configuration constants
-const SUPABASE_URL = 'https://ggyzlvbtkibqnkfhgnbe.supabase.co';
-const SUPABASE_FUNCTIONS_PATH = '/functions/v1';
+const API_CONFIG = {
+  SUPABASE_URL: 'https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1',
+  ENDPOINTS: {
+    PROCESS_INTERPRECOACH: '/process-interprecoach',
+    GENERATE_FEEDBACK: '/generate-interpreter-feedback'
+  }
+};
+
+// Cleanup delay to ensure async operations complete before UI removal
+const CLEANUP_DELAY_MS = 100;
 
 let isSessionActive = false;
 let recognition = null;
@@ -26,26 +34,11 @@ let sessionData = {
   feedback: null
 };
 
-/**
- * HIPAA Compliance: De-identification patterns
- * 
- * IMPORTANT: These patterns provide basic PHI redaction but may not catch all variations.
- * For production use in HIPAA-regulated environments, consider using a validated 
- * de-identification library or service that meets Safe Harbor or Expert Determination standards.
- * 
- * Current patterns cover HIPAA's 18 PHI identifiers (partial coverage):
- * 1. Names (with titles) - Limited to formal names with titles
- * 2. Phone numbers - Common US formats
- * 3. Email addresses - Standard email patterns
- * 4. SSN - Standard format with dashes
- * 5. Dates - Multiple common formats
- * 6. Medical record numbers - Common identifiers
- * 7. Addresses - Street addresses only
- * 8. ZIP codes - 5 and 9 digit formats
- * 
- * NOT currently covered: Device IDs, URLs, IP addresses, Biometric IDs, Photos, 
- * Account numbers (except MRN), Certificate numbers, Vehicle IDs, License plates, etc.
- */
+// HIPAA Compliance: De-identification patterns
+// NOTE: These are basic regex patterns. For production HIPAA compliance,
+// consider using a validated PHI de-identification library or service
+// that has been tested for medical use cases (e.g., Philter, AWS Comprehend Medical).
+// Current patterns may not catch all PHI variations (informal names, all date formats, etc.)
 const PHI_PATTERNS = {
   // Enhanced name pattern - includes titles and common name formats
   names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss|Prof\.|Rev\.)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
@@ -132,7 +125,8 @@ function detectMedications(text) {
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meters?|metres?)\b/gi);
+  // More specific pattern to avoid matching 'm' in words like "I'm" or "am"
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|\bm\b)/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
@@ -367,7 +361,7 @@ async function processTranscript(text) {
   const conversions = detectAndConvertUnits(text);
   
   try {
-    const response = await fetch(API_ENDPOINTS.PROCESS_INTERPRECOACH, {
+    const response = await fetch(`${API_CONFIG.SUPABASE_URL}${API_CONFIG.ENDPOINTS.PROCESS_INTERPRECOACH}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -416,20 +410,20 @@ function updateTranscriptDisplay(text) {
   
   let highlightedText = text;
   
-  // Sort terms by length (longest first) to handle substring overlaps correctly
-  const allMedicalTerms = Object.keys(MEDICAL_TERMS_DB).sort((a, b) => b.length - a.length);
-  const allMedications = Object.keys(MEDICATION_DATABASE).sort((a, b) => b.length - a.length);
+  // Sort terms by length (longest first) to prevent substring replacement issues
+  const sortedMedicalTerms = Object.keys(MEDICAL_TERMS_DB).sort((a, b) => b.length - a.length);
+  const sortedMedications = Object.keys(MEDICATION_DATABASE).sort((a, b) => b.length - a.length);
   
-  // Highlight medical terms (longest first to avoid substring issues)
-  allMedicalTerms.forEach(term => {
+  // Highlight medical terms
+  sortedMedicalTerms.forEach(term => {
     const regex = new RegExp(`\\b${term}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
     }
   });
   
-  // Highlight medications (longest first to avoid substring issues)
-  allMedications.forEach(med => {
+  // Highlight medications
+  sortedMedications.forEach(med => {
     const regex = new RegExp(`\\b${med}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
@@ -614,7 +608,7 @@ async function generateSessionFeedback() {
   try {
     analyzeSessionPerformance();
     
-    const response = await fetch(API_ENDPOINTS.GENERATE_INTERPRETER_FEEDBACK, {
+    const response = await fetch(`${API_CONFIG.SUPABASE_URL}${API_CONFIG.ENDPOINTS.GENERATE_FEEDBACK}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -797,18 +791,25 @@ function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
     if (isSessionActive) {
-      showCustomConfirmDialog(
-        'Session is active. Closing will destroy all PHI/PII data. Continue?',
-        () => {
-          if (recognition) recognition.stop();
-          if (captionObserver) captionObserver.disconnect();
-          isSessionActive = false;
-          destroySessionData();
-          overlay.remove();
-        }
-      );
-    } else {
-      overlay.remove();
+      // NOTE: For better UX, consider implementing a custom non-blocking confirmation modal
+      // instead of window.confirm(). The blocking nature of window.confirm() is not ideal
+      // for modern web applications. Current implementation uses window.confirm() for simplicity.
+      const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
+      if (!confirm) return;
+      
+      // Ensure all async operations complete before removing overlay
+      if (recognition) recognition.stop();
+      if (captionObserver) captionObserver.disconnect();
+      isSessionActive = false;
+      
+      // Wait for session data to be destroyed before removing UI
+      destroySessionData();
+      
+      // Small delay to ensure cleanup completes
+      setTimeout(() => {
+        overlay.remove();
+      }, CLEANUP_DELAY_MS);
+      return;
     }
   }
 }
