@@ -332,7 +332,7 @@ async function processTranscript(text) {
   const conversions = detectAndConvertUnits(text);
   
   try {
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/process-interprecoach', {
+    const response = await fetch('https://opmafykbhjinqebgflnl.supabase.co/functions/v1/process-interprecoach', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -575,7 +575,7 @@ async function generateSessionFeedback() {
   try {
     analyzeSessionPerformance();
     
-    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/generate-interpreter-feedback', {
+    const response = await fetch('https://opmafykbhjinqebgflnl.supabase.co/functions/v1/generate-interpreter-feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
