@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { AI_MODEL, LOVABLE_API_ENDPOINT } from "../_shared/config.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -82,6 +83,7 @@ Provide professional coaching feedback following the format specified.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        model: AI_MODEL,
         model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },

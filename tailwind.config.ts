@@ -84,6 +84,7 @@ export default {
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
+        // 'display' font uses Poppins, imported in index.html
         'display': ['Poppins', 'sans-serif'],
         'mono': ['Space Grotesk', 'monospace'],
       },

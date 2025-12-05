@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Save } from 'lucide-react';
+import { validatePayRate } from '@/lib/validations';
 
 export const SettingsPanel = () => {
   const [payRate, setPayRate] = useState('0');
@@ -62,6 +63,8 @@ export const SettingsPanel = () => {
       });
       return;
     }
+    
+    const payRateValue = parseFloat(payRate);
 
     const { error } = await supabase
       .from('user_settings')
@@ -113,7 +116,7 @@ export const SettingsPanel = () => {
               max="10000"
               value={payRate}
               onChange={(e) => setPayRate(e.target.value)}
-              placeholder="Enter your pay rate"
+              placeholder="Enter your pay rate (0-10,000)"
             />
           </div>
 
