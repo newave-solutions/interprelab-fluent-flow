@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Building2, Plus, Trash2, Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { validatePlatformRate } from '@/utils/validation';
 
 interface PlatformRate {
   id: string;
@@ -53,15 +54,17 @@ export const PlatformRatesPanel = () => {
     e.preventDefault();
     if (!user) return;
 
-    const rateValue = parseFloat(formData.rate_per_minute);
-    if (isNaN(rateValue) || rateValue < 0 || rateValue > 10000) {
+    const validation = validatePlatformRate(formData.rate_per_minute);
+    if (!validation.isValid) {
       toast({
         title: 'Invalid Rate',
-        description: 'Rate per minute must be between 0 and 10,000',
+        description: validation.error,
         variant: 'destructive',
       });
       return;
     }
+    
+    const rateValue = parseFloat(formData.rate_per_minute);
 
     if (editingId) {
       const { error } = await supabase

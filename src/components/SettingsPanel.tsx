@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Save } from 'lucide-react';
-import { validatePayRate } from '@/lib/validations';
+import { validatePayRate } from '@/utils/validation';
 
 export const SettingsPanel = () => {
   const [payRate, setPayRate] = useState('0');
