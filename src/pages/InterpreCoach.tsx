@@ -105,7 +105,7 @@ const InterpreCoach = () => {
           <div className="flex justify-center">
             <Card className="w-full max-w-2xl glass">
               <CardContent className="p-6">
-                <SignDetection />
+                <SignDetection onSignDetected={(sign) => console.log('Detected sign:', sign)} />
               </CardContent>
             </Card>
           </div>
