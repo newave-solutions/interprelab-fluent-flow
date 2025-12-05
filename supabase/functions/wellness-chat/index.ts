@@ -1,7 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { AI_MODEL } from "../_shared/constants.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -57,7 +56,7 @@ Never diagnose, never give medical advice, but always be present and compassiona
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: AI_MODEL,
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
           ...messages

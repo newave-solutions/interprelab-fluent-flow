@@ -64,8 +64,7 @@ WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update their own platform rates"
 ON public.platform_rates FOR UPDATE
 TO authenticated
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own platform rates"
 ON public.platform_rates FOR DELETE
@@ -86,8 +85,7 @@ WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update their own goals"
 ON public.user_goals FOR UPDATE
 TO authenticated
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own goals"
 ON public.user_goals FOR DELETE
@@ -103,8 +101,7 @@ USING (auth.uid() = user_id);
 CREATE POLICY "Users can update their own insights"
 ON public.user_insights FOR UPDATE
 TO authenticated
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own insights"
 ON public.user_insights FOR DELETE

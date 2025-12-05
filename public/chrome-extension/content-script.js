@@ -4,18 +4,6 @@
 
 console.log('InterpreCoach: Content script loaded');
 
-// Configuration constants
-const API_CONFIG = {
-  SUPABASE_URL: 'https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1',
-  ENDPOINTS: {
-    PROCESS_INTERPRECOACH: '/process-interprecoach',
-    GENERATE_FEEDBACK: '/generate-interpreter-feedback'
-  }
-};
-
-// Cleanup delay to ensure async operations complete before UI removal
-const CLEANUP_DELAY_MS = 100;
-
 let isSessionActive = false;
 let recognition = null;
 let captionObserver = null;
@@ -35,31 +23,15 @@ let sessionData = {
 };
 
 // HIPAA Compliance: De-identification patterns
-// NOTE: These are basic regex patterns. For production HIPAA compliance,
-// consider using a validated PHI de-identification library or service
-// that has been tested for medical use cases (e.g., Philter, AWS Comprehend Medical).
-// Current patterns may not catch all PHI variations (informal names, all date formats, etc.)
 const PHI_PATTERNS = {
-  // Enhanced name pattern - includes titles and common name formats
-  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss|Prof\.|Rev\.)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
-  // Enhanced phone pattern - multiple formats including international
-  phone: /\b(\+\d{1,3}\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
-  // Email addresses
+  names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
+  phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-  // SSN with various formats
-  ssn: /\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/g,
-  // Enhanced date patterns - multiple formats
-  dates: /\b(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\d{4}[-\/]\d{2}[-\/]\d{2})\b/gi,
-  // Medical record numbers and patient IDs
-  mrn: /\b(MRN|Medical Record|Patient ID|Record Number|Account Number|ID Number)[\s:]*[A-Z0-9-]+\b/gi,
-  // Street addresses
-  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir|Way|Place|Pl|Parkway|Pkwy)\b/gi,
-  // ZIP codes
-  zipcode: /\b\d{5}(?:-\d{4})?\b/g,
-  // IP addresses
-  ipAddress: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
-  // URLs and web addresses
-  urls: /https?:\/\/[^\s<>"{}|\\^`\[\]]+/gi
+  ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
+  dates: /\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b/gi,
+  mrn: /\b(MRN|Medical Record|Patient ID|Record Number)[\s:]*[A-Z0-9-]+\b/gi,
+  address: /\b\d+\s+[A-Za-z0-9\s,]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir)\b/gi,
+  zipcode: /\b\d{5}(?:-\d{4})?\b/g
 };
 
 // Medical terminology database
@@ -125,8 +97,7 @@ function detectMedications(text) {
 function detectAndConvertUnits(text) {
   const conversions = [];
   
-  // More specific pattern to avoid matching 'm' in words like "I'm" or "am"
-  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|\bm\b)/gi);
+  const meterMatch = text.match(/(\d+\.?\d*)\s*(meter|metres|m\b)/gi);
   if (meterMatch) {
     meterMatch.forEach(match => {
       const value = parseFloat(match);
@@ -361,7 +332,7 @@ async function processTranscript(text) {
   const conversions = detectAndConvertUnits(text);
   
   try {
-    const response = await fetch(`${API_CONFIG.SUPABASE_URL}${API_CONFIG.ENDPOINTS.PROCESS_INTERPRECOACH}`, {
+    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/process-interprecoach', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -410,12 +381,8 @@ function updateTranscriptDisplay(text) {
   
   let highlightedText = text;
   
-  // Sort terms by length (longest first) to prevent substring replacement issues
-  const sortedMedicalTerms = Object.keys(MEDICAL_TERMS_DB).sort((a, b) => b.length - a.length);
-  const sortedMedications = Object.keys(MEDICATION_DATABASE).sort((a, b) => b.length - a.length);
-  
   // Highlight medical terms
-  sortedMedicalTerms.forEach(term => {
+  Object.keys(MEDICAL_TERMS_DB).forEach(term => {
     const regex = new RegExp(`\\b${term}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
@@ -423,7 +390,7 @@ function updateTranscriptDisplay(text) {
   });
   
   // Highlight medications
-  sortedMedications.forEach(med => {
+  Object.keys(MEDICATION_DATABASE).forEach(med => {
     const regex = new RegExp(`\\b${med}\\b`, 'gi');
     if (regex.test(text)) {
       highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
@@ -608,7 +575,7 @@ async function generateSessionFeedback() {
   try {
     analyzeSessionPerformance();
     
-    const response = await fetch(`${API_CONFIG.SUPABASE_URL}${API_CONFIG.ENDPOINTS.GENERATE_FEEDBACK}`, {
+    const response = await fetch('https://ggyzlvbtkibqnkfhgnbe.supabase.co/functions/v1/generate-interpreter-feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -705,112 +672,19 @@ function destroySessionData() {
   console.log('InterpreCoach: PHI/PII data destroyed');
 }
 
-function showCustomConfirmDialog(message, onConfirm, onCancel) {
-  // Create custom modal
-  const modal = document.createElement('div');
-  modal.id = 'interprecoach-confirm-modal';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-  `;
-  
-  const dialog = document.createElement('div');
-  dialog.style.cssText = `
-    background: white;
-    padding: 24px;
-    border-radius: 8px;
-    max-width: 400px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  `;
-  
-  const messageText = document.createElement('p');
-  messageText.textContent = message;
-  messageText.style.cssText = `
-    margin: 0 0 20px 0;
-    color: #333;
-    font-size: 16px;
-    line-height: 1.5;
-  `;
-  
-  const buttonContainer = document.createElement('div');
-  buttonContainer.style.cssText = `
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-  `;
-  
-  const cancelBtn = document.createElement('button');
-  cancelBtn.textContent = 'Cancel';
-  cancelBtn.style.cssText = `
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    color: #333;
-    cursor: pointer;
-    font-size: 14px;
-  `;
-  cancelBtn.onclick = () => {
-    modal.remove();
-    if (onCancel) onCancel();
-  };
-  
-  const confirmBtn = document.createElement('button');
-  confirmBtn.textContent = 'Continue';
-  confirmBtn.style.cssText = `
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    background: #dc2626;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-  `;
-  confirmBtn.onclick = () => {
-    modal.remove();
-    if (onConfirm) onConfirm();
-  };
-  
-  buttonContainer.appendChild(cancelBtn);
-  buttonContainer.appendChild(confirmBtn);
-  dialog.appendChild(messageText);
-  dialog.appendChild(buttonContainer);
-  modal.appendChild(dialog);
-  document.body.appendChild(modal);
-}
-
 function closeOverlay() {
   const overlay = document.getElementById('interprecoach-overlay');
   if (overlay) {
     if (isSessionActive) {
-      // NOTE: For better UX, consider implementing a custom non-blocking confirmation modal
-      // instead of window.confirm(). The blocking nature of window.confirm() is not ideal
-      // for modern web applications. Current implementation uses window.confirm() for simplicity.
       const confirm = window.confirm('Session is active. Closing will destroy all PHI/PII data. Continue?');
       if (!confirm) return;
       
-      // Ensure all async operations complete before removing overlay
       if (recognition) recognition.stop();
       if (captionObserver) captionObserver.disconnect();
       isSessionActive = false;
-      
-      // Wait for session data to be destroyed before removing UI
       destroySessionData();
-      
-      // Small delay to ensure cleanup completes
-      setTimeout(() => {
-        overlay.remove();
-      }, CLEANUP_DELAY_MS);
-      return;
     }
+    overlay.remove();
   }
 }
 

@@ -1,7 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { AI_MODEL } from "../_shared/constants.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -64,7 +63,7 @@ Focus on commonly used ${specialty || 'medical'} terms that interpreters need to
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: AI_MODEL,
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: "You are a medical terminology expert creating flashcards for interpreter training." },
           { role: "user", content: prompt }

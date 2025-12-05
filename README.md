@@ -119,13 +119,6 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-### Dependency Version Notes
-
-Some dependencies are pinned to specific versions for compatibility:
-
-- **vite**: `^5.4.19` - Using v5.x for stability. v7.x introduced breaking changes incompatible with current plugin ecosystem
-- **lovable-tagger**: `^1.1.9` - Using v1.1.9 for compatibility with our build process. v1.1.11 introduced issues with the tagging system
-
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/61694cb5-bbd8-44b1-aa9e-2b4cead1a91a) and click on Share -> Publish.
