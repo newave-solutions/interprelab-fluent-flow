@@ -15,7 +15,6 @@ export default {
     },
     extend: {
       colors: {
-        ...require('tailwindcss/colors'),
         nobel: {
           gold: '#C5A059',
           dark: '#1a1a1a',
