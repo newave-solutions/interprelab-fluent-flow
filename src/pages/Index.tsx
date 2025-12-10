@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
+import { DarkSection } from "@/components/DarkSection";
 import { FullScreenVideoHero } from "@/components/VideoSection";
 import { SolutionsShowcase } from "@/components/SolutionsShowcase";
 import { StatsSection } from "@/components/StatsSection";
@@ -59,6 +60,9 @@ const Index = () => {
       
       <main>
         <Hero />
+        
+        {/* Dark Section - Mission Statement */}
+        <DarkSection />
         
         {/* Pain Points Video Sections with Data Overlays */}
         <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
