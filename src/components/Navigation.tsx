@@ -6,6 +6,7 @@ import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut } from "luc
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -98,6 +99,7 @@ export const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             {user ? (
               <>
                 <Button variant="ghost" size="sm" asChild>
@@ -169,6 +171,9 @@ export const Navigation = () => {
                 ))}
 
                 <div className="pt-6 space-y-3">
+                  <div className="flex justify-center pb-3">
+                    <ThemeToggle />
+                  </div>
                   {user ? (
                     <Button
                       onClick={() => {

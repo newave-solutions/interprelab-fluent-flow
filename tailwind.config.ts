@@ -15,6 +15,12 @@ export default {
     },
     extend: {
       colors: {
+        ...require('tailwindcss/colors'),
+        nobel: {
+          gold: '#C5A059',
+          dark: '#1a1a1a',
+          cream: '#F9F8F4',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -84,6 +90,7 @@ export default {
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'serif': ['Playfair Display', 'serif'],
         'display': ['Poppins', 'sans-serif'],
         'mono': ['Space Grotesk', 'monospace'],
       },

@@ -5,7 +5,6 @@ import { SolutionsShowcase } from "@/components/SolutionsShowcase";
 import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Brain, AlertTriangle, DollarSign, TrendingDown } from "lucide-react";
 import cognitiveOverloadImg from "@/assets/pain-point-cognitive-overload.png";
 import healthcareCrisisImg from "@/assets/pain-point-healthcare-crisis.png";
@@ -57,7 +56,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <ThemeToggle />
       
       <main>
         <Hero />
