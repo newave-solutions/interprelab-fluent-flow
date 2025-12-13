@@ -27,6 +27,7 @@ import SignIn from "./pages/SignIn";
 import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
 import ASLTeacher from "./pages/ASLTeacher";
+import Account from "./pages/Account";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,11 @@ const App = () => (
                 <Route path="/settings" element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/account" element={
+                  <ProtectedRoute>
+                    <Account />
                   </ProtectedRoute>
                 } />
                 <Route path="/resources" element={<Resources />} />
