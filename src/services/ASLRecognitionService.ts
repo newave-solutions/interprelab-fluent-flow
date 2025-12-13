@@ -30,7 +30,7 @@ class ASLRecognitionService {
     const hand = await this.net!.estimateHands(videoElement);
     if (hand.length > 0) {
       // @tensorflow-models/handpose returns landmarks as arrays [x, y, z], which is compatible with fingerpose
-      const estimatedGestures = await this.gestureEstimator!.estimate(hand[0].landmarks, 6.5);
+      const estimatedGestures = await this.gestureEstimator!.estimate(hand[0].landmarks as any, 6.5);
       
       if (estimatedGestures.gestures && estimatedGestures.gestures.length > 0) {
         const scores = estimatedGestures.gestures.map(p => p.score);
