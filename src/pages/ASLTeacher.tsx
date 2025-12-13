@@ -17,8 +17,7 @@ const ASLTeacher = () => {
     if (!user) return;
 
     try {
-      // Check if record exists
-      const { data: existingData } = await supabase
+      const { data: existingData } = await (supabase as any)
         .from('asl_progress')
         .select('*')
         .eq('user_id', user.id)
@@ -26,18 +25,16 @@ const ASLTeacher = () => {
         .maybeSingle();
 
       if (existingData) {
-        // Update
-        await supabase
+        await (supabase as any)
           .from('asl_progress')
           .update({
-            attempts: (existingData.attempts || 0) + 1,
-            success_count: (existingData.success_count || 0) + 1,
+            attempts: ((existingData as any).attempts || 0) + 1,
+            success_count: ((existingData as any).success_count || 0) + 1,
             last_practiced: new Date().toISOString(),
           })
-          .eq('id', existingData.id);
+          .eq('id', (existingData as any).id);
       } else {
-        // Insert
-        await supabase
+        await (supabase as any)
           .from('asl_progress')
           .insert({
             user_id: user.id,
