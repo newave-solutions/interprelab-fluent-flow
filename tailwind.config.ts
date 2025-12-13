@@ -20,6 +20,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "nobel-gold": "hsl(var(--nobel-gold))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -84,8 +85,8 @@ export default {
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
-        'display': ['Poppins', 'sans-serif'],
-        'mono': ['Space Grotesk', 'monospace'],
+        'serif': ['Playfair Display', 'Georgia', 'serif'],
+        'mono': ['monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",
