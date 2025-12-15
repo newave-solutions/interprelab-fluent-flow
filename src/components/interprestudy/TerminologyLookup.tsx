@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,28 +46,56 @@ export const TerminologyLookup = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
+  const loadGlossaryTerms = useCallback(async () => {
+    if (!user?.id) return;
+
+    const { data, error } = await supabase
+      .from('glossary_terms')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading glossary terms:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load glossary terms.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setGlossaryTerms(data || []);
+  }, [user?.id, toast]);
+
   useEffect(() => {
     if (user) {
       loadGlossaryTerms();
     }
-  }, [user]);
-
-  const loadGlossaryTerms = async () => {
-    if (!user?.id) return;
-
-    // TODO: glossary_terms table needs to be created
-    // Temporarily disabled until database migration is complete
-    console.log('Glossary terms feature coming soon');
-    setGlossaryTerms([]);
-  };
+  }, [user, loadGlossaryTerms]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
     setIsLoading(true);
 
-    // TODO: Database lookup disabled until glossary_terms table is created
-    // Simulate AI lookup for demo purposes
+    // First check if term exists in user's glossary
+    const { data: existingTerm } = await supabase
+      .from('glossary_terms')
+      .select('*')
+      .eq('term', searchTerm)
+      .maybeSingle();
+
+    if (existingTerm) {
+      setResult({
+        english: existingTerm.term,
+        translation: existingTerm.target_language || '',
+        pronunciation: existingTerm.pronunciation || '',
+        definition: existingTerm.definition,
+        imageUrl: undefined,
+      });
+      setIsLoading(false);
+      return;
+    }
 
     // Simulate AI lookup for demo purposes
     setTimeout(() => {
@@ -85,19 +113,57 @@ export const TerminologyLookup = () => {
   const handleAddToGlossary = async () => {
     if (!result || !user?.id) return;
 
-    // TODO: glossary_terms table needs to be created
-    toast({
-      title: 'Coming Soon',
-      description: 'Glossary feature will be available after database setup.',
+    const { error } = await supabase.from('glossary_terms').insert({
+      user_id: user.id,
+      term: result.english,
+      definition: result.definition,
+      pronunciation: result.pronunciation,
+      target_language: result.translation,
+      source_language: 'en', // Assuming English source for now
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
+
+    if (error) {
+      console.error('Error adding term:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to add term to glossary.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Success',
+      description: 'Term added to your glossary.',
+    });
+
+    loadGlossaryTerms();
   };
 
   const deleteTerm = async (termId: string) => {
-    // TODO: glossary_terms table needs to be created
+    const { error } = await supabase
+      .from('glossary_terms')
+      .delete()
+      .eq('id', termId);
+
+    if (error) {
+      console.error('Error deleting term:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete term.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     toast({
-      title: 'Coming Soon',
-      description: 'Glossary feature will be available after database setup.',
+      title: 'Success',
+      description: 'Term deleted from glossary.',
     });
+
+    loadGlossaryTerms();
   };
 
   const playPronunciation = () => {
@@ -109,7 +175,7 @@ export const TerminologyLookup = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="terminology-lookup-view">
       <Card className="glass border-border/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -267,3 +333,5 @@ export const TerminologyLookup = () => {
     </div>
   );
 };
+
+export default TerminologyLookup;
