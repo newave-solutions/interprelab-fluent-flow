@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,34 +46,47 @@ export const TerminologyLookup = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
+  const loadGlossaryTerms = useCallback(async () => {
+    if (!user?.id) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data) {
+        setGlossaryTerms(data as GlossaryTerm[]);
+      }
+    } catch (error) {
+      console.error('Error loading glossary terms:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load glossary terms.',
+        variant: 'destructive',
+      });
+    }
+  }, [user, toast]);
+
   useEffect(() => {
     if (user) {
       loadGlossaryTerms();
     }
-  }, [user]);
-
-  const loadGlossaryTerms = async () => {
-    if (!user?.id) return;
-
-    // TODO: glossary_terms table needs to be created
-    // Temporarily disabled until database migration is complete
-    console.log('Glossary terms feature coming soon');
-    setGlossaryTerms([]);
-  };
+  }, [user, loadGlossaryTerms]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
     setIsLoading(true);
 
-    // TODO: Database lookup disabled until glossary_terms table is created
-    // Simulate AI lookup for demo purposes
-
     // Simulate AI lookup for demo purposes
     setTimeout(() => {
       setResult({
         english: searchTerm,
-        translation: 'Diagnóstico',
+        translation: 'Diagnóstico', // This would ideally be dynamic
         pronunciation: '/di.aɡˈnos.ti.ko/',
         definition: 'The identification of the nature of an illness or other problem by examination of the symptoms.',
         imageUrl: undefined,
@@ -85,19 +98,67 @@ export const TerminologyLookup = () => {
   const handleAddToGlossary = async () => {
     if (!result || !user?.id) return;
 
-    // TODO: glossary_terms table needs to be created
-    toast({
-      title: 'Coming Soon',
-      description: 'Glossary feature will be available after database setup.',
-    });
+    try {
+      const newTerm = {
+        user_id: user.id,
+        term: result.english,
+        definition: result.definition,
+        pronunciation: result.pronunciation,
+        target_language: result.translation, // Using target_language to store translation based on UI usage
+        source_language: 'en',
+        language_code: 'es', // Hardcoded as per current UI simulation
+        category: 'General',
+      };
+
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .insert(newTerm)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: 'Term added to your glossary.',
+      });
+
+      if (data) {
+        setGlossaryTerms([data as GlossaryTerm, ...glossaryTerms]);
+      }
+    } catch (error) {
+      console.error('Error adding term:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to add term to glossary.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const deleteTerm = async (termId: string) => {
-    // TODO: glossary_terms table needs to be created
-    toast({
-      title: 'Coming Soon',
-      description: 'Glossary feature will be available after database setup.',
-    });
+    try {
+      const { error } = await supabase
+        .from('glossary_terms')
+        .delete()
+        .eq('id', termId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: 'Term deleted from glossary.',
+      });
+
+      setGlossaryTerms(glossaryTerms.filter(t => t.id !== termId));
+    } catch (error) {
+      console.error('Error deleting term:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete term.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const playPronunciation = () => {

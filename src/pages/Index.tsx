@@ -38,8 +38,9 @@ const Index = () => {
         
         {/* Testimonials */}
         <Testimonials />
+
       </main>
-      
+
       <Footer />
     </div>
   );

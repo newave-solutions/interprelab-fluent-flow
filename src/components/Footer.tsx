@@ -9,7 +9,6 @@ import {
   Twitter,
   Linkedin,
   Github,
-  Chrome,
   Stethoscope,
   Scale,
   Globe
@@ -19,7 +18,7 @@ export const Footer = () => {
   return (
     <footer className="relative bg-stone-900 text-stone-400 snap-start">
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
           {/* Company Info */}
           <div className="space-y-4">
@@ -69,6 +68,11 @@ export const Footer = () => {
                   InterpreStudy
                 </Link>
               </li>
+              <li>
+                <Link to="/interpretrack" className="hover:text-nobel-gold transition-colors">
+                  InterpreTrack
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -102,12 +106,12 @@ export const Footer = () => {
                 <Mail className="w-4 h-4" />
                 <span>admin.ceo@interprelab.com</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-nobel-gold" />
                 <span>+1 (555) 123-4567</span>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+              <div className="flex items-center gap-3">
+                <MapPin className="w-4 h-4 text-nobel-gold" />
                 <span>Houston, Texas</span>
               </div>
             </div>

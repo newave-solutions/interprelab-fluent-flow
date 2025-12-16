@@ -1,7 +1,7 @@
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle } from 'lucide-react';
+import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle, PlayCircle } from 'lucide-react';
 import { InteractiveChat } from '@/components/interprestudy/InteractiveChat';
 import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
@@ -13,6 +13,7 @@ import { BodyMapper } from '@/components/interprestudy/modules/BodyMapper';
 import { ScenarioGenerator } from '@/components/interprestudy/modules/ScenarioGenerator';
 import { AiQuiz } from '@/components/interprestudy/modules/AiQuiz';
 import { CoreDynamicsTraining } from '@/components/interprestudy/modules/CoreDynamicsTraining';
+import { InteractiveModulePlayer } from '@/components/interprestudy/modules/InteractiveModulePlayer';
 
 export default function InterpreStudy() {
   return (
@@ -20,7 +21,7 @@ export default function InterpreStudy() {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
         <div
-          className="text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
+          className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
           style={{ backgroundImage: "url('/src/assets/studying-learning.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
@@ -39,8 +40,12 @@ export default function InterpreStudy() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="training" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-9 h-auto mb-8 p-1">
+        <Tabs defaultValue="modules" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-10 h-auto mb-8 p-1">
+            <TabsTrigger value="modules" className="flex items-center gap-2 py-2">
+              <PlayCircle className="w-4 h-4" />
+              <span className="hidden lg:inline">Modules</span>
+            </TabsTrigger>
             <TabsTrigger value="training" className="flex items-center gap-2 py-2">
               <GraduationCap className="w-4 h-4" />
               <span className="hidden lg:inline">Training</span>
@@ -78,6 +83,10 @@ export default function InterpreStudy() {
               <span className="hidden lg:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="modules" className="animate-fade-in">
+            <InteractiveModulePlayer />
+          </TabsContent>
 
           <TabsContent value="training" className="animate-fade-in">
              <CoreDynamicsTraining />

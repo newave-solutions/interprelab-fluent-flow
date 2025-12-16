@@ -1,24 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, User, Shield, Zap, Play } from "lucide-react";
+import { ArrowRight, Play, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBg from '../assets/hero-homepage.jpg';
 
 export const Hero = () => {
+  const scrollToContent = () => {
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" role="banner">
-      {/* Background Image with Parallax */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" role="banner">
+      {/* Background Image with Overlay */}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center transition-transform duration-700"
+        className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroBg})` }}
         aria-hidden="true"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
       </div>
+
+      {/* Radial Glow Effect */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 30%, hsl(41 52% 56% / 0.1), transparent 60%)'
+        }}
+        aria-hidden="true"
+      />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
-        <div className="max-w-5xl mx-auto space-y-10 animate-fade-in">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
           {/* Badge */}
           <Badge className="glass px-6 py-3 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm">
@@ -50,7 +62,7 @@ export const Hero = () => {
               className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl" 
               asChild
             >
-              <Link to="/interprebot" aria-label="Start your assessment with InterpreBot">
+              <Link to="/interprebot" aria-label="Start your assessment">
                 Take the Assessment
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
               </Link>
@@ -62,7 +74,7 @@ export const Hero = () => {
               className="px-8 py-6 border-2 border-white/30 text-white hover:bg-white/10 rounded-full font-medium transition-all duration-300 hover:scale-105" 
               asChild
             >
-              <Link to="/interprecoach" aria-label="Learn more about InterpreCoach AI assistant">
+              <Link to="/interprecoach" aria-label="Meet InterpreCoach AI assistant">
                 <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
                 Meet InterpreCoach
               </Link>
@@ -80,6 +92,16 @@ export const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <button 
+        onClick={scrollToContent}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 group flex flex-col items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        aria-label="Scroll to learn more"
+      >
+        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <ChevronDown className="w-5 h-5 animate-bounce" />
+      </button>
     </section>
   );
 };
