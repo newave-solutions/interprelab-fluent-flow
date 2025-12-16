@@ -28,6 +28,7 @@ import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
 import ASLTeacher from "./pages/ASLTeacher";
 import Account from "./pages/Account";
+import Dilemma from "./pages/Dilemma";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +86,7 @@ const App = () => (
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/interpre-wellness" element={<InterpreWellness />} />
                 <Route path="/interprewellbeing" element={<InterpreWellness />} />
+                <Route path="/dilemma" element={<Dilemma />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
