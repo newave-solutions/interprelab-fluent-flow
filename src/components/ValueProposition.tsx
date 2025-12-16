@@ -32,7 +32,7 @@ export const ValueProposition = () => {
               <Sparkles className="w-4 h-4 mr-2" />
               Why Interpreters Choose Us
             </Badge>
-            <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
+            <h2 id="value-proposition-heading" className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
               Professional Development, <span className="text-nobel-gold">Reimagined</span>
             </h2>
             <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-2xl mx-auto">
