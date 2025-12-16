@@ -42,8 +42,8 @@ export const HowItWorks = () => {
           {/* Steps */}
           <div className="grid md:grid-cols-3 gap-8 relative">
             {/* Connection lines for desktop */}
-            <div className="hidden md:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-nobel-gold to-green-500 opacity-20" 
-                 style={{ width: 'calc(100% - 200px)', left: '100px' }} 
+            <div
+              className="hidden md:block absolute top-16 left-[100px] w-[calc(100%-200px)] h-0.5 bg-gradient-to-r from-blue-500 via-nobel-gold to-green-500 opacity-20"
             />
 
             {steps.map((step, index) => (
