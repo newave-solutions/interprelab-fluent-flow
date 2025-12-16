@@ -73,9 +73,9 @@ export const Hero = () => {
           <div className="pt-8 text-sm text-white/60 animate-slide-up">
             <p className="font-light">Trusted by healthcare systems and legal firms across 50+ countries</p>
             <div className="flex justify-center gap-8 mt-4">
-              <span>🏥 Medical Centers</span>
-              <span>⚖️ Legal Firms</span>
-              <span>🌍 Global Organizations</span>
+              <span><span role="img" aria-label="hospital">🏥</span> Medical Centers</span>
+              <span><span role="img" aria-label="scales of justice">⚖️</span> Legal Firms</span>
+              <span><span role="img" aria-label="globe">🌍</span> Global Organizations</span>
             </div>
           </div>
         </div>
