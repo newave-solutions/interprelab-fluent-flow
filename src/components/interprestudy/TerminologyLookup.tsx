@@ -43,6 +43,7 @@ export const TerminologyLookup = () => {
   const [result, setResult] = useState<TermResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -75,6 +76,25 @@ export const TerminologyLookup = () => {
     if (user) {
       loadGlossaryTerms();
     }
+  }, [user]);
+
+  // Clean up speech synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const loadGlossaryTerms = async () => {
+    if (!user?.id) return;
+
+    // TODO: glossary_terms table needs to be created
+    // Temporarily disabled until database migration is complete
+    console.log('Glossary terms feature coming soon');
+    setGlossaryTerms([]);
+  };
   }, [user, loadGlossaryTerms]);
 
   const handleSearch = async () => {
@@ -161,10 +181,18 @@ export const TerminologyLookup = () => {
     }
   };
 
-  const playPronunciation = () => {
-    if (result?.pronunciation && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(result.english);
+  const playPronunciation = (text: string, id: string = 'main') => {
+    if ('speechSynthesis' in window) {
+      // Cancel any currently playing speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
+
+      setPlayingId(id);
+      utterance.onend = () => setPlayingId((current) => (current === id ? null : current));
+      utterance.onerror = () => setPlayingId((current) => (current === id ? null : current));
+
       speechSynthesis.speak(utterance);
     }
   };
@@ -185,6 +213,7 @@ export const TerminologyLookup = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter term in English or target language..."
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              aria-label="Search terms"
             />
             <Button onClick={handleSearch} disabled={isLoading}>
               <Search className="w-4 h-4 mr-2" />
@@ -225,7 +254,13 @@ export const TerminologyLookup = () => {
 
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <span className="font-mono text-lg">{result.pronunciation}</span>
-                  <Button variant="ghost" size="sm" onClick={playPronunciation}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => playPronunciation(result.english, 'main')}
+                    aria-label="Play pronunciation"
+                    className={playingId === 'main' ? 'text-primary animate-pulse' : ''}
+                  >
                     <Volume2 className="w-4 h-4" />
                   </Button>
                 </div>
@@ -291,13 +326,9 @@ export const TerminologyLookup = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => {
-                                if ('speechSynthesis' in window) {
-                                  const utterance = new SpeechSynthesisUtterance(term.term);
-                                  utterance.lang = 'en-US';
-                                  speechSynthesis.speak(utterance);
-                                }
-                              }}
+                              onClick={() => playPronunciation(term.term, term.id)}
+                              aria-label={`Play pronunciation for ${term.term}`}
+                              className={playingId === term.id ? 'text-primary animate-pulse' : ''}
                             >
                               <Volume2 className="w-3 h-3" />
                             </Button>
@@ -314,6 +345,7 @@ export const TerminologyLookup = () => {
                         size="icon"
                         onClick={() => deleteTerm(term.id)}
                         className="text-destructive hover:text-destructive"
+                        aria-label={`Delete term ${term.term}`}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
