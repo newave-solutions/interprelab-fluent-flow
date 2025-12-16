@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, DollarSign, TrendingDown, Clock, Brain } from "lucide-react";
+import { CheckCircle2, DollarSign, Clock, Brain } from "lucide-react";
 
 export const ProblemSolution = () => {
   const challenges = [
