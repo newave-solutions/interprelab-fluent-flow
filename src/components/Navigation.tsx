@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, User, LogOut, ChevronDown } from "lucide-react";
+import { Menu, Chrome, Shield, Phone, Mail, ArrowRight, User, LogOut, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,9 +23,7 @@ export const Navigation = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -53,21 +52,17 @@ export const Navigation = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-background/90 backdrop-blur-md shadow-sm py-4' 
-        : 'bg-transparent py-6'
-    }`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-nobel-gold rounded-full flex items-center justify-center text-background font-serif font-bold text-xl shadow-sm">
-              I
+            <div className="w-10 h-10 bg-nobel-gold rounded-full flex items-center justify-center shadow-sm">
+              <Shield className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-serif font-medium">InterpreLab</h1>
-              <p className="text-xs text-muted-foreground">Advanced Interpretation</p>
+            <div className={`transition-opacity ${scrolled ? 'opacity-100' : 'opacity-0 md:opacity-100'}`}>
+              <h1 className="font-serif text-xl font-bold tracking-wide">InterpreLab</h1>
+              <p className="text-xs text-muted-foreground font-normal">Advanced Interpretation</p>
             </div>
           </Link>
 
@@ -78,19 +73,16 @@ export const Navigation = () => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="text-sm font-medium text-muted-foreground hover:text-foreground bg-transparent data-[state=open]:text-nobel-gold">
+                      <NavigationMenuTrigger className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold bg-transparent uppercase">
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid w-56 gap-1 p-2 bg-card border border-border rounded-lg">
+                        <ul className="grid w-52 gap-2 p-3">
                           {item.submenu.map((subitem) => (
                             <li key={subitem.href}>
                               <NavigationMenuLink asChild>
-                                <Link 
-                                  to={subitem.href} 
-                                  className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-sm"
-                                >
-                                  {subitem.label}
+                                <Link to={subitem.href} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-nobel-gold/10 hover:text-nobel-gold focus:bg-nobel-gold/10 focus:text-nobel-gold">
+                                  <div className="text-sm font-medium leading-none">{subitem.label}</div>
                                 </Link>
                               </NavigationMenuLink>
                             </li>
@@ -104,7 +96,7 @@ export const Navigation = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold transition-colors uppercase"
                 >
                   {item.label}
                 </Link>
@@ -114,34 +106,32 @@ export const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             {user ? (
               <>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" className="hover:text-nobel-gold" asChild>
                   <Link to="/dashboard">
                     Dashboard
                   </Link>
                 </Button>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/account">
-                    <User className="w-4 h-4 mr-2" />
-                    Account
-                  </Link>
-                </Button>
-                <Button onClick={handleSignOut} variant="outline" size="sm" className="border-nobel-gold/50 text-nobel-gold hover:bg-nobel-gold/10">
+                <Button onClick={handleSignOut} variant="ghost" size="sm" className="hover:text-nobel-gold">
                   <LogOut className="w-4 h-4 mr-2" />
                   {t('signOut')}
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-nobel-gold" asChild>
                   <Link to="/waitlist">
                     Join Waitlist
                   </Link>
                 </Button>
-                <Button variant="default" size="sm" className="bg-nobel-gold text-background hover:bg-nobel-gold/90" asChild>
+                <Button 
+                  size="sm" 
+                  className="px-5 py-2 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full shadow-sm font-medium"
+                  asChild
+                >
                   <Link to="/signin">
-                    <User className="w-4 h-4 mr-2" />
                     {t('signIn')}
                   </Link>
                 </Button>
@@ -152,16 +142,16 @@ export const Navigation = () => {
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="hover:text-nobel-gold">
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-card border-border">
+            <SheetContent side="right" className="bg-background/95 backdrop-blur-md">
               <div className="space-y-6 mt-8">
                 {navItems.map((item) => (
                   item.submenu ? (
                     <div key={item.label} className="space-y-2">
-                      <p className="text-xs font-bold tracking-widest text-muted-foreground uppercase">{item.label}</p>
+                      <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{item.label}</p>
                       {item.submenu.map((subitem) => (
                         <Link
                           key={subitem.href}
@@ -177,7 +167,7 @@ export const Navigation = () => {
                     <Link
                       key={item.label}
                       to={item.href}
-                      className="block text-lg font-medium text-foreground hover:text-nobel-gold transition-colors"
+                      className="block text-lg font-medium text-foreground hover:text-nobel-gold transition-colors uppercase"
                       onClick={() => setIsOpen(false)}
                     >
                       {item.label}
@@ -185,38 +175,35 @@ export const Navigation = () => {
                   )
                 ))}
 
-                <div className="pt-6 space-y-3 border-t border-border">
+                <div className="pt-6 space-y-3">
+                  <div className="flex justify-center pb-3">
+                    <ThemeToggle />
+                  </div>
                   {user ? (
-                    <>
-                      <Button variant="ghost" className="w-full justify-start" asChild>
-                        <Link to="/account" onClick={() => setIsOpen(false)}>
-                          <User className="w-4 h-4 mr-2" />
-                          Account
-                        </Link>
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          handleSignOut();
-                          setIsOpen(false);
-                        }}
-                        variant="outline"
-                        className="w-full border-nobel-gold/50 text-nobel-gold"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        {t('signOut')}
-                      </Button>
-                    </>
+                    <Button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsOpen(false);
+                      }}
+                      variant="ghost"
+                      className="w-full hover:text-nobel-gold"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {t('signOut')}
+                    </Button>
                   ) : (
                     <>
-                      <Button variant="ghost" className="w-full" asChild>
+                      <Button variant="ghost" className="w-full hover:text-nobel-gold" asChild>
                         <Link to="/waitlist" onClick={() => setIsOpen(false)}>
                           Join Waitlist
                         </Link>
                       </Button>
-                      <Button className="w-full bg-nobel-gold text-background hover:bg-nobel-gold/90" asChild>
+                      <Button 
+                        className="w-full bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium"
+                        asChild
+                      >
                         <Link to="/signin" onClick={() => setIsOpen(false)}>
-                          <User className="w-4 h-4 mr-2" />
-                          {t('signIn')}
+                          Sign In
                         </Link>
                       </Button>
                     </>
