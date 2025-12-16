@@ -138,13 +138,10 @@ const Index = () => {
         {/* Hero Section */}
         <Hero />
 
-        {/* Pain Point Stories - Full Screen Video Sections */}
-        <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
-          {painPointStories.map((story, index) => (
-            <StoryDrivenHero key={story.id} {...story} index={index} />
-          ))}
-        </div>
-
+        {/* Pain Point Stories */}
+        {painPointStories.map((story, index) => (
+          <StoryDrivenHero key={story.id} {...story} index={index} />
+        ))}
         {/* Feature Solutions - Linked from Pain Points */}
         <ProductShowcase />
 
