@@ -1,91 +1,161 @@
 import { Navigation } from "@/components/Navigation";
-import { Hero } from "@/components/Hero";
-import { FullScreenVideoHero } from "@/components/VideoSection";
-import { SolutionsShowcase } from "@/components/SolutionsShowcase";
-import { StatsSection } from "@/components/StatsSection";
-import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { Brain, AlertTriangle, DollarSign, TrendingDown } from "lucide-react";
+import { Hero } from "@/components/landing/Hero";
+import { StoryDrivenHero } from "@/components/landing/StoryDrivenHero";
+import { ProductShowcase } from "@/components/landing/ProductShowcase";
+import { CertificatesPremium } from "@/components/landing/CertificatesPremium";
+import { Testimonials } from "@/components/landing/Testimonials";
+import {
+  ArrowRight,
+  Heart,
+  TrendingUp,
+  Shield,
+  Clock,
+  AlertTriangle,
+  DollarSign,
+  FileX,
+} from 'lucide-react';
+
+// Import images from assets
 import cognitiveOverloadImg from "@/assets/pain-point-cognitive-overload.png";
-import healthcareCrisisImg from "@/assets/pain-point-healthcare-crisis.png";
+import wellnessSupportImg from "@/assets/wellness-support.jpg";
+import studyingLearningImg from "@/assets/studying-learning.jpg";
 import exploitationImg from "@/assets/pain-point-exploitation.png";
 
 const Index = () => {
-  const painPoints = [
+  const painPointStories = [
     {
-      videoSrc: "/videos/lep-statistics.mp4",
-      title: "30 Seconds to Reset, Lives on the Line",
-      description:
-        "Back-to-back calls across diverse medical specialties. Interpreters have 30 seconds or less to completely reset their brain, begin active listening and note-taking, search unfamiliar terminology while continuing to absorb the message, and start interpreting within seconds—all while preserving every word without additions, omissions, or summarizations. Voice clarity, pacing, and smoothness are non-negotiable. In healthcare, lives are directly in their hands. Every. Single. Call.",
+      id: 'terminology-crisis',
+      imageSrc: cognitiveOverloadImg,
+      title: 'The Terminology Crisis',
+      scenario:
+        "Dr. Martinez needs consent for an emergency thoracentesis. The patient is deteriorating rapidly. But what's the exact term in Spanish? Toracocentesis? Punción pleural? Getting this wrong could mean the difference between informed consent and a lawsuit...",
+      emotionalHook: 'In critical moments, interpreters have seconds to make decisions that impact lives.',
       dataOverlays: [
-        { stat: "30 SEC", label: "Reset Time", icon: <Brain className="w-5 h-5" /> },
-        { stat: "5-10", label: "Specialties Per Day", icon: <AlertTriangle className="w-5 h-5" /> },
-        { stat: "100%", label: "Accuracy Required" },
+        { stat: '⏰ 3 sec', label: 'Decision window', icon: <Clock className="w-5 h-5" /> },
+        {
+          stat: '73%',
+          label: 'Report terminology stress',
+          icon: <AlertTriangle className="w-5 h-5" />,
+        },
+        {
+          stat: '$71M',
+          label: 'Largest malpractice settlement',
+          icon: <DollarSign className="w-5 h-5" />,
+        },
       ],
-      illustrationSrc: cognitiveOverloadImg,
-      illustrationPosition: 'center' as const,
+      ctaText: 'Find Out How InterpreCoach Helps',
+      ctaIcon: ArrowRight,
+      targetFeature: 'interprecoach-section',
+      emotionalTone: 'urgent' as const,
     },
     {
-      videoSrc: "/videos/interpreter-stress.mp4",
-      title: "20 Million Lives, Double the Risk",
-      description:
-        "Over 20 million Limited English Proficient individuals in the U.S. (not counting undocumented immigrants) face a stark reality: they are twice as likely to die when hospitalized compared to English-speaking patients due to language barriers. Despite these alarming mortality rates, interpreters are being onboarded with little to no true training—thrown into life-or-death situations unprepared.",
+      id: 'emotional-toll',
+      imageSrc: wellnessSupportImg,
+      title: 'The Emotional Toll',
+      scenario:
+        "'I'm deeply sorry to inform you... your father passed away peacefully at 3:47 AM.' The interpreter feels the family's grief wash over them like a wave. Word by word, they deliver news that shatters a world. Then, 5 minutes later, another call. Another family. Another trauma. But who's there for the interpreter?",
+      emotionalHook: 'Interpreters absorb emotional trauma daily. 73% report burnout. Who supports them?',
       dataOverlays: [
-        { stat: "20M+", label: "LEP Patients in U.S.", icon: <AlertTriangle className="w-5 h-5" /> },
-        { stat: "2x", label: "Mortality Risk", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "Minimal", label: "Training Provided" },
+        {
+          stat: '73%',
+          label: 'Burnout rate among interpreters',
+          icon: <TrendingUp className="w-5 h-5" />,
+        },
+        { stat: 'Daily', label: 'Traumatic calls frequency', icon: <Clock className="w-5 h-5" /> },
+        {
+          stat: '$0',
+          label: 'Typical mental health support',
+          icon: <DollarSign className="w-5 h-5" />,
+        },
       ],
-      illustrationSrc: healthcareCrisisImg,
-      illustrationPosition: 'center' as const,
+      ctaText: 'Discover InterpreWellness Support',
+      ctaIcon: Heart,
+      targetFeature: 'wellness-section',
+      emotionalTone: 'somber' as const,
     },
     {
-      videoSrc: "/videos/terminology-gap.mp4",
-      title: "Undervalued, Underpaid, Overworked",
-      description:
-        "Major Language Service Providers justify extreme undercompensation with the excuse: 'Pay ranges according to interpreter's location and economy.' Meanwhile, they're meeting demand and maximizing profits—all at the expense of LEP communities who deserve qualified, fairly-compensated professionals. The interpreters bearing this impossible burden deserve better. The LEP patients depending on them deserve better.",
+      id: 'feedback-gap',
+      imageSrc: studyingLearningImg,
+      title: 'The Feedback Gap',
+      scenario:
+        "David just completed 50 calls this month. His QA feedback? 'Correct, correct, correct. Additional comments: none.' He wants to improve, to be excellent, but how? Everyone says he's 'fine'... but is fine good enough when lives depend on his words?",
+      emotionalHook: "Generic feedback doesn't build excellence. Interpreters deserve better.",
       dataOverlays: [
-        { stat: "$0.10/min", label: "Offshore Pay", icon: <DollarSign className="w-5 h-5" /> },
-        { stat: "$4.95/min", label: "LSP Charges", icon: <TrendingDown className="w-5 h-5" /> },
-        { stat: "89%", label: "Pay Gap" },
+        { stat: '1 call', label: 'QA reviewed per 4-6 months', icon: <FileX className="w-5 h-5" /> },
+        {
+          stat: 'Generic',
+          label: 'Feedback quality',
+          icon: <AlertTriangle className="w-5 h-5" />,
+        },
+        {
+          stat: '$1000s',
+          label: 'Cost of quality training',
+          icon: <DollarSign className="w-5 h-5" />,
+        },
       ],
-      illustrationSrc: exploitationImg,
-      illustrationPosition: 'center' as const,
+      ctaText: 'See How We Provide Real Insights',
+      ctaIcon: TrendingUp,
+      targetFeature: 'qa-feedback-section',
+      emotionalTone: 'frustrated' as const,
+    },
+    {
+      id: 'payment-accuracy',
+      imageSrc: exploitationImg,
+      title: 'Payment Accuracy',
+      scenario:
+        "Sarah compares her logs: '47 minutes.' Company statement: '45 minutes.' Two minutes, rounded down. Multiply by 20 calls/day × 5 days/week × 52 weeks... Over $2,800 stolen. Just like that. And without her own records, she has no proof.",
+      emotionalHook: '2-3 minutes per day = $3,000+ lost per year. Your time deserves accurate tracking.',
+      dataOverlays: [
+        {
+          stat: '2-3 min',
+          label: 'Average daily rounding loss',
+          icon: <Clock className="w-5 h-5" />,
+        },
+        {
+          stat: '$3,000+',
+          label: 'Potential lost earnings (est.)',
+          icon: <DollarSign className="w-5 h-5" />,
+        },
+        {
+          stat: 'Zero logs',
+          label: 'Most interpreters keep no records',
+          icon: <FileX className="w-5 h-5" />,
+        },
+      ],
+      ctaText: 'Take Control with InterpreTrack',
+      ctaIcon: Shield,
+      targetFeature: 'interpretrack-section',
+      emotionalTone: 'determined' as const,
     },
   ];
 
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <ThemeToggle />
-      
+
       <main>
+        {/* Hero Section */}
         <Hero />
-        
-        {/* Pain Points Video Sections with Data Overlays */}
+
+        {/* Pain Point Stories - Full Screen Video Sections */}
         <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
-          {painPoints.map((painPoint, index) => (
-            <FullScreenVideoHero
-              key={index}
-              videoSrc={painPoint.videoSrc}
-              title={painPoint.title}
-              description={painPoint.description}
-              index={index}
-              dataOverlays={painPoint.dataOverlays}
-              illustrationSrc={painPoint.illustrationSrc}
-              illustrationPosition={painPoint.illustrationPosition}
-            />
+          {painPointStories.map((story, index) => (
+            <StoryDrivenHero key={story.id} {...story} index={index} />
           ))}
-          
-          {/* Solutions Showcase - 4th section */}
-          <SolutionsShowcase />
         </div>
 
-        {/* Social Proof & Stats */}
-        <StatsSection />
+        {/* Feature Solutions - Linked from Pain Points */}
+        <ProductShowcase />
+
+        {/* Certification & Premium */}
+        <CertificatesPremium />
+
+        {/* Testimonials */}
         <Testimonials />
+
       </main>
-      
+
       <Footer />
     </div>
   );
