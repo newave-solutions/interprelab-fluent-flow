@@ -21,7 +21,7 @@ export default function InterpreStudy() {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
         <div
-          className="text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
+          className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
           style={{ backgroundImage: "url('/src/assets/studying-learning.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
