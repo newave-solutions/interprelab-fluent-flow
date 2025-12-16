@@ -131,7 +131,7 @@ export const Navigation = () => {
                   asChild
                 >
                   <Link to="/signin">
-                    Sign In
+                    {t('signIn')}
                   </Link>
                 </Button>
               </>
