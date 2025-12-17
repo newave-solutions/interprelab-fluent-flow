@@ -20,7 +20,7 @@ def verify_asl_page():
             if page.get_by_text("ASL Teacher").count() > 0:
                 print("Found 'ASL Teacher' text")
             else:
-                 print("Did NOT find 'ASL Teacher' text")
+                print("Did NOT find 'ASL Teacher' text")
 
 
             # Take screenshot
