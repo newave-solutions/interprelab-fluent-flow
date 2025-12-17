@@ -10,7 +10,7 @@ import {
   Heart,
   ChevronDown,
   ChevronUp,
-  TrendingDown,
+
   AlertTriangle
 } from "lucide-react";
 
