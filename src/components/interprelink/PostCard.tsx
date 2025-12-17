@@ -1,17 +1,21 @@
-import { memo } from "react";
+import React from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal, Heart, MessageCircle, Share2, Bookmark } from "lucide-react";
+import {
+  MessageCircle, Heart, Share2, MoreHorizontal,
+  Bookmark
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { Post } from "@/lib/types";
+import { Post } from "./types";
 
 interface PostCardProps {
   post: Post;
 }
 
-export const PostCard = memo(({ post }: PostCardProps) => {
+// Memoized to prevent re-renders when parent state (like search query) changes
+const PostCard = React.memo(({ post }: PostCardProps) => {
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -75,3 +79,5 @@ export const PostCard = memo(({ post }: PostCardProps) => {
 });
 
 PostCard.displayName = "PostCard";
+
+export default PostCard;
