@@ -10,7 +10,8 @@ export default function InterpreTrack() {
   const stats = getAggregatedStats();
   const weeklyData = getWeeklyData();
   const callTypeData = getCallTypeStats();
-  const aiStats = "Here are some AI stats";
+  // TODO: Implement actual AI-generated statistics using Gemini API
+  const aiStats = null;
   const aiError = false;
 
   return (
