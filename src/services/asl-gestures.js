@@ -270,6 +270,7 @@ for(let finger of [Finger.Index, Finger.Middle, Finger.Ring]) {
  * - X: Dynamic gesture requiring hooked finger movement
  * - Z: Dynamic gesture requiring tracing the letter Z in space
  */
+// J, X, Z omitted as they require motion
 export const gestures = [
     aSign, bSign, cSign, dSign, eSign, fSign, gSign, hSign, iSign, kSign, lSign, mSign, nSign, oSign, pSign, qSign, rSign, sSign, tSign, uSign, vSign, wSign, ySign
 ];
