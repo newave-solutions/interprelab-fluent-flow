@@ -1,56 +1,56 @@
 -- Create study_settings table for storing user study preferences
-CREATE TABLE IF NOT EXISTS study_settings (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  difficulty TEXT NOT NULL DEFAULT 'intermediate',
-  specialty TEXT NOT NULL DEFAULT 'medical',
-  target_language TEXT NOT NULL DEFAULT 'spanish',
-  provider_accent TEXT NOT NULL DEFAULT 'neutral',
-  provider_gender TEXT NOT NULL DEFAULT 'any',
-  response_time INTEGER NOT NULL DEFAULT 8,
-  preferred_vocabulary TEXT DEFAULT '',
-  auto_save BOOLEAN NOT NULL DEFAULT true,
-  audio_feedback BOOLEAN NOT NULL DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id)
+create table if not exists study_settings (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  difficulty text not null default 'intermediate',
+  specialty text not null default 'medical',
+  target_language text not null default 'spanish',
+  provider_accent text not null default 'neutral',
+  provider_gender text not null default 'any',
+  response_time integer not null default 8,
+  preferred_vocabulary text default '',
+  auto_save boolean not null default true,
+  audio_feedback boolean not null default true,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now(),
+  constraint study_settings_user_id_key unique(user_id)
 );
 
 -- Add index for better query performance
-CREATE INDEX IF NOT EXISTS idx_study_settings_user_id ON study_settings(user_id);
+create index if not exists study_settings_user_id_idx on study_settings(user_id);
 
 -- Enable Row Level Security
-ALTER TABLE study_settings ENABLE ROW LEVEL SECURITY;
+alter table study_settings enable row level security;
 
 -- RLS Policies for study_settings
-CREATE POLICY "Users can view their own study settings"
-  ON study_settings FOR SELECT
-  USING (auth.uid() = user_id);
+create policy "Users can view their own study settings"
+  on study_settings for select
+  using (auth.uid() = user_id);
 
-CREATE POLICY "Users can insert their own study settings"
-  ON study_settings FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+create policy "Users can insert their own study settings"
+  on study_settings for insert
+  with check (auth.uid() = user_id);
 
-CREATE POLICY "Users can update their own study settings"
-  ON study_settings FOR UPDATE
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+create policy "Users can update their own study settings"
+  on study_settings for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 
-CREATE POLICY "Users can delete their own study settings"
-  ON study_settings FOR DELETE
-  USING (auth.uid() = user_id);
+create policy "Users can delete their own study settings"
+  on study_settings for delete
+  using (auth.uid() = user_id);
 
 -- Grant necessary permissions
-GRANT SELECT, INSERT, UPDATE, DELETE ON study_settings TO authenticated;
+grant select, insert, update, delete on study_settings to authenticated;
 
 -- Add helpful comments
-COMMENT ON TABLE study_settings IS 'Stores user study preferences for InterpreStudy sessions';
-COMMENT ON COLUMN study_settings.difficulty IS 'Study difficulty level: beginner, intermediate, advanced, expert';
-COMMENT ON COLUMN study_settings.specialty IS 'Field of study: medical, legal, business, education, social-services';
-COMMENT ON COLUMN study_settings.target_language IS 'Target language for practice: spanish, french, mandarin, arabic';
-COMMENT ON COLUMN study_settings.provider_accent IS 'Provider accent preference: neutral, regional, native, mixed';
-COMMENT ON COLUMN study_settings.provider_gender IS 'Provider gender preference: any, male, female';
-COMMENT ON COLUMN study_settings.response_time IS 'Maximum response time in seconds (5-15)';
-COMMENT ON COLUMN study_settings.preferred_vocabulary IS 'Comma-separated list of preferred vocabulary terms to practice';
-COMMENT ON COLUMN study_settings.auto_save IS 'Whether to automatically save study progress';
-COMMENT ON COLUMN study_settings.audio_feedback IS 'Whether to provide audio confirmation for correct answers';
+comment on table study_settings is 'Stores user study preferences for InterpreStudy sessions';
+comment on column study_settings.difficulty is 'Study difficulty level: beginner, intermediate, advanced, expert';
+comment on column study_settings.specialty is 'Field of study: medical, legal, business, education, social-services';
+comment on column study_settings.target_language is 'Target language for practice: spanish, french, mandarin, arabic';
+comment on column study_settings.provider_accent is 'Provider accent preference: neutral, regional, native, mixed';
+comment on column study_settings.provider_gender is 'Provider gender preference: any, male, female';
+comment on column study_settings.response_time is 'Maximum response time in seconds (5-15)';
+comment on column study_settings.preferred_vocabulary is 'Comma-separated list of preferred vocabulary terms to practice';
+comment on column study_settings.auto_save is 'Whether to automatically save study progress';
+comment on column study_settings.audio_feedback is 'Whether to provide audio confirmation for correct answers';
