@@ -244,6 +244,7 @@ for(let finger of [Finger.Index, Finger.Middle, Finger.Ring]) {
     ySign.addDirection(finger, FingerDirection.VerticalUp, 1.0);
 }
 
+// J, X, Z omitted as they require motion
 export const gestures = [
     aSign, bSign, cSign, dSign, eSign, fSign, gSign, hSign, iSign, kSign, lSign, mSign, nSign, oSign, pSign, qSign, rSign, sSign, tSign, uSign, vSign, wSign, ySign
 ];
