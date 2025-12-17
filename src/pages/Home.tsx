@@ -9,28 +9,24 @@ import { ScrollProgress } from "../components/ScrollProgress";
 export default function Home() {
   const painPoints = [
     {
-      id: "overworked-underpaid",
       videoSrc: "/videos/lep-statistics.mp4",
       title: "Overworked & Underpaid",
       description:
         "As of the present day, research suggests remote interpreters are overworked and underpaid, so how does this reflect on the services provided?",
     },
     {
-      id: "unqualified-gap",
       videoSrc: "/videos/interpreter-stress.mp4",
       title: "The Unqualified Gap",
       description:
         "The shortage of qualified interpreters has led to hiring untrained bilinguals, in some cases, limited English proficient. Independent contractor relationships mean QA teams provide minimal feedback - often analyzing just one call every 4-6 months.",
     },
     {
-      id: "lives-at-stake",
       videoSrc: "/videos/terminology-gap.mp4",
       title: "Lives at Stake",
       description:
         "As a result, Limited English Proficiency patients are twice as likely to die when hospitalized compared to English-speaking patients. These disparities often go unreported as LEP communities face marginalization and discrimination in healthcare.",
     },
     {
-      id: "solution-interprelab",
       videoSrc: "/videos/lep-statistics.mp4",
       title: "The Solution: InterpreLab",
       description:
@@ -47,7 +43,7 @@ export default function Home() {
       <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-snap-container" role="region" aria-label="Pain points and solutions showcase">
         {painPoints.map((painPoint, index) => (
           <FullScreenVideoHero
-            key={painPoint.id}
+            key={index}
             videoSrc={painPoint.videoSrc}
             title={painPoint.title}
             description={painPoint.description}

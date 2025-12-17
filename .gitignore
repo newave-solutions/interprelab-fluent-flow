@@ -16,13 +16,6 @@ dist-ssr
 .env.*.local
 .env.production
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
 # Supabase
 supabase/.temp/
 supabase/.branches/

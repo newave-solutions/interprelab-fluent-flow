@@ -1,14 +1,4 @@
 // src/services/asl-gestures.js
-/**
- * ASL Alphabet Gesture Recognition
- * 
- * This module defines static hand pose gestures for ASL alphabet letters.
- * Note: Letters J, X, and Z are not included as they require motion to sign,
- * which cannot be detected using static hand pose recognition alone.
- * 
- * Supported letters: A, B, C, D, E, F, G, H, I, K, L, M, N, O, P, Q, R, S, T, U, V, W, Y
- * Not supported (motion required): J, X, Z
- */
 
 import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose';
 
@@ -254,8 +244,7 @@ for(let finger of [Finger.Index, Finger.Middle, Finger.Ring]) {
     ySign.addDirection(finger, FingerDirection.VerticalUp, 1.0);
 }
 
-// Export all supported gestures
-// Note: J, X, and Z are excluded as they require motion-based detection
+// J, X, Z omitted as they require motion
 export const gestures = [
     aSign, bSign, cSign, dSign, eSign, fSign, gSign, hSign, iSign, kSign, lSign, mSign, nSign, oSign, pSign, qSign, rSign, sSign, tSign, uSign, vSign, wSign, ySign
 ];

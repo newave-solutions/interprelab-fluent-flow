@@ -340,18 +340,20 @@ export const ExtensionUI = () => {
   };
 
   useEffect(() => {
-    if (isDragging) {
-      const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
         setPosition({
           x: e.clientX - dragOffset.x,
           y: e.clientY - dragOffset.y
         });
-      };
+      }
+    };
 
-      const handleMouseUp = () => {
-        setIsDragging(false);
-      };
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
 
+    if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       return () => {
