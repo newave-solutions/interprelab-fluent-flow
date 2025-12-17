@@ -1,33 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, BookMarked, Volume2, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 interface GlossaryTerm {
   id: string;
-  user_id: string | null;
   term: string;
   definition: string;
-  pronunciation: string | null;
-  category: string | null;
-  subcategory: string | null;
-  language_code: string | null;
-  source_language: string | null;
-  target_language: string | null;
-  difficulty_level: string | null;
-  usage_example: string | null;
-  notes: string | null;
-  tags: string[] | null;
-  is_public: boolean | null;
-  is_verified: boolean | null;
-  usage_count: number | null;
-  created_at: string;
-  updated_at: string;
+  pronunciation: string;
+  translation: string;
+  category: string;
+  createdAt: string;
 }
 
 interface TermResult {
@@ -38,47 +24,27 @@ interface TermResult {
   imageUrl?: string;
 }
 
+const STORAGE_KEY = 'interprestudy_glossary';
+
 export const TerminologyLookup = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [result, setResult] = useState<TermResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const { user } = useAuth();
   const { toast } = useToast();
 
-  const loadGlossaryTerms = useCallback(async () => {
-    if (!user?.id) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('glossary_terms')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      if (data) {
-        setGlossaryTerms(data as GlossaryTerm[]);
-      }
-    } catch (error) {
-      console.error('Error loading glossary terms:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load glossary terms.',
-        variant: 'destructive',
-      });
-    }
-  }, [user, toast]);
-
   useEffect(() => {
-    if (user) {
-      loadGlossaryTerms();
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setGlossaryTerms(JSON.parse(stored));
+      } catch {
+        // Use empty array if parsing fails
+      }
     }
-  }, [user]);
+  }, []);
 
-  // Clean up speech synthesis on unmount
   useEffect(() => {
     return () => {
       if ('speechSynthesis' in window) {
@@ -86,7 +52,6 @@ export const TerminologyLookup = () => {
       }
     };
   }, []);
-
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
@@ -97,7 +62,7 @@ export const TerminologyLookup = () => {
     setTimeout(() => {
       setResult({
         english: searchTerm,
-        translation: 'Diagnóstico', // This would ideally be dynamic
+        translation: 'Diagnóstico',
         pronunciation: '/di.aɡˈnos.ti.ko/',
         definition: 'The identification of the nature of an illness or other problem by examination of the symptoms.',
         imageUrl: undefined,
@@ -106,75 +71,42 @@ export const TerminologyLookup = () => {
     }, 1000);
   };
 
-  const handleAddToGlossary = async () => {
-    if (!result || !user?.id) return;
+  const handleAddToGlossary = () => {
+    if (!result) return;
 
-    try {
-      const newTerm = {
-        user_id: user.id,
-        term: result.english,
-        definition: result.definition,
-        pronunciation: result.pronunciation,
-        target_language: result.translation, // Using target_language to store translation based on UI usage
-        source_language: 'en',
-        language_code: 'es', // Hardcoded as per current UI simulation
-        category: 'General',
-      };
+    const newTerm: GlossaryTerm = {
+      id: crypto.randomUUID(),
+      term: result.english,
+      definition: result.definition,
+      pronunciation: result.pronunciation,
+      translation: result.translation,
+      category: 'General',
+      createdAt: new Date().toISOString(),
+    };
 
-      const { data, error } = await supabase
-        .from('glossary_terms')
-        .insert(newTerm)
-        .select()
-        .single();
+    const updated = [newTerm, ...glossaryTerms];
+    setGlossaryTerms(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Term added to your glossary.',
-      });
-
-      if (data) {
-        setGlossaryTerms([data as GlossaryTerm, ...glossaryTerms]);
-      }
-    } catch (error) {
-      console.error('Error adding term:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to add term to glossary.',
-        variant: 'destructive',
-      });
-    }
+    toast({
+      title: 'Success',
+      description: 'Term added to your glossary.',
+    });
   };
 
-  const deleteTerm = async (termId: string) => {
-    try {
-      const { error } = await supabase
-        .from('glossary_terms')
-        .delete()
-        .eq('id', termId);
+  const deleteTerm = (termId: string) => {
+    const updated = glossaryTerms.filter(t => t.id !== termId);
+    setGlossaryTerms(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Term deleted from glossary.',
-      });
-
-      setGlossaryTerms(glossaryTerms.filter(t => t.id !== termId));
-    } catch (error) {
-      console.error('Error deleting term:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete term.',
-        variant: 'destructive',
-      });
-    }
+    toast({
+      title: 'Success',
+      description: 'Term deleted from glossary.',
+    });
   };
 
   const playPronunciation = (text: string, id: string = 'main') => {
     if ('speechSynthesis' in window) {
-      // Cancel any currently playing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
@@ -304,11 +236,6 @@ export const TerminologyLookup = () => {
                               {term.category}
                             </Badge>
                           )}
-                          {term.difficulty_level && (
-                            <Badge variant="secondary" className="text-xs">
-                              {term.difficulty_level}
-                            </Badge>
-                          )}
                         </div>
                         <p className="text-sm text-muted-foreground mb-2">{term.definition}</p>
                         {term.pronunciation && (
@@ -325,9 +252,9 @@ export const TerminologyLookup = () => {
                             </Button>
                           </div>
                         )}
-                        {term.target_language && (
+                        {term.translation && (
                           <p className="text-sm text-primary mt-1">
-                            Translation: {term.target_language}
+                            Translation: {term.translation}
                           </p>
                         )}
                       </div>
