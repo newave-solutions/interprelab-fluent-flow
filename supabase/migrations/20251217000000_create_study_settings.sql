@@ -36,8 +36,12 @@ CREATE POLICY "Users can update their own study settings"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+CREATE POLICY "Users can delete their own study settings"
+  ON study_settings FOR DELETE
+  USING (auth.uid() = user_id);
+
 -- Grant necessary permissions
-GRANT SELECT, INSERT, UPDATE ON study_settings TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON study_settings TO authenticated;
 
 -- Add helpful comments
 COMMENT ON TABLE study_settings IS 'Stores user study preferences for InterpreStudy sessions';
