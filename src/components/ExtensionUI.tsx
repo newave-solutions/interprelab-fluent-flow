@@ -354,6 +354,17 @@ export const ExtensionUI = () => {
     };
 
     if (isDragging) {
+      const handleMouseMove = (e: MouseEvent) => {
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y
+        });
+      };
+
+      const handleMouseUp = () => {
+        setIsDragging(false);
+      };
+
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       return () => {
