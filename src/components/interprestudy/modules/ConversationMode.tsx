@@ -3,45 +3,27 @@ import { Mic, MicOff, Play, Volume2, Loader2, ThumbsUp, ThumbsDown, User, Smile,
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
 
-// --- GEMINI API UTILITIES ---
-const apiKey = ""; // API Key injected at runtime
-
+// --- API UTILITIES ---
 const callGemini = async (prompt: string) => {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }]
-  };
-
-  let attempt = 0;
-  const maxRetries = 3;
-  const delays = [1000, 2000, 4000];
-
-  while (attempt < maxRetries) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-         if (response.status === 429) {
-            throw new Error("Rate limit exceeded");
-         }
-         throw new Error(`API Error: ${response.status}`);
+  try {
+    const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+      body: {
+        action: 'completion',
+        messages: [{ role: 'user', content: prompt }]
       }
+    });
 
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated.";
-
-    } catch (error) {
-      attempt++;
-      if (attempt >= maxRetries) {
-        return "Connection error. Please try again later.";
-      }
-      await new Promise(resolve => setTimeout(resolve, delays[attempt - 1]));
+    if (error) {
+      console.error('Error calling AI:', error);
+      throw new Error(error.message);
     }
+
+    return data.content || "No content generated.";
+  } catch (error) {
+    console.error("AI Error:", error);
+    return "Connection error. Please try again later.";
   }
 };
 
@@ -76,6 +58,46 @@ const speakText = (text: string, lang = 'en-US') => {
   }
 };
 
+interface Message {
+  role: string;
+  text: string;
+  feedback?: {
+    score: number;
+    feedback: string;
+    strong_point: string;
+    weak_point: string;
+  };
+}
+
+interface Metrics {
+  score: number;
+  turns: number;
+  strongAreas: string[];
+  weakAreas: string[];
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
 export const ConversationMode = () => {
   // Configuration
   const [topic, setTopic] = useState("");
@@ -83,7 +105,7 @@ export const ConversationMode = () => {
 
   // Session State
   const [started, setStarted] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<Message[]>([]);
   const [currentTurn, setCurrentTurn] = useState('init'); // 'doctor', 'patient', 'interpreter'
   const [loading, setLoading] = useState(false);
   const [userTranscript, setUserTranscript] = useState("");
@@ -92,16 +114,17 @@ export const ConversationMode = () => {
 
   // Timer
   const [seconds, setSeconds] = useState(0);
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Metrics
-  const [metrics, setMetrics] = useState({
+  const [metrics, setMetrics] = useState<Metrics>({
     score: 100,
     turns: 0,
     strongAreas: ['Vocabulary'],
-    weakAreas: [] as string[]
+    weakAreas: []
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
 
   // Timer Logic
@@ -111,9 +134,11 @@ export const ConversationMode = () => {
         setSeconds(s => s + 1);
       }, 1000);
     } else {
-      clearInterval(timerRef.current);
+      if (timerRef.current) clearInterval(timerRef.current);
     }
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [started, soapNote]);
 
   const formatTime = (totalSeconds: number) => {
@@ -130,13 +155,16 @@ export const ConversationMode = () => {
     }
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognitionRef.current.onresult = (event: any) => {
         const transcript = Array.from(event.results)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((result: any) => result[0].transcript)
           .join('');
         setUserTranscript(transcript);
@@ -274,7 +302,7 @@ export const ConversationMode = () => {
     const result = await callGemini(prompt);
     setSoapNote(result);
     setLoading(false);
-    clearInterval(timerRef.current);
+    if (timerRef.current) clearInterval(timerRef.current);
   };
 
   if (!started) {
