@@ -87,6 +87,7 @@ export const TerminologyLookup = () => {
     };
   }, []);
 
+
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
