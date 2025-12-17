@@ -573,6 +573,7 @@ VITE_APP_ENV=production
 **Security Notes:**
 - ⚠️ Never commit `.env` files to version control
 - ⚠️ Use `.env.local` for local development
+- ⚠️ Use `.env.production` for production (not committed, create from `.env.production.example`)
 - ⚠️ Rotate keys regularly
 - ⚠️ Use Secret Manager for production
 
