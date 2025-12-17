@@ -10,7 +10,7 @@ export default function InterpreTrack() {
   const stats = getAggregatedStats();
   const weeklyData = getWeeklyData();
   const callTypeData = getCallTypeStats();
-  const aiStats = "Here are some AI stats";
+  const aiStats = "Here are some AI stats"; // TODO: Replace with real API data
   const aiError = false;
 
   return (
