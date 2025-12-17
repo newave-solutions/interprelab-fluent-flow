@@ -2,6 +2,22 @@
 
 import { Finger, FingerCurl, FingerDirection, GestureDescription } from 'fingerpose';
 
+/**
+ * ASL Alphabet Gesture Definitions for Static Hand Pose Recognition
+ * 
+ * This module defines 23 out of 26 ASL alphabet letters that can be recognized
+ * using static hand pose detection. The following letters are NOT included
+ * because they require motion tracking, which is not supported by the fingerpose
+ * library's static pose recognition:
+ * 
+ * - J: Requires tracing the letter "J" with the pinky finger
+ * - X: Requires a hooked index finger with a shaking motion
+ * - Z: Requires tracing the letter "Z" in the air with the index finger
+ * 
+ * Future enhancements could include motion-based gesture recognition to support
+ * these dynamic ASL letters.
+ */
+
 // define gestures
 // A
 const aSign = new GestureDescription('A');
@@ -244,6 +260,16 @@ for(let finger of [Finger.Index, Finger.Middle, Finger.Ring]) {
     ySign.addDirection(finger, FingerDirection.VerticalUp, 1.0);
 }
 
+/**
+ * Supported ASL alphabet gestures for static hand pose recognition.
+ * 
+ * Contains 23 letters: A, B, C, D, E, F, G, H, I, K, L, M, N, O, P, Q, R, S, T, U, V, W, Y
+ * 
+ * NOT SUPPORTED (require motion tracking):
+ * - J: Dynamic gesture requiring tracing motion
+ * - X: Dynamic gesture requiring hooked finger movement
+ * - Z: Dynamic gesture requiring tracing the letter Z in space
+ */
 export const gestures = [
     aSign, bSign, cSign, dSign, eSign, fSign, gSign, hSign, iSign, kSign, lSign, mSign, nSign, oSign, pSign, qSign, rSign, sSign, tSign, uSign, vSign, wSign, ySign
 ];
