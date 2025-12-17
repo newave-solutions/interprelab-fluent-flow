@@ -87,15 +87,6 @@ export const TerminologyLookup = () => {
     };
   }, []);
 
-  const loadGlossaryTerms = async () => {
-    if (!user?.id) return;
-
-    // TODO: glossary_terms table needs to be created
-    // Temporarily disabled until database migration is complete
-    console.log('Glossary terms feature coming soon');
-    setGlossaryTerms([]);
-  };
-  }, [user, loadGlossaryTerms]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
