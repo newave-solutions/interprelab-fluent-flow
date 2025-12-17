@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, ChevronDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Play, ChevronDown, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBg from '../assets/hero-homepage.jpg';
 
