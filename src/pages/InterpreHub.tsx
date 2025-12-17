@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Plus, MessageCircle, Heart, Share, MoreHorizontal, Users, BookOpen, HelpCircle, Briefcase, Network } from "lucide-react";
 import { useState } from "react";
 
