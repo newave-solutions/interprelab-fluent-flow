@@ -10,8 +10,8 @@ export default function InterpreTrack() {
   const stats = getAggregatedStats();
   const weeklyData = getWeeklyData();
   const callTypeData = getCallTypeStats();
-  const aiStats = null;
-  const aiError = undefined;
+  const aiStats = "Here are some AI stats"; // TODO: Replace with real API data
+  const aiError = false;
 
   return (
     <div className="p-4 md:p-8 space-y-6">

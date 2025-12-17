@@ -1,5 +1,5 @@
 
-from playwright.sync_api import sync_playwright, expect
+from playwright.sync_api import sync_playwright
 
 def verify_asl_page():
     with sync_playwright() as p:
