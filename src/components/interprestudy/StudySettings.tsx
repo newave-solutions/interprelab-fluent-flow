@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Settings as SettingsIcon, Save } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/components/ui/use-toast';
 
 export const StudySettings = () => {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [settings, setSettings] = useState({
     difficulty: 'intermediate',
     specialty: 'medical',
@@ -15,14 +20,119 @@ export const StudySettings = () => {
     providerAccent: 'neutral',
     providerGender: 'any',
     responseTime: '8',
+    preferredVocabulary: '',
     autoSave: true,
     audioFeedback: true,
   });
 
-  const handleSave = () => {
-    // TODO: Save settings
-    console.log('Saving settings:', settings);
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          setInitialLoading(false);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('study_settings')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error) {
+            // If error is PGRST116, it means no rows returned, which is fine (defaults used)
+            if (error.code !== 'PGRST116') {
+                console.error('Error fetching study settings:', error);
+                toast({
+                  title: "Error",
+                  description: "Failed to load settings. Please try again.",
+                  variant: "destructive",
+                });
+            }
+        }
+
+        if (data) {
+          setSettings({
+            difficulty: data.difficulty,
+            specialty: data.specialty,
+            targetLanguage: data.target_language,
+            providerAccent: data.provider_accent,
+            providerGender: data.provider_gender,
+            responseTime: data.response_time.toString(),
+            preferredVocabulary: data.preferred_vocabulary,
+            autoSave: data.auto_save,
+            audioFeedback: data.audio_feedback,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, [toast]);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to save settings.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('study_settings')
+        .upsert({
+          user_id: user.id,
+          difficulty: settings.difficulty,
+          specialty: settings.specialty,
+          target_language: settings.targetLanguage,
+          provider_accent: settings.providerAccent,
+          provider_gender: settings.providerGender,
+          response_time: parseInt(settings.responseTime) || 8,
+          preferred_vocabulary: settings.preferredVocabulary,
+          auto_save: settings.autoSave,
+          audio_feedback: settings.audioFeedback,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Study preferences saved successfully.",
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (initialLoading) {
+    return (
+      <Card className="glass border-border/50">
+        <CardContent className="flex items-center justify-center py-10">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="glass border-border/50">
@@ -147,6 +257,8 @@ export const StudySettings = () => {
           <Label>Preferred Vocabulary to Practice</Label>
           <Input
             placeholder="Enter terms separated by commas (e.g., diagnosis, treatment, prescription)"
+            value={settings.preferredVocabulary}
+            onChange={(e) => setSettings({ ...settings, preferredVocabulary: e.target.value })}
           />
         </div>
 
@@ -179,8 +291,12 @@ export const StudySettings = () => {
           </div>
         </div>
 
-        <Button onClick={handleSave} className="w-full">
-          <Save className="w-4 h-4 mr-2" />
+        <Button onClick={handleSave} className="w-full" disabled={loading}>
+          {loading ? (
+             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+             <Save className="w-4 h-4 mr-2" />
+          )}
           Save Preferences
         </Button>
       </CardContent>
