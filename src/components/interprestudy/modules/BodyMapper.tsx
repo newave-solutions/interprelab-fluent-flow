@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Accessibility, Search, Volume2, BookOpen, Sparkles,
   Heart, Brain, Bone, Eye, Ear
@@ -264,16 +265,24 @@ export function BodyMapper() {
                             {language === 'en' ? organ.nameEs : organ.name}
                           </p>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            speakText(language === 'en' ? organ.nameEs : organ.name, language === 'en' ? 'es' : 'en');
-                          }}
-                        >
-                          <Volume2 className="w-4 h-4" />
-                        </Button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label={`Listen to ${language === 'en' ? organ.name : organ.nameEs} pronunciation`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                speakText(language === 'en' ? organ.nameEs : organ.name, language === 'en' ? 'es' : 'en');
+                              }}
+                            >
+                              <Volume2 className="w-4 h-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Listen to pronunciation</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                     </CardContent>
                   </Card>
@@ -351,17 +360,25 @@ export function BodyMapper() {
                                   {language === 'en' ? selectedOrgan.conditionsEs[i] : selectedOrgan.conditions[i]}
                                 </p>
                               </div>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8"
-                                onClick={() => speakText(
-                                  language === 'en' ? selectedOrgan.conditionsEs[i] : condition,
-                                  language === 'en' ? 'es' : 'en'
-                                )}
-                              >
-                                <Volume2 className="w-3 h-3" />
-                              </Button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    aria-label={`Listen to ${condition} pronunciation`}
+                                    onClick={() => speakText(
+                                      language === 'en' ? selectedOrgan.conditionsEs[i] : condition,
+                                      language === 'en' ? 'es' : 'en'
+                                    )}
+                                  >
+                                    <Volume2 className="w-3 h-3" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Listen to pronunciation</p>
+                                </TooltipContent>
+                              </Tooltip>
                             </div>
                           ))}
                         </div>
