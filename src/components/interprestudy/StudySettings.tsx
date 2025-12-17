@@ -6,108 +6,42 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Settings as SettingsIcon, Save, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+
+const STORAGE_KEY = 'interprestudy_settings';
+
+const defaultSettings = {
+  difficulty: 'intermediate',
+  specialty: 'medical',
+  targetLanguage: 'spanish',
+  providerAccent: 'neutral',
+  providerGender: 'any',
+  responseTime: '8',
+  preferredVocabulary: '',
+  autoSave: true,
+  audioFeedback: true,
+};
 
 export const StudySettings = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [settings, setSettings] = useState({
-    difficulty: 'intermediate',
-    specialty: 'medical',
-    targetLanguage: 'spanish',
-    providerAccent: 'neutral',
-    providerGender: 'any',
-    responseTime: '8',
-    preferredVocabulary: '',
-    autoSave: true,
-    audioFeedback: true,
-  });
+  const [settings, setSettings] = useState(defaultSettings);
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-          setInitialLoading(false);
-          return;
-        }
-
-        const { data, error } = await supabase
-          .from('study_settings')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-
-        if (error) {
-            // If error is PGRST116, it means no rows returned, which is fine (defaults used)
-            if (error.code !== 'PGRST116') {
-                console.error('Error fetching study settings:', error);
-                toast({
-                  title: "Error",
-                  description: "Failed to load settings. Please try again.",
-                  variant: "destructive",
-                });
-            }
-        }
-
-        if (data) {
-          setSettings({
-            difficulty: data.difficulty,
-            specialty: data.specialty,
-            targetLanguage: data.target_language,
-            providerAccent: data.provider_accent,
-            providerGender: data.provider_gender,
-            responseTime: data.response_time.toString(),
-            preferredVocabulary: data.preferred_vocabulary,
-            autoSave: data.auto_save,
-            audioFeedback: data.audio_feedback,
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-      } finally {
-        setInitialLoading(false);
+        setSettings({ ...defaultSettings, ...JSON.parse(stored) });
+      } catch {
+        // Use defaults if parsing fails
       }
-    };
+    }
+  }, []);
 
-    fetchSettings();
-  }, [toast]);
-
-  const handleSave = async () => {
+  const handleSave = () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "You must be logged in to save settings.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const { error } = await supabase
-        .from('study_settings')
-        .upsert({
-          user_id: user.id,
-          difficulty: settings.difficulty,
-          specialty: settings.specialty,
-          target_language: settings.targetLanguage,
-          provider_accent: settings.providerAccent,
-          provider_gender: settings.providerGender,
-          response_time: parseInt(settings.responseTime) || 8,
-          preferred_vocabulary: settings.preferredVocabulary,
-          auto_save: settings.autoSave,
-          audio_feedback: settings.audioFeedback,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (error) throw error;
-
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
       toast({
         title: "Success",
         description: "Study preferences saved successfully.",
@@ -123,16 +57,6 @@ export const StudySettings = () => {
       setLoading(false);
     }
   };
-
-  if (initialLoading) {
-    return (
-      <Card className="glass border-border/50">
-        <CardContent className="flex items-center justify-center py-10">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="glass border-border/50">
