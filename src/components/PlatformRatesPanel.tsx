@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Building2, Plus, Trash2, Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface PlatformRate {
   id: string;
@@ -23,6 +24,8 @@ export const PlatformRatesPanel = () => {
   const [platforms, setPlatforms] = useState<PlatformRate[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     platform_name: '',
     rate_per_minute: '',
@@ -31,13 +34,8 @@ export const PlatformRatesPanel = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (user) {
-      loadPlatforms();
-    }
-  }, [user]);
-
-  const loadPlatforms = async () => {
+  const loadPlatforms = useCallback(async () => {
+    setIsLoading(true);
     const { data, error } = await supabase
       .from('platform_rates')
       .select('*')
@@ -47,13 +45,23 @@ export const PlatformRatesPanel = () => {
     if (!error && data) {
       setPlatforms(data);
     }
-  };
+    setIsLoading(false);
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadPlatforms();
+    }
+  }, [user, loadPlatforms]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
     const rateValue = parseFloat(formData.rate_per_minute);
+    const platformName = formData.platform_name.trim();
+    const currency = formData.currency.trim().toUpperCase();
+
     if (isNaN(rateValue) || rateValue < 0) {
       toast({
         title: 'Invalid Rate',
@@ -63,13 +71,30 @@ export const PlatformRatesPanel = () => {
       return;
     }
 
+    // Check for duplicates
+    const isDuplicate = platforms.some(p =>
+      p.platform_name.toLowerCase() === platformName.toLowerCase() &&
+      p.id !== editingId
+    );
+
+    if (isDuplicate) {
+      toast({
+        title: 'Duplicate Platform',
+        description: 'A platform with this name already exists.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
     if (editingId) {
       const { error } = await supabase
         .from('platform_rates')
         .update({
-          platform_name: formData.platform_name,
+          platform_name: platformName,
           rate_per_minute: rateValue,
-          currency: formData.currency,
+          currency: currency,
         })
         .eq('id', editingId);
 
@@ -79,6 +104,7 @@ export const PlatformRatesPanel = () => {
           description: 'Failed to update platform rate',
           variant: 'destructive',
         });
+        setIsSubmitting(false);
         return;
       }
     } else {
@@ -86,9 +112,9 @@ export const PlatformRatesPanel = () => {
         .from('platform_rates')
         .insert({
           user_id: user.id,
-          platform_name: formData.platform_name,
+          platform_name: platformName,
           rate_per_minute: rateValue,
-          currency: formData.currency,
+          currency: currency,
         });
 
       if (error) {
@@ -97,6 +123,7 @@ export const PlatformRatesPanel = () => {
           description: 'Failed to add platform rate',
           variant: 'destructive',
         });
+        setIsSubmitting(false);
         return;
       }
     }
@@ -106,6 +133,7 @@ export const PlatformRatesPanel = () => {
       description: editingId ? 'Platform updated successfully' : 'Platform added successfully',
     });
 
+    setIsSubmitting(false);
     resetForm();
     loadPlatforms();
   };
@@ -213,7 +241,16 @@ export const PlatformRatesPanel = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit">{editingId ? 'Update' : 'Add'} Platform</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <LoadingSpinner size="sm" className="mr-2 text-primary-foreground" />
+                    {editingId ? 'Updating...' : 'Adding...'}
+                  </>
+                ) : (
+                  <>{editingId ? 'Update' : 'Add'} Platform</>
+                )}
+              </Button>
               <Button type="button" variant="outline" onClick={resetForm}>
                 Cancel
               </Button>
@@ -222,7 +259,11 @@ export const PlatformRatesPanel = () => {
         )}
 
         <div className="space-y-3">
-          {platforms.length === 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <LoadingSpinner size="lg" text="Loading rates..." />
+            </div>
+          ) : platforms.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
               No platforms configured yet. Add your first platform to start tracking platform-specific earnings!
             </p>

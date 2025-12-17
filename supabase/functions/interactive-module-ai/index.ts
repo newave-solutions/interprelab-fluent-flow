@@ -26,18 +26,18 @@ serve(async (req) => {
 
     const rawData = await req.json();
     const validationResult = requestSchema.safeParse(rawData);
-    
+
     if (!validationResult.success) {
       console.error("Validation error:", validationResult.error.errors);
       return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { action, topic, specialty, messages, term } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -82,14 +82,14 @@ serve(async (req) => {
         break;
     }
 
-    const apiMessages = action === 'chat' && messages 
+    const apiMessages = action === 'chat' && messages
       ? [{ role: "system", content: systemPrompt }, ...messages]
       : (action === 'completion') && messages
       ? messages
       : [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ];
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
 
     console.log(`Processing ${action} request for topic: ${topic || specialty || term || 'general'}`);
 
@@ -118,7 +118,7 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      
+
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
           status: 429,
@@ -177,3 +177,5 @@ serve(async (req) => {
     });
   }
 });
+
+

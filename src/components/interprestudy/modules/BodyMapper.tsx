@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import {
   Accessibility, Search, Volume2, BookOpen, Sparkles,
   Heart, Brain, Bone, Eye, Ear
 } from 'lucide-react';
@@ -162,13 +162,13 @@ export function BodyMapper() {
   const [language, setLanguage] = useState<'en' | 'es'>('en');
 
   const currentSystem = BODY_SYSTEMS.find(s => s.id === selectedSystem);
-  
+
   const filteredOrgans = currentSystem?.organs.filter(organ => {
     const query = searchQuery.toLowerCase();
-    return organ.name.toLowerCase().includes(query) || 
-           organ.nameEs.toLowerCase().includes(query) ||
-           organ.conditions.some(c => c.toLowerCase().includes(query)) ||
-           organ.conditionsEs.some(c => c.toLowerCase().includes(query));
+    return organ.name.toLowerCase().includes(query) ||
+      organ.nameEs.toLowerCase().includes(query) ||
+      organ.conditions.some(c => c.toLowerCase().includes(query)) ||
+      organ.conditionsEs.some(c => c.toLowerCase().includes(query));
   });
 
   const speakText = (text: string, lang: string) => {
@@ -227,8 +227,8 @@ export function BodyMapper() {
       <Tabs value={selectedSystem} onValueChange={setSelectedSystem}>
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
           {BODY_SYSTEMS.map(system => (
-            <TabsTrigger 
-              key={system.id} 
+            <TabsTrigger
+              key={system.id}
               value={system.id}
               className="flex items-center gap-2 py-3"
             >
@@ -350,7 +350,7 @@ export function BodyMapper() {
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                           {(language === 'en' ? selectedOrgan.conditions : selectedOrgan.conditionsEs).map((condition, i) => (
-                            <div 
+                            <div
                               key={i}
                               className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border"
                             >
