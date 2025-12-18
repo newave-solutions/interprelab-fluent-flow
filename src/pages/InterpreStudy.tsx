@@ -21,7 +21,7 @@ export default function InterpreStudy() {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
         <div
-          className="text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
+          className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
           style={{ backgroundImage: "url('/src/assets/studying-learning.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
@@ -42,43 +42,43 @@ export default function InterpreStudy() {
         {/* Main Content Tabs */}
         <Tabs defaultValue="modules" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-10 h-auto mb-8 p-1">
-            <TabsTrigger value="modules" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="modules" className="flex items-center gap-2 py-2" aria-label="Modules">
               <PlayCircle className="w-4 h-4" />
               <span className="hidden lg:inline">Modules</span>
             </TabsTrigger>
-            <TabsTrigger value="training" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="training" className="flex items-center gap-2 py-2" aria-label="Training">
               <GraduationCap className="w-4 h-4" />
               <span className="hidden lg:inline">Training</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="chat" className="flex items-center gap-2 py-2" aria-label="Simulation">
               <MessageSquare className="w-4 h-4" />
               <span className="hidden lg:inline">Sim</span>
             </TabsTrigger>
-            <TabsTrigger value="flashcards" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="flashcards" className="flex items-center gap-2 py-2" aria-label="Flashcards">
               <Layers className="w-4 h-4" />
               <span className="hidden lg:inline">Cards</span>
             </TabsTrigger>
-            <TabsTrigger value="quiz" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="quiz" className="flex items-center gap-2 py-2" aria-label="Quiz">
               <HelpCircle className="w-4 h-4" />
               <span className="hidden lg:inline">Quiz</span>
             </TabsTrigger>
-            <TabsTrigger value="body" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="body" className="flex items-center gap-2 py-2" aria-label="Body Mapper">
               <Accessibility className="w-4 h-4" />
               <span className="hidden lg:inline">Body</span>
             </TabsTrigger>
-            <TabsTrigger value="scenarios" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="scenarios" className="flex items-center gap-2 py-2" aria-label="Practice Scripts">
               <BookOpen className="w-4 h-4" />
               <span className="hidden lg:inline">Scripts</span>
             </TabsTrigger>
-            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2" aria-label="Terminology">
               <Languages className="w-4 h-4" />
               <span className="hidden lg:inline">Terms</span>
             </TabsTrigger>
-            <TabsTrigger value="interactive_chat" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="interactive_chat" className="flex items-center gap-2 py-2" aria-label="AI Chat">
                <MessageSquare className="w-4 h-4" />
                <span className="hidden lg:inline">AI Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2 py-2">
+            <TabsTrigger value="settings" className="flex items-center gap-2 py-2" aria-label="Settings">
               <Settings className="w-4 h-4" />
               <span className="hidden lg:inline">Settings</span>
             </TabsTrigger>

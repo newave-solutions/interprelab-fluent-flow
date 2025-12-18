@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,11 +12,91 @@ interface Message {
   timestamp: Date;
 }
 
+// Define minimal SpeechRecognition types to satisfy linter
+interface SpeechRecognitionResult {
+  [index: number]: { transcript: string };
+  isFinal: boolean;
+  length: number;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [Symbol.iterator](): IterableIterator<SpeechRecognitionResult>;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+}
+
+interface WindowWithSpeech extends Window {
+  SpeechRecognition?: { new(): SpeechRecognition };
+  webkitSpeechRecognition?: { new(): SpeechRecognition };
+}
+
 export const InteractiveChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const textBeforeRecording = useRef('');
+
+  useEffect(() => {
+    const windowWithSpeech = window as unknown as WindowWithSpeech;
+    if (windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition) {
+      const SpeechRecognition = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = 'en-US';
+
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+          const transcript = Array.from(event.results)
+            .map((result) => result[0].transcript)
+            .join(' ');
+
+          setInput(textBeforeRecording.current + (textBeforeRecording.current && transcript ? ' ' : '') + transcript);
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsRecording(false);
+        };
+
+        recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+          console.error('Speech recognition error:', event.error);
+          setIsRecording(false);
+        };
+      }
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current = null;
+      }
+    };
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -87,8 +167,22 @@ export const InteractiveChat = () => {
   };
 
   const toggleRecording = () => {
-    setIsRecording(!isRecording);
-    // TODO: Implement voice recording
+    if (!recognitionRef.current) {
+      console.warn("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+    } else {
+      textBeforeRecording.current = input;
+      try {
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } catch (err) {
+        console.error("Error starting speech recognition:", err);
+      }
+    }
   };
 
   return (
@@ -156,7 +250,8 @@ export const InteractiveChat = () => {
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about ethics, request a quiz, or query standards..."
+            disabled={isRecording}
+            placeholder={isRecording ? "Listening..." : "Ask about ethics, request a quiz, or query standards..."}
             className="min-h-[80px]"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
@@ -166,12 +261,13 @@ export const InteractiveChat = () => {
             }}
           />
           <div className="flex flex-col gap-2">
-            <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
+            <Button onClick={handleSend} disabled={isLoading || (!input.trim() && !isRecording)}>
               <Send className="w-4 h-4" />
             </Button>
             <Button
               variant={isRecording ? 'destructive' : 'outline'}
               onClick={toggleRecording}
+              className={isRecording ? "animate-pulse" : ""}
             >
               {isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </Button>
@@ -184,6 +280,7 @@ export const InteractiveChat = () => {
             variant="outline"
             size="sm"
             onClick={() => setInput('Quiz me on code of ethics')}
+            disabled={isRecording}
           >
             Ethics Quiz
           </Button>
@@ -191,6 +288,7 @@ export const InteractiveChat = () => {
             variant="outline"
             size="sm"
             onClick={() => setInput('What are the standards of practice?')}
+            disabled={isRecording}
           >
             Standards Query
           </Button>
@@ -198,6 +296,7 @@ export const InteractiveChat = () => {
             variant="outline"
             size="sm"
             onClick={() => setInput('Test my knowledge')}
+            disabled={isRecording}
           >
             Knowledge Test
           </Button>

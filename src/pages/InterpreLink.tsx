@@ -8,8 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { LucideIcon } from "lucide-react";
 import {
-  Search, Plus, MessageCircle, Heart, Share2, MoreHorizontal,
-  Users, BookOpen, HelpCircle, Briefcase, Network, Video,
+  Search, Plus, MessageCircle, Users, BookOpen, HelpCircle, Briefcase, Network, Video,
   Image as ImageIcon, Send, Bookmark, TrendingUp
 } from "lucide-react";
 import { useState } from "react";
@@ -20,7 +19,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
-import { formatDistanceToNow } from "date-fns";
+import PostCard from "@/components/interprelink/PostCard";
+import { Post } from "@/components/interprelink/types";
 
 interface SidebarItem {
   icon: LucideIcon;
@@ -28,16 +28,6 @@ interface SidebarItem {
   active?: boolean;
   badge?: string;
   badgeColor?: string;
-}
-
-interface Post {
-  id: string;
-  content: string;
-  created_at: string;
-  media_url?: string;
-  media_type?: string;
-  tags?: string[];
-  user_id: string;
 }
 
 export default function InterpreLink() {
@@ -279,64 +269,7 @@ export default function InterpreLink() {
                   <div className="text-center py-8 text-muted-foreground">No posts yet. Be the first to share!</div>
                 ) : (
                   posts?.map((post) => (
-                    <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex items-start gap-4">
-                          <Avatar className="w-12 h-12">
-                            <AvatarFallback>U</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h3 className="font-semibold">User</h3>
-                                <p className="text-sm text-muted-foreground">Interpreter</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                  {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
-                                </span>
-                                <Button variant="ghost" size="icon">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-foreground leading-relaxed">{post.content}</p>
-
-                        {post.tags && (
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.map((tag, index) => (
-                              <Badge key={index} variant="secondary">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-
-                        <div className="flex items-center justify-between pt-4 border-t">
-                          <div className="flex items-center gap-6">
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <Heart className="w-4 h-4" />
-                              <span>0</span>
-                            </Button>
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <MessageCircle className="w-4 h-4" />
-                              <span>0</span>
-                            </Button>
-                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                              <Share2 className="w-4 h-4" />
-                              <span>0</span>
-                            </Button>
-                          </div>
-                          <Button variant="ghost" size="sm">
-                            <Bookmark className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <PostCard key={post.id} post={post} />
                   ))
                 )}
               </TabsContent>
