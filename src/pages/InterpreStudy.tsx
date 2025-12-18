@@ -22,7 +22,7 @@ export default function InterpreStudy() {
         {/* Hero Section */}
         <div
           className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
-          style={{ backgroundImage: "url('/src/assets/studying-learning.jpg')" }}
+          style={{ backgroundImage: "url('/studying-learning.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
           <div className="relative z-10">
@@ -75,8 +75,8 @@ export default function InterpreStudy() {
               <span className="hidden lg:inline">Terms</span>
             </TabsTrigger>
             <TabsTrigger value="interactive_chat" className="flex items-center gap-2 py-2">
-               <MessageSquare className="w-4 h-4" />
-               <span className="hidden lg:inline">AI Chat</span>
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden lg:inline">AI Chat</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2 py-2">
               <Settings className="w-4 h-4" />
@@ -89,7 +89,7 @@ export default function InterpreStudy() {
           </TabsContent>
 
           <TabsContent value="training" className="animate-fade-in">
-             <CoreDynamicsTraining />
+            <CoreDynamicsTraining />
           </TabsContent>
 
           <TabsContent value="chat" className="animate-fade-in">
@@ -101,11 +101,11 @@ export default function InterpreStudy() {
           </TabsContent>
 
           <TabsContent value="quiz" className="animate-fade-in">
-             <AiQuiz />
+            <AiQuiz />
           </TabsContent>
 
           <TabsContent value="body" className="animate-fade-in">
-             <BodyMapper />
+            <BodyMapper />
           </TabsContent>
 
           <TabsContent value="scenarios" className="animate-fade-in">

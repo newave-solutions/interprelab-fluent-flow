@@ -84,7 +84,7 @@ const Resources = () => {
             Resources & Training
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Access comprehensive training materials, industry resources, and professional 
+            Access comprehensive training materials, industry resources, and professional
             development tools to advance your interpretation career.
           </p>
           <Button size="lg" className="glass-button">
@@ -109,7 +109,7 @@ const Resources = () => {
                   </div>
                   <CardTitle className="text-2xl">Industry Pain Points & Insights</CardTitle>
                   <CardDescription className="text-base">
-                    Research-backed insights exposing systemic challenges facing interpreters and LEP communities. 
+                    Research-backed insights exposing systemic challenges facing interpreters and LEP communities.
                     Understand the compensation crisis, workforce exploitation, and psychological toll.
                   </CardDescription>
                 </CardHeader>
@@ -126,20 +126,21 @@ const Resources = () => {
               <CardHeader>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-primary/10 rounded-lg">
-                    <Newspaper className="w-6 h-6 text-primary" />
+                    <Brain className="w-6 h-6 text-primary" />
                   </div>
-                  <Badge variant="secondary">Research & Articles</Badge>
+                  <Badge variant="secondary">Interactive Experience</Badge>
                 </div>
-                <CardTitle className="text-2xl">Articles & News</CardTitle>
+                <CardTitle className="text-2xl">The Interpreter Dilemma</CardTitle>
                 <CardDescription className="text-base">
-                  Latest research on vicarious trauma, compassion fatigue, language services news, 
-                  and legislative updates affecting medical interpreters.
+                  Navigate complex ethical scenarios in this interactive 3D experience. Test your decision-making skills in real-world interpreter situations.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full">
-                  Read Articles
-                  <ExternalLink className="w-4 h-4 ml-2" />
+                <Button variant="outline" className="w-full" asChild>
+                  <a href="http://localhost:3001" target="_blank" rel="noopener noreferrer">
+                    Start Experience
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
                 </Button>
               </CardContent>
             </Card>
@@ -150,18 +151,17 @@ const Resources = () => {
               Featured Training Materials
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Curated content designed by industry experts to enhance your 
+              Curated content designed by industry experts to enhance your
               interpretation skills and professional knowledge.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {resources.map((resource, index) => (
-              <Card 
-                key={index} 
-                className={`glass border-border/50 hover:border-primary/50 transition-all duration-300 ${
-                  resource.featured ? 'ring-2 ring-primary/20' : ''
-                }`}
+              <Card
+                key={index}
+                className={`glass border-border/50 hover:border-primary/50 transition-all duration-300 ${resource.featured ? 'ring-2 ring-primary/20' : ''
+                  }`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -214,7 +214,7 @@ const Resources = () => {
               Industry Organizations & Certifications
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Connect with professional organizations and pursue industry-recognized 
+              Connect with professional organizations and pursue industry-recognized
               certifications to advance your career.
             </p>
           </div>
@@ -253,7 +253,7 @@ const Resources = () => {
             <Calendar className="w-16 h-16 text-primary mx-auto mb-6" />
             <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Get the latest resources, industry insights, and training materials 
+              Get the latest resources, industry insights, and training materials
               delivered to your inbox monthly.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">

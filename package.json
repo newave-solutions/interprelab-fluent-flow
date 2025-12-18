@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:dilemma": "cd services/interpreter-dilemma && npm run dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
