@@ -12,7 +12,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
-const InterpreBot = lazy(() => import("./pages/InterpreBot"));
+const InterpreTest = lazy(() => import("./pages/InterpreTest"));
 const InterpreCoach = lazy(() => import("./pages/InterpreCoach"));
 const InterpreStudy = lazy(() => import("./pages/InterpreStudy"));
 const InterpreLink = lazy(() => import("./pages/InterpreLink"));
@@ -30,9 +30,12 @@ const Careers = lazy(() => import("./pages/Careers"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const Waitlist = lazy(() => import("./pages/Waitlist"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const ASLTeacher = lazy(() => import("./pages/ASLTeacher"));
+const InterpreSigns = lazy(() => import("./pages/InterpreSigns"));
 const Account = lazy(() => import("./pages/Account"));
 const Dilemma = lazy(() => import("./pages/Dilemma"));
+const InterpreTrackFeature = lazy(() => import("./pages/InterpreTrackFeature"));
+const InterpreSignsFeature = lazy(() => import("./pages/InterpreSignsFeature"));
+const InterpreLinkFeature = lazy(() => import("./pages/InterpreLinkFeature"));
 
 const queryClient = new QueryClient();
 
@@ -56,11 +59,15 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   {/* Redirect /home to / for backwards compatibility */}
                   <Route path="/home" element={<Navigate to="/" replace />} />
-                  <Route path="/interprebot" element={<InterpreBot />} />
+                  <Route path="/interpretest" element={<InterpreTest />} />
                   <Route path="/interprecoach" element={<InterpreCoach />} />
                   <Route path="/interprestudy" element={<InterpreStudy />} />
-                  <Route path="/asl-teacher" element={<ASLTeacher />} />
-                  <Route path="/interprelink" element={<InterpreLink />} />
+                  <Route path="/interpresigns" element={<InterpreSigns />} />
+
+                  {/* Feature Marketing Pages (Public) */}
+                  <Route path="/interprelink" element={<InterpreLinkFeature />} />
+                  <Route path="/interpretrack" element={<InterpreTrackFeature />} />
+                  <Route path="/interpresigns" element={<InterpreSignsFeature />} />
 
                   {/* Protected Routes */}
                   <Route path="/dashboard" element={
@@ -68,13 +75,33 @@ const App = () => (
                       <Dashboard />
                     </ProtectedRoute>
                   } />
-                  <Route path="/interpretrack" element={
+
+                  {/* Feature-Specific Dashboards (Protected) */}
+                  <Route path="/interprelink/dashboard" element={
+                    <ProtectedRoute>
+                      <InterpreLink />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/interpretrack/dashboard" element={
                     <ProtectedRoute>
                       <CallTracker />
                     </ProtectedRoute>
                   } />
-                  {/* Redirect legacy call-tracker route */}
-                  <Route path="/call-tracker" element={<Navigate to="/interpretrack" replace />} />
+                  <Route path="/interpresigns/dashboard" element={
+                    <ProtectedRoute>
+                      <InterpreSigns />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/interpretest/dashboard" element={
+                    <ProtectedRoute>
+                      <InterpreTest />
+                    </ProtectedRoute>
+                  } />
+
+                  {/* Legacy route redirects */}
+                  <Route path="/interprebot" element={<Navigate to="/interpretest" replace />} />
+                  <Route path="/asl-teacher" element={<Navigate to="/interpresigns" replace />} />
+                  <Route path="/call-tracker" element={<Navigate to="/interpretrack/dashboard" replace />} />
 
                   <Route path="/settings" element={
                     <ProtectedRoute>

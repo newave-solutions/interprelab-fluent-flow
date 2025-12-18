@@ -88,12 +88,12 @@
     --sidebar-ring: 41 52% 56%;
   }
 
-  /* Light mode - Elegant cream/beige aesthetic inspired by interpreter-dilemma */
+  /* Light mode - Enhanced with better contrast and shadows */
   .light {
     --background: 38 42% 97%; /* #F9F8F4 - nobel cream */
-    --foreground: 0 0% 10%; /* #1a1a1a - nobel dark */
+    --foreground: 0 0% 10%; /* #1a1a1a - nobel dark - Enhanced for readability */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 30 10% 15%; /* Darker for better readability */
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
     --primary: 39 38% 57%; /* #C5A059 - nobel gold */
@@ -101,7 +101,7 @@
     --secondary: 30 20% 85%;
     --secondary-foreground: 0 0% 10%;
     --muted: 30 25% 95%;
-    --muted-foreground: 30 10% 40%;
+    --muted-foreground: 30 10% 40%; /* Minimum for accessibility */
     --accent: 39 38% 57%;
     --accent-foreground: 0 0% 100%;
     --border: 30 15% 88%;
@@ -109,6 +109,12 @@
     --ring: 39 38% 57%;
     --glass-bg: 0 0% 100% / 0.9;
     --glass-border: 0 0% 10% / 0.1;
+    
+    /* Light theme shadow variables for depth */
+    --shadow-card-light: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover-light: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-input-light: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+    
     --sidebar-background: 38 42% 97%;
     --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 39 38% 57%;

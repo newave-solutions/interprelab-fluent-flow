@@ -11,17 +11,18 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" role="banner">
-      {/* Background Image with Overlay */}
+      {/* Background Image with Enhanced Overlay for better visibility */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroBg})` }}
         aria-hidden="true"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
+        {/* Darker, more opaque overlay to prevent text opacity issues */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background shadow-2xl" />
       </div>
 
       {/* Radial Glow Effect */}
-      <div 
+      <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           background: 'radial-gradient(circle at 50% 30%, hsl(41 52% 56% / 0.1), transparent 60%)'
@@ -57,10 +58,10 @@ export const Hero = () => {
 
           {/* CTA Buttons - Updated styling */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-            <Button 
-              variant="default" 
-              size="lg" 
-              className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl" 
+            <Button
+              variant="default"
+              size="lg"
+              className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               asChild
             >
               <Link to="/interprebot" aria-label="Start your assessment">
@@ -69,10 +70,10 @@ export const Hero = () => {
               </Link>
             </Button>
 
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="px-8 py-6 border-2 border-white/30 text-white hover:bg-white/10 rounded-full font-medium transition-all duration-300 hover:scale-105" 
+            <Button
+              variant="outline"
+              size="lg"
+              className="px-8 py-6 border-2 border-white/30 text-white hover:bg-white/10 rounded-full font-medium transition-all duration-300 hover:scale-105"
               asChild
             >
               <Link to="/interprecoach" aria-label="Meet InterpreCoach AI assistant">
@@ -95,7 +96,7 @@ export const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <button 
+      <button
         onClick={scrollToContent}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 group flex flex-col items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
         aria-label="Scroll to learn more"

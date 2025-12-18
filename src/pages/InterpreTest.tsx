@@ -1,4 +1,4 @@
-import interpreHubMockup from "@/assets/interpre-hub-mockup.png";
+import interpreTestMockup from "@/assets/interpre-hub-mockup.png"; // TODO: Replace with InterpreTest-specific mockup
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,7 +64,7 @@ const InterpreBot = () => {
                 />
                 <Button onClick={() => setShowChat(true)}>Ask</Button>
               </div>
-              
+
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground text-left">Quick questions:</p>
                 <div className="flex flex-wrap gap-2">
@@ -146,8 +146,8 @@ const InterpreBot = () => {
             <Card className="glass border-border/50">
               <CardContent className="p-4">
                 <img
-                  src={interpreHubMockup}
-                  alt="InterpreBot Assessment Dashboard"
+                  src={interpreTestMockup}
+                  alt="InterpreTest Assessment Dashboard"
                   className="w-full rounded-lg"
                 />
               </CardContent>
