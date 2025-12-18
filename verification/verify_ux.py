@@ -1,73 +1,67 @@
+from playwright.sync_api import sync_playwright
 
-import asyncio
-from playwright.async_api import async_playwright, expect
-
-async def verify_ux_changes():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
+def verify_ux_changes():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1280, "height": 800})
 
         try:
-            print("Navigating to home page...")
-            await page.goto("http://localhost:8080/", timeout=60000)
+            print("Navigating to /interprestudy...")
+            # Increase timeout
+            page.goto("http://127.0.0.1:8080/interprestudy", timeout=90000)
 
-            print("Checking mobile menu...")
-            await page.set_viewport_size({"width": 375, "height": 667})
+            # Wait for content to load - networkidle might be flaky if there are polling requests
+            # Let's wait for a specific element
+            print("Waiting for page content...")
+            page.wait_for_selector("h1", timeout=30000)
 
-            # Take a debug screenshot to see what's rendered
-            await page.wait_for_timeout(3000)
-            await page.screenshot(path="verification/debug_mobile_view.png")
+            # Click on the 'Terms' tab (value="terminology")
+            print("Clicking 'Terms' tab...")
 
-            # Check for the button presence first, perhaps it's not visible for some reason
-            # The button is inside SheetTrigger which is md:hidden.
+            # Try multiple selectors for the tab
+            try:
+                page.click("button[value='terminology']", timeout=5000)
+            except:
+                print("Could not click by value, trying text...")
+                page.click("text=Terms", timeout=5000)
 
-            # Try finding it by role button first
-            buttons = page.get_by_role("button")
-            count = await buttons.count()
-            print(f"Found {count} buttons")
+            # Wait for TerminologyLookup to be visible
+            print("Waiting for TerminologyLookup...")
+            page.wait_for_selector("text=Terminology Lookup", timeout=10000)
 
-            # Try to find our button by internal SVG or class if label fails
-            # But we really want to verify the label.
+            # Search for a term
+            print("Searching for a term...")
+            page.fill("input[placeholder*='Enter term']", "Diagnostico")
+            page.click("button:has-text('Search')")
 
-            # Maybe the state is somehow isOpen=true? Unlikely.
+            # Wait for result (simulate delay is 1000ms)
+            page.wait_for_timeout(2000)
 
-            menu_button = page.get_by_label("Open menu")
-            if await menu_button.count() > 0:
-                print("Found button by label 'Open menu'")
-                await expect(menu_button).to_be_visible()
-                print("Verified Mobile Nav Button has aria-label")
+            # Find the volume button in the result card.
+            print("Finding volume button...")
+            # The result card appears after search.
+            # Look for the button with the ARIA label we added/verified
+            volume_btn = page.locator("button[aria-label='Play pronunciation']").first
+
+            if volume_btn.is_visible():
+                print("Volume button found. Hovering...")
+                volume_btn.hover()
+                # Wait for tooltip to appear
+                page.wait_for_timeout(1000)
+
+                # Take screenshot
+                print("Taking screenshot...")
+                page.screenshot(path="verification/ux_tooltip_verification.png")
+                print("Screenshot saved.")
             else:
-                print("Could not find button by label 'Open menu'")
-                # Fallback check
-                close_button = page.get_by_label("Close menu")
-                if await close_button.count() > 0:
-                    print("Found button by label 'Close menu'")
-                else:
-                    print("Could not find button by label 'Close menu' either")
-
-            # Footer check
-            print("Checking footer...")
-            await page.set_viewport_size({"width": 1280, "height": 800})
-
-            await page.reload()
-            await page.wait_for_timeout(3000)
-            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-            await page.wait_for_timeout(1000)
-
-            twitter_btn = page.get_by_label("Twitter")
-            if await twitter_btn.count() > 0:
-                 await expect(twitter_btn).to_be_visible()
-                 print("Verified Footer Social Buttons have aria-labels")
-                 await page.screenshot(path="verification/footer_aria.png")
-            else:
-                print("Could not find Twitter button by label")
-                await page.screenshot(path="verification/debug_footer.png")
+                print("Volume button not found!")
+                page.screenshot(path="verification/ux_failed.png")
 
         except Exception as e:
-            print(f"Error during verification: {e}")
-            await page.screenshot(path="verification/error.png")
+            print(f"Error: {e}")
+            page.screenshot(path="verification/error.png")
         finally:
-            await browser.close()
+            browser.close()
 
 if __name__ == "__main__":
-    asyncio.run(verify_ux_changes())
+    verify_ux_changes()
