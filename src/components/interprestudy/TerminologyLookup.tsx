@@ -28,6 +28,7 @@ interface GlossaryTerm {
   id: string;
   user_id: string | null;
   term: string;
+  translation: string | null;
   definition: string;
   pronunciation: string | null;
   category: string | null;
@@ -42,6 +43,7 @@ interface GlossaryTerm {
   is_public: boolean | null;
   is_verified: boolean | null;
   usage_count: number | null;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -109,11 +111,35 @@ export const TerminologyLookup = () => {
 
     setIsLoading(true);
 
-    // Simulate AI lookup for demo purposes
+    try {
+      // First, try to find the term in the database (public or user's own)
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .or(`term.ilike.%${searchTerm}%,translation.ilike.%${searchTerm}%`)
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        const term = data[0];
+        setResult({
+          english: term.term,
+          translation: term.translation || '',
+          pronunciation: term.pronunciation || '',
+          definition: term.definition || '',
+          imageUrl: term.image_url || undefined,
+        });
+        setIsLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.error('Error searching database:', err);
+    }
+
+    // If not found in DB, simulate AI lookup (as a fallback/demo)
     setTimeout(() => {
       setResult({
         english: searchTerm,
-        translation: 'Diagnóstico', // This would ideally be dynamic
+        translation: 'Diagnóstico', // This is just a placeholder simulation
         pronunciation: '/di.aɡˈnos.ti.ko/',
         definition: 'The identification of the nature of an illness or other problem by examination of the symptoms.',
         imageUrl: undefined,
@@ -125,41 +151,33 @@ export const TerminologyLookup = () => {
   const handleAddToGlossary = async () => {
     if (!result || !user?.id) return;
 
-    try {
-      const newTerm = {
-        user_id: user.id,
-        term: result.english,
-        definition: result.definition,
-        pronunciation: result.pronunciation,
-        target_language: result.translation, // Using target_language to store translation based on UI usage
-        source_language: 'en',
-        language_code: 'es', // Hardcoded as per current UI simulation
-        category: 'General',
-      };
+    const newTerm = {
+      user_id: user.id,
+      term: result.english,
+      translation: result.translation,
+      definition: result.definition,
+      pronunciation: result.pronunciation,
+      source_language: 'English',
+      target_language: 'Spanish', // In a real app, this would be dynamic
+      image_url: result.imageUrl,
+      is_public: false,
+    };
 
-      const { data, error } = await supabase
-        .from('glossary_terms')
-        .insert(newTerm)
-        .select()
-        .single();
+    const { error } = await supabase.from('glossary_terms').insert([newTerm]);
 
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Term added to your glossary.',
-      });
-
-      if (data) {
-        setGlossaryTerms([data as GlossaryTerm, ...glossaryTerms]);
-      }
-    } catch (error) {
+    if (error) {
       console.error('Error adding term:', error);
       toast({
         title: 'Error',
         description: 'Failed to add term to glossary.',
         variant: 'destructive',
       });
+    } else {
+      toast({
+        title: 'Success',
+        description: 'Term added to glossary successfully.',
+      });
+      loadGlossaryTerms();
     }
   };
 
@@ -170,14 +188,15 @@ export const TerminologyLookup = () => {
         .delete()
         .eq('id', termId);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       toast({
         title: 'Success',
         description: 'Term deleted from glossary.',
       });
-
-      setGlossaryTerms(glossaryTerms.filter(t => t.id !== termId));
+      loadGlossaryTerms();
     } catch (error) {
       console.error('Error deleting term:', error);
       toast({
@@ -355,9 +374,9 @@ export const TerminologyLookup = () => {
                             </Tooltip>
                           </div>
                         )}
-                        {term.target_language && (
+                        {term.translation && (
                           <p className="text-sm text-primary mt-1">
-                            Translation: {term.target_language}
+                            Translation: {term.translation}
                           </p>
                         )}
                       </div>
