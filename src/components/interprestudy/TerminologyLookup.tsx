@@ -1,20 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, BookMarked, Volume2, Trash2 } from 'lucide-react';
+import { Search, Plus, BookMarked, Volume2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-
-interface GlossaryTerm {
-  id: string;
-  term: string;
-  definition: string;
-  pronunciation: string;
-  translation: string;
-  category: string;
-  createdAt: string;
-}
+import { GlossaryTermItem, GlossaryTerm } from './GlossaryTermItem';
 
 interface TermResult {
   english: string;
@@ -94,8 +85,8 @@ export const TerminologyLookup = () => {
     });
   };
 
-  const deleteTerm = (termId: string) => {
-    const updated = glossaryTerms.filter(t => t.id !== termId);
+  const deleteTerm = useCallback((termId: string) => {
+    const updated = glossaryTerms.filter((t) => t.id !== termId);
     setGlossaryTerms(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
@@ -103,9 +94,9 @@ export const TerminologyLookup = () => {
       title: 'Success',
       description: 'Term deleted from glossary.',
     });
-  };
+  }, [glossaryTerms, toast]);
 
-  const playPronunciation = (text: string, id: string = 'main') => {
+  const playPronunciation = useCallback((text: string, id: string = 'main') => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
 
@@ -118,7 +109,7 @@ export const TerminologyLookup = () => {
 
       speechSynthesis.speak(utterance);
     }
-  };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -225,51 +216,13 @@ export const TerminologyLookup = () => {
           ) : (
             <div className="space-y-4">
               {glossaryTerms.map((term) => (
-                <Card key={term.id} className="glass border-border/30">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold">{term.term}</h4>
-                          {term.category && (
-                            <Badge variant="outline" className="text-xs">
-                              {term.category}
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">{term.definition}</p>
-                        {term.pronunciation && (
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="font-mono">{term.pronunciation}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => playPronunciation(term.term, term.id)}
-                              aria-label={`Play pronunciation for ${term.term}`}
-                              className={playingId === term.id ? 'text-primary animate-pulse' : ''}
-                            >
-                              <Volume2 className="w-3 h-3" />
-                            </Button>
-                          </div>
-                        )}
-                        {term.translation && (
-                          <p className="text-sm text-primary mt-1">
-                            Translation: {term.translation}
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => deleteTerm(term.id)}
-                        className="text-destructive hover:text-destructive"
-                        aria-label={`Delete term ${term.term}`}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <GlossaryTermItem
+                  key={term.id}
+                  term={term}
+                  isPlaying={playingId === term.id}
+                  onPlay={playPronunciation}
+                  onDelete={deleteTerm}
+                />
               ))}
             </div>
           )}
