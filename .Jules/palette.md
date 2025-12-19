@@ -5,3 +5,7 @@
 ## 2025-12-17 - Icon-Only Button Accessibility
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2025-12-19 - Live Region for Dynamic Content
+**Learning:** Real-time AI feedback (like sign detection) is visual-only by default. Screen reader users miss out on this "magic".
+**Action:** Use `aria-live="polite"` for elements that update frequently but shouldn't interrupt the user immediately, giving non-visual access to AI outputs.
