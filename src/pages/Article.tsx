@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 // Mock data for articles - in a real app this would come from an API/CMS
 const articles = {
@@ -119,7 +120,7 @@ const Article = () => {
         <div className="container mx-auto px-6 max-w-3xl py-12">
           <div
             className="prose prose-invert prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
           />
 
           <div className="mt-16 pt-8 border-t border-border flex justify-between items-center">

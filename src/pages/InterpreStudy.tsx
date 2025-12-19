@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle, PlayCircle } from 'lucide-react';
 import { InteractiveChat } from '@/components/interprestudy/InteractiveChat';
-import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup';
+import TerminologyLookup from '@/components/interprestudy/TerminologyLookup';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
 import { PainPointBadge } from '@/components/PainPointBadge';
 import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';

@@ -8,6 +8,7 @@ import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import SignDetection from "@/components/SignDetection";
+import extensionPreview from "@/assets/extension-preview.jpg";
 
 const InterpreCoach = () => {
   return (
@@ -45,7 +46,7 @@ const InterpreCoach = () => {
             <div className="relative">
               <div className="glass rounded-2xl p-8 border border-border/50">
                 <img
-                  src="/interpre-hub-mockup.png"
+                  src={extensionPreview}
                   alt="InterpreCoach Extension Preview"
                   className="w-full rounded-lg shadow-2xl"
                 />

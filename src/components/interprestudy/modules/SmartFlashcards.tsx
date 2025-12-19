@@ -3,45 +3,27 @@ import { Book, Check, RotateCcw, ChevronRight, X, Trophy, Sparkles, Loader2, Pla
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
-// --- GEMINI API UTILITIES ---
-const apiKey = ""; // API Key injected at runtime
-
+// --- API UTILITIES ---
 const callGemini = async (prompt: string) => {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }]
-  };
-
-  let attempt = 0;
-  const maxRetries = 3;
-  const delays = [1000, 2000, 4000];
-
-  while (attempt < maxRetries) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-         if (response.status === 429) {
-            throw new Error("Rate limit exceeded");
-         }
-         throw new Error(`API Error: ${response.status}`);
+  try {
+    const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+      body: {
+        action: 'completion',
+        messages: [{ role: 'user', content: prompt }]
       }
+    });
 
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated.";
-
-    } catch (error) {
-      attempt++;
-      if (attempt >= maxRetries) {
-        return "Connection error. Please try again later.";
-      }
-      await new Promise(resolve => setTimeout(resolve, delays[attempt - 1]));
+    if (error) {
+      console.error('Error calling AI:', error);
+      throw new Error(error.message);
     }
+
+    return data.content || "No content generated.";
+  } catch (error) {
+    console.error("AI Error:", error);
+    return "Connection error. Please try again later.";
   }
 };
 
