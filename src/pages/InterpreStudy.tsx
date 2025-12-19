@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle, PlayCircle } from 'lucide-react';
 import { InteractiveChat } from '@/components/interprestudy/InteractiveChat';
-import { TerminologyLookup } from '@/components/interprestudy/TerminologyLookup';
+import TerminologyLookup from '@/components/interprestudy/TerminologyLookup';
 import { StudySettings } from '@/components/interprestudy/StudySettings';
 import { PainPointBadge } from '@/components/PainPointBadge';
 import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
@@ -70,7 +70,7 @@ export default function InterpreStudy() {
               <BookOpen className="w-4 h-4" />
               <span className="hidden lg:inline">Scripts</span>
             </TabsTrigger>
-            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2" aria-label="Terminology">
+            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2" data-testid="terms-tab">
               <Languages className="w-4 h-4" />
               <span className="hidden lg:inline">Terms</span>
             </TabsTrigger>
