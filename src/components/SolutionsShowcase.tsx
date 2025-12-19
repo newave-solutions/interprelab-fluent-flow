@@ -127,20 +127,8 @@ export const SolutionsShowcase = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsl(var(--nobel-gold)/0.05)_0%,_transparent_65%)]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header with Bot Group */}
-        <div className="text-center mb-16 animate-fade-in">
-          {/* Floating Bot Group Image */}
-          <div className="relative mb-8">
-            <img 
-              src={interprebotsGroup} 
-              alt="InterpreLab AI Assistants" 
-              className="mx-auto w-full max-w-md md:max-w-lg animate-float drop-shadow-2xl"
-              style={{
-                filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
-              }}
-            />
-          </div>
-          
+        {/* Section Header */}
+        <div className="text-center mb-8 animate-fade-in">
           <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
             Our Solutions
           </div>
@@ -150,6 +138,18 @@ export const SolutionsShowcase = () => {
           <p className="text-lg md:text-xl text-stone-600 dark:text-muted-foreground max-w-3xl mx-auto font-light">
             AI-powered solutions addressing every pain point—built by interpreters, for interpreters
           </p>
+        </div>
+
+        {/* Floating Bot Group Image */}
+        <div className="relative mb-16 flex justify-center">
+          <img 
+            src={interprebotsGroup} 
+            alt="InterpreLab AI Assistants" 
+            className="w-full max-w-md md:max-w-lg animate-float drop-shadow-2xl"
+            style={{
+              filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
+            }}
+          />
         </div>
 
         {/* Solutions Grid */}
