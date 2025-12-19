@@ -14,18 +14,33 @@ import { ScenarioGenerator } from '@/components/interprestudy/modules/ScenarioGe
 import { AiQuiz } from '@/components/interprestudy/modules/AiQuiz';
 import { CoreDynamicsTraining } from '@/components/interprestudy/modules/CoreDynamicsTraining';
 import { InteractiveModulePlayer } from '@/components/interprestudy/modules/InteractiveModulePlayer';
+import { ParticlesBackground } from '@/components/ParticlesBackground';
+import interprestudyBot from '@/assets/interprestudy-bot.png';
 
 export default function InterpreStudy() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
+        {/* Hero Section with Particles and Bot */}
         <div
-          className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center"
+          className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center overflow-hidden"
           style={{ backgroundImage: "url('/studying-learning.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
-          <div className="relative z-10">
+          <ParticlesBackground particleCount={35} variant="stars" className="z-[1]" />
+          
+          {/* Scholar Bot - Positioned on the right */}
+          <img 
+            src={interprestudyBot}
+            alt="InterpreStudy AI Scholar"
+            className="absolute right-4 md:right-10 bottom-0 w-32 md:w-48 lg:w-56 animate-float z-[5] drop-shadow-2xl hidden sm:block"
+            style={{
+              filter: 'drop-shadow(0 10px 30px hsl(var(--nobel-gold) / 0.4))',
+              animationDelay: '0.5s',
+            }}
+          />
+          
+          <div className="relative z-10 max-w-3xl mx-auto">
             <PainPointBadge painPoint="Addressing Pain Point #4: Accessible, Specialized Training" />
             <div className="flex items-center justify-center gap-3 mb-4">
               <Brain className="w-12 h-12 text-primary" />
