@@ -1,42 +1,57 @@
 -- Create glossary_terms table
-create table if not exists glossary_terms (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id) on delete cascade not null,
-  term text not null,
-  definition text not null,
-  pronunciation text,
-  category text,
-  subcategory text,
-  language_code text,
-  source_language text,
-  target_language text, -- Used to store the translation text in the current implementation
-  difficulty_level text,
-  usage_example text,
-  notes text,
-  tags text[],
-  is_public boolean default false,
-  is_verified boolean default false,
-  usage_count integer default 0,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+CREATE TABLE IF NOT EXISTS glossary_terms (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    term TEXT NOT NULL,
+    translation TEXT,
+    definition TEXT,
+    pronunciation TEXT,
+    category TEXT,
+    subcategory TEXT,
+    language_code TEXT,
+    source_language TEXT,
+    target_language TEXT,
+    difficulty_level TEXT,
+    usage_example TEXT,
+    notes TEXT,
+    tags TEXT[],
+    is_public BOOLEAN DEFAULT false,
+    is_verified BOOLEAN DEFAULT false,
+    usage_count INTEGER DEFAULT 0,
+    image_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
--- Enable RLS
-alter table glossary_terms enable row level security;
+-- Enable Row Level Security
+ALTER TABLE glossary_terms ENABLE ROW LEVEL SECURITY;
 
--- Policies
-create policy "Users can view their own glossary terms"
-  on glossary_terms for select
-  using (auth.uid() = user_id);
+-- Create policies
+-- Users can view their own terms
+CREATE POLICY "Users can view their own glossary terms" ON glossary_terms
+    FOR SELECT
+    USING (auth.uid() = user_id);
 
-create policy "Users can insert their own glossary terms"
-  on glossary_terms for insert
-  with check (auth.uid() = user_id);
+-- Users can view public terms
+CREATE POLICY "Users can view public glossary terms" ON glossary_terms
+    FOR SELECT
+    USING (is_public = true);
 
-create policy "Users can update their own glossary terms"
-  on glossary_terms for update
-  using (auth.uid() = user_id);
+-- Users can insert their own terms
+CREATE POLICY "Users can insert their own glossary terms" ON glossary_terms
+    FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
 
-create policy "Users can delete their own glossary terms"
-  on glossary_terms for delete
-  using (auth.uid() = user_id);
+-- Users can update their own terms
+CREATE POLICY "Users can update their own glossary terms" ON glossary_terms
+    FOR UPDATE
+    USING (auth.uid() = user_id);
+
+-- Users can delete their own terms
+CREATE POLICY "Users can delete their own glossary terms" ON glossary_terms
+    FOR DELETE
+    USING (auth.uid() = user_id);
+
+-- Create index for faster searching
+CREATE INDEX idx_glossary_terms_term ON glossary_terms(term);
+CREATE INDEX idx_glossary_terms_user_id ON glossary_terms(user_id);

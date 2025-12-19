@@ -2,33 +2,18 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, BookMarked, Volume2, Trash2 } from 'lucide-react';
+import { Search, Plus, BookMarked, Volume2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-
-interface GlossaryTerm {
-  id: string;
-  user_id: string | null;
-  term: string;
-  definition: string;
-  pronunciation: string | null;
-  category: string | null;
-  subcategory: string | null;
-  language_code: string | null;
-  source_language: string | null;
-  target_language: string | null;
-  difficulty_level: string | null;
-  usage_example: string | null;
-  notes: string | null;
-  tags: string[] | null;
-  is_public: boolean | null;
-  is_verified: boolean | null;
-  usage_count: number | null;
-  created_at: string;
-  updated_at: string;
-}
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import GlossaryTermCard from './GlossaryTermCard';
+import { GlossaryTerm } from '@/lib/types';
 
 interface TermResult {
   english: string;
@@ -43,49 +28,85 @@ export const TerminologyLookup = () => {
   const [result, setResult] = useState<TermResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
   const loadGlossaryTerms = useCallback(async () => {
     if (!user?.id) return;
 
-    const { data, error } = await supabase
-      .from('glossary_terms')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
-    if (error) {
+      if (error) throw error;
+
+      if (data) {
+        setGlossaryTerms(data as GlossaryTerm[]);
+      }
+    } catch (error) {
       console.error('Error loading glossary terms:', error);
       toast({
         title: 'Error',
         description: 'Failed to load glossary terms.',
         variant: 'destructive',
       });
-      return;
     }
-
-    setGlossaryTerms(data as GlossaryTerm[]);
-  }, [user?.id, toast]);
+  }, [user, toast]);
 
   useEffect(() => {
     if (user) {
       loadGlossaryTerms();
     }
-  }, [user, loadGlossaryTerms]);
+  }, [user]);
+
+  // Clean up speech synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
     setIsLoading(true);
 
-    // TODO: Database lookup disabled until glossary_terms table is created
-    // Simulate AI lookup for demo purposes
+    try {
+      // First, try to find the term in the database (public or user's own)
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .or(`term.ilike.%${searchTerm}%,translation.ilike.%${searchTerm}%`)
+        .limit(1);
 
-    // Simulate AI lookup for demo purposes
+      if (!error && data && data.length > 0) {
+        const term = data[0];
+        setResult({
+          english: term.term,
+          translation: term.translation || '',
+          pronunciation: term.pronunciation || '',
+          definition: term.definition || '',
+          imageUrl: term.image_url || undefined,
+        });
+        setIsLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.error('Error searching database:', err);
+    }
+
+    // If not found in DB, simulate AI lookup (as a fallback/demo)
     setTimeout(() => {
       setResult({
         english: searchTerm,
-        translation: 'Diagnóstico',
+        translation: 'Diagnóstico', // This is just a placeholder simulation
         pronunciation: '/di.aɡˈnos.ti.ko/',
         definition: 'The identification of the nature of an illness or other problem by examination of the symptoms.',
         imageUrl: undefined,
@@ -97,63 +118,77 @@ export const TerminologyLookup = () => {
   const handleAddToGlossary = async () => {
     if (!result || !user?.id) return;
 
-    const { error } = await supabase.from('glossary_terms').insert({
+    const newTerm = {
       user_id: user.id,
       term: result.english,
+      translation: result.translation,
       definition: result.definition,
       pronunciation: result.pronunciation,
-      target_language: result.translation,
-    });
+      source_language: 'English',
+      target_language: 'Spanish', // In a real app, this would be dynamic
+      image_url: result.imageUrl,
+      is_public: false,
+    };
+
+    const { error } = await supabase.from('glossary_terms').insert([newTerm]);
 
     if (error) {
-      console.error('Error adding to glossary:', error);
+      console.error('Error adding term:', error);
       toast({
         title: 'Error',
         description: 'Failed to add term to glossary.',
         variant: 'destructive',
       });
-      return;
+    } else {
+      toast({
+        title: 'Success',
+        description: 'Term added to glossary successfully.',
+      });
+      loadGlossaryTerms();
     }
-
-    toast({
-      title: 'Success',
-      description: 'Term added to your glossary.',
-    });
-
-    loadGlossaryTerms();
   };
 
-  const deleteTerm = async (termId: string) => {
-    const { error } = await supabase
-      .from('glossary_terms')
-      .delete()
-      .eq('id', termId);
+  const deleteTerm = useCallback(async (termId: string) => {
+    try {
+      const { error } = await supabase
+        .from('glossary_terms')
+        .delete()
+        .eq('id', termId);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: 'Success',
+        description: 'Term deleted from glossary.',
+      });
+      loadGlossaryTerms();
+    } catch (error) {
       console.error('Error deleting term:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete term.',
         variant: 'destructive',
       });
-      return;
     }
+  }, [loadGlossaryTerms, toast]);
 
-    toast({
-      title: 'Success',
-      description: 'Term deleted from your glossary.',
-    });
+  const playPronunciation = useCallback((text: string, id: string = 'main') => {
+    if ('speechSynthesis' in window) {
+      // Cancel any currently playing speech
+      window.speechSynthesis.cancel();
 
-    loadGlossaryTerms();
-  };
-
-  const playPronunciation = () => {
-    if (result?.pronunciation && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(result.english);
+      const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
+
+      setPlayingId(id);
+      utterance.onend = () => setPlayingId((current) => (current === id ? null : current));
+      utterance.onerror = () => setPlayingId((current) => (current === id ? null : current));
+
       speechSynthesis.speak(utterance);
     }
-  };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -171,6 +206,7 @@ export const TerminologyLookup = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter term in English or target language..."
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              aria-label="Search terms"
             />
             <Button onClick={handleSearch} disabled={isLoading}>
               <Search className="w-4 h-4 mr-2" />
@@ -211,9 +247,22 @@ export const TerminologyLookup = () => {
 
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <span className="font-mono text-lg">{result.pronunciation}</span>
-                  <Button variant="ghost" size="sm" onClick={playPronunciation}>
-                    <Volume2 className="w-4 h-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => playPronunciation(result.english, 'main')}
+                        aria-label="Play pronunciation"
+                        className={playingId === 'main' ? 'text-primary animate-pulse' : ''}
+                      >
+                        <Volume2 className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Play pronunciation</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
 
                 <div className="pt-4 border-t border-border/50">
@@ -253,59 +302,13 @@ export const TerminologyLookup = () => {
           ) : (
             <div className="space-y-4">
               {glossaryTerms.map((term) => (
-                <Card key={term.id} className="glass border-border/30">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold">{term.term}</h4>
-                          {term.category && (
-                            <Badge variant="outline" className="text-xs">
-                              {term.category}
-                            </Badge>
-                          )}
-                          {term.difficulty_level && (
-                            <Badge variant="secondary" className="text-xs">
-                              {term.difficulty_level}
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">{term.definition}</p>
-                        {term.pronunciation && (
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="font-mono">{term.pronunciation}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if ('speechSynthesis' in window) {
-                                  const utterance = new SpeechSynthesisUtterance(term.term);
-                                  utterance.lang = 'en-US';
-                                  speechSynthesis.speak(utterance);
-                                }
-                              }}
-                            >
-                              <Volume2 className="w-3 h-3" />
-                            </Button>
-                          </div>
-                        )}
-                        {term.target_language && (
-                          <p className="text-sm text-primary mt-1">
-                            Translation: {term.target_language}
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => deleteTerm(term.id)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <GlossaryTermCard
+                  key={term.id}
+                  term={term}
+                  isPlaying={playingId === term.id}
+                  onPlay={playPronunciation}
+                  onDelete={deleteTerm}
+                />
               ))}
             </div>
           )}
