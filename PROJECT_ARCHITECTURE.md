@@ -639,6 +639,15 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
+For production deployments, create `.env.production` based on `.env.production.example`:
+
+```bash
+cp .env.production.example .env.production
+# Edit .env.production with your production credentials
+```
+
+**Important:** Never commit `.env.production` to version control. It's already in `.gitignore`.
+
 ### IDE Setup (Recommended)
 
 **VS Code Extensions:**

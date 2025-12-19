@@ -64,14 +64,14 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
   }, [onSignDetected]);
 
   return (
-    <div className="relative">
+    <div className="relative" aria-busy={isLoading} aria-label="Sign language detection">
       {isLoading && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" role="status">
           <p className="text-white">Initializing camera and model...</p>
         </div>
       )}
       {error && (
-        <div>
+        <div role="alert" aria-live="assertive">
           <img src="/no-camera.svg" alt="Camera not available" className="w-full h-auto" />
           <div className="text-red-500 p-4 border border-red-500 rounded-md mt-4">{error}</div>
         </div>
@@ -83,9 +83,14 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
         autoPlay
         playsInline
         muted
+        aria-label="Video feed for sign language detection"
       />
       {detectedSign && !isLoading && !error && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-md">
+        <div
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-md"
+          role="status"
+          aria-live="polite"
+        >
           Detected Sign: {detectedSign}
         </div>
       )}

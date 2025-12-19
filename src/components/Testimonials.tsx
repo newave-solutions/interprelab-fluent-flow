@@ -85,16 +85,16 @@ export const Testimonials = () => {
   };
 
   return (
-    <section className="py-32 px-6 relative" ref={ref} aria-labelledby="testimonials-heading">      
+    <section className="py-32 px-6 relative bg-nobel-cream dark:bg-background" ref={ref} aria-labelledby="testimonials-heading">      
       <div className="container mx-auto relative z-10">
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <Badge className="glass px-6 py-3 mb-6 border-primary/20">
+          <Badge className="px-6 py-3 mb-6 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
             Testimonials
           </Badge>
-          <h2 id="testimonials-heading" className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Loved by <span className="bg-gradient-primary bg-clip-text text-transparent">Interpreters</span>
+          <h2 id="testimonials-heading" className="font-serif text-5xl md:text-6xl font-medium text-foreground mb-6">
+            Loved by <span className="text-nobel-gold">Interpreters</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-stone-600 dark:text-muted-foreground max-w-2xl mx-auto font-light">
             Join thousands of professionals who've transformed their practice.
           </p>
         </div>
@@ -107,13 +107,13 @@ export const Testimonials = () => {
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="glass border-border/30 hover-lift">
+                  <Card className="bg-white dark:bg-card/50 border-stone-200 dark:border-border/30 hover-lift shadow-sm">
                     <CardContent className="p-8 md:p-12">
                       <div className="space-y-6">
                         {/* Quote */}
                         <div className="relative">
-                          <Quote className="w-10 h-10 text-primary/20 absolute -top-4 -left-4" />
-                          <blockquote className="text-lg md:text-xl text-foreground leading-relaxed pl-8">
+                          <Quote className="w-10 h-10 text-nobel-gold/20 absolute -top-4 -left-4" />
+                          <blockquote className="text-lg md:text-xl text-stone-800 dark:text-foreground leading-relaxed pl-8 font-light">
                             "{testimonial.quote}"
                           </blockquote>
                         </div>

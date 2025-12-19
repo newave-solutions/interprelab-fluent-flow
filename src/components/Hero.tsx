@@ -32,35 +32,34 @@ export const Hero = () => {
       <div className="relative z-10 container mx-auto px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
-          {/* Eyebrow Badge */}
-          <div className="inline-block">
-            <span className="px-4 py-2 border border-nobel-gold text-nobel-gold text-xs tracking-[0.2em] uppercase font-bold rounded-full">
-              Special Report
-            </span>
-          </div>
+          {/* Badge */}
+          <Badge className="glass px-6 py-3 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm">
+            <Zap className="w-4 h-4 mr-2" />
+            AI-Powered Interpretation Platform
+          </Badge>
 
-          {/* Main Headline - Playfair Display */}
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1] drop-shadow-sm">
-            <span className="text-foreground">
-              The Interpreter
+          {/* Main Headline - Elegant serif style */}
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1]">
+            <span className="text-nobel-gold">
+              Master Medical
             </span>
             <br />
-            <span className="text-nobel-gold">
-              Dilemma
+            <span className="text-white">
+              Interpretation
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto">
-            A crisis hiding in plain sight. Lives hang in the balance as undertrained, 
-            underpaid interpreters face impossible demands.
+          {/* Subtitle - Lighter font weight */}
+          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-light leading-relaxed">
+            Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          {/* CTA Buttons - Updated styling */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
             <Button 
+              variant="default" 
               size="lg" 
-              className="group bg-nobel-gold text-background hover:bg-nobel-gold/90 hover:shadow-glow transition-all duration-300 rounded-full px-8" 
+              className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl" 
               asChild
             >
               <Link to="/interprebot" aria-label="Start your assessment">
@@ -72,7 +71,7 @@ export const Hero = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="group border-border/50 hover:border-nobel-gold/50 hover:bg-accent transition-all duration-300 rounded-full px-8" 
+              className="px-8 py-6 border-2 border-white/30 text-white hover:bg-white/10 rounded-full font-medium transition-all duration-300 hover:scale-105" 
               asChild
             >
               <Link to="/interprecoach" aria-label="Meet InterpreCoach AI assistant">
@@ -83,12 +82,12 @@ export const Hero = () => {
           </div>
 
           {/* Trust Indicators */}
-          <div className="pt-12 text-sm text-muted-foreground">
+          <div className="pt-8 text-sm text-white/60 animate-slide-up">
             <p className="font-light">Trusted by healthcare systems and legal firms across 50+ countries</p>
-            <div className="flex justify-center gap-8 mt-4 text-stone-500">
-              <span>🏥 Medical Centers</span>
-              <span>⚖️ Legal Firms</span>
-              <span>🌍 Global Organizations</span>
+            <div className="flex justify-center gap-8 mt-4">
+              <span><span role="img" aria-label="hospital">🏥</span> Medical Centers</span>
+              <span><span role="img" aria-label="scales of justice">⚖️</span> Legal Firms</span>
+              <span><span role="img" aria-label="globe">🌍</span> Global Organizations</span>
             </div>
           </div>
         </div>
