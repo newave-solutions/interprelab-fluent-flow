@@ -42,43 +42,43 @@ export default function InterpreStudy() {
         {/* Main Content Tabs */}
         <Tabs defaultValue="modules" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-10 h-auto mb-8 p-1">
-            <TabsTrigger value="modules" className="flex items-center gap-2 py-2" aria-label="Modules">
+            <TabsTrigger value="modules" aria-label="Modules" className="flex items-center gap-2 py-2">
               <PlayCircle className="w-4 h-4" />
               <span className="hidden lg:inline">Modules</span>
             </TabsTrigger>
-            <TabsTrigger value="training" className="flex items-center gap-2 py-2" aria-label="Training">
+            <TabsTrigger value="training" aria-label="Training" className="flex items-center gap-2 py-2">
               <GraduationCap className="w-4 h-4" />
               <span className="hidden lg:inline">Training</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="flex items-center gap-2 py-2" aria-label="Simulation">
+            <TabsTrigger value="chat" aria-label="Simulation" className="flex items-center gap-2 py-2">
               <MessageSquare className="w-4 h-4" />
               <span className="hidden lg:inline">Sim</span>
             </TabsTrigger>
-            <TabsTrigger value="flashcards" className="flex items-center gap-2 py-2" aria-label="Flashcards">
+            <TabsTrigger value="flashcards" aria-label="Flashcards" className="flex items-center gap-2 py-2">
               <Layers className="w-4 h-4" />
               <span className="hidden lg:inline">Cards</span>
             </TabsTrigger>
-            <TabsTrigger value="quiz" className="flex items-center gap-2 py-2" aria-label="Quiz">
+            <TabsTrigger value="quiz" aria-label="Quiz" className="flex items-center gap-2 py-2">
               <HelpCircle className="w-4 h-4" />
               <span className="hidden lg:inline">Quiz</span>
             </TabsTrigger>
-            <TabsTrigger value="body" className="flex items-center gap-2 py-2" aria-label="Body Mapper">
+            <TabsTrigger value="body" aria-label="Body Mapper" className="flex items-center gap-2 py-2">
               <Accessibility className="w-4 h-4" />
               <span className="hidden lg:inline">Body</span>
             </TabsTrigger>
-            <TabsTrigger value="scenarios" className="flex items-center gap-2 py-2" aria-label="Practice Scripts">
+            <TabsTrigger value="scenarios" aria-label="Scripts" className="flex items-center gap-2 py-2">
               <BookOpen className="w-4 h-4" />
               <span className="hidden lg:inline">Scripts</span>
             </TabsTrigger>
-            <TabsTrigger value="terminology" className="flex items-center gap-2 py-2" data-testid="terms-tab">
+            <TabsTrigger value="terminology" aria-label="Terminology" className="flex items-center gap-2 py-2">
               <Languages className="w-4 h-4" />
               <span className="hidden lg:inline">Terms</span>
             </TabsTrigger>
-            <TabsTrigger value="interactive_chat" className="flex items-center gap-2 py-2" aria-label="AI Chat">
+            <TabsTrigger value="interactive_chat" aria-label="AI Chat" className="flex items-center gap-2 py-2">
                <MessageSquare className="w-4 h-4" />
                <span className="hidden lg:inline">AI Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2 py-2" aria-label="Settings">
+            <TabsTrigger value="settings" aria-label="Settings" className="flex items-center gap-2 py-2">
               <Settings className="w-4 h-4" />
               <span className="hidden lg:inline">Settings</span>
             </TabsTrigger>
