@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, Bot, BookOpen, Users, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { ParticlesBackground } from "@/components/ParticlesBackground";
+import interprebotsGroup from "@/assets/interprebots-group-features.png";
 
 interface Solution {
   id: string;
@@ -119,12 +120,27 @@ const solutions: Solution[] = [
 export const SolutionsShowcase = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white dark:from-stone-950 dark:via-stone-950 dark:to-background relative overflow-hidden">
+      {/* Particles Background */}
+      <ParticlesBackground particleCount={40} variant="mixed" />
+      
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsl(var(--nobel-gold)/0.05)_0%,_transparent_65%)]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header */}
+        {/* Section Header with Bot Group */}
         <div className="text-center mb-16 animate-fade-in">
+          {/* Floating Bot Group Image */}
+          <div className="relative mb-8">
+            <img 
+              src={interprebotsGroup} 
+              alt="InterpreLab AI Assistants" 
+              className="mx-auto w-full max-w-md md:max-w-lg animate-float drop-shadow-2xl"
+              style={{
+                filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
+              }}
+            />
+          </div>
+          
           <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
             Our Solutions
           </div>
