@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { PainPointBadge } from '@/components/PainPointBadge';
+import { ParticlesBackground } from '@/components/ParticlesBackground';
+import interprewellnessBot from '@/assets/interprewellness-bot.png';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -178,9 +180,22 @@ export default function InterpreWellness() {
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-background to-accent/5">
-        {/* Hero Section */}
+        {/* Hero Section with Particles and Bot */}
         <section className="relative py-20 px-4 overflow-hidden bg-cover bg-center" style={{ backgroundImage: "url('/src/assets/wellness-support.jpg')" }}>
           <div className="absolute inset-0 bg-black/60" />
+          <ParticlesBackground particleCount={30} variant="stars" className="z-[1]" />
+          
+          {/* Wellness Bot - Positioned on the left, appearing to listen */}
+          <img 
+            src={interprewellnessBot}
+            alt="InterpreWellness AI Counselor"
+            className="absolute left-4 md:left-10 bottom-0 w-32 md:w-44 lg:w-52 animate-float z-[5] drop-shadow-2xl hidden sm:block"
+            style={{
+              filter: 'drop-shadow(0 10px 30px hsl(var(--primary) / 0.4))',
+              animationDelay: '0.3s',
+            }}
+          />
+          
           <div className="max-w-4xl mx-auto relative z-10">
             <PainPointBadge 
               painPoint="Addressing Pain Point #5: Psychological Toll & Lack of Support"
@@ -201,8 +216,9 @@ export default function InterpreWellness() {
         </section>
 
         {/* Understanding the Challenges */}
-        <section className="py-16 px-4">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-16 px-4 relative overflow-hidden">
+          <ParticlesBackground particleCount={20} variant="dots" />
+          <div className="max-w-6xl mx-auto relative z-10">
             <h2 className="text-3xl font-bold mb-8 text-center">We Understand What You Face</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {wellbeingTopics.map((topic, index) => (
@@ -390,8 +406,9 @@ export default function InterpreWellness() {
         </section>
 
         {/* Support Resources */}
-        <section className="py-16 px-4 bg-muted/30">
-          <div className="max-w-4xl mx-auto text-center">
+        <section className="py-16 px-4 bg-muted/30 relative overflow-hidden">
+          <ParticlesBackground particleCount={25} variant="mixed" />
+          <div className="max-w-4xl mx-auto text-center relative z-10">
             <h3 className="text-2xl font-bold mb-6">You're Not Alone</h3>
             <p className="text-muted-foreground mb-8">
               Connect with fellow interpreters and access resources through our community.
@@ -406,22 +423,24 @@ export default function InterpreWellness() {
                   <p className="text-muted-foreground mb-4">
                     Connect with fellow interpreters who understand your experience. Share, support, and grow together.
                   </p>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link to="/interprelink">Join the Community</Link>
+                  <Button variant="outline" asChild>
+                    <Link to="/interprelink">Join Community</Link>
                   </Button>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader>
-                  <MessageCircle className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle>Professional Resources</CardTitle>
+                  <Heart className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle>Crisis Resources</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Access articles, guides, and best practices for managing the emotional demands of interpreting.
+                    If you're in crisis, please reach out to professional support services immediately.
                   </p>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link to="/resources">Browse Resources</Link>
+                  <Button variant="outline" asChild>
+                    <a href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer">
+                      988 Lifeline
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
