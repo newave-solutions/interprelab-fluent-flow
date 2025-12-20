@@ -2,18 +2,22 @@ import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle, PlayCircle } from 'lucide-react';
-import { InteractiveChat } from '@/components/interprestudy/InteractiveChat';
-import TerminologyLookup from '@/components/interprestudy/TerminologyLookup';
-import { StudySettings } from '@/components/interprestudy/StudySettings';
 import { PainPointBadge } from '@/components/PainPointBadge';
 import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
-import { SmartFlashcards } from '@/components/interprestudy/modules/SmartFlashcards';
-import { ConversationMode } from '@/components/interprestudy/modules/ConversationMode';
-import { BodyMapper } from '@/components/interprestudy/modules/BodyMapper';
-import { ScenarioGenerator } from '@/components/interprestudy/modules/ScenarioGenerator';
-import { AiQuiz } from '@/components/interprestudy/modules/AiQuiz';
-import { CoreDynamicsTraining } from '@/components/interprestudy/modules/CoreDynamicsTraining';
-import { InteractiveModulePlayer } from '@/components/interprestudy/modules/InteractiveModulePlayer';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { lazy, Suspense } from 'react';
+
+// Lazy load components
+const InteractiveModulePlayer = lazy(() => import('@/components/interprestudy/modules/InteractiveModulePlayer').then(m => ({ default: m.InteractiveModulePlayer })));
+const CoreDynamicsTraining = lazy(() => import('@/components/interprestudy/modules/CoreDynamicsTraining').then(m => ({ default: m.CoreDynamicsTraining })));
+const ConversationMode = lazy(() => import('@/components/interprestudy/modules/ConversationMode').then(m => ({ default: m.ConversationMode })));
+const SmartFlashcards = lazy(() => import('@/components/interprestudy/modules/SmartFlashcards').then(m => ({ default: m.SmartFlashcards })));
+const AiQuiz = lazy(() => import('@/components/interprestudy/modules/AiQuiz').then(m => ({ default: m.AiQuiz })));
+const BodyMapper = lazy(() => import('@/components/interprestudy/modules/BodyMapper').then(m => ({ default: m.BodyMapper })));
+const ScenarioGenerator = lazy(() => import('@/components/interprestudy/modules/ScenarioGenerator').then(m => ({ default: m.ScenarioGenerator })));
+const TerminologyLookup = lazy(() => import('@/components/interprestudy/TerminologyLookup'));
+const InteractiveChat = lazy(() => import('@/components/interprestudy/InteractiveChat').then(m => ({ default: m.InteractiveChat })));
+const StudySettings = lazy(() => import('@/components/interprestudy/StudySettings').then(m => ({ default: m.StudySettings })));
 
 export default function InterpreStudy() {
   return (
@@ -84,45 +88,47 @@ export default function InterpreStudy() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="modules" className="animate-fade-in">
-            <InteractiveModulePlayer />
-          </TabsContent>
+          <Suspense fallback={<div className="flex justify-center p-10"><LoadingSpinner size="lg" /></div>}>
+            <TabsContent value="modules" className="animate-fade-in">
+              <InteractiveModulePlayer />
+            </TabsContent>
 
-          <TabsContent value="training" className="animate-fade-in">
-             <CoreDynamicsTraining />
-          </TabsContent>
+            <TabsContent value="training" className="animate-fade-in">
+              <CoreDynamicsTraining />
+            </TabsContent>
 
-          <TabsContent value="chat" className="animate-fade-in">
-            <ConversationMode />
-          </TabsContent>
+            <TabsContent value="chat" className="animate-fade-in">
+              <ConversationMode />
+            </TabsContent>
 
-          <TabsContent value="flashcards" className="animate-fade-in">
-            <SmartFlashcards />
-          </TabsContent>
+            <TabsContent value="flashcards" className="animate-fade-in">
+              <SmartFlashcards />
+            </TabsContent>
 
-          <TabsContent value="quiz" className="animate-fade-in">
-             <AiQuiz />
-          </TabsContent>
+            <TabsContent value="quiz" className="animate-fade-in">
+              <AiQuiz />
+            </TabsContent>
 
-          <TabsContent value="body" className="animate-fade-in">
-             <BodyMapper />
-          </TabsContent>
+            <TabsContent value="body" className="animate-fade-in">
+              <BodyMapper />
+            </TabsContent>
 
-          <TabsContent value="scenarios" className="animate-fade-in">
-            <ScenarioGenerator />
-          </TabsContent>
+            <TabsContent value="scenarios" className="animate-fade-in">
+              <ScenarioGenerator />
+            </TabsContent>
 
-          <TabsContent value="terminology" className="animate-fade-in">
-            <TerminologyLookup />
-          </TabsContent>
+            <TabsContent value="terminology" className="animate-fade-in">
+              <TerminologyLookup />
+            </TabsContent>
 
-          <TabsContent value="interactive_chat" className="animate-fade-in">
-            <InteractiveChat />
-          </TabsContent>
+            <TabsContent value="interactive_chat" className="animate-fade-in">
+              <InteractiveChat />
+            </TabsContent>
 
-          <TabsContent value="settings" className="animate-fade-in">
-            <StudySettings />
-          </TabsContent>
+            <TabsContent value="settings" className="animate-fade-in">
+              <StudySettings />
+            </TabsContent>
+          </Suspense>
         </Tabs>
 
         {/* Quick Actions - Only show if not on Training tab ideally, but keeping for footer access */}

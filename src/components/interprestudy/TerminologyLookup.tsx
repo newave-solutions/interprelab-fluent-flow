@@ -64,33 +64,41 @@ export const TerminologyLookup = () => {
 
     setIsLoading(true);
 
-    // First check if term exists in user's glossary
-    const { data: existingTerm } = await supabase
-      .from('glossary_terms')
-      .select('*')
-      .eq('term', searchTerm)
-      .maybeSingle();
+    try {
+      // First check if term exists in user's glossary
+      const { data: existingTerm } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .eq('term', searchTerm)
+        .maybeSingle();
 
-    if (existingTerm) {
-      setResult({
-        english: existingTerm.term,
-        translation: existingTerm.target_language || '',
-        pronunciation: existingTerm.pronunciation || '',
-        definition: existingTerm.definition,
-        imageUrl: undefined,
-      });
-      setIsLoading(false);
-      return;
-    }
+      if (existingTerm) {
+        setResult({
+          english: existingTerm.term,
+          translation: existingTerm.target_language || '',
+          pronunciation: existingTerm.pronunciation || '',
+          definition: existingTerm.definition,
+          imageUrl: undefined,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Only if not in user's glossary, simulate or search public glossary
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .eq('term', searchTerm)
+        .limit(1);
 
       if (!error && data && data.length > 0) {
         const term = data[0];
         setResult({
           english: term.term,
-          translation: term.translation || '',
+          translation: term.target_language || '',
           pronunciation: term.pronunciation || '',
           definition: term.definition || '',
-          imageUrl: term.image_url || undefined,
+          imageUrl: undefined,
         });
         setIsLoading(false);
         return;
@@ -139,30 +147,6 @@ export const TerminologyLookup = () => {
     toast({
       title: 'Success',
       description: 'Term added to your glossary.',
-    });
-
-    loadGlossaryTerms();
-  };
-
-  const deleteTerm = async (termId: string) => {
-    const { error } = await supabase
-      .from('glossary_terms')
-      .delete()
-      .eq('id', termId);
-
-    if (error) {
-      console.error('Error deleting term:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete term.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    toast({
-      title: 'Success',
-      description: 'Term deleted from glossary.',
     });
 
     loadGlossaryTerms();
