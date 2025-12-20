@@ -75,9 +75,11 @@ export const TerminologyLookup = () => {
       createdAt: new Date().toISOString(),
     };
 
-    const updated = [newTerm, ...glossaryTerms];
-    setGlossaryTerms(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setGlossaryTerms(prev => {
+      const updated = [newTerm, ...prev];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
 
     toast({
       title: 'Success',
@@ -85,16 +87,21 @@ export const TerminologyLookup = () => {
     });
   };
 
+  // Performance Optimization:
+  // stable callback using functional update to avoid re-rendering the entire list
+  // when deleting a single term.
   const deleteTerm = useCallback((termId: string) => {
-    const updated = glossaryTerms.filter((t) => t.id !== termId);
-    setGlossaryTerms(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setGlossaryTerms(prev => {
+      const updated = prev.filter((t) => t.id !== termId);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
 
     toast({
       title: 'Success',
       description: 'Term deleted from glossary.',
     });
-  }, [glossaryTerms, toast]);
+  }, [toast]);
 
   const playPronunciation = useCallback((text: string, id: string = 'main') => {
     if ('speechSynthesis' in window) {
