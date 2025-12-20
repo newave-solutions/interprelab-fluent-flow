@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Mic,
   Square,
   Volume2,
@@ -42,15 +47,23 @@ export const InterpreBotUI = () => {
   if (isMinimized) {
     return (
       <div className="fixed bottom-6 left-6 z-50">
-        <button
-          onClick={() => setIsMinimized(false)}
-          className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform glow animate-pulse-glow"
-        >
-          <div className="relative">
-            <Brain className="w-6 h-6 text-white" />
-            <Sparkles className="w-3 h-3 text-yellow-300 absolute -top-1 -right-1 animate-pulse" />
-          </div>
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => setIsMinimized(false)}
+              className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform glow animate-pulse-glow"
+              aria-label="Expand InterpreBot"
+            >
+              <div className="relative">
+                <Brain className="w-6 h-6 text-white" />
+                <Sparkles className="w-3 h-3 text-yellow-300 absolute -top-1 -right-1 animate-pulse" />
+              </div>
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Expand InterpreBot</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     );
   }
@@ -73,22 +86,39 @@ export const InterpreBotUI = () => {
                 </div>
               </div>
               <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-6 h-6"
-                  onClick={() => setIsMinimized(true)}
-                >
-                  <Minimize2 className="w-3 h-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-6 h-6"
-                  onClick={() => setIsVisible(false)}
-                >
-                  <X className="w-3 h-3" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-6 h-6"
+                      onClick={() => setIsMinimized(true)}
+                      aria-label="Minimize"
+                    >
+                      <Minimize2 className="w-3 h-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Minimize</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-6 h-6"
+                      onClick={() => setIsVisible(false)}
+                      aria-label="Close"
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Close</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
 
@@ -194,13 +224,19 @@ export const InterpreBotUI = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="flex-1 px-3 py-2 text-sm bg-muted/30 border border-border/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  aria-label="Chat input"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
                       setMessage("");
                     }
                   }}
                 />
-                <Button size="sm" variant="default" className="bg-gradient-to-r from-purple-500 to-pink-500">
+                <Button
+                  size="sm"
+                  variant="default"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500"
+                  aria-label="Send message"
+                >
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
@@ -377,14 +413,22 @@ export const ExtensionUI = () => {
   if (isMinimized) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setIsMinimized(false)}
-          className="w-14 h-14 rounded-full glow animate-pulse-glow bg-card/95 backdrop-blur-sm"
-        >
-          <Languages className="w-6 h-6" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsMinimized(false)}
+              className="w-14 h-14 rounded-full glow animate-pulse-glow bg-card/95 backdrop-blur-sm"
+              aria-label="Expand InterpreCoach"
+            >
+              <Languages className="w-6 h-6" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Expand InterpreCoach</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     );
   }
@@ -418,25 +462,55 @@ export const ExtensionUI = () => {
                 <Badge variant="outline" className="text-xs">
                   6 Agents Active
                 </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-6 h-6"
-                  onClick={() => setIsMuted(!isMuted)}
-                >
-                  {isMuted ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-6 h-6"
-                  onClick={() => setIsMinimized(true)}
-                >
-                  <Minimize2 className="w-3 h-3" />
-                </Button>
-                <Button variant="ghost" size="icon" className="w-6 h-6">
-                  <Settings className="w-3 h-3" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-6 h-6"
+                      onClick={() => setIsMuted(!isMuted)}
+                      aria-label={isMuted ? "Unmute" : "Mute"}
+                    >
+                      {isMuted ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{isMuted ? "Unmute" : "Mute"}</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-6 h-6"
+                      onClick={() => setIsMinimized(true)}
+                      aria-label="Minimize"
+                    >
+                      <Minimize2 className="w-3 h-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Minimize</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="w-6 h-6"
+                      aria-label="Settings"
+                    >
+                      <Settings className="w-3 h-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Settings</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
 

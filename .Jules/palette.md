@@ -9,3 +9,7 @@
 ## 2025-12-19 - Live Region for Dynamic Content
 **Learning:** Real-time AI feedback (like sign detection) is visual-only by default. Screen reader users miss out on this "magic".
 **Action:** Use `aria-live="polite"` for elements that update frequently but shouldn't interrupt the user immediately, giving non-visual access to AI outputs.
+
+## 2025-05-24 - Draggable Interface Accessibility
+**Learning:** Floating, draggable windows (like the InterpreCoach extension) are convenient for mouse users but can be a trap for keyboard users if they cannot be moved or if their content is not easily navigable.
+**Action:** Ensure all interactive elements within floating windows are keyboard accessible, and consider providing an alternative way to position or dock the window for keyboard users.
