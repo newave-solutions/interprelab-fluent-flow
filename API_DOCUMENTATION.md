@@ -1,7 +1,7 @@
 # InterpreHub API Documentation
 
 **Version:** 1.0.0
-**Base URL:** `https://0ec90b57d6e95fcbda19832f.supabase.co`
+**Base URL:** `https://<YOUR_PROJECT_ID>.supabase.co`
 **Last Updated:** December 1, 2025
 
 ## Table of Contents
@@ -22,7 +22,7 @@ All API requests require authentication using Supabase Auth tokens.
 ### Headers Required
 
 ```http
-Authorization: Bearer <SUPABASE_ANON_KEY>
+Authorization: Bearer <YOUR_SUPABASE_ANON_KEY>
 Content-Type: application/json
 ```
 
@@ -120,7 +120,7 @@ Authorization: Bearer <access_token>
 ## Edge Functions API
 
 All Edge Function endpoints:
-- Base URL: `https://0ec90b57d6e95fcbda19832f.supabase.co/functions/v1`
+- Base URL: `https://<YOUR_PROJECT_ID>.supabase.co/functions/v1`
 - Require Authorization header
 - Return CORS headers for cross-origin requests
 - Support OPTIONS preflight requests

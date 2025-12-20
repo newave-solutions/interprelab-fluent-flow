@@ -5,7 +5,17 @@
 
 set -e
 
-PROJECT_ID="interprelab-fluent-flow"
+# Load project ID from config or ask user
+# Attempt to read from supabase/config.toml if it exists
+CONFIG_PROJECT_ID=$(grep 'project_id' supabase/config.toml | cut -d '"' -f 2 || true)
+
+if [ -z "$CONFIG_PROJECT_ID" ]; then
+    echo "⚠️  Could not find project_id in supabase/config.toml"
+    read -p "Enter your Google Cloud Project ID: " PROJECT_ID
+else
+    PROJECT_ID=$CONFIG_PROJECT_ID
+fi
+
 SERVICE_ACCOUNT_NAME="github-actions"
 SERVICE_ACCOUNT_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
@@ -84,8 +94,8 @@ echo "   https://github.com/YOUR_USERNAME/interprelab-fluent-flow/settings/secre
 echo ""
 echo "3. Add these secrets:"
 echo "   - GCP_SA_KEY: (paste the entire content of $KEY_FILE)"
-echo "   - VITE_SUPABASE_URL: https://iokgkrnbawhizmuejluz.supabase.co"
-echo "   - VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlva2drcm5iYXdoaXptdWVqbHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2Mjg5ODcsImV4cCI6MjA3NzIwNDk4N30.GTIKRwPUu44PA209OFLj1WaEEGgKwbBaO0iTc7P-UtY"
+echo "   - VITE_SUPABASE_URL: https://${PROJECT_ID}.supabase.co"
+echo "   - VITE_SUPABASE_ANON_KEY: (get this from your Supabase dashboard)"
 echo ""
 echo "4. Commit and push the workflow file:"
 echo "   git add .github/workflows/deploy.yml"
