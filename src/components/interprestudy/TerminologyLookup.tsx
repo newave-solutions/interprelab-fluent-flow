@@ -23,8 +23,10 @@ export const TerminologyLookup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const { toast } = useToast();
 
+  // Load glossary terms from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -34,15 +36,16 @@ export const TerminologyLookup = () => {
         // Use empty array if parsing fails
       }
     }
+    setIsInitialized(true);
   }, []);
 
   // Centralized localStorage synchronization
   // Watches glossaryTerms and persists changes whenever the state updates
   useEffect(() => {
-    if (glossaryTerms.length > 0 || localStorage.getItem(STORAGE_KEY)) {
+    if (isInitialized) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(glossaryTerms));
     }
-  }, [glossaryTerms]);
+  }, [glossaryTerms, isInitialized]);
 
   useEffect(() => {
     return () => {
