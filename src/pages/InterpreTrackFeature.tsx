@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { FeatureGrid } from "@/components/FeatureGrid";
-import callTrackerPreview from "@/assets/coach-frontned-design.png";
+import callTrackerPreview from "@/assets/interpretrack-dashboard.png";
 
 const InterpreTrackFeature = () => {
     return (

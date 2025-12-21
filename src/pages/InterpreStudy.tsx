@@ -32,16 +32,15 @@ export default function InterpreStudy() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
-        {/* Hero Section with Particles and Bot */}
+        {/* Hero Section with Background Image and Bot */}
         <div
           className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center overflow-hidden"
-          style={{ backgroundImage: "url('/studying-learning.jpg')" }}
+          style={{ backgroundImage: "url('/interprestudy-hero.png')" }}
         >
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
-          <ParticlesBackground particleCount={35} variant="stars" className="z-[1]" />
-          
+
           {/* Scholar Bot - Positioned on the right */}
-          <img 
+          <img
             src={interprestudyBot}
             alt="InterpreStudy AI Scholar"
             className="absolute right-4 md:right-10 bottom-0 w-32 md:w-48 lg:w-56 animate-float z-[5] drop-shadow-2xl hidden sm:block"
@@ -50,7 +49,7 @@ export default function InterpreStudy() {
               animationDelay: '0.5s',
             }}
           />
-          
+
           <div className="relative z-10 max-w-3xl mx-auto">
             <PainPointBadge painPoint="Addressing Pain Point #4: Accessible, Specialized Training" />
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -171,50 +170,53 @@ export default function InterpreStudy() {
           </TabsContent>
         </Tabs>
 
-        {/* Quick Actions - Only show if not on Training tab ideally, but keeping for footer access */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-primary" />
-                Code of Ethics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Query and quiz yourself on professional standards and ethical guidelines
-              </p>
-            </CardContent>
-          </Card>
+        {/* Quick Actions with Particles Background */}
+        <section className="relative py-12 overflow-hidden">
+          <ParticlesBackground particleCount={100} variant="mixed" />
+          <div className="relative z-10 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  Code of Ethics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Query and quiz yourself on professional standards and ethical guidelines
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-primary" />
-                Live Practice
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Real-time conversation with AI in 8-second response windows
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-primary" />
+                  Live Practice
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Real-time conversation with AI in 8-second response windows
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Languages className="w-5 h-5 text-primary" />
-                Custom Glossary
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Build your personal terminology library with translations and images
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Languages className="w-5 h-5 text-primary" />
+                  Custom Glossary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Build your personal terminology library with translations and images
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
         {/* Mission & Collaboration CTA */}
         <MissionCollaborationCTA

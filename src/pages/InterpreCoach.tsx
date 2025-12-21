@@ -8,7 +8,7 @@ import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 
-import extensionPreview from "@/assets/extension-preview.jpg";
+import extensionPreview from "@/assets/coach-frontned-design.png";
 
 const InterpreCoach = () => {
   return (

@@ -63,7 +63,7 @@ export default function InterpreWellness() {
   const streamChat = async (userMessage: string) => {
     const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/wellness-chat`;
     const newMessages = [...chatMessages, { role: 'user' as const, content: userMessage }];
-    
+
     setChatMessages([...newMessages, { role: 'assistant' as const, content: '' }]);
     setIsLoading(true);
 
@@ -98,7 +98,7 @@ export default function InterpreWellness() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        
+
         textBuffer += decoder.decode(value, { stream: true });
 
         let newlineIndex: number;
@@ -140,7 +140,7 @@ export default function InterpreWellness() {
 
   const handleSendMessage = async () => {
     if (!chatInput.trim() || isLoading) return;
-    
+
     const message = chatInput.trim();
     setChatInput('');
     await streamChat(message);
@@ -154,7 +154,7 @@ export default function InterpreWellness() {
     }
 
     setIsAnalyzing(true);
-    
+
     try {
       const responsesText = debriefingQuestions
         .map((q, i) => debriefingResponses[i] ? `Q: ${q}\nA: ${debriefingResponses[i]}` : '')
@@ -166,7 +166,7 @@ export default function InterpreWellness() {
       });
 
       if (error) throw error;
-      
+
       setDebriefingAnalysis(data.analysis);
       toast.success('Analysis complete!');
     } catch (error) {
@@ -180,44 +180,48 @@ export default function InterpreWellness() {
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-background to-accent/5">
-        {/* Hero Section with Particles and Bot */}
-        <section className="relative py-20 px-4 overflow-hidden bg-cover bg-center" style={{ backgroundImage: "url('/src/assets/wellness-support.jpg')" }}>
-          <div className="absolute inset-0 bg-black/60" />
-          <ParticlesBackground particleCount={30} variant="stars" className="z-[1]" />
-          
-          {/* Wellness Bot - Positioned on the left, appearing to listen */}
-          <img 
-            src={interprewellnessBot}
-            alt="InterpreWellness AI Counselor"
-            className="absolute left-4 md:left-10 bottom-0 w-32 md:w-44 lg:w-52 animate-float z-[5] drop-shadow-2xl hidden sm:block"
-            style={{
-              filter: 'drop-shadow(0 10px 30px hsl(var(--primary) / 0.4))',
-              animationDelay: '0.3s',
-            }}
-          />
-          
-          <div className="max-w-4xl mx-auto relative z-10">
-            <PainPointBadge 
-              painPoint="Addressing Pain Point #5: Psychological Toll & Lack of Support"
-              className="mb-4 bg-primary/10 text-primary border-primary/20"
+        {/* Hero Section with Contained Image and Bot */}
+        <div className="container mx-auto px-4 py-12">
+          <div
+            className="relative text-center mb-16 animate-fade-in py-20 px-4 rounded-3xl bg-cover bg-center overflow-hidden"
+            style={{ backgroundImage: "url('/src/assets/wellness-support.jpg')" }}
+          >
+            <div className="absolute inset-0 bg-black/60 rounded-3xl" />
+
+            {/* Wellness Bot - Positioned on the left, appearing to listen */}
+            <img
+              src={interprewellnessBot}
+              alt="InterpreWellness AI Counselor"
+              className="absolute left-4 md:left-10 bottom-0 w-32 md:w-44 lg:w-52 animate-float z-[5] drop-shadow-2xl hidden sm:block"
+              style={{
+                filter: 'drop-shadow(0 10px 30px hsl(var(--primary) / 0.4))',
+                animationDelay: '0.3s',
+              }}
             />
-            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Interpre-Wellness
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              We understand the weight you carry. The emotional toll of absorbing trauma, speaking in first person, feeling isolated after difficult calls—we've been there. Interpre-Wellness is your compassionate companion, a safe space to process, reflect, and heal.
-            </p>
-            <div className="glass p-6 rounded-lg mb-8">
-              <p className="text-sm text-muted-foreground">
-                💙 <strong>Built from lived experience:</strong> As working interpreters, we know the psychological demands of this work. You verbally embody patients' pain and fear. You deserve support that understands the unique nature of medical interpreting.
+
+            <div className="max-w-4xl mx-auto relative z-10">
+              <PainPointBadge
+                painPoint="Addressing Pain Point #5: Psychological Toll & Lack of Support"
+                className="mb-4 bg-primary/10 text-primary border-primary/20"
+              />
+              <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Interpre-Wellness
+              </h1>
+              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+                We understand the weight you carry. The emotional toll of absorbing trauma, speaking in first person, feeling isolated after difficult calls—we've been there. Interpre-Wellness is your compassionate companion, a safe space to process, reflect, and heal.
               </p>
+              <div className="glass p-6 rounded-lg mb-8">
+                <p className="text-sm text-muted-foreground">
+                  💙 <strong>Built from lived experience:</strong> As working interpreters, we know the psychological demands of this work. You verbally embody patients' pain and fear. You deserve support that understands the unique nature of medical interpreting.
+                </p>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Understanding the Challenges */}
         <section className="py-16 px-4 relative overflow-hidden">
-          <ParticlesBackground particleCount={20} variant="dots" />
+          <ParticlesBackground particleCount={80} variant="dots" />
           <div className="max-w-6xl mx-auto relative z-10">
             <h2 className="text-3xl font-bold mb-8 text-center">We Understand What You Face</h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -262,11 +266,10 @@ export default function InterpreWellness() {
                   )}
                   {chatMessages.map((msg, i) => (
                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[80%] p-3 rounded-lg ${
-                        msg.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
-                      }`}>
+                      <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                        }`}>
                         <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                       </div>
                     </div>
@@ -287,7 +290,7 @@ export default function InterpreWellness() {
                     className="min-h-[60px]"
                     disabled={isLoading}
                   />
-                  <Button 
+                  <Button
                     onClick={handleSendMessage}
                     disabled={isLoading || !chatInput.trim()}
                     size="icon"
@@ -330,7 +333,7 @@ export default function InterpreWellness() {
                     <div className="prose prose-sm max-w-none">
                       <p className="whitespace-pre-wrap text-sm">{debriefingAnalysis}</p>
                     </div>
-                    <Button 
+                    <Button
                       onClick={() => {
                         setShowDebriefing(false);
                         setDebriefingAnalysis('');
@@ -359,7 +362,7 @@ export default function InterpreWellness() {
                         />
                       </div>
                     ))}
-                    <Button 
+                    <Button
                       onClick={handleDebriefingSubmit}
                       disabled={isAnalyzing}
                       className="w-full"
@@ -407,7 +410,7 @@ export default function InterpreWellness() {
 
         {/* Support Resources */}
         <section className="py-16 px-4 bg-muted/30 relative overflow-hidden">
-          <ParticlesBackground particleCount={25} variant="mixed" />
+          <ParticlesBackground particleCount={100} variant="mixed" />
           <div className="max-w-4xl mx-auto text-center relative z-10">
             <h3 className="text-2xl font-bold mb-6">You're Not Alone</h3>
             <p className="text-muted-foreground mb-8">

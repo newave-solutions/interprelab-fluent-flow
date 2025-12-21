@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface Particle {
   id: number;
   x: number;
   y: number;
+  vx: number;
+  vy: number;
   size: number;
-  duration: number;
-  delay: number;
   opacity: number;
+  color: string;
 }
 
 interface ParticlesBackgroundProps {
@@ -16,86 +17,148 @@ interface ParticlesBackgroundProps {
   variant?: 'stars' | 'dots' | 'mixed';
 }
 
-export const ParticlesBackground = ({ 
-  className = '', 
+export const ParticlesBackground = ({
+  className = '',
   particleCount = 50,
   variant = 'mixed'
 }: ParticlesBackgroundProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [particles, setParticles] = useState<Particle[]>([]);
+  const animationFrameId = useRef<number>();
+
+  // Brand colors based on your design system
+  const brandColors = [
+    'rgba(197, 160, 89, 0.8)',      // Nobel gold - primary
+    'rgba(197, 160, 89, 0.6)',      // Nobel gold - lighter
+    'rgba(249, 248, 244, 0.4)',     // Foreground/text
+    'rgba(160, 180, 200, 0.5)',     // Accent blue-gray
+    'rgba(197, 160, 89, 0.9)',      // Nobel gold - bright
+  ];
 
   useEffect(() => {
-    const generated: Particle[] = [];
-    for (let i = 0; i < particleCount; i++) {
-      generated.push({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: variant === 'stars' 
-          ? Math.random() * 3 + 1 
-          : variant === 'dots' 
-            ? Math.random() * 4 + 2 
-            : Math.random() * 4 + 1,
-        duration: Math.random() * 20 + 15,
-        delay: Math.random() * 10,
-        opacity: Math.random() * 0.5 + 0.2,
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Initialize particles with varied sizes
+    const initParticles = () => {
+      const generated: Particle[] = [];
+      for (let i = 0; i < particleCount; i++) {
+        const sizeVariation = variant === 'stars'
+          ? Math.random() * 2 + 1  // 1-3px for stars
+          : variant === 'dots'
+            ? Math.random() * 3 + 2  // 2-5px for dots
+            : Math.random() * 4 + 1; // 1-5px for mixed
+
+        generated.push({
+          id: i,
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5, // Velocity X
+          vy: (Math.random() - 0.5) * 0.5, // Velocity Y
+          size: sizeVariation,
+          opacity: Math.random() * 0.6 + 0.3,
+          color: variant === 'stars'
+            ? brandColors[0] // Always Nobel gold for stars
+            : variant === 'dots'
+              ? brandColors[2] // Foreground color for dots
+              : brandColors[i % brandColors.length] // Mixed colors
+        });
+      }
+      setParticles(generated);
+      return generated;
+    };
+
+    let currentParticles = initParticles();
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      currentParticles.forEach((particle) => {
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Bounce off edges
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+        // Keep in bounds
+        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.globalAlpha = particle.opacity;
+        ctx.fill();
+
+        // Add glow for Nobel gold particles
+        if (particle.color.includes('197, 160, 89')) {
+          ctx.shadowBlur = particle.size * 3;
+          ctx.shadowColor = 'rgba(197, 160, 89, 0.5)';
+        }
       });
-    }
-    setParticles(generated);
+
+      // Draw connections between nearby particles
+      const connectionDistance = 150; // pixels
+      const connectionOpacity = 0.15;
+
+      for (let i = 0; i < currentParticles.length; i++) {
+        for (let j = i + 1; j < currentParticles.length; j++) {
+          const dx = currentParticles[i].x - currentParticles[j].x;
+          const dy = currentParticles[i].y - currentParticles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < connectionDistance) {
+            // Opacity based on distance (closer = more visible)
+            const opacity = connectionOpacity * (1 - distance / connectionDistance);
+
+            ctx.beginPath();
+            ctx.moveTo(currentParticles[i].x, currentParticles[i].y);
+            ctx.lineTo(currentParticles[j].x, currentParticles[j].y);
+            ctx.strokeStyle = `rgba(197, 160, 89, ${opacity})`; // Nobel gold connections
+            ctx.lineWidth = 1;
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameId.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
   }, [particleCount, variant]);
 
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className="absolute rounded-full"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            opacity: particle.opacity,
-            background: variant === 'stars' 
-              ? 'hsl(var(--nobel-gold))' 
-              : variant === 'dots'
-                ? 'hsl(var(--foreground) / 0.3)'
-                : particle.id % 3 === 0 
-                  ? 'hsl(var(--nobel-gold))' 
-                  : 'hsl(var(--foreground) / 0.2)',
-            boxShadow: variant === 'stars' || (variant === 'mixed' && particle.id % 3 === 0)
-              ? `0 0 ${particle.size * 2}px hsl(var(--nobel-gold) / 0.5)`
-              : 'none',
-            animation: `particleFloat ${particle.duration}s ease-in-out infinite, particleTwinkle ${particle.duration / 2}s ease-in-out infinite`,
-            animationDelay: `${particle.delay}s, ${particle.delay + 2}s`,
-          }}
-        />
-      ))}
-      
-      <style>{`
-        @keyframes particleFloat {
-          0%, 100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(10px, -15px) rotate(90deg);
-          }
-          50% {
-            transform: translate(-5px, -25px) rotate(180deg);
-          }
-          75% {
-            transform: translate(-15px, -10px) rotate(270deg);
-          }
-        }
-        
-        @keyframes particleTwinkle {
-          0%, 100% {
-            opacity: var(--particle-opacity, 0.3);
-          }
-          50% {
-            opacity: calc(var(--particle-opacity, 0.3) * 1.8);
-          }
-        }
-      `}</style>
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+        style={{ opacity: 0.6 }}
+      />
     </div>
   );
 };

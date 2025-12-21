@@ -121,8 +121,8 @@ export const SolutionsShowcase = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white dark:from-stone-950 dark:via-stone-950 dark:to-background relative overflow-hidden">
       {/* Particles Background */}
-      <ParticlesBackground particleCount={40} variant="mixed" />
-      
+      <ParticlesBackground particleCount={150} variant="mixed" />
+
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_hsl(var(--nobel-gold)/0.05)_0%,_transparent_65%)]" />
 
@@ -142,9 +142,9 @@ export const SolutionsShowcase = () => {
 
         {/* Floating Bot Group Image */}
         <div className="relative mb-16 flex justify-center">
-          <img 
-            src={interprebotsGroup} 
-            alt="InterpreLab AI Assistants" 
+          <img
+            src={interprebotsGroup}
+            alt="InterpreLab AI Assistants"
             className="w-full max-w-md md:max-w-lg animate-float drop-shadow-2xl"
             style={{
               filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
