@@ -23,6 +23,7 @@ export const TerminologyLookup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,7 +35,15 @@ export const TerminologyLookup = () => {
         // Use empty array if parsing fails
       }
     }
+    setIsInitialLoad(false);
   }, []);
+
+  // Sync glossaryTerms to localStorage whenever it changes (after initial load)
+  useEffect(() => {
+    if (!isInitialLoad) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(glossaryTerms));
+    }
+  }, [glossaryTerms, isInitialLoad]);
 
   useEffect(() => {
     return () => {
@@ -75,11 +84,7 @@ export const TerminologyLookup = () => {
       createdAt: new Date().toISOString(),
     };
 
-    setGlossaryTerms(prev => {
-      const updated = [newTerm, ...prev];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => [newTerm, ...prev]);
 
     toast({
       title: 'Success',
@@ -91,11 +96,7 @@ export const TerminologyLookup = () => {
   // stable callback using functional update to avoid re-rendering the entire list
   // when deleting a single term.
   const deleteTerm = useCallback((termId: string) => {
-    setGlossaryTerms(prev => {
-      const updated = prev.filter((t) => t.id !== termId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => prev.filter((t) => t.id !== termId));
 
     toast({
       title: 'Success',
