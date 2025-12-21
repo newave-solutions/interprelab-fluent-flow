@@ -64,7 +64,6 @@ export default function ManualLog() {
             description: `Your ${callType} call on ${platform} has been logged with a duration of ${duration} minutes.`,
         });
 
-        window.location.reload();
     }
     setElapsedTime(0);
     setStartTime(null);
