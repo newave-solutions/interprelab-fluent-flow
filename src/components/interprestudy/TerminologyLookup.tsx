@@ -36,6 +36,11 @@ export const TerminologyLookup = () => {
     }
   }, []);
 
+  // Centralized localStorage synchronization
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(glossaryTerms));
+  }, [glossaryTerms]);
+
   useEffect(() => {
     return () => {
       if ('speechSynthesis' in window) {
@@ -75,11 +80,7 @@ export const TerminologyLookup = () => {
       createdAt: new Date().toISOString(),
     };
 
-    setGlossaryTerms(prev => {
-      const updated = [newTerm, ...prev];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => [newTerm, ...prev]);
 
     toast({
       title: 'Success',
@@ -91,11 +92,7 @@ export const TerminologyLookup = () => {
   // stable callback using functional update to avoid re-rendering the entire list
   // when deleting a single term.
   const deleteTerm = useCallback((termId: string) => {
-    setGlossaryTerms(prev => {
-      const updated = prev.filter((t) => t.id !== termId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => prev.filter((t) => t.id !== termId));
 
     toast({
       title: 'Success',

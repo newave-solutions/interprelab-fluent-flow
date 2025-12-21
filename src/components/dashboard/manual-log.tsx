@@ -9,8 +9,11 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import type { CallRecord } from '@/lib/types';
 
+interface ManualLogProps {
+  onCallLogged?: () => void;
+}
 
-export default function ManualLog() {
+export default function ManualLog({ onCallLogged }: ManualLogProps) {
   const [isActive, setIsActive] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -64,7 +67,8 @@ export default function ManualLog() {
             description: `Your ${callType} call on ${platform} has been logged with a duration of ${duration} minutes.`,
         });
 
-        window.location.reload();
+        // Trigger parent component to refresh data
+        onCallLogged?.();
     }
     setElapsedTime(0);
     setStartTime(null);

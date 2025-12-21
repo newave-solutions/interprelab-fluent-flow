@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import StatsCards from '@/components/dashboard/stats-cards';
 import WeeklyChart from '@/components/dashboard/weekly-chart';
 import AIInsights from '@/components/dashboard/ai-insights';
@@ -7,11 +8,17 @@ import ManualLog from '@/components/dashboard/manual-log';
 import { getAggregatedStats, getWeeklyData, getCallTypeStats } from '@/lib/data';
 
 export default function InterpreTrack() {
+  const [refreshKey, setRefreshKey] = useState(0);
+  
   const stats = getAggregatedStats();
   const weeklyData = getWeeklyData();
   const callTypeData = getCallTypeStats();
   const aiStats = "Here are some AI stats"; // TODO: Replace with real API data
   const aiError = false;
+
+  const handleCallLogged = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
     <div className="p-4 md:p-8 space-y-6">
@@ -24,7 +31,7 @@ export default function InterpreTrack() {
 
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3 space-y-6">
-           <ManualLog />
+           <ManualLog onCallLogged={handleCallLogged} />
            <WeeklyChart data={weeklyData} />
         </div>
         <div className="lg:col-span-2 grid gap-6">
@@ -33,7 +40,7 @@ export default function InterpreTrack() {
         </div>
       </div>
 
-      <RecentCalls />
+      <RecentCalls key={refreshKey} />
 
     </div>
   );
