@@ -20,9 +20,9 @@ export default function InterpreTrack() {
 
   useEffect(() => {
     if (refreshKey > 0) {
-      setStats(getAggregatedStats());
-      setWeeklyData(getWeeklyData());
-      setCallTypeData(getCallTypeStats());
+      setStats(() => getAggregatedStats());
+      setWeeklyData(() => getWeeklyData());
+      setCallTypeData(() => getCallTypeStats());
     }
   }, [refreshKey]);
 
