@@ -155,7 +155,10 @@ export const InteractiveChat = () => {
                 return updated;
               });
             }
-          } catch { break; }
+          } catch (e) {
+            console.error('Error parsing streaming response line:', jsonStr, e);
+            break;
+          }
         }
       }
     } catch (error) {

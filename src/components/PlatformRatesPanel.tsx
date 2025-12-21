@@ -62,6 +62,36 @@ export const PlatformRatesPanel = () => {
     const platformName = formData.platform_name.trim();
     const currency = formData.currency.trim().toUpperCase();
 
+    // Validate platform name
+    if (!platformName) {
+      toast({
+        title: 'Invalid Platform Name',
+        description: 'Please enter a platform name',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate currency
+    const validCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'MXN', 'JPY', 'CNY', 'INR', 'BRL', 'ZAR'];
+    if (!currency) {
+      toast({
+        title: 'Invalid Currency',
+        description: 'Please enter a currency code',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!validCurrencies.includes(currency)) {
+      toast({
+        title: 'Invalid Currency',
+        description: `Please enter a valid currency code (e.g., ${validCurrencies.slice(0, 5).join(', ')})`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (isNaN(rateValue) || rateValue < 0) {
       toast({
         title: 'Invalid Rate',

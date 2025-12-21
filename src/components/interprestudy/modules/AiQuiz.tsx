@@ -49,7 +49,6 @@ export function AiQuiz() {
             const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
                 body: {
                     action: 'generate-quiz',
-                    topic: specialty,
                     specialty: specialty
                 }
             });

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Play, Pause, SkipBack, SkipForward, FileText } from 'lucide-react';
 
 const TranscriptSegment = ({ time, text, active, onClick }: { time: string, text: string, active: boolean, onClick: () => void }) => (
@@ -45,6 +45,15 @@ export const AudioPlayer = () => {
     };
 
     const progress = (currentTimeSec / durationSec) * 100;
+
+    // Generate stable waveform heights using a deterministic function
+    const waveformHeights = useMemo(() => {
+        return Array.from({ length: 40 }, (_, i) => {
+            // Use a sine wave pattern for more natural-looking waveforms
+            const baseHeight = 20 + Math.abs(Math.sin(i * 0.5) * 60) + Math.abs(Math.cos(i * 0.3) * 20);
+            return baseHeight;
+        });
+    }, []);
 
     // Transcript data with mapped seconds for synchronization
     const transcriptData = [
@@ -103,12 +112,12 @@ export const AudioPlayer = () => {
 
                 {/* Fake Waveform */}
                 <div className="flex items-end gap-1 h-12 mt-4 opacity-50">
-                    {[...Array(40)].map((_, i) => (
+                    {waveformHeights.map((height, i) => (
                          <div
                             key={i}
                             className={`w-1 bg-amber-500 rounded-t-sm transition-all duration-300 ${playing ? 'animate-pulse' : ''}`}
                             style={{
-                                height: `${20 + Math.random() * 80}%`,
+                                height: `${height}%`,
                                 opacity: i / 40
                             }}
                          />

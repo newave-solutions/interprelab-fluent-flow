@@ -73,7 +73,7 @@ export const Navigation = () => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold bg-transparent uppercase">
+                      <NavigationMenuTrigger className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold bg-transparent">
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
