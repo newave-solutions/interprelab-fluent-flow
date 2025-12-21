@@ -142,6 +142,10 @@ export default {
           "0%, 100%": { opacity: "1", boxShadow: "0 0 20px hsl(var(--primary) / 0.5)" },
           "50%": { opacity: "0.8", boxShadow: "0 0 40px hsl(var(--primary) / 0.8)" },
         },
+        "marquee": {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -149,6 +153,7 @@ export default {
         "fade-in-up": "fade-in-up 0.6s ease-out forwards",
         "float": "float 6s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "marquee": "marquee 40s linear infinite",
       },
       perspective: {
         '1000': '1000px',

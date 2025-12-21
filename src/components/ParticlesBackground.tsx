@@ -26,13 +26,13 @@ export const ParticlesBackground = ({
   const [particles, setParticles] = useState<Particle[]>([]);
   const animationFrameId = useRef<number>();
 
-  // Brand colors based on your design system
+  // Brand colors - Nobel gold variations
   const brandColors = [
     'rgba(197, 160, 89, 0.8)',      // Nobel gold - primary
     'rgba(197, 160, 89, 0.6)',      // Nobel gold - lighter
-    'rgba(249, 248, 244, 0.4)',     // Foreground/text
-    'rgba(160, 180, 200, 0.5)',     // Accent blue-gray
     'rgba(197, 160, 89, 0.9)',      // Nobel gold - bright
+    'rgba(218, 180, 109, 0.7)',     // Nobel gold - warm
+    'rgba(177, 140, 69, 0.8)',      // Nobel gold - deep
   ];
 
   useEffect(() => {

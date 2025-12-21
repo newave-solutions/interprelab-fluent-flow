@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import ASLRecognitionService from '../services/ASLRecognitionService';
+import ASLRecognitionService from './ASLRecognitionService';
 
 interface SignDetectionProps {
   onSignDetected: (sign: string) => void;
