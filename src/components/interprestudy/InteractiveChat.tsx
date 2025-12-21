@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { MessageSquare, Send, Mic, StopCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -158,6 +159,7 @@ export const InteractiveChat = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about ethics, request a quiz, or query standards..."
             className="min-h-[80px]"
+            aria-label="Chat message input"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -166,15 +168,35 @@ export const InteractiveChat = () => {
             }}
           />
           <div className="flex flex-col gap-2">
-            <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
-              <Send className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={isRecording ? 'destructive' : 'outline'}
-              onClick={toggleRecording}
-            >
-              {isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleSend}
+                  disabled={isLoading || !input.trim()}
+                  aria-label="Send message"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Send message</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={isRecording ? 'destructive' : 'outline'}
+                  onClick={toggleRecording}
+                  aria-label={isRecording ? "Stop recording" : "Start voice recording"}
+                >
+                  {isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isRecording ? "Stop recording" : "Start voice recording"}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
