@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { MessageSquare, Send, Mic, StopCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -217,11 +218,10 @@ export const InteractiveChat = () => {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
-                      message.role === 'user'
+                    className={`max-w-[80%] rounded-lg p-4 ${message.role === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted'
-                    }`}
+                      }`}
                   >
                     <p className="text-sm">{message.content}</p>
                     <p className="text-xs opacity-70 mt-2">
@@ -253,6 +253,7 @@ export const InteractiveChat = () => {
             disabled={isRecording}
             placeholder={isRecording ? "Listening..." : "Ask about ethics, request a quiz, or query standards..."}
             className="min-h-[80px]"
+            aria-label="Chat message input"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -261,16 +262,35 @@ export const InteractiveChat = () => {
             }}
           />
           <div className="flex flex-col gap-2">
-            <Button onClick={handleSend} disabled={isLoading || (!input.trim() && !isRecording)}>
-              <Send className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={isRecording ? 'destructive' : 'outline'}
-              onClick={toggleRecording}
-              className={isRecording ? "animate-pulse" : ""}
-            >
-              {isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleSend}
+                  disabled={isLoading || !input.trim()}
+                  aria-label="Send message"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Send message</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={isRecording ? 'destructive' : 'outline'}
+                  onClick={toggleRecording}
+                  aria-label={isRecording ? "Stop recording" : "Start voice recording"}
+                >
+                  {isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isRecording ? "Stop recording" : "Start voice recording"}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 

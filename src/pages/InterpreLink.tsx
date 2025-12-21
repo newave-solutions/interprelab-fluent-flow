@@ -161,11 +161,10 @@ export default function InterpreLink() {
                     {section.items.map((item, itemIndex) => (
                       <div
                         key={itemIndex}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
-                          item.active
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${item.active
                             ? "bg-primary text-primary-foreground"
                             : "text-foreground hover:bg-accent"
-                        }`}
+                          }`}
                       >
                         <item.icon className="w-5 h-5" />
                         <span className="text-sm font-medium flex-1">{item.label}</span>
@@ -186,8 +185,8 @@ export default function InterpreLink() {
           <div className="flex-1 p-4 md:p-8 max-w-4xl">
             {/* Header */}
             <div className="mb-8">
-              <PainPointBadge 
-                painPoint="Addressing Pain Point #5: Professional Community & Support" 
+              <PainPointBadge
+                painPoint="Addressing Pain Point #5: Professional Community & Support"
                 className="mb-6 bg-primary/10 text-primary border-primary/20"
               />
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
@@ -331,7 +330,7 @@ export default function InterpreLink() {
                 </Link>
               </CardContent>
             </Card>
-            
+
             <Card className="mb-6">
               <CardHeader>
                 <h3 className="font-semibold">Trending Topics</h3>
