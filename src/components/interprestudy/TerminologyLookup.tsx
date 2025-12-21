@@ -50,6 +50,9 @@ export const TerminologyLookup = () => {
     setIsLoading(true);
 
     // Simulate AI lookup for demo purposes
+    // TODO: Replace this simulated AI lookup and hardcoded demo data
+    // with a real terminology lookup (e.g., via backend or AI API) before production use.
+    // This placeholder is intentionally kept for demo purposes only.
     setTimeout(() => {
       setResult({
         english: searchTerm,

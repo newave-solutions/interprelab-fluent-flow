@@ -55,6 +55,9 @@ export const AudioPlayer = () => {
         { time: "03:43", seconds: 223, text: "It creates this unstoppable downward pressure, a race to the bottom that's pulling the entire profession down with it." }
     ];
 
+    // Stable random heights for visualization
+    const waveformHeights = React.useMemo(() => [...Array(40)].map(() => 20 + Math.random() * 80), []);
+
     const getActiveSegmentIndex = () => {
         // Find the segment that started most recently relative to current time
         for (let i = transcriptData.length - 1; i >= 0; i--) {
@@ -103,12 +106,12 @@ export const AudioPlayer = () => {
 
                 {/* Fake Waveform */}
                 <div className="flex items-end gap-1 h-12 mt-4 opacity-50">
-                    {[...Array(40)].map((_, i) => (
+                    {waveformHeights.map((height, i) => (
                          <div
                             key={i}
                             className={`w-1 bg-amber-500 rounded-t-sm transition-all duration-300 ${playing ? 'animate-pulse' : ''}`}
                             style={{
-                                height: `${20 + Math.random() * 80}%`,
+                                height: `${height}%`,
                                 opacity: i / 40
                             }}
                          />
