@@ -10,6 +10,9 @@ import { Building2, Plus, Trash2, Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
+// Supported currency codes for platform rates
+const VALID_CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'MXN', 'JPY', 'CNY', 'INR', 'BRL', 'ZAR'];
+
 interface PlatformRate {
   id: string;
   platform_name: string;
@@ -73,7 +76,6 @@ export const PlatformRatesPanel = () => {
     }
 
     // Validate currency
-    const validCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'MXN', 'JPY', 'CNY', 'INR', 'BRL', 'ZAR'];
     if (!currency) {
       toast({
         title: 'Invalid Currency',
@@ -83,10 +85,10 @@ export const PlatformRatesPanel = () => {
       return;
     }
 
-    if (!validCurrencies.includes(currency)) {
+    if (!VALID_CURRENCIES.includes(currency)) {
       toast({
         title: 'Invalid Currency',
-        description: `Please enter a valid currency code (e.g., ${validCurrencies.slice(0, 5).join(', ')})`,
+        description: `Please enter a valid currency code (e.g., ${VALID_CURRENCIES.slice(0, 5).join(', ')})`,
         variant: 'destructive',
       });
       return;

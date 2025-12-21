@@ -48,9 +48,19 @@ export const AudioPlayer = () => {
 
     // Generate stable waveform heights using a deterministic function
     const waveformHeights = useMemo(() => {
-        return Array.from({ length: 40 }, (_, i) => {
+        // Waveform visualization constants
+        const WAVEFORM_BAR_COUNT = 40;
+        const WAVEFORM_MIN_HEIGHT = 20; // Minimum height percentage
+        const WAVEFORM_PRIMARY_AMPLITUDE = 60; // Primary wave amplitude
+        const WAVEFORM_PRIMARY_FREQUENCY = 0.5; // Primary wave frequency
+        const WAVEFORM_SECONDARY_AMPLITUDE = 20; // Secondary wave amplitude
+        const WAVEFORM_SECONDARY_FREQUENCY = 0.3; // Secondary wave frequency
+
+        return Array.from({ length: WAVEFORM_BAR_COUNT }, (_, i) => {
             // Use a sine wave pattern for more natural-looking waveforms
-            const baseHeight = 20 + Math.abs(Math.sin(i * 0.5) * 60) + Math.abs(Math.cos(i * 0.3) * 20);
+            const baseHeight = WAVEFORM_MIN_HEIGHT + 
+                Math.abs(Math.sin(i * WAVEFORM_PRIMARY_FREQUENCY) * WAVEFORM_PRIMARY_AMPLITUDE) + 
+                Math.abs(Math.cos(i * WAVEFORM_SECONDARY_FREQUENCY) * WAVEFORM_SECONDARY_AMPLITUDE);
             return baseHeight;
         });
     }, []);
