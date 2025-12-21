@@ -30,41 +30,69 @@ interface SidebarItem {
   badgeColor?: string;
 }
 
+// Optimization: Moved static data outside component to prevent re-creation on every render
+const SIDEBAR_SECTIONS = [
+  {
+    title: "FEED",
+    items: [
+      { icon: TrendingUp, label: "Trending", active: true },
+      { icon: Users, label: "Following" },
+      { icon: Bookmark, label: "Saved Posts" },
+    ] as SidebarItem[]
+  },
+  {
+    title: "TOPICS",
+    items: [
+      { icon: MessageCircle, label: "All Discussions" },
+      { icon: Users, label: "Day-to-Day Stories" },
+      { icon: BookOpen, label: "Best Practices" },
+      { icon: BookOpen, label: "Terminology Tips" },
+      { icon: HelpCircle, label: "Ask the Community" },
+      { icon: Video, label: "Reels & Videos" }
+    ] as SidebarItem[]
+  },
+  {
+    title: "OPPORTUNITIES",
+    items: [
+      { icon: Network, label: "InterpreLinks", badge: "3", badgeColor: "bg-destructive" },
+      { icon: Briefcase, label: "Jobs Board" }
+    ] as SidebarItem[]
+  }
+];
+
+const REELS_DATA = [
+  {
+    id: 1,
+    author: "Alex Thompson",
+    avatar: "AT",
+    title: "Day in the life: Hospital Interpreter",
+    views: "2.3K",
+    thumbnail: "/placeholder-reel1.jpg"
+  },
+  {
+    id: 2,
+    author: "Nina Patel",
+    avatar: "NP",
+    title: "5 phrases every interpreter should know",
+    views: "5.1K",
+    thumbnail: "/placeholder-reel2.jpg"
+  },
+  {
+    id: 3,
+    author: "Carlos Ruiz",
+    avatar: "CR",
+    title: "Handling difficult terminology on the spot",
+    views: "3.8K",
+    thumbnail: "/placeholder-reel3.jpg"
+  }
+];
+
 export default function InterpreLink() {
   const [searchQuery, setSearchQuery] = useState("");
   const [newPostContent, setNewPostContent] = useState("");
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const { user } = useAuth();
   const queryClient = useQueryClient();
-
-  const sidebarSections = [
-    {
-      title: "FEED",
-      items: [
-        { icon: TrendingUp, label: "Trending", active: true },
-        { icon: Users, label: "Following" },
-        { icon: Bookmark, label: "Saved Posts" },
-      ] as SidebarItem[]
-    },
-    {
-      title: "TOPICS",
-      items: [
-        { icon: MessageCircle, label: "All Discussions" },
-        { icon: Users, label: "Day-to-Day Stories" },
-        { icon: BookOpen, label: "Best Practices" },
-        { icon: BookOpen, label: "Terminology Tips" },
-        { icon: HelpCircle, label: "Ask the Community" },
-        { icon: Video, label: "Reels & Videos" }
-      ] as SidebarItem[]
-    },
-    {
-      title: "OPPORTUNITIES",
-      items: [
-        { icon: Network, label: "InterpreLinks", badge: "3", badgeColor: "bg-destructive" },
-        { icon: Briefcase, label: "Jobs Board" }
-      ] as SidebarItem[]
-    }
-  ];
 
   // Fetch posts
   const { data: posts, isLoading } = useQuery({
@@ -110,33 +138,6 @@ export default function InterpreLink() {
     createPostMutation.mutate(newPostContent);
   };
 
-  const reels = [
-    {
-      id: 1,
-      author: "Alex Thompson",
-      avatar: "AT",
-      title: "Day in the life: Hospital Interpreter",
-      views: "2.3K",
-      thumbnail: "/placeholder-reel1.jpg"
-    },
-    {
-      id: 2,
-      author: "Nina Patel",
-      avatar: "NP",
-      title: "5 phrases every interpreter should know",
-      views: "5.1K",
-      thumbnail: "/placeholder-reel2.jpg"
-    },
-    {
-      id: 3,
-      author: "Carlos Ruiz",
-      avatar: "CR",
-      title: "Handling difficult terminology on the spot",
-      views: "3.8K",
-      thumbnail: "/placeholder-reel3.jpg"
-    }
-  ];
-
   return (
     <Layout>
       <div className="min-h-screen bg-background">
@@ -151,7 +152,7 @@ export default function InterpreLink() {
             </div>
 
             <div className="space-y-8">
-              {sidebarSections.map((section, index) => (
+              {SIDEBAR_SECTIONS.map((section, index) => (
                 <div key={index}>
                   <h3 className="text-xs font-semibold text-muted-foreground mb-4 tracking-wider">
                     {section.title}
@@ -276,7 +277,7 @@ export default function InterpreLink() {
 
               <TabsContent value="reels" className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {reels.map((reel) => (
+                  {REELS_DATA.map((reel) => (
                     <Card key={reel.id} className="cursor-pointer hover:shadow-lg transition-shadow">
                       <div className="relative aspect-[9/16] bg-muted rounded-t-lg flex items-center justify-center">
                         <Video className="w-12 h-12 text-muted-foreground" />
