@@ -12,11 +12,11 @@ dist
 dist-ssr
 *.local
 
-# Only ignore local and production env files, .env is version controlled for this project
+# Environment files - ignore .env for security, but allow .env.production for deployment
 .env
 .env.local
 .env.*.local
-# .env.production  # Uncommented to allow Lovable deployment
+# .env.production  # Allowed for Lovable deployment (contains non-sensitive public keys)
 
 # Supabase
 supabase/.temp/
