@@ -21,20 +21,31 @@ export const TerminologyLookup = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [result, setResult] = useState<TermResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setGlossaryTerms(JSON.parse(stored));
-      } catch {
-        // Use empty array if parsing fails
+  // Lazy initialization of state from localStorage as requested in PR feedback
+  // Wrapped in try-catch for safety
+  const [glossaryTerms, setGlossaryTerms] = useState<GlossaryTerm[]>(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
       }
+    } catch {
+      // Fallback if localStorage access fails
     }
-  }, []);
+    return [];
+  });
+
+  // Sync state changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(glossaryTerms));
+    } catch (e) {
+      console.error('Failed to save to localStorage', e);
+    }
+  }, [glossaryTerms]);
 
   useEffect(() => {
     return () => {
@@ -75,11 +86,7 @@ export const TerminologyLookup = () => {
       createdAt: new Date().toISOString(),
     };
 
-    setGlossaryTerms(prev => {
-      const updated = [newTerm, ...prev];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => [newTerm, ...prev]);
 
     toast({
       title: 'Success',
@@ -91,11 +98,7 @@ export const TerminologyLookup = () => {
   // stable callback using functional update to avoid re-rendering the entire list
   // when deleting a single term.
   const deleteTerm = useCallback((termId: string) => {
-    setGlossaryTerms(prev => {
-      const updated = prev.filter((t) => t.id !== termId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setGlossaryTerms(prev => prev.filter((t) => t.id !== termId));
 
     toast({
       title: 'Success',
