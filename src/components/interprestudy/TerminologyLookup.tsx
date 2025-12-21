@@ -83,6 +83,14 @@ export const TerminologyLookup = () => {
       return;
     }
 
+    try {
+      // Try to find the term in the database (public or other users')
+      const { data, error } = await supabase
+        .from('glossary_terms')
+        .select('*')
+        .or(`term.ilike.%${searchTerm}%,translation.ilike.%${searchTerm}%`)
+        .limit(1);
+
       if (!error && data && data.length > 0) {
         const term = data[0];
         setResult({
@@ -139,30 +147,6 @@ export const TerminologyLookup = () => {
     toast({
       title: 'Success',
       description: 'Term added to your glossary.',
-    });
-
-    loadGlossaryTerms();
-  };
-
-  const deleteTerm = async (termId: string) => {
-    const { error } = await supabase
-      .from('glossary_terms')
-      .delete()
-      .eq('id', termId);
-
-    if (error) {
-      console.error('Error deleting term:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete term.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    toast({
-      title: 'Success',
-      description: 'Term deleted from glossary.',
     });
 
     loadGlossaryTerms();

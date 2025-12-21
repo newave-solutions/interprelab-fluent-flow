@@ -146,7 +146,8 @@ export const Navigation = () => {
                 variant="ghost"
                 size="icon"
                 className="hover:text-nobel-gold"
-                aria-label={isOpen ? "Close menu" : "Open menu"}
+                aria-label="Main menu"
+                aria-expanded={isOpen}
               >
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
