@@ -10,18 +10,20 @@ import { getAggregatedStats, getWeeklyData, getCallTypeStats } from '@/lib/data'
 export default function InterpreTrack() {
   const [refreshKey, setRefreshKey] = useState(0);
   
-  // Recompute stats when refreshKey changes
-  const [stats, setStats] = useState(() => getAggregatedStats());
-  const [weeklyData, setWeeklyData] = useState(() => getWeeklyData());
-  const [callTypeData, setCallTypeData] = useState(() => getCallTypeStats());
+  // Compute stats initially and recompute when refreshKey changes
+  const [stats, setStats] = useState(getAggregatedStats);
+  const [weeklyData, setWeeklyData] = useState(getWeeklyData);
+  const [callTypeData, setCallTypeData] = useState(getCallTypeStats);
   
   const aiStats = "Here are some AI stats"; // TODO: Replace with real API data
   const aiError = false;
 
   useEffect(() => {
-    setStats(getAggregatedStats());
-    setWeeklyData(getWeeklyData());
-    setCallTypeData(getCallTypeStats());
+    if (refreshKey > 0) {
+      setStats(getAggregatedStats());
+      setWeeklyData(getWeeklyData());
+      setCallTypeData(getCallTypeStats());
+    }
   }, [refreshKey]);
 
   const handleCallLogged = () => {
