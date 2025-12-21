@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StatsCards from '@/components/dashboard/stats-cards';
 import WeeklyChart from '@/components/dashboard/weekly-chart';
 import AIInsights from '@/components/dashboard/ai-insights';
@@ -10,11 +10,19 @@ import { getAggregatedStats, getWeeklyData, getCallTypeStats } from '@/lib/data'
 export default function InterpreTrack() {
   const [refreshKey, setRefreshKey] = useState(0);
   
-  const stats = getAggregatedStats();
-  const weeklyData = getWeeklyData();
-  const callTypeData = getCallTypeStats();
+  // Recompute stats when refreshKey changes
+  const [stats, setStats] = useState(() => getAggregatedStats());
+  const [weeklyData, setWeeklyData] = useState(() => getWeeklyData());
+  const [callTypeData, setCallTypeData] = useState(() => getCallTypeStats());
+  
   const aiStats = "Here are some AI stats"; // TODO: Replace with real API data
   const aiError = false;
+
+  useEffect(() => {
+    setStats(getAggregatedStats());
+    setWeeklyData(getWeeklyData());
+    setCallTypeData(getCallTypeStats());
+  }, [refreshKey]);
 
   const handleCallLogged = () => {
     setRefreshKey(prev => prev + 1);

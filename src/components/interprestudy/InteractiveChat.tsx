@@ -107,7 +107,8 @@ export const InteractiveChat = () => {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage, { role: 'assistant', content: '', timestamp: new Date() }]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages([...updatedMessages, { role: 'assistant', content: '', timestamp: new Date() }]);
     setInput('');
     setIsLoading(true);
 
@@ -119,7 +120,7 @@ export const InteractiveChat = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })), specialty: 'ethics' }),
+        body: JSON.stringify({ messages: updatedMessages.map(m => ({ role: m.role, content: m.content })), specialty: 'ethics' }),
       });
 
       if (!resp.ok || !resp.body) throw new Error('Failed');
