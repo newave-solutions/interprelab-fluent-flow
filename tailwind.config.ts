@@ -104,9 +104,9 @@ export default {
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
-        'serif': ['Playfair Display', 'serif'],
+        'serif': ['"Playfair Display"', 'serif'],
         'display': ['Poppins', 'sans-serif'],
-        'mono': ['Space Grotesk', 'monospace'],
+        'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",
