@@ -135,6 +135,26 @@
     --sidebar-ring: 39 38% 57%;
   }
 
+  /* Dark sections in light mode for visual variety */
+  .light .dark-section {
+    background: linear-gradient(135deg, hsl(0 0% 10%), hsl(240 10% 12%));
+    color: hsl(48 15% 97%);
+  }
+
+  .light .dark-section .glass {
+    background: hsl(240 10% 8% / 0.8);
+    border-color: hsl(39 48% 56% / 0.2);
+  }
+
+  .light .dark-section .text-muted-foreground {
+    color: hsl(210 20% 75%);
+  }
+
+  .light .gold-accent-section {
+    background: linear-gradient(135deg, hsl(39 48% 96%), hsl(45 40% 98%));
+    border: 2px solid hsl(39 48% 56% / 0.2);
+  }
+
   /* Sidebar Variables */
   :root {
     --sidebar-background: 240 12% 8%;
@@ -163,6 +183,11 @@
   h2,
   h3 {
     font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: white;
   }
 
   /* Accessibility improvements */
@@ -198,6 +223,34 @@
 
   .glow {
     text-shadow: 0 0 50px hsl(41 52% 56% / 0.3);
+  }
+
+  /* CTA Button Glow Effects */
+  .warm-glow {
+    box-shadow: 0 0 20px hsl(var(--secondary) / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .warm-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--secondary) / 0.6);
+  }
+
+  .success-glow {
+    box-shadow: 0 0 20px hsl(var(--success) / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .success-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--success) / 0.6);
+  }
+
+  .financial-glow {
+    box-shadow: 0 0 20px hsl(142 71% 45% / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .financial-glow:hover {
+    box-shadow: 0 0 30px hsl(142 71% 45% / 0.6);
   }
 
   /* Animation classes */
@@ -413,4 +466,30 @@
 
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Stagger animation delays */
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+
+.stagger-6 {
+  animation-delay: 0.6s;
 }

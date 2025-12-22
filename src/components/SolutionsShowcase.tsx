@@ -154,10 +154,10 @@ export const SolutionsShowcase = () => {
 
         {/* Solutions Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {solutions.map((solution) => (
+          {solutions.map((solution, index) => (
             <Card
               key={solution.id}
-              className="group transition-all duration-500 hover:scale-105 hover:shadow-xl bg-white dark:bg-card border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 flex flex-col h-full"
+              className={`group transition-all duration-500 hover:scale-105 hover:shadow-xl bg-white dark:bg-card border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 flex flex-col h-full animate-fade-in-up stagger-${Math.min(index + 1, 6)}`}
             >
               <CardHeader className="pb-4">
                 <div className="flex justify-between items-start mb-4">
@@ -189,7 +189,7 @@ export const SolutionsShowcase = () => {
                 </ul>
                 <Link to={solution.route} className="mt-auto">
                   <Button
-                    className="w-full bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full transition-all shadow-sm group-hover:shadow-lg"
+                    className="w-full bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full transition-all shadow-sm group-hover:shadow-lg warm-glow"
                   >
                     Learn More
                   </Button>
