@@ -87,6 +87,16 @@ const REELS_DATA = [
   }
 ];
 
+// Optimization: Moved static data outside component to prevent re-creation on every render
+const TRENDING_TOPICS = ["#MedicalTerminology", "#InterpreterLife", "#BestPractices", "#ERStories"];
+
+// Optimization: Moved static data outside component to prevent re-creation on every render
+const SUGGESTED_PROFILES = [
+  { name: "Dr. Lisa Wong", role: "Hospital Coordinator", avatar: "LW" },
+  { name: "Miguel Santos", role: "Legal Interpreter", avatar: "MS" },
+  { name: "Emma Johnson", role: "Community Interpreter", avatar: "EJ" }
+];
+
 export default function InterpreLink() {
   const [searchQuery, setSearchQuery] = useState("");
   const [newPostContent, setNewPostContent] = useState("");
@@ -336,7 +346,7 @@ export default function InterpreLink() {
                 <h3 className="font-semibold">Trending Topics</h3>
               </CardHeader>
               <CardContent className="space-y-3">
-                {["#MedicalTerminology", "#InterpreterLife", "#BestPractices", "#ERStories"].map((tag, index) => (
+                {TRENDING_TOPICS.map((tag, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <span className="text-sm font-medium text-primary">{tag}</span>
                     <span className="text-xs text-muted-foreground">{Math.floor(Math.random() * 100)}+ posts</span>
@@ -350,11 +360,7 @@ export default function InterpreLink() {
                 <h3 className="font-semibold">Suggested InterpreLinks</h3>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[
-                  { name: "Dr. Lisa Wong", role: "Hospital Coordinator", avatar: "LW" },
-                  { name: "Miguel Santos", role: "Legal Interpreter", avatar: "MS" },
-                  { name: "Emma Johnson", role: "Community Interpreter", avatar: "EJ" }
-                ].map((person, index) => (
+                {SUGGESTED_PROFILES.map((person, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Avatar className="w-10 h-10">

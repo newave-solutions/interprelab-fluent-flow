@@ -79,7 +79,7 @@ export const ParticlesBackground = ({
       return generated;
     };
 
-    let currentParticles = initParticles();
+    const currentParticles = initParticles();
 
     // Animation loop
     const animate = () => {
