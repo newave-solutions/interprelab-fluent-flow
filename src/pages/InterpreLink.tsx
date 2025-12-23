@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import PostCard from "@/components/interprelink/PostCard";
 import { Post } from "@/components/interprelink/types";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 import interprelinkMockup from "@/assets/interprelink-mockup.png";
 
 interface SidebarItem {
@@ -151,8 +152,57 @@ export default function InterpreLink() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
-        <div className="flex">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-primary/10 via-accent/5 to-background border-b border-border">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            {/* Text Content */}
+            <div className="flex-1 text-center md:text-left">
+              <PainPointBadge
+                painPoint="Addressing Pain Point #5: Professional Community & Support"
+                className="mb-4 bg-primary/10 text-primary border-primary/20 inline-block"
+              />
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                <Network className="w-10 h-10 text-primary" />
+                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  InterpreLink
+                </h1>
+              </div>
+              <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
+                Connect with fellow interpreters, share experiences, and grow together in a supportive professional community.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Button size="lg" className="glass-button">
+                  <Plus className="w-5 h-5 mr-2" />
+                  Create Post
+                </Button>
+                <Link to="/interprelink/feature">
+                  <Button variant="outline" size="lg">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Mockup Image */}
+            <div className="flex-1">
+              <div className="relative glass rounded-2xl p-4 border border-border/50">
+                <img
+                  src="/interprelink-hero.png"
+                  alt="InterpreLink Community Dashboard"
+                  className="w-full rounded-lg shadow-2xl"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Dashboard Content */}
+      <div className="min-h-screen bg-background relative">
+        {/* Subtle particles background for the entire page */}
+        <ParticlesBackground particleCount={50} variant="stars" />
+        <div className="flex relative z-10">
           {/* Sidebar */}
           <div className="w-72 bg-card border-r min-h-screen p-6 sticky top-0 hidden lg:block">
             <div className="mb-8">
@@ -173,8 +223,8 @@ export default function InterpreLink() {
                       <div
                         key={itemIndex}
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${item.active
-                            ? "bg-primary text-primary-foreground"
-                            : "text-foreground hover:bg-accent"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-foreground hover:bg-accent"
                           }`}
                       >
                         <item.icon className="w-5 h-5" />

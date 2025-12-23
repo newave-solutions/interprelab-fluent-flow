@@ -1,0 +1,271 @@
+-- Study Progress Tracking System
+-- Migration: Create tables for user study progress, quiz scores, and glossary terms
+
+-- Study Progress Table
+CREATE TABLE IF NOT EXISTS study_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  module_id TEXT NOT NULL,
+  module_type TEXT NOT NULL CHECK (module_type IN ('lesson', 'quiz', 'scenario', 'flashcard', 'video')),
+ status TEXT DEFAULT 'not_started' CHECK (status IN ('not_started', 'in_progress', 'completed')),
+  progress_percentage INTEGER DEFAULT 0 CHECK (progress_percentage >= 0 AND progress_percentage <= 100),
+  time_spent_seconds INTEGER DEFAULT 0,
+  last_accessed_at TIMESTAMP WITH TIME ZONE,
+  completed_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, module_id)
+);
+
+-- Quiz Scores Table
+CREATE TABLE IF NOT EXISTS quiz_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  quiz_id TEXT NOT NULL,
+  specialty TEXT NOT NULL,
+  score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100),
+  total_questions INTEGER NOT NULL,
+  correct_answers INTEGER NOT NULL,
+  time_taken_seconds INTEGER,
+  difficulty_level TEXT NOT NULL CHECK (difficulty_level IN ('beginner', 'intermediate', 'advanced')),
+  questions_data JSONB DEFAULT '[]'::jsonb, -- Store individual question responses
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Glossary Terms Table  
+CREATE TABLE IF NOT EXISTS glossary_terms (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  term_en TEXT NOT NULL,
+  term_es TEXT NOT NULL,
+  definition_en TEXT,
+  definition_es TEXT,
+  specialty TEXT,
+  difficulty_level TEXT CHECK (difficulty_level IN ('basic', 'intermediate', 'advanced')),
+  example_sentence_en TEXT,
+  example_sentence_es TEXT,
+  pronunciation_guide TEXT,
+  is_favorited BOOLEAN DEFAULT FALSE,
+  times_reviewed INTEGER DEFAULT 0,
+  last_reviewed_at TIMESTAMP WITH TIME ZONE,
+  mastery_level INTEGER DEFAULT 0 CHECK (mastery_level >= 0 AND mastery_level <= 5),
+  source TEXT DEFAULT 'user_added' CHECK (source IN ('user_added', 'ai_generated', 'system')),
+  tags TEXT[] DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Study Sessions Table (for tracking study time)
+CREATE TABLE IF NOT EXISTS study_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  module_id TEXT,
+  session_type TEXT NOT NULL CHECK (session_type IN ('lesson', 'quiz', 'practice', 'review')),
+  duration_seconds INTEGER NOT NULL,
+  activities_completed INTEGER DEFAULT 0,
+  notes TEXT,
+  started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  ended_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Learning Streaks Table
+CREATE TABLE IF NOT EXISTS learning_streaks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL UNIQUE,
+  current_streak_days INTEGER DEFAULT 0,
+  longest_streak_days INTEGER DEFAULT 0,
+  last_activity_date DATE DEFAULT CURRENT_DATE,
+  total_study_days INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_study_progress_user_id ON study_progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_study_progress_module_id ON study_progress(module_id);
+CREATE INDEX IF NOT EXISTS idx_study_progress_status ON study_progress(status);
+
+CREATE INDEX IF NOT EXISTS idx_quiz_scores_user_id ON quiz_scores(user_id);
+CREATE INDEX IF NOT EXISTS idx_quiz_scores_specialty ON quiz_scores(specialty);
+CREATE INDEX IF NOT EXISTS idx_quiz_scores_created_at ON quiz_scores(created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_glossary_terms_user_id ON glossary_terms(user_id);
+CREATE INDEX IF NOT EXISTS idx_glossary_terms_specialty ON glossary_terms(specialty);
+CREATE INDEX IF NOT EXISTS idx_glossary_terms_is_favorited ON glossary_terms(is_favorited) WHERE is_favorited = true;
+CREATE INDEX IF NOT EXISTS idx_glossary_terms_tags ON glossary_terms USING GIN(tags);
+
+CREATE INDEX IF NOT EXISTS idx_study_sessions_user_id ON study_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_study_sessions_started_at ON study_sessions(started_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_learning_streaks_user_id ON learning_streaks(user_id);
+
+-- Row Level Security Policies
+ALTER TABLE study_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quiz_scores ENABLE ROW LEVEL SECURITY;
+ALTER TABLE glossary_terms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE study_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE learning_streaks ENABLE ROW LEVEL SECURITY;
+
+-- Study Progress Policies
+CREATE POLICY "Users can view own study progress" 
+  ON study_progress FOR SELECT 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own study progress" 
+  ON study_progress FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own study progress" 
+  ON study_progress FOR UPDATE 
+  USING (auth.uid() = user_id);
+
+-- Quiz Scores Policies
+CREATE POLICY "Users can view own quiz scores" 
+  ON quiz_scores FOR SELECT 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own quiz scores" 
+  ON quiz_scores FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+-- Glossary Terms Policies
+CREATE POLICY "Users can view own glossary terms" 
+  ON glossary_terms FOR SELECT 
+  USING (auth.uid() = user_id OR user_id IS NULL);
+
+CREATE POLICY "Users can insert own glossary terms" 
+  ON glossary_terms FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own glossary terms" 
+  ON glossary_terms FOR UPDATE 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own glossary terms" 
+  ON glossary_terms FOR DELETE 
+  USING (auth.uid() = user_id);
+
+-- Study Sessions Policies
+CREATE POLICY "Users can view own study sessions" 
+  ON study_sessions FOR SELECT 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own study sessions" 
+  ON study_sessions FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+-- Learning Streaks Policies
+CREATE POLICY "Users can view own learning streaks" 
+  ON learning_streaks FOR SELECT 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own learning streaks" 
+  ON learning_streaks FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own learning streaks" 
+  ON learning_streaks FOR UPDATE 
+  USING (auth.uid() = user_id);
+
+-- Functions for automatic timestamp updates
+CREATE OR REPLACE FUNCTION update_study_progress_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_glossary_terms_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_learning_streaks_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create triggers
+CREATE TRIGGER trigger_update_study_progress_timestamp
+  BEFORE UPDATE ON study_progress
+  FOR EACH ROW
+  EXECUTE FUNCTION update_study_progress_timestamp();
+
+CREATE TRIGGER trigger_update_glossary_terms_timestamp
+  BEFORE UPDATE ON glossary_terms
+  FOR EACH ROW
+  EXECUTE FUNCTION update_glossary_terms_timestamp();
+
+CREATE TRIGGER trigger_update_learning_streaks_timestamp
+  BEFORE UPDATE ON learning_streaks
+  FOR EACH ROW
+  EXECUTE FUNCTION update_learning_streaks_timestamp();
+
+-- Function to calculate and update learning streaks
+CREATE OR REPLACE FUNCTION update_learning_streak()
+RETURNS TRIGGER AS $$
+DECLARE
+  user_streak RECORD;
+  days_diff INTEGER;
+BEGIN
+  -- Get current streak data
+  SELECT * INTO user_streak
+  FROM learning_streaks
+  WHERE user_id = NEW.user_id;
+
+  -- If no streak record exists, create one
+  IF user_streak IS NULL THEN
+    INSERT INTO learning_streaks (user_id, current_streak_days, longest_streak_days, last_activity_date, total_study_days)
+    VALUES (NEW.user_id, 1, 1, CURRENT_DATE, 1);
+    RETURN NEW;
+  END IF;
+
+  -- Calculate days difference
+  days_diff := CURRENT_DATE - user_streak.last_activity_date;
+
+  -- Update streak logic
+  IF days_diff = 0 THEN
+    -- Same day activity, no change to streak
+    RETURN NEW;
+  ELSIF days_diff = 1 THEN
+    -- Consecutive day, increment streak
+    UPDATE learning_streaks
+    SET 
+      current_streak_days = user_streak.current_streak_days + 1,
+      longest_streak_days = GREATEST(user_streak.longest_streak_days, user_streak.current_streak_days + 1),
+      last_activity_date = CURRENT_DATE,
+      total_study_days = user_streak.total_study_days + 1
+    WHERE user_id = NEW.user_id;
+  ELSE
+    -- Streak broken, reset to 1
+    UPDATE learning_streaks
+    SET 
+      current_streak_days = 1,
+      last_activity_date = CURRENT_DATE,
+      total_study_days = user_streak.total_study_days + 1
+    WHERE user_id = NEW.user_id;
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to update learning streaks on study activity
+CREATE TRIGGER trigger_update_learning_streak
+  AFTER INSERT ON study_sessions
+  FOR EACH ROW
+  EXECUTE FUNCTION update_learning_streak();
+
+-- Comments for documentation
+COMMENT ON TABLE study_progress IS 'Tracks user progress through study modules including lessons, quizzes, and scenarios';
+COMMENT ON TABLE quiz_scores IS 'Stores detailed quiz attempt results with questions and answers';
+COMMENT ON TABLE glossary_terms IS 'User-managed medical terminology glossary with review tracking';
+COMMENT ON TABLE study_sessions IS 'Logs individual study sessions for activity tracking and analytics';
+COMMENT ON TABLE learning_streaks IS 'Tracks daily study streaks and engagement metrics';

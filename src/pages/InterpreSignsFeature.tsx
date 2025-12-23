@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { FeatureGrid } from "@/components/FeatureGrid";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const InterpreSignsFeature = () => {
     return (
@@ -31,106 +32,116 @@ const InterpreSignsFeature = () => {
                 </div>
             </div>
 
-            {/* Key Features */}
-            <FeatureGrid
-                title="Learn Sign Language Your Way"
-                subtitle="AI-powered practice with real-time feedback and progress tracking"
-                features={[
-                    {
-                        icon: Brain,
-                        title: "AI-Powered Recognition",
-                        description: "Advanced computer vision technology detects your hand signs in real-time with high accuracy.",
-                    },
-                    {
-                        icon: Target,
-                        title: "Instant Feedback",
-                        description: "Get immediate corrections on hand positioning, shape, and movement. Know exactly what to improve.",
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Progress Tracking",
-                        description: "Track which signs you've mastered, practice time, and accuracy rates over time.",
-                    },
-                    {
-                        icon: BookOpen,
-                        title: "Medical Terminology",
-                        description: "Focus on ASL signs commonly used in healthcare settings. Perfect for medical interpreters.",
-                    },
-                    {
-                        icon: Zap,
-                        title: "Practice Anywhere",
-                        description: "All you need is a webcam or phone camera. Practice at home, in your office, or on the go.",
-                    },
-                    {
-                        icon: Star,
-                        title: "Gamified Learning",
-                        description: "Earn badges, unlock new sign sets, and compete with yourself to maintain practice streaks.",
-                    },
-                ]}
-            />
+            {/* Key Features with Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={80} variant="dots" />
+                <div className="relative z-10">
+                    <FeatureGrid
+                        title="Learn Sign Language Your Way"
+                        subtitle="AI-powered practice with real-time feedback and progress tracking"
+                        features={[
+                            {
+                                icon: Brain,
+                                title: "AI-Powered Recognition",
+                                description: "Advanced computer vision technology detects your hand signs in real-time with high accuracy.",
+                            },
+                            {
+                                icon: Target,
+                                title: "Instant Feedback",
+                                description: "Get immediate corrections on hand positioning, shape, and movement. Know exactly what to improve.",
+                            },
+                            {
+                                icon: TrendingUp,
+                                title: "Progress Tracking",
+                                description: "Track which signs you've mastered, practice time, and accuracy rates over time.",
+                            },
+                            {
+                                icon: BookOpen,
+                                title: "Medical Terminology",
+                                description: "Focus on ASL signs commonly used in healthcare settings. Perfect for medical interpreters.",
+                            },
+                            {
+                                icon: Zap,
+                                title: "Practice Anywhere",
+                                description: "All you need is a webcam or phone camera. Practice at home, in your office, or on the go.",
+                            },
+                            {
+                                icon: Star,
+                                title: "Gamified Learning",
+                                description: "Earn badges, unlock new sign sets, and compete with yourself to maintain practice streaks.",
+                            },
+                        ]}
+                    />
+                </div>
+            </section>
 
-            {/* How It Works */}
-            <GetStartedSteps
-                title="Start Signing in 3 Simple Steps"
-                subtitle="From your first sign to fluency"
-                steps={[
-                    {
-                        showIcon: true,
-                        icon: CheckCircle,
-                        title: "Enable Your Camera",
-                        description: "Allow camera access and position yourself in frame. Our AI will guide you on optimal positioning.",
-                        content: (
-                            <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                <p className="text-sm font-semibold mb-1">Camera Setup</p>
-                                <p className="text-xs text-muted-foreground">Good lighting • Clear background • Hands visible</p>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: Hand,
-                        title: "Practice Signs",
-                        description: "Follow the on-screen prompts. Make each sign and receive instant feedback on accuracy.",
-                        content: (
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
-                                    <span className="text-sm">Sign "A" - 98% match ✓</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
-                                    <span className="text-sm">Sign "B" - 100% match ✓</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-warning rounded-full shadow-sm" />
-                                    <span className="text-sm">Sign "C" - 75% match • Adjust thumb</span>
-                                </div>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: TrendingUp,
-                        title: "Track Your Progress",
-                        description: "View your mastery level for each sign, practice statistics, and improvement trends over time.",
-                        content: (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                    <p className="text-sm font-semibold mb-1">Signs Mastered</p>
-                                    <p className="text-xs text-muted-foreground">18 / 26 (Alphabet)</p>
-                                </div>
-                                <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                    <p className="text-sm font-semibold mb-1">Practice Time</p>
-                                    <p className="text-xs text-muted-foreground">45 minutes today</p>
-                                </div>
-                            </div>
-                        ),
-                    },
-                ]}
-                finalCTAText="Start Practicing Now"
-                finalCTAIcon={Hand}
-                finalCTAAction={() => window.location.href = '/signin'}
-            />
+            {/* How It Works with Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={100} variant="mixed" />
+                <div className="relative z-10">
+                    <GetStartedSteps
+                        title="Start Signing in 3 Simple Steps"
+                        subtitle="From your first sign to fluency"
+                        steps={[
+                            {
+                                showIcon: true,
+                                icon: CheckCircle,
+                                title: "Enable Your Camera",
+                                description: "Allow camera access and position yourself in frame. Our AI will guide you on optimal positioning.",
+                                content: (
+                                    <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                        <p className="text-sm font-semibold mb-1">Camera Setup</p>
+                                        <p className="text-xs text-muted-foreground">Good lighting • Clear background • Hands visible</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: Hand,
+                                title: "Practice Signs",
+                                description: "Follow the on-screen prompts. Make each sign and receive instant feedback on accuracy.",
+                                content: (
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
+                                            <span className="text-sm">Sign "A" - 98% match ✓</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
+                                            <span className="text-sm">Sign "B" - 100% match ✓</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-warning rounded-full shadow-sm" />
+                                            <span className="text-sm">Sign "C" - 75% match • Adjust thumb</span>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: TrendingUp,
+                                title: "Track Your Progress",
+                                description: "View your mastery level for each sign, practice statistics, and improvement trends over time.",
+                                content: (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                            <p className="text-sm font-semibold mb-1">Signs Mastered</p>
+                                            <p className="text-xs text-muted-foreground">18 / 26 (Alphabet)</p>
+                                        </div>
+                                        <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                            <p className="text-sm font-semibold mb-1">Practice Time</p>
+                                            <p className="text-xs text-muted-foreground">45 minutes today</p>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                        finalCTAText="Start Practicing Now"
+                        finalCTAIcon={Hand}
+                        finalCTAAction={() => window.location.href = '/signin'}
+                    />
+                </div>
+            </section>
 
             {/* Medical Focus Section */}
             <section className="py-20 bg-muted/30">

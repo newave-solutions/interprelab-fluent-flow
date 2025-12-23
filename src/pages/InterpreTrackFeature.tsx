@@ -8,6 +8,7 @@ import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import callTrackerPreview from "@/assets/interpretrack-dashboard.png";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const InterpreTrackFeature = () => {
     return (
@@ -74,102 +75,112 @@ const InterpreTrackFeature = () => {
                 </div>
             </section>
 
-            {/* Key Features with Enhanced Card Shadows */}
-            <FeatureGrid
-                title="Everything You Need to Track Your Worth"
-                subtitle="Precision tracking with transparency-focused analytics"
-                features={[
-                    {
-                        icon: Clock,
-                        title: "Real-Time Tracking",
-                        description: "Start and stop call tracking with a single tap. Accurate to the second, with automatic session logging.",
-                    },
-                    {
-                        icon: DollarSign,
-                        title: "Earnings Transparency",
-                        description: "See exactly what you've earned vs. what platforms report. Track discrepancies and time rounding practices.",
-                    },
-                    {
-                        icon: BarChart3,
-                        title: "Advanced Analytics",
-                        description: "Visualize call volume patterns by hour, day, week, month, or year. Compare across multiple platforms and clients.",
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Platform Comparison",
-                        description: "Multi-line graphs showing Platform A vs B vs C. Identify which clients value your time fairly.",
-                    },
-                    {
-                        icon: Shield,
-                        title: "Your Data, Your Control",
-                        description: "Export your logs anytime. Use your data to negotiate better rates or file complaints.",
-                    },
-                    {
-                        icon: Zap,
-                        title: "VRI & OPI Support",
-                        description: "Track both video and phone interpretation sessions. Categorize by call type for better insights.",
-                    },
-                ]}
-            />
+            {/* Key Features with Enhanced Card Shadows and Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={80} variant="dots" />
+                <div className="relative z-10">
+                    <FeatureGrid
+                        title="Everything You Need to Track Your Worth"
+                        subtitle="Precision tracking with transparency-focused analytics"
+                        features={[
+                            {
+                                icon: Clock,
+                                title: "Real-Time Tracking",
+                                description: "Start and stop call tracking with a single tap. Accurate to the second, with automatic session logging.",
+                            },
+                            {
+                                icon: DollarSign,
+                                title: "Earnings Transparency",
+                                description: "See exactly what you've earned vs. what platforms report. Track discrepancies and time rounding practices.",
+                            },
+                            {
+                                icon: BarChart3,
+                                title: "Advanced Analytics",
+                                description: "Visualize call volume patterns by hour, day, week, month, or year. Compare across multiple platforms and clients.",
+                            },
+                            {
+                                icon: TrendingUp,
+                                title: "Platform Comparison",
+                                description: "Multi-line graphs showing Platform A vs B vs C. Identify which clients value your time fairly.",
+                            },
+                            {
+                                icon: Shield,
+                                title: "Your Data, Your Control",
+                                description: "Export your logs anytime. Use your data to negotiate better rates or file complaints.",
+                            },
+                            {
+                                icon: Zap,
+                                title: "VRI & OPI Support",
+                                description: "Track both video and phone interpretation sessions. Categorize by call type for better insights.",
+                            },
+                        ]}
+                    />
+                </div>
+            </section>
 
-            {/* How It Works */}
-            <GetStartedSteps
-                title="Start Tracking in 3 Simple Steps"
-                subtitle="From your first call to full transparency"
-                steps={[
-                    {
-                        showIcon: true,
-                        icon: CheckCircle,
-                        title: "Create Your Free Account",
-                        description: "Sign up with your email and set your pay rate and preferred currency.",
-                        content: (
-                            <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                <p className="text-sm font-semibold mb-1">Set Your Rate</p>
-                                <p className="text-xs text-muted-foreground">$0.20/min or $12/hour</p>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: Clock,
-                        title: "Log Your Calls",
-                        description: "One-tap start/stop tracking. Add notes, call type (VRI/OPI), and any relevant details.",
-                        content: (
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
-                                    <span className="text-sm">Call started: 10:42 AM</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-primary rounded-full shadow-sm" />
-                                    <span className="text-sm">VRI - Hospital intake</span>
-                                </div>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: BarChart3,
-                        title: "Analyze & Export",
-                        description: "View detailed analytics, identify discrepancies, and export your data for record-keeping or advocacy.",
-                        content: (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                    <p className="text-sm font-semibold mb-1">This Month</p>
-                                    <p className="text-xs text-muted-foreground">$847.50 earned</p>
-                                </div>
-                                <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
-                                    <p className="text-sm font-semibold mb-1">Time Lost</p>
-                                    <p className="text-xs text-muted-foreground">18m 45s unpaid</p>
-                                </div>
-                            </div>
-                        ),
-                    },
-                ]}
-                finalCTAText="Start Tracking Now"
-                finalCTAIcon={Clock}
-                finalCTAAction={() => window.location.href = '/signin'}
-            />
+            {/* How It Works with Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={100} variant="mixed" />
+                <div className="relative z-10">
+                    <GetStartedSteps
+                        title="Start Tracking in 3 Simple Steps"
+                        subtitle="From your first call to full transparency"
+                        steps={[
+                            {
+                                showIcon: true,
+                                icon: CheckCircle,
+                                title: "Create Your Free Account",
+                                description: "Sign up with your email and set your pay rate and preferred currency.",
+                                content: (
+                                    <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                        <p className="text-sm font-semibold mb-1">Set Your Rate</p>
+                                        <p className="text-xs text-muted-foreground">$0.20/min or $12/hour</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: Clock,
+                                title: "Log Your Calls",
+                                description: "One-tap start/stop tracking. Add notes, call type (VRI/OPI), and any relevant details.",
+                                content: (
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-success rounded-full shadow-sm" />
+                                            <span className="text-sm">Call started: 10:42 AM</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-primary rounded-full shadow-sm" />
+                                            <span className="text-sm">VRI - Hospital intake</span>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: BarChart3,
+                                title: "Analyze & Export",
+                                description: "View detailed analytics, identify discrepancies, and export your data for record-keeping or advocacy.",
+                                content: (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                            <p className="text-sm font-semibold mb-1">This Month</p>
+                                            <p className="text-xs text-muted-foreground">$847.50 earned</p>
+                                        </div>
+                                        <div className="p-4 glass rounded-lg shadow-card-light dark:shadow-md">
+                                            <p className="text-sm font-semibold mb-1">Time Lost</p>
+                                            <p className="text-xs text-muted-foreground">18m 45s unpaid</p>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                        finalCTAText="Start Tracking Now"
+                        finalCTAIcon={Clock}
+                        finalCTAAction={() => window.location.href = '/signin'}
+                    />
+                </div>
+            </section>
 
             {/* Transparency Report Section with Enhanced Card */}
             <section className="py-20 bg-muted/30">

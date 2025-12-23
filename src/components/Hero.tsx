@@ -69,18 +69,6 @@ export const Hero = () => {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
               </Link>
             </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-8 py-6 border-2 border-white/30 text-white hover:bg-white/10 rounded-full font-medium transition-all duration-300 hover:scale-105"
-              asChild
-            >
-              <Link to="/interprecoach" aria-label="Meet InterpreCoach AI assistant">
-                <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
-                Meet InterpreCoach
-              </Link>
-            </Button>
           </div>
 
           {/* Trust Indicators */}

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { FeatureGrid } from "@/components/FeatureGrid";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const InterpreLinkFeature = () => {
     return (
@@ -74,106 +75,116 @@ const InterpreLinkFeature = () => {
                 </div>
             </section>
 
-            {/* Key Features */}
-            <FeatureGrid
-                title="Your Professional Network Awaits"
-                subtitle="Community features designed for medical interpreters"
-                features={[
-                    {
-                        icon: MessageCircle,
-                        title: "Discussion Forums",
-                        description: "Ask questions, share experiences, and discuss best practices with fellow interpreters in dedicated topic channels.",
-                    },
-                    {
-                        icon: Briefcase,
-                        title: "Job Board",
-                        description: "Discover new opportunities from LSCs, hospitals, and healthcare systems actively seeking qualified interpreters.",
-                    },
-                    {
-                        icon: Network,
-                        title: "Networking Requests",
-                        description: "Connect with interpreters in your specialty, region, or language pairs. Build meaningful professional relationships.",
-                    },
-                    {
-                        icon: BookOpen,
-                        title: "Resource Library",
-                        description: "Access community-curated glossaries, terminology guides, and educational resources shared by experienced interpreters.",
-                    },
-                    {
-                        icon: Heart,
-                        title: "Peer Support",
-                        description: "Share the emotional weight of difficult calls. Find support from those who truly understand vicarious trauma.",
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Professional Development",
-                        description: "Stay updated on certification requirements, continuing education opportunities, and industry news.",
-                    },
-                ]}
-            />
+            {/* Key Features with Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={80} variant="dots" />
+                <div className="relative z-10">
+                    <FeatureGrid
+                        title="Your Professional Network Awaits"
+                        subtitle="Community features designed for medical interpreters"
+                        features={[
+                            {
+                                icon: MessageCircle,
+                                title: "Discussion Forums",
+                                description: "Ask questions, share experiences, and discuss best practices with fellow interpreters in dedicated topic channels.",
+                            },
+                            {
+                                icon: Briefcase,
+                                title: "Job Board",
+                                description: "Discover new opportunities from LSCs, hospitals, and healthcare systems actively seeking qualified interpreters.",
+                            },
+                            {
+                                icon: Network,
+                                title: "Networking Requests",
+                                description: "Connect with interpreters in your specialty, region, or language pairs. Build meaningful professional relationships.",
+                            },
+                            {
+                                icon: BookOpen,
+                                title: "Resource Library",
+                                description: "Access community-curated glossaries, terminology guides, and educational resources shared by experienced interpreters.",
+                            },
+                            {
+                                icon: Heart,
+                                title: "Peer Support",
+                                description: "Share the emotional weight of difficult calls. Find support from those who truly understand vicarious trauma.",
+                            },
+                            {
+                                icon: TrendingUp,
+                                title: "Professional Development",
+                                description: "Stay updated on certification requirements, continuing education opportunities, and industry news.",
+                            },
+                        ]}
+                    />
+                </div>
+            </section>
 
-            {/* How It Works */}
-            <GetStartedSteps
-                title="Join the Hub in 3 Simple Steps"
-                subtitle="From isolation to community"
-                steps={[
-                    {
-                        showIcon: true,
-                        icon: CheckCircle,
-                        title: "Create Your Profile",
-                        description: "Share your certifications, language pairs, and specialties. Let others know your expertise.",
-                        content: (
-                            <div className="p-4 glass rounded-lg">
-                                <p className="text-sm font-semibold mb-1">Your Profile</p>
-                                <p className="text-xs text-muted-foreground">CMI Certified • EN↔ES • Medical/Legal</p>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: Users,
-                        title: "Explore & Connect",
-                        description: "Browse discussions, respond to posts, and send connection requests to interpreters in your field.",
-                        content: (
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-primary rounded-full" />
-                                    <span className="text-sm">Join "Best Practices" discussion</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-primary rounded-full" />
-                                    <span className="text-sm">Answer a terminology question</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-primary rounded-full" />
-                                    <span className="text-sm">Connect with 3 interpreters</span>
-                                </div>
-                            </div>
-                        ),
-                    },
-                    {
-                        showIcon: true,
-                        icon: Briefcase,
-                        title: "Find Opportunities",
-                        description: "Browse job postings, apply directly, and grow your career with better rates and working conditions.",
-                        content: (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 glass rounded-lg">
-                                    <p className="text-sm font-semibold mb-1">Your Network</p>
-                                    <p className="text-xs text-muted-foreground">47 connections</p>
-                                </div>
-                                <div className="p-4 glass rounded-lg">
-                                    <p className="text-sm font-semibold mb-1">Jobs Matched</p>
-                                    <p className="text-xs text-muted-foreground">12 opportunities</p>
-                                </div>
-                            </div>
-                        ),
-                    },
-                ]}
-                finalCTAText="Join InterpreLink Now"
-                finalCTAIcon={Users}
-                finalCTAAction={() => window.location.href = '/signin'}
-            />
+            {/* How It Works with Particles */}
+            <section className="relative py-16 overflow-hidden">
+                <ParticlesBackground particleCount={100} variant="mixed" />
+                <div className="relative z-10">
+                    <GetStartedSteps
+                        title="Join the Hub in 3 Simple Steps"
+                        subtitle="From isolation to community"
+                        steps={[
+                            {
+                                showIcon: true,
+                                icon: CheckCircle,
+                                title: "Create Your Profile",
+                                description: "Share your certifications, language pairs, and specialties. Let others know your expertise.",
+                                content: (
+                                    <div className="p-4 glass rounded-lg">
+                                        <p className="text-sm font-semibold mb-1">Your Profile</p>
+                                        <p className="text-xs text-muted-foreground">CMI Certified • EN↔ES • Medical/Legal</p>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: Users,
+                                title: "Explore & Connect",
+                                description: "Browse discussions, respond to posts, and send connection requests to interpreters in your field.",
+                                content: (
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-primary rounded-full" />
+                                            <span className="text-sm">Join "Best Practices" discussion</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-primary rounded-full" />
+                                            <span className="text-sm">Answer a terminology question</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 bg-primary rounded-full" />
+                                            <span className="text-sm">Connect with 3 interpreters</span>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                            {
+                                showIcon: true,
+                                icon: Briefcase,
+                                title: "Find Opportunities",
+                                description: "Browse job postings, apply directly, and grow your career with better rates and working conditions.",
+                                content: (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 glass rounded-lg">
+                                            <p className="text-sm font-semibold mb-1">Your Network</p>
+                                            <p className="text-xs text-muted-foreground">47 connections</p>
+                                        </div>
+                                        <div className="p-4 glass rounded-lg">
+                                            <p className="text-sm font-semibold mb-1">Jobs Matched</p>
+                                            <p className="text-xs text-muted-foreground">12 opportunities</p>
+                                        </div>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                        finalCTAText="Join InterpreLink Now"
+                        finalCTAIcon={Users}
+                        finalCTAAction={() => window.location.href = '/signin'}
+                    />
+                </div>
+            </section>
 
             {/* Community Testimonials Section */}
             <section className="py-20 bg-muted/30">
