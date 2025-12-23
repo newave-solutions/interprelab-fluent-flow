@@ -2,16 +2,20 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Plus, BookMarked, Volume2 } from 'lucide-react';
+import { Search, Plus, BookMarked, Volume2, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { GlossaryTermItem, GlossaryTerm } from './GlossaryTermItem';
+import { supabase } from '@/integrations/supabase/client';
 
 interface TermResult {
   english: string;
   translation: string;
   pronunciation: string;
   definition: string;
+  context?: string;
+  notes?: string;
+  relatedTerms?: string[];
   imageUrl?: string;
 }
 
@@ -48,18 +52,35 @@ export const TerminologyLookup = () => {
     if (!searchTerm.trim()) return;
 
     setIsLoading(true);
+    setResult(null);
 
-    // Simulate AI lookup for demo purposes
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('terminology-lookup', {
+        body: { term: searchTerm.trim(), targetLanguage: 'Spanish' }
+      });
+
+      if (error) throw error;
+
       setResult({
-        english: searchTerm,
-        translation: 'Diagnóstico',
-        pronunciation: '/di.aɡˈnos.ti.ko/',
-        definition: 'The identification of the nature of an illness or other problem by examination of the symptoms.',
+        english: data.english || searchTerm,
+        translation: data.translation || '',
+        pronunciation: data.pronunciation || '',
+        definition: data.definition || '',
+        context: data.context,
+        notes: data.notes,
+        relatedTerms: data.relatedTerms,
         imageUrl: undefined,
       });
+    } catch (error) {
+      console.error('Terminology lookup error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to look up term. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleAddToGlossary = () => {
@@ -137,8 +158,8 @@ export const TerminologyLookup = () => {
 
           {isLoading && (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-              <p className="text-sm text-muted-foreground mt-2">Looking up term...</p>
+              <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+              <p className="text-sm text-muted-foreground mt-2">Looking up term with AI...</p>
             </div>
           )}
 

@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import PostCard from "@/components/interprelink/PostCard";
 import { Post } from "@/components/interprelink/types";
+import interprelinkMockup from "@/assets/interprelink-mockup.png";
 
 interface SidebarItem {
   icon: LucideIcon;

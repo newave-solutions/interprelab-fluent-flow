@@ -1,8 +1,6 @@
 import { Layout } from "@/components/Layout";
 import SignDetection from "@/components/interpresigns/SignDetection";
-import React, { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Hand } from "lucide-react";
 import { PainPointBadge } from "@/components/PainPointBadge";
@@ -12,52 +10,18 @@ import { getGestureHint, isMotionGesture } from "@/components/interpresigns/moti
 const signsToPractice = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 const ASLTeacher = () => {
-  const { user } = useAuth();
   const [currentTargetSign, setCurrentTargetSign] = useState('A');
   const [isCorrect, setIsCorrect] = useState(false);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
 
-  const saveProgress = async (sign: string) => {
-    if (!user) return;
-
-    try {
-      const { data: existingData } = await supabase
-        .from('asl_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('sign_letter', sign)
-        .maybeSingle();
-
-      if (existingData) {
-        await supabase
-          .from('asl_progress')
-          .update({
-            attempts: (existingData.attempts || 0) + 1,
-            success_count: (existingData.success_count || 0) + 1,
-            last_practiced: new Date().toISOString(),
-          })
-          .eq('id', existingData.id);
-      } else {
-        await supabase
-          .from('asl_progress')
-          .insert({
-            user_id: user.id,
-            sign_letter: sign,
-            attempts: 1,
-            success_count: 1,
-          });
-      }
-      toast.success(`Progress saved for sign ${sign}!`);
-    } catch (error) {
-      console.error('Error saving ASL progress:', error);
-      toast.error("Failed to save progress.");
-    }
+  const handleSuccessfulSign = (sign: string) => {
+    toast.success(`Great job! You signed ${sign} correctly!`);
   };
 
   useEffect(() => {
     if (detectedSign && detectedSign === currentTargetSign) {
       setIsCorrect(true);
-      saveProgress(currentTargetSign);
+      handleSuccessfulSign(currentTargetSign);
       setTimeout(() => {
         const nextSignIndex = (signsToPractice.indexOf(currentTargetSign) + 1) % signsToPractice.length;
         setCurrentTargetSign(signsToPractice[nextSignIndex]);

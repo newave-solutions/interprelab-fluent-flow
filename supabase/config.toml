@@ -1,4 +1,4 @@
-project_id = "opmafykbhjinqebgflnl"
+project_id = "ggyzlvbtkibqnkfhgnbe"
 
 [functions.generate-interpreter-feedback]
 verify_jwt = true
@@ -16,4 +16,16 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.interactive-module-ai]
+verify_jwt = true
+
+[functions.process-interprecoach]
+verify_jwt = true
+
+[functions.terminology-lookup]
+verify_jwt = true
+
+[functions.generate-quiz]
+verify_jwt = true
+
+[functions.generate-scenario]
 verify_jwt = true

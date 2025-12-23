@@ -188,11 +188,11 @@ export default function InterpreWellness() {
           >
             <div className="absolute inset-0 bg-black/60 rounded-3xl" />
 
-            {/* Wellness Bot - Positioned on the left, appearing to listen */}
+            {/* Wellness Bot - Positioned on the right, appearing thoughtful */}
             <img
               src={interprewellnessBot}
               alt="InterpreWellness AI Counselor"
-              className="absolute left-4 md:left-10 bottom-0 w-32 md:w-44 lg:w-52 animate-float z-[5] drop-shadow-2xl hidden sm:block"
+              className="absolute right-4 md:right-10 bottom-0 w-32 md:w-44 lg:w-52 animate-float z-[5] drop-shadow-2xl hidden sm:block"
               style={{
                 filter: 'drop-shadow(0 10px 30px hsl(var(--primary) / 0.4))',
                 animationDelay: '0.3s',
