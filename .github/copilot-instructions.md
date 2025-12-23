@@ -40,10 +40,11 @@ This document provides coding standards, architecture patterns, and development 
 
 ### TypeScript
 - **Always use TypeScript** for all new files
-- Enable strict type checking where possible
-- Use type inference but provide explicit types for function parameters and return values
+- The project uses relaxed TypeScript configuration (strict checking is disabled to allow flexibility)
+- Use type inference but provide explicit types for function parameters and return values where beneficial
 - Prefer interfaces over types for object shapes
 - Use proper typing for React components, hooks, and event handlers
+- Handle nullable values appropriately even though strictNullChecks is disabled
 
 ### React Components
 - **Component Structure**: Create modular, reusable components
