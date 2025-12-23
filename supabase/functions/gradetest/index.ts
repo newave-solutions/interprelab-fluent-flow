@@ -4,6 +4,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { callGemini, extractJSON } from './utils/gemini.ts'
+import { verifyAuthQuick } from '../_shared/auth.ts'
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -211,6 +212,12 @@ serve(async (req) => {
     // Handle CORS preflight
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
+    }
+
+    // Verify authentication
+    const authResult = await verifyAuthQuick(req);
+    if ('error' in authResult) {
+        return authResult.error;
     }
 
     try {

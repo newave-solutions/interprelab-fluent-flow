@@ -2,20 +2,20 @@
 // Based on CEFR and ACTFL proficiency testing standards
 // Focuses on practical English mastery without technical grammar terminology
 
-import { callGemini, extractJSON } from '../utils/gemini.ts'
+import { callGemini, extractJSON } from './utils/gemini.ts'
 
 /**
  * Generates a grammar question at specified difficulty level
  * Uses real-world medical contexts and avoids technical grammar terms
  */
 export async function generateGrammarQuestion(difficulty: 'basic' | 'intermediate' | 'advanced') {
-    const difficultyGuidelines = {
-        basic: "Simple present/past tense errors, basic subject-verb agreement, common word order mistakes",
-        intermediate: "Present perfect, conditional forms, preposition errors, article usage",
-        advanced: "Subjunctive mood, complex tenses, nuanced word choice, subtle agreement errors"
-    }
+  const difficultyGuidelines = {
+    basic: "Simple present/past tense errors, basic subject-verb agreement, common word order mistakes",
+    intermediate: "Present perfect, conditional forms, preposition errors, article usage",
+    advanced: "Subjunctive mood, complex tenses, nuanced word choice, subtle agreement errors"
+  }
 
-    const prompt = `
+  const prompt = `
 You are an expert English proficiency test designer following CEFR and ACTFL standards.
 
 Generate ONE multiple-choice grammar question for medical interpreters.
@@ -60,58 +60,58 @@ EXAMPLE (for reference, create something different):
 }
 `
 
-    const result = await callGemini(prompt)
-    if (!result) return null
+  const result = await callGemini(prompt)
+  if (!result) return null
 
-    return extractJSON(result)
+  return extractJSON(result)
 }
 
 /**
  * Generates a typing test prompt based on medical interpreter scenarios
  */
 export function generateTypingPrompt(scenario: 'email' | 'report' | 'note'): string {
-    const prompts = {
-        email: `You are a medical interpreter. Write a professional email (100-150 words) to a Language Service Company (LSC) coordinator.
+  const prompts = {
+    email: `You are a medical interpreter. Write a professional email (100-150 words) to a Language Service Company (LSC) coordinator.
 
 Scenario: You need to request a schedule change for next week because you have a certification exam on Wednesday. Be professional and polite.
 
 Begin typing when ready. Time starts now.`,
 
-        report: `You are documenting a complex interpretation session. Write a brief incident report (100-150 words).
+    report: `You are documenting a complex interpretation session. Write a brief incident report (100-150 words).
 
 Scenario: During a video interpretation, the provider spoke very quickly and used complex medical terms. The patient seemed confused. Explain what happened and what you did to help.
 
 Begin typing when ready. Time starts now.`,
 
-        note: `You are sending a message to a colleague interpreter. Write a professional note (100-150 words).
+    note: `You are sending a message to a colleague interpreter. Write a professional note (100-150 words).
 
 Scenario: You encountered a rare medical term "cholangiocarcinoma" during a session. Share what you learned and ask if they have experience with oncology terminology.
 
 Begin typing when ready. Time starts now.`
-    }
+  }
 
-    return prompts[scenario]
+  return prompts[scenario]
 }
 
 /**
  * Validates typing test difficulty parameters
  */
 export function calculateTypingMetrics(text: string, duration: number, targetWPM: number = 40) {
-    const words = text.trim().split(/\s+/)
-    const wordCount = words.length
-    const wpm = (wordCount / duration) * 60
+  const words = text.trim().split(/\s+/)
+  const wordCount = words.length
+  const wpm = (wordCount / duration) * 60
 
-    // Calculate difficulty score based on sentence complexity
-    const avgWordLength = text.replace(/\s/g, '').length / wordCount
-    const sentenceCount = text.split(/[.!?]+/).filter(s => s.trim()).length
-    const avgWordsPerSentence = wordCount / Math.max(sentenceCount, 1)
+  // Calculate difficulty score based on sentence complexity
+  const avgWordLength = text.replace(/\s/g, '').length / wordCount
+  const sentenceCount = text.split(/[.!?]+/).filter(s => s.trim()).length
+  const avgWordsPerSentence = wordCount / Math.max(sentenceCount, 1)
 
-    return {
-        wordCount,
-        wpm: Math.round(wpm),
-        avgWordLength: Math.round(avgWordLength * 10) / 10,
-        avgWordsPerSentence: Math.round(avgWordsPerSentence),
-        meetsTarget: wpm >= targetWPM,
-        proficiencyLevel: wpm >= 60 ? 'Advanced' : wpm >= 40 ? 'Intermediate' : 'Basic'
-    }
+  return {
+    wordCount,
+    wpm: Math.round(wpm),
+    avgWordLength: Math.round(avgWordLength * 10) / 10,
+    avgWordsPerSentence: Math.round(avgWordsPerSentence),
+    meetsTarget: wpm >= targetWPM,
+    proficiencyLevel: wpm >= 60 ? 'Advanced' : wpm >= 40 ? 'Intermediate' : 'Basic'
+  }
 }

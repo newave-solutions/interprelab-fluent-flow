@@ -9,27 +9,47 @@ import { PainPointBadge } from "@/components/PainPointBadge";
 import { getGestureHint, isMotionGesture } from "@/components/interpresigns/motion-gestures";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 
+// Type definition for ASL progress data
+interface ASLProgress {
+  id: string;
+  user_id: string;
+  sign_letter: string;
+  attempts: number;
+  success_count: number;
+  last_practiced?: string;
+  created_at?: string;
+}
+
 // Extended to include all 26 letters including motion-based gestures J, X, Z
 const signsToPractice = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 const ASLTeacher = () => {
+  const { user } = useAuth();
   const [currentTargetSign, setCurrentTargetSign] = useState('A');
   const [isCorrect, setIsCorrect] = useState(false);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
 
+  // Memoized function to save ASL practice progress to Supabase
   const saveProgress = useCallback(async (sign: string) => {
     if (!user) return;
 
     try {
-      const { data: existingData } = await supabase
+      const { data: existingData, error } = await supabase
         .from('asl_progress')
         .select('*')
         .eq('user_id', user.id)
         .eq('sign_letter', sign)
-        .maybeSingle();
+        .maybeSingle<ASLProgress>();
+
+      if (error) {
+        console.error('Error fetching ASL progress:', error);
+        toast.error("Failed to fetch progress.");
+        return;
+      }
 
       if (existingData) {
-        await supabase
+        // Update existing progress record
+        const { error: updateError } = await supabase
           .from('asl_progress')
           .update({
             attempts: (existingData.attempts || 0) + 1,
@@ -37,8 +57,15 @@ const ASLTeacher = () => {
             last_practiced: new Date().toISOString(),
           })
           .eq('id', existingData.id);
+
+        if (updateError) {
+          console.error('Error updating ASL progress:', updateError);
+          toast.error("Failed to update progress.");
+          return;
+        }
       } else {
-        await supabase
+        // Create new progress record
+        const { error: insertError } = await supabase
           .from('asl_progress')
           .insert({
             user_id: user.id,
@@ -46,6 +73,12 @@ const ASLTeacher = () => {
             attempts: 1,
             success_count: 1,
           });
+
+        if (insertError) {
+          console.error('Error inserting ASL progress:', insertError);
+          toast.error("Failed to save progress.");
+          return;
+        }
       }
       toast.success(`Progress saved for sign ${sign}!`);
     } catch (error) {
@@ -54,16 +87,22 @@ const ASLTeacher = () => {
     }
   }, [user]);
 
+  // Effect to handle successful sign detection
   useEffect(() => {
     if (detectedSign && detectedSign === currentTargetSign) {
       setIsCorrect(true);
-      handleSuccessfulSign(currentTargetSign);
-      setTimeout(() => {
+      saveProgress(currentTargetSign);
+
+      // Advance to next sign after 2 seconds
+      const timeoutId = setTimeout(() => {
         const nextSignIndex = (signsToPractice.indexOf(currentTargetSign) + 1) % signsToPractice.length;
         setCurrentTargetSign(signsToPractice[nextSignIndex]);
         setIsCorrect(false);
         setDetectedSign(null);
       }, 2000);
+
+      // Cleanup timeout on unmount or dependency change
+      return () => clearTimeout(timeoutId);
     }
   }, [detectedSign, currentTargetSign, saveProgress]);
 
