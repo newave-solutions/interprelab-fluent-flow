@@ -46,20 +46,35 @@ export function AiQuiz() {
         setShowResult(false);
 
         try {
-            const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+            const { data, error } = await supabase.functions.invoke('generate-quiz', {
                 body: {
-                    action: 'generate-quiz',
-                    topic: specialty,
-                    specialty: specialty
+                    specialty: specialty,
+                    difficulty: 'intermediate',
+                    questionCount: 1
                 }
             });
 
-            if (error) throw error;
+            if (error) {
+                // Check for rate limit or payment errors
+                if (error.message?.includes('429') || error.message?.includes('Rate')) {
+                    toast.error('Rate limit exceeded. Please try again later.');
+                    return;
+                }
+                if (error.message?.includes('402') || error.message?.includes('Payment')) {
+                    toast.error('AI service unavailable. Please try again later.');
+                    return;
+                }
+                throw error;
+            }
+
+            if (data?.error) {
+                throw new Error(data.error);
+            }
 
             if (data && data.question && data.options) {
                 setCurrentQuestion(data);
             } else {
-                throw new Error('Invalid quiz data');
+                throw new Error('Invalid quiz data received');
             }
         } catch (error) {
             console.error('Error generating quiz:', error);
