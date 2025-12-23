@@ -8,6 +8,7 @@ import { PainPointBadge } from "@/components/PainPointBadge";
 import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import callTrackerPreview from "@/assets/interpretrack-dashboard.png";
+import interpretrackBot from "@/assets/interpretrack-bot.png";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const InterpreTrackFeature = () => {
@@ -50,16 +51,17 @@ const InterpreTrackFeature = () => {
                             </div>
                         </div>
 
-                        {/* Right Visual - Call Tracking Preview with Enhanced Shadows */}
+                        {/* Right Visual - InterpreTrack Bot with Enhanced Shadows */}
                         <div className="relative animate-fade-in">
-                            <div className="relative rounded-3xl overflow-hidden shadow-2xl hover:shadow-card-hover-light dark:shadow-xl dark:hover:shadow-2xl transition-shadow duration-300">
+                            <div className="relative rounded-3xl overflow-hidden flex items-center justify-center">
                                 <img
-                                    src={callTrackerPreview}
-                                    alt="InterpreTrack dashboard showing call logging interface"
-                                    className="w-full h-auto"
+                                    src={interpretrackBot}
+                                    alt="InterpreTrack bot assistant"
+                                    className="w-full max-w-md h-auto drop-shadow-2xl"
+                                    style={{
+                                        filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
+                                    }}
                                 />
-                                {/* Subtle gradient overlay for depth */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
                             </div>
                             {/* Floating stats cards with enhanced shadows */}
                             <div className="absolute -bottom-6 -left-6 glass p-4 rounded-xl shadow-xl dark:shadow-2xl border border-white/20 dark:border-border/50 backdrop-blur-lg">
