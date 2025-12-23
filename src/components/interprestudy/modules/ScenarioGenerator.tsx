@@ -55,63 +55,38 @@ export function ScenarioGenerator() {
         setScenario(null);
 
         try {
-            const { data, error } = await supabase.functions.invoke('study-chat', {
+            const { data, error } = await supabase.functions.invoke('generate-scenario', {
                 body: {
-                    messages: [{
-                        role: 'user',
-                        content: `Generate a realistic medical interpretation practice scenario for a ${setting.replace('-', ' ')} at ${difficulty} level.
-
-Return ONLY a valid JSON object (no markdown, no explanation) with this exact structure:
-{
-  "title": "Brief scenario title",
-  "setting": "${setting}",
-  "difficulty": "${difficulty}",
-  "lines": [
-    {"speaker": "doctor", "language": "en", "text": "English dialogue"},
-    {"speaker": "interpreter", "language": "es", "text": "Spanish interpretation"},
-    {"speaker": "patient", "language": "es", "text": "Spanish response"},
-    {"speaker": "interpreter", "language": "en", "text": "English interpretation"}
-  ]
-}
-
-Include 8-12 dialogue exchanges. Make it realistic with appropriate medical terminology for the ${difficulty} level.`
-                    }],
-                    specialty: 'medical interpretation scenarios'
+                    setting: setting,
+                    difficulty: difficulty
                 }
             });
 
-            if (error) throw error;
+            if (error) {
+                // Check for rate limit or payment errors
+                if (error.message?.includes('429') || error.message?.includes('Rate')) {
+                    toast.error('Rate limit exceeded. Please try again later.');
+                    return;
+                }
+                if (error.message?.includes('402') || error.message?.includes('Payment')) {
+                    toast.error('AI service unavailable. Please try again later.');
+                    return;
+                }
+                throw error;
+            }
 
-            // Handle streaming response - collect all chunks
-            if (data && typeof data === 'object') {
-                // If it's already parsed JSON
+            if (data?.error) {
+                throw new Error(data.error);
+            }
+
+            if (data && data.title && data.lines) {
                 setScenario(data);
-            } else if (typeof data === 'string') {
-                // Try to parse the string as JSON
-                const cleanedData = data.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-                const parsed = JSON.parse(cleanedData);
-                setScenario(parsed);
+            } else {
+                throw new Error('Invalid scenario data received');
             }
         } catch (error) {
             console.error('Error generating scenario:', error);
             toast.error('Failed to generate scenario. Please try again.');
-
-            // Fallback scenario for demonstration
-            setScenario({
-                title: 'Primary Care Visit - Headache Complaint',
-                setting: 'primary-care',
-                difficulty: 'intermediate',
-                lines: [
-                    { speaker: 'doctor', language: 'en', text: 'Good morning. I understand you\'ve been having headaches. Can you tell me more about them?' },
-                    { speaker: 'interpreter', language: 'es', text: 'Buenos días. Entiendo que ha estado teniendo dolores de cabeza. ¿Puede contarme más sobre ellos?' },
-                    { speaker: 'patient', language: 'es', text: 'Sí, doctor. Me duele mucho la cabeza desde hace una semana. El dolor está aquí, en la frente.' },
-                    { speaker: 'interpreter', language: 'en', text: 'Yes, doctor. My head has been hurting a lot for a week. The pain is here, in my forehead.' },
-                    { speaker: 'doctor', language: 'en', text: 'On a scale of 1 to 10, how would you rate the pain?' },
-                    { speaker: 'interpreter', language: 'es', text: 'En una escala del 1 al 10, ¿cómo calificaría el dolor?' },
-                    { speaker: 'patient', language: 'es', text: 'Cuando está muy fuerte, es como un 8. A veces siento náuseas también.' },
-                    { speaker: 'interpreter', language: 'en', text: 'When it\'s very strong, it\'s like an 8. Sometimes I feel nauseous too.' },
-                ]
-            });
         } finally {
             setIsLoading(false);
         }
