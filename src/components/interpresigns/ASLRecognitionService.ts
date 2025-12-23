@@ -55,11 +55,11 @@ class ASLRecognitionService {
 
     const hand = await this.net!.estimateHands(videoElement);
     if (hand.length > 0) {
-      // @tensorflow-models/handpose returns landmarks as arrays [x, y, z], which is compatible with fingerpose
-      const landmarks = hand[0].landmarks as unknown as [number, number, number][];
+      // @tensorflow-models/handpose returns landmarks as arrays [x, y, z]
+      const rawLandmarks = hand[0].landmarks as unknown as [number, number, number][];
 
       // Add frame to motion tracker
-      this.motionTracker.addFrame(landmarks);
+      this.motionTracker.addFrame(rawLandmarks);
 
       // First, try to detect motion-based gestures (J, X, Z)
       const motionGesture = this.motionTracker.detectMotionGesture();
@@ -67,6 +67,9 @@ class ASLRecognitionService {
         this.motionTracker.clear(); // Clear history after successful detection
         return motionGesture;
       }
+
+      // Convert to fingerpose-compatible format (Keypoint3D requires {x, y, z} objects)
+      const landmarks = rawLandmarks.map(([x, y, z]) => ({ x, y, z }));
 
       // Fall back to static gesture detection for all other letters
       const estimatedGestures = await this.gestureEstimator!.estimate(landmarks, 6.5);
