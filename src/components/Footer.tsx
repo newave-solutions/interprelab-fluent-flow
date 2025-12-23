@@ -113,13 +113,13 @@ export const Footer = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Follow us on Twitter">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our Twitter page">
                 <Twitter className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Connect on LinkedIn">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our LinkedIn page">
                 <Linkedin className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="View source on GitHub">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our GitHub page">
                 <Github className="w-4 h-4" />
               </Button>
             </div>
