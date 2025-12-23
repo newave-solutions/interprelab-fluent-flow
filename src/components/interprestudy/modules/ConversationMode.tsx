@@ -3,45 +3,23 @@ import { Mic, MicOff, Play, Volume2, Loader2, ThumbsUp, ThumbsDown, User, Smile,
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
 
-// --- GEMINI API UTILITIES ---
-const apiKey = ""; // API Key injected at runtime
-
-const callGemini = async (prompt: string) => {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }]
-  };
-
-  let attempt = 0;
-  const maxRetries = 3;
-  const delays = [1000, 2000, 4000];
-
-  while (attempt < maxRetries) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-         if (response.status === 429) {
-            throw new Error("Rate limit exceeded");
-         }
-         throw new Error(`API Error: ${response.status}`);
+// --- API UTILITIES ---
+const callAI = async (prompt: string) => {
+  try {
+    const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+      body: {
+        action: 'completion',
+        messages: [{ role: 'user', content: prompt }]
       }
+    });
 
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated.";
-
-    } catch (error) {
-      attempt++;
-      if (attempt >= maxRetries) {
-        return "Connection error. Please try again later.";
-      }
-      await new Promise(resolve => setTimeout(resolve, delays[attempt - 1]));
-    }
+    if (error) throw error;
+    return data.content || "No content generated.";
+  } catch (error) {
+    console.error("AI Error:", error);
+    return "Connection error. Please try again later.";
   }
 };
 
@@ -83,6 +61,7 @@ export const ConversationMode = () => {
 
   // Session State
   const [started, setStarted] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [history, setHistory] = useState<any[]>([]);
   const [currentTurn, setCurrentTurn] = useState('init'); // 'doctor', 'patient', 'interpreter'
   const [loading, setLoading] = useState(false);
@@ -92,7 +71,7 @@ export const ConversationMode = () => {
 
   // Timer
   const [seconds, setSeconds] = useState(0);
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Metrics
   const [metrics, setMetrics] = useState({
@@ -102,6 +81,7 @@ export const ConversationMode = () => {
     weakAreas: [] as string[]
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
 
   // Timer Logic
@@ -111,9 +91,11 @@ export const ConversationMode = () => {
         setSeconds(s => s + 1);
       }, 1000);
     } else {
-      clearInterval(timerRef.current);
+      if (timerRef.current) clearInterval(timerRef.current);
     }
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [started, soapNote]);
 
   const formatTime = (totalSeconds: number) => {
@@ -130,13 +112,17 @@ export const ConversationMode = () => {
     }
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognitionRef.current.onresult = (event: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const transcript = Array.from(event.results)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((result: any) => result[0].transcript)
           .join('');
         setUserTranscript(transcript);
@@ -181,7 +167,7 @@ export const ConversationMode = () => {
       Output ONLY the Doctor's first line (1-2 sentences max). No quotes.
     `;
 
-    const firstLine = await callGemini(prompt);
+    const firstLine = await callAI(prompt);
     const newMsg = { role: 'Doctor', text: firstLine };
     setHistory([newMsg]);
     setLoading(false);
@@ -213,7 +199,7 @@ export const ConversationMode = () => {
 
     let assessment = { score: 85, feedback: "Good flow", strong_point: "Flow", weak_point: "None" };
     try {
-      const res = await callGemini(assessPrompt);
+      const res = await callAI(assessPrompt);
       const cleanJson = res.replace(/```json/g, '').replace(/```/g, '').trim();
       assessment = JSON.parse(cleanJson);
     } catch(e) { console.error("JSON parse error", e); }
@@ -250,7 +236,7 @@ export const ConversationMode = () => {
       Keep it brief (1-2 sentences). Natural conversational tone. Output ONLY text.
     `;
 
-    const nextLine = await callGemini(contextPrompt);
+    const nextLine = await callAI(contextPrompt);
     const nextMsg = { role: nextRole, text: nextLine };
 
     // Update history with BOTH the interpretation and the NEXT line
@@ -271,7 +257,7 @@ export const ConversationMode = () => {
       Dialogue:
       ${transcript}
     `;
-    const result = await callGemini(prompt);
+    const result = await callAI(prompt);
     setSoapNote(result);
     setLoading(false);
     clearInterval(timerRef.current);
