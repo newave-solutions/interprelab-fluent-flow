@@ -14,7 +14,7 @@ serve(async (req) => {
 
   try {
     const requestSchema = z.object({
-      action: z.enum(['generate-quiz', 'chat', 'get-insight']),
+      action: z.enum(['generate-quiz', 'chat', 'get-insight', 'completion']),
       topic: z.string().max(200).optional(),
       specialty: z.string().max(100).optional(),
       messages: z.array(z.object({
@@ -76,10 +76,14 @@ serve(async (req) => {
         3. Common related terms
         Keep it concise and educational (max 100 words).`;
         break;
+
+      case 'completion':
+        // No default system prompt for completion, user provides it in messages
+        break;
     }
 
-    const apiMessages = action === 'chat' && messages 
-      ? [{ role: "system", content: systemPrompt }, ...messages]
+    const apiMessages = (action === 'chat' || action === 'completion') && messages
+      ? (action === 'chat' ? [{ role: "system", content: systemPrompt }, ...messages] : messages)
       : [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
