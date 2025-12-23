@@ -4,48 +4,59 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReactNode } from "react";
 
 // Mock data for articles - in a real app this would come from an API/CMS
-const articles = {
+// In a real app, this content would likely be Markdown or HTML sanitized on the server or via a library like dompurify
+const articles: Record<string, {
+  title: string;
+  subtitle: string;
+  date: string;
+  readTime: string;
+  category: string;
+  content: ReactNode;
+}> = {
   "understanding-vicarious-trauma": {
     title: "Understanding Vicarious Trauma in Healthcare Interpretation",
     subtitle: "How indirect exposure to trauma affects medical interpreters and strategies for coping.",
     date: "January 15, 2024",
     readTime: "8 min read",
     category: "Mental Health",
-    content: `
-      <p class="mb-6 text-lg leading-relaxed text-muted-foreground">
-        Medical interpreters serve as the voice for patients during some of their most vulnerable moments.
-        While essential for equitable care, this role comes with a hidden cost: vicarious trauma.
-      </p>
+    content: (
+      <>
+        <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
+          Medical interpreters serve as the voice for patients during some of their most vulnerable moments.
+          While essential for equitable care, this role comes with a hidden cost: vicarious trauma.
+        </p>
 
-      <h2 class="text-2xl font-bold mb-4 mt-8">What is Vicarious Trauma?</h2>
-      <p class="mb-4 text-muted-foreground">
-        Vicarious trauma, also known as secondary traumatic stress, is the emotional residue of exposure
-        to traumatic stories and experiences of others through work. For interpreters, who must speak in
-        the first person ("I am in pain," "I was assaulted"), the psychological impact can be particularly intense.
-      </p>
+        <h2 className="text-2xl font-bold mb-4 mt-8">What is Vicarious Trauma?</h2>
+        <p className="mb-4 text-muted-foreground">
+          Vicarious trauma, also known as secondary traumatic stress, is the emotional residue of exposure
+          to traumatic stories and experiences of others through work. For interpreters, who must speak in
+          the first person ("I am in pain," "I was assaulted"), the psychological impact can be particularly intense.
+        </p>
 
-      <h2 class="text-2xl font-bold mb-4 mt-8">Signs and Symptoms</h2>
-      <ul class="list-disc pl-6 mb-6 text-muted-foreground space-y-2">
-        <li>Persistent intrusive thoughts about a patient's story</li>
-        <li>Emotional numbness or hypersensitivity</li>
-        <li>Sleep disturbances or nightmares</li>
-        <li>Increased irritability or anxiety</li>
-        <li>Loss of hope or cynical worldview</li>
-      </ul>
+        <h2 className="text-2xl font-bold mb-4 mt-8">Signs and Symptoms</h2>
+        <ul className="list-disc pl-6 mb-6 text-muted-foreground space-y-2">
+          <li>Persistent intrusive thoughts about a patient's story</li>
+          <li>Emotional numbness or hypersensitivity</li>
+          <li>Sleep disturbances or nightmares</li>
+          <li>Increased irritability or anxiety</li>
+          <li>Loss of hope or cynical worldview</li>
+        </ul>
 
-      <h2 class="text-2xl font-bold mb-4 mt-8">Strategies for Coping</h2>
-      <p class="mb-4 text-muted-foreground">
-        Recognizing the signs is the first step. Interpreters can protect their mental health by:
-      </p>
-      <ul class="list-disc pl-6 mb-6 text-muted-foreground space-y-2">
-        <li>Engaging in regular debriefing sessions</li>
-        <li>Practicing grounding techniques between calls</li>
-        <li>Maintaining strict professional boundaries</li>
-        <li>Prioritizing self-care and time away from work</li>
-      </ul>
-    `
+        <h2 className="text-2xl font-bold mb-4 mt-8">Strategies for Coping</h2>
+        <p className="mb-4 text-muted-foreground">
+          Recognizing the signs is the first step. Interpreters can protect their mental health by:
+        </p>
+        <ul className="list-disc pl-6 mb-6 text-muted-foreground space-y-2">
+          <li>Engaging in regular debriefing sessions</li>
+          <li>Practicing grounding techniques between calls</li>
+          <li>Maintaining strict professional boundaries</li>
+          <li>Prioritizing self-care and time away from work</li>
+        </ul>
+      </>
+    )
   },
   "quality-matters": {
     title: "The $71M Question: Why Medical Interpretation Quality Matters",
@@ -53,11 +64,13 @@ const articles = {
     date: "January 10, 2024",
     readTime: "12 min read",
     category: "Industry Analysis",
-    content: `
-      <p class="mb-6 text-lg leading-relaxed text-muted-foreground">
-        The cost of errors in medical interpretation goes far beyond financial metrics—it measures in human lives.
-      </p>
-    `
+    content: (
+      <>
+        <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
+          The cost of errors in medical interpretation goes far beyond financial metrics—it measures in human lives.
+        </p>
+      </>
+    )
   },
   // Add other articles as needed or handle 'not found'
 };
@@ -117,10 +130,13 @@ const Article = () => {
 
         {/* Article Content */}
         <div className="container mx-auto px-6 max-w-3xl py-12">
-          <div
-            className="prose prose-invert prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          {/*
+            Refactored to use React components directly instead of dangerouslySetInnerHTML.
+            This prevents XSS vulnerabilities.
+          */}
+          <div className="prose prose-invert prose-lg max-w-none">
+            {article.content}
+          </div>
 
           <div className="mt-16 pt-8 border-t border-border flex justify-between items-center">
             <div className="text-muted-foreground">
