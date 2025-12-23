@@ -13,7 +13,7 @@ export const ThemeToggle = () => {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="glass">
+      <Button variant="ghost" size="icon" className="glass" aria-label="Toggle theme">
         <Sun className="h-5 w-5" />
       </Button>
     );
