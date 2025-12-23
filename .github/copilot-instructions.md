@@ -99,7 +99,7 @@ npm install
 
 # Start development server
 npm run dev
-# Server runs on http://localhost:8080
+# Server runs on port 8080 (accessible on all network interfaces)
 
 # Build for production
 npm run build
