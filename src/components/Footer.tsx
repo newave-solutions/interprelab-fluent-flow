@@ -117,15 +117,6 @@ export const Footer = () => {
             </div>
 
             <div className="flex gap-2">
-<<<<<<< HEAD
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our Twitter page">
-                <Twitter className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our LinkedIn page">
-                <Linkedin className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visit our GitHub page">
-=======
               <Button
                 variant="ghost"
                 size="icon"
@@ -148,7 +139,6 @@ export const Footer = () => {
                 className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
                 aria-label="GitHub"
               >
->>>>>>> lovable
                 <Github className="w-4 h-4" />
               </Button>
             </div>

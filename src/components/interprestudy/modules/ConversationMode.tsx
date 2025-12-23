@@ -5,24 +5,6 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 
-<<<<<<< HEAD
-// --- API UTILITIES ---
-const callAI = async (prompt: string) => {
-  try {
-    const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
-      body: {
-        action: 'completion',
-        messages: [{ role: 'user', content: prompt }]
-      }
-    });
-
-    if (error) throw error;
-    return data.content || "No content generated.";
-  } catch (error) {
-    console.error("AI Error:", error);
-    return "Connection error. Please try again later.";
-  }
-=======
 // --- TYPES ---
 type Role = 'Doctor' | 'Patient' | 'Interpreter';
 
@@ -121,7 +103,6 @@ const callInteractiveAI = async (action: string, payload: InteractiveAIPayload) 
   if (error) throw error;
   if (data.error) throw new Error(data.error);
   return data.result;
->>>>>>> lovable
 };
 
 // --- ENHANCED SPEECH UTILS (NATURAL SOUNDING) ---
@@ -210,12 +191,7 @@ export const ConversationMode = () => {
 
   // Session State
   const [started, setStarted] = useState(false);
-<<<<<<< HEAD
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [history, setHistory] = useState<any[]>([]);
-=======
   const [history, setHistory] = useState<ConversationMessage[]>([]);
->>>>>>> lovable
   const [currentTurn, setCurrentTurn] = useState('init'); // 'doctor', 'patient', 'interpreter'
   const [loading, setLoading] = useState(false);
   const [userTranscript, setUserTranscript] = useState("");
@@ -224,11 +200,7 @@ export const ConversationMode = () => {
 
   // Timer
   const [seconds, setSeconds] = useState(0);
-<<<<<<< HEAD
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-=======
   const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
->>>>>>> lovable
 
   // Metrics
   const [metrics, setMetrics] = useState<Metrics>({
@@ -238,12 +210,7 @@ export const ConversationMode = () => {
     weakAreas: []
   });
 
-<<<<<<< HEAD
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
-=======
 
->>>>>>> lovable
 
   // Timer Logic
   useEffect(() => {
@@ -265,56 +232,8 @@ export const ConversationMode = () => {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-<<<<<<< HEAD
-  // Speech Rec Setup
-  useEffect(() => {
-    // Load voices eagerly
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.getVoices();
-    }
-
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = true;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognitionRef.current.onresult = (event: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const transcript = Array.from(event.results)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .map((result: any) => result[0].transcript)
-          .join('');
-        setUserTranscript(transcript);
-      };
-
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
-    }
-  }, []);
-
-  const toggleListening = () => {
-    if (isListening) {
-      recognitionRef.current.stop();
-    } else {
-      setUserTranscript("");
-      // Determine target language based on who spoke last
-      const lastRole = history.length > 0 ? history[history.length-1].role : 'Doctor';
-      // If Doctor spoke (EN), I interpret to ES. If Patient spoke (ES), I interpret to EN.
-      recognitionRef.current.lang = lastRole === 'Doctor' ? 'es-MX' : 'en-US';
-      recognitionRef.current.start();
-      setIsListening(true);
-    }
-  };
-
-  const startScenario = async () => {
-=======
   // --- LOGIC HELPERS ---
   const handleStartScenario = async () => {
->>>>>>> lovable
     if (!topic) return;
 
     // Reset State
@@ -342,14 +261,6 @@ export const ConversationMode = () => {
     }
   };
 
-<<<<<<< HEAD
-    const firstLine = await callAI(prompt);
-    const newMsg = { role: 'Doctor', text: firstLine };
-    setHistory([newMsg]);
-    setLoading(false);
-    setCurrentTurn('doctor');
-    speakText(firstLine, 'en-US');
-=======
   const assessStudentPerformance = async (lastMessage: ConversationMessage, transcript: string) => {
     const lang = lastMessage.role === 'Doctor' ? 'English' : 'Spanish';
     // const prompt = createAssessmentPrompt(topic, lastMessage.text, lang, transcript);
@@ -386,7 +297,6 @@ export const ConversationMode = () => {
       console.error("Next Turn Error", e);
       return { role: nextRole, text: "..." };
     }
->>>>>>> lovable
   };
 
   const processInterpretation = async () => {
@@ -397,17 +307,10 @@ export const ConversationMode = () => {
 
     // Parallel execution for faster response
     try {
-<<<<<<< HEAD
-      const res = await callAI(assessPrompt);
-      const cleanJson = res.replace(/```json/g, '').replace(/```/g, '').trim();
-      assessment = JSON.parse(cleanJson);
-    } catch(e) { console.error("JSON parse error", e); }
-=======
       const [assessment, nextMsg] = await Promise.all([
         assessStudentPerformance(lastMessage, userTranscript),
         generateNextResponse(history, userTranscript, lastMessage.role)
       ]);
->>>>>>> lovable
 
       // Update Metrics
       setMetrics(prev => {
@@ -434,38 +337,11 @@ export const ConversationMode = () => {
       setUserTranscript("");
       setCurrentTurn(nextMsg.role.toLowerCase());
 
-<<<<<<< HEAD
-    // 2. Generate Next Turn
-    // Logic: If Doctor spoke last, now Patient speaks. If Patient spoke last, Doctor speaks.
-    const nextRole = lastMessage.role === 'Doctor' ? 'Patient' : 'Doctor';
-
-    const contextPrompt = `
-      Roleplay Context: ${topic}. Difficulty: ${difficulty}.
-      Conversation History:
-      ${history.map(h => `${h.role}: ${h.text}`).join('\n')}
-      Interpreter just said: "${userTranscript}" (Meaning the message was conveyed).
-
-      Generate the ${nextRole}'s response in ${nextRole === 'Doctor' ? 'English' : 'Spanish'}.
-      Keep it brief (1-2 sentences). Natural conversational tone. Output ONLY text.
-    `;
-
-    const nextLine = await callAI(contextPrompt);
-    const nextMsg = { role: nextRole, text: nextLine };
-
-    // Update history with BOTH the interpretation and the NEXT line
-    setHistory(prev => [...prev, interpMsg, nextMsg]);
-    setLoading(false);
-    setUserTranscript("");
-    setCurrentTurn(nextRole.toLowerCase()); // 'doctor' or 'patient'
-
-    speakText(nextLine, nextRole === 'Doctor' ? 'en-US' : 'es-MX');
-=======
       speakText(nextMsg.text, nextMsg.role === 'Doctor' ? 'en-US' : 'es-MX');
     } catch (e) {
       console.error("Process Interpretation Error", e);
       setLoading(false);
     }
->>>>>>> lovable
   };
 
 
@@ -489,17 +365,6 @@ export const ConversationMode = () => {
 
   const generateSoapNote = async () => {
     setLoading(true);
-<<<<<<< HEAD
-    const transcript = history.map(h => `${h.role}: ${h.text}`).join('\n');
-    const prompt = `
-      Based on the following medical dialogue, generate a concise SOAP Note (Subjective, Objective, Assessment, Plan).
-      Use professional medical terminology.
-      Dialogue:
-      ${transcript}
-    `;
-    const result = await callAI(prompt);
-    setSoapNote(result);
-=======
     try {
       const result = await callInteractiveAI('generate-soap', { history });
       setSoapNote(result);
@@ -507,7 +372,6 @@ export const ConversationMode = () => {
       console.error("SOAP Note Error", e);
       setSoapNote("Failed to generate note.");
     }
->>>>>>> lovable
     setLoading(false);
     if (timerRef.current) clearInterval(timerRef.current);
   };

@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
-<<<<<<< HEAD
-=======
 
 // --- API UTILITIES ---
 const callGemini = async (prompt: string) => {
@@ -28,7 +26,6 @@ const callGemini = async (prompt: string) => {
     return "Connection error. Please try again later.";
   }
 };
->>>>>>> lovable
 
 // --- DATA ---
 const INITIAL_VOCABULARY_DATA = [
@@ -83,23 +80,15 @@ export const SmartFlashcards = () => {
   const fetchAIInsight = async (e: React.MouseEvent) => {
     e.stopPropagation();
     setLoadingAi(true);
-
-    try {
-      const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
-        body: {
-          action: 'get-insight',
-          term: `${currentCard.root} (${currentCard.en_meaning})`
-        }
-      });
-
-      if (error) throw error;
-      setAiInsight(data.content || "No insight generated.");
-    } catch (error) {
-      console.error("Error fetching AI insight:", error);
-      setAiInsight("Unable to load insight. Please try again.");
-    } finally {
-      setLoadingAi(false);
-    }
+    const prompt = `
+      For the medical root "${currentCard.root}" (meaning: ${currentCard.en_meaning}):
+      1. Provide a 1-sentence etymology (origin).
+      2. Create a short, funny or memorable mnemonic to help remember it.
+      Keep it concise.
+    `;
+    const result = await callGemini(prompt);
+    setAiInsight(result);
+    setLoadingAi(false);
   };
 
   if (finished) {
