@@ -1,0 +1,10 @@
+{
+    "name": "gradetest",
+    "version": "1.0.0",
+    "description": "AI-powered grading engine for InterpreTest assessments",
+    "main": "index.ts",
+    "scripts": {
+        "start": "deno run --allow-net --allow-env index.ts"
+    },
+    "dependencies": {}
+}

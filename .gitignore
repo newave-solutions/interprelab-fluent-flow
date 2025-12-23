@@ -12,13 +12,20 @@ dist
 dist-ssr
 *.local
 
+# Environment files - ignore .env for security, but allow .env.production for deployment
 .env
+.env.local
 .env.*.local
-.env.production
+# .env.production  # Allowed for Lovable deployment (contains non-sensitive public keys)
 
 # Supabase
 supabase/.temp/
 supabase/.branches/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
 
 # Editor directories and files
 .vscode/*
@@ -30,3 +37,9 @@ supabase/.branches/
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so

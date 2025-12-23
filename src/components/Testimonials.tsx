@@ -1,165 +1,214 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Quote } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { Badge } from "@/components/ui/badge";
+import { Quote } from "lucide-react";
 
 export const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   const testimonials = [
     {
-      name: "Dr. Maria Rodriguez",
+      name: "Sofia Martinez",
+      credentials: "CMI, CoreCHI-Spanish",
       role: "Medical Interpreter",
-      location: "Los Angeles, CA",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612e2c5?w=150&h=150&fit=crop&crop=face",
-      quote: "InterpreLab transformed my practice. The real-time feedback from InterpreCoach during live sessions has improved my accuracy by 40%. It's like having a mentor always with me.",
-      rating: 5,
-      specialty: "Medical"
+      location: "Houston, TX",
+      quote: "InterpreLab transformed my practice. The real-time terminology suggestions have improved my accuracy by 40% during complex surgical procedures.",
+    },
+    {
+      name: "Nguyễn Thị Lan",
+      credentials: "CCHI-Vietnamese",
+      role: "Healthcare Interpreter",
+      location: "Orange County, CA",
+      quote: "The cultural competency modules helped me bridge communication gaps I didn't even know existed. My patients feel truly heard now.",
+    },
+    {
+      name: "Dmitry Volkov",
+      credentials: "CoreCHI-Russian",
+      role: "Medical & Legal Interpreter",
+      location: "Brooklyn, NY",
+      quote: "Passed both NBCMI and CCHI certifications on first attempts. The exam prep is incredibly thorough and mirrors real-world scenarios perfectly.",
+    },
+    {
+      name: "Dr. Sarah Chen",
+      credentials: "CMI, NBCMI",
+      role: "Healthcare Interpreter Manager",
+      location: "Seattle, WA",
+      quote: "Our team of 200+ interpreters saw a 35% performance improvement. The analytics dashboard is a game-changer for training programs.",
+    },
+    {
+      name: "Ahmed Al-Rashid",
+      credentials: "CoreCHI-Arabic",
+      role: "Medical Interpreter",
+      location: "Dearborn, MI",
+      quote: "The multilingual terminology database is unmatched. I confidently handle everything from cardiology to oncology consultations now.",
+    },
+    {
+      name: "Mei Lin Wang",
+      credentials: "CMI, CCHI-Mandarin",
+      role: "Conference Interpreter",
+      location: "San Francisco, CA",
+      quote: "The AI-powered context suggestions during live sessions are like having a senior interpreter mentoring you in real-time. Absolutely invaluable.",
     },
     {
       name: "Carlos Mendez",
-      role: "Court Interpreter",
-      location: "Miami, FL", 
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      quote: "The ethics training and cultural context features are game-changers. InterpreBot's analysis helped me identify blind spots I never knew I had.",
-      rating: 5,
-      specialty: "Legal"
+      credentials: "NBCMI, CoreCHI-Spanish",
+      role: "Court & Medical Interpreter",
+      location: "Miami, FL",
+      quote: "The ethics and legal compliance modules are exceptional. I feel prepared for the most challenging courtroom and hospital scenarios.",
     },
     {
-      name: "Sarah Chen",
-      role: "Healthcare Interpreter Manager",
-      location: "Seattle, WA",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      quote: "We've trained over 200 interpreters using InterpreLab. The personalized learning paths and comprehensive analytics have revolutionized our training program.",
-      rating: 5,
-      specialty: "Training"
-    },
-    {
-      name: "Ahmed Hassan", 
-      role: "Freelance Medical Interpreter",
-      location: "Houston, TX",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      quote: "The multilingual dictionaries and terminology detection saved my career. I can now confidently handle complex medical procedures in three languages.",
-      rating: 5,
-      specialty: "Medical"
-    },
-    {
-      name: "Lisa Thompson",
-      role: "Legal Interpretation Coordinator",
-      location: "New York, NY",
-      avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face",
-      quote: "InterpreLab's compliance features ensure our interpreters meet all legal standards. The HIPAA training module alone is worth the subscription.",
-      rating: 5,
-      specialty: "Legal"
-    },
-    {
-      name: "Roberto Silva",
+      name: "Olga Petrova",
+      credentials: "CCHI-Russian",
       role: "Community Health Interpreter",
-      location: "Phoenix, AZ",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-      quote: "The InterpreterHub community has been incredible. I've connected with interpreters worldwide and landed three new contracts through the platform.",
-      rating: 5,
-      specialty: "Community"
-    }
+      location: "Chicago, IL",
+      quote: "Connected with interpreters globally through InterpreLink. Landed three hospital contracts and found an amazing mentor community.",
+    },
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 4000);
-
-    return () => clearInterval(timer);
-  }, [testimonials.length]);
-
-  const getSpecialtyColor = (specialty: string) => {
-    switch (specialty) {
-      case 'Medical': return 'bg-gradient-primary';
-      case 'Legal': return 'bg-gradient-success';
-      case 'Training': return 'bg-gradient-to-r from-purple-500 to-pink-500';
-      case 'Community': return 'bg-gradient-to-r from-orange-500 to-red-500';
-      default: return 'bg-gradient-primary';
-    }
-  };
+  // Duplicate for seamless infinite scroll
+  const allTestimonials = [...testimonials, ...testimonials];
 
   return (
-    <section className="py-32 px-6 relative" ref={ref} aria-labelledby="testimonials-heading">      
-      <div className="container mx-auto relative z-10">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <Badge className="glass px-6 py-3 mb-6 border-primary/20">
+    <section
+      className="py-24 px-6 relative bg-nobel-cream dark:bg-background overflow-hidden"
+      ref={ref}
+      aria-labelledby="testimonials-heading"
+    >
+      <div className="container mx-auto relative z-10 mb-16">
+        <div
+          className={`text-center transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+        >
+          <Badge className="px-6 py-3 mb-6 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
             Testimonials
           </Badge>
-          <h2 id="testimonials-heading" className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Loved by <span className="bg-gradient-primary bg-clip-text text-transparent">Interpreters</span>
+          <h2
+            id="testimonials-heading"
+            className="font-serif text-5xl md:text-6xl font-medium text-foreground mb-6"
+          >
+            Loved by <span className="text-nobel-gold">Interpreters</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-stone-600 dark:text-muted-foreground max-w-2xl mx-auto font-light">
             Join thousands of professionals who've transformed their practice.
           </p>
         </div>
+      </div>
 
-        <div className="max-w-5xl mx-auto">
-          <div className="relative overflow-hidden">
-            <div 
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      {/* Marquee Container - Single Row with hover pause */}
+      <div className="group overflow-hidden relative w-auto flex-nowrap hidden lg:flex">
+        {/* Left gradient overlay */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-nobel-cream dark:from-background to-transparent z-10 pointer-events-none" />
+        {/* Right gradient overlay */}
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-nobel-cream dark:from-background to-transparent z-10 pointer-events-none" />
+
+        <div className="flex gap-4 py-4 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none will-change-transform">
+          {allTestimonials.map((testimonial, index) => (
+            <div
+              key={`testimonial-${index}`}
+              className="min-w-[380px] max-w-[380px] flex-shrink-0 group/card"
             >
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="glass border-border/30 hover-lift">
-                    <CardContent className="p-8 md:p-12">
-                      <div className="space-y-6">
-                        {/* Quote */}
-                        <div className="relative">
-                          <Quote className="w-10 h-10 text-primary/20 absolute -top-4 -left-4" />
-                          <blockquote className="text-lg md:text-xl text-foreground leading-relaxed pl-8">
-                            "{testimonial.quote}"
-                          </blockquote>
-                        </div>
-
-                        {/* Rating */}
-                        <div className="flex items-center gap-1">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <span key={i} className="text-warning text-xl">★</span>
-                          ))}
-                        </div>
-
-                        {/* Author */}
-                        <div className="flex items-center gap-4 pt-4 border-t border-border/50">
-                          <Avatar className="w-14 h-14">
-                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                            <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h4 className="text-lg font-bold text-foreground">{testimonial.name}</h4>
-                            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                          <Badge className="bg-gradient-to-r from-primary/20 to-primary/10 border-primary/30 text-primary">
-                            {testimonial.specialty}
-                          </Badge>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+              <div className="bg-white dark:bg-card border border-border group-hover/card:border-nobel-gold/50 transition-colors rounded-2xl p-6 shadow-sm h-full">
+                {/* Quote with icon */}
+                <div className="relative mb-4">
+                  <div className="absolute -left-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-nobel-gold">
+                    <Quote className="h-3 w-3 text-white fill-white" />
+                  </div>
+                  <p className="text-muted-foreground text-base leading-relaxed pl-7">
+                    {testimonial.quote}
+                  </p>
                 </div>
-              ))}
+
+                {/* Author info */}
+                <div className="border-t border-border/50 pt-4 mt-4">
+                  <h4 className="text-foreground font-semibold text-base">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-nobel-gold text-sm font-medium mt-1">
+                    {testimonial.credentials}
+                  </p>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {testimonial.role}
+                  </p>
+                  <p className="text-muted-foreground text-xs mt-1">
+                    {testimonial.location}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Duplicate for seamless loop */}
+        <div className="flex gap-4 py-4 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none will-change-transform" aria-hidden="true">
+          {allTestimonials.map((testimonial, index) => (
+            <div
+              key={`testimonial-dup-${index}`}
+              className="min-w-[380px] max-w-[380px] flex-shrink-0 group/card"
+            >
+              <div className="bg-white dark:bg-card border border-border group-hover/card:border-nobel-gold/50 transition-colors rounded-2xl p-6 shadow-sm h-full">
+                {/* Quote with icon */}
+                <div className="relative mb-4">
+                  <div className="absolute -left-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-nobel-gold">
+                    <Quote className="h-3 w-3 text-white fill-white" />
+                  </div>
+                  <p className="text-muted-foreground text-base leading-relaxed pl-7">
+                    {testimonial.quote}
+                  </p>
+                </div>
+
+                {/* Author info */}
+                <div className="border-t border-border/50 pt-4 mt-4">
+                  <h4 className="text-foreground font-semibold text-base">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-nobel-gold text-sm font-medium mt-1">
+                    {testimonial.credentials}
+                  </p>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {testimonial.role}
+                  </p>
+                  <p className="text-muted-foreground text-xs mt-1">
+                    {testimonial.location}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile fallback - show grid on smaller screens */}
+      <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6 container mx-auto">
+        {testimonials.slice(0, 4).map((testimonial, index) => (
+          <div key={`mobile-${index}`} className="group/card">
+            <div className="bg-white dark:bg-card border border-border group-hover/card:border-nobel-gold/50 transition-colors rounded-2xl p-6 shadow-sm">
+              {/* Quote with icon */}
+              <div className="relative mb-4">
+                <div className="absolute -left-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-nobel-gold">
+                  <Quote className="h-3 w-3 text-white fill-white" />
+                </div>
+                <p className="text-muted-foreground text-base leading-relaxed pl-7">
+                  {testimonial.quote}
+                </p>
+              </div>
+
+              {/* Author info */}
+              <div className="border-t border-border/50 pt-4 mt-4">
+                <h4 className="text-foreground font-semibold text-base">
+                  {testimonial.name}
+                </h4>
+                <p className="text-nobel-gold text-sm font-medium mt-1">
+                  {testimonial.credentials}
+                </p>
+                <p className="text-muted-foreground text-sm mt-1">
+                  {testimonial.role}
+                </p>
+                <p className="text-muted-foreground text-xs mt-1">
+                  {testimonial.location}
+                </p>
+              </div>
             </div>
           </div>
-
-          {/* Dots indicator */}
-          <div className="flex justify-center gap-2 mt-10">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentIndex ? 'w-8 bg-primary' : 'w-2 bg-primary/30'
-                }`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );

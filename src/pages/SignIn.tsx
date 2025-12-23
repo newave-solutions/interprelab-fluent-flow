@@ -170,25 +170,25 @@ const SignIn = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-subtle">
+      <section className="py-24 min-h-screen flex items-center">
         <div className="container mx-auto px-6">
           <div className="max-w-md mx-auto">
             <div className="text-center mb-8">
-              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
+              <span className="px-4 py-2 border border-nobel-gold text-nobel-gold text-xs tracking-[0.2em] uppercase font-bold rounded-full inline-block mb-6">
                 Professional Access
-              </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-                Welcome to InterpreLab
+              </span>
+              <h1 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
+                Welcome to <span className="text-nobel-gold">InterpreLab</span>
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground font-light">
                 Access your professional interpretation tools and training platform
               </p>
             </div>
 
-            <Card className="glass border-border/50">
+            <Card className="bg-card border-border">
               <CardContent className="p-6">
                 <Tabs defaultValue="signin" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
+                  <TabsList className="grid w-full grid-cols-2 bg-muted">
                     <TabsTrigger value="signin">Sign In</TabsTrigger>
                     <TabsTrigger value="signup">Sign Up</TabsTrigger>
                   </TabsList>
@@ -245,12 +245,12 @@ const SignIn = () => {
                           <input type="checkbox" className="rounded border-border" />
                           <span className="text-muted-foreground">Remember me</span>
                         </label>
-                        <Button variant="link" size="sm" className="p-0 text-primary">
+                        <Button variant="link" size="sm" className="p-0 text-nobel-gold">
                           Forgot password?
                         </Button>
                       </div>
 
-                      <Button type="submit" className="w-full glass-button" disabled={isLoading}>
+                      <Button type="submit" className="w-full" disabled={isLoading}>
                         {isLoading ? "Signing in..." : "Sign In"}
                       </Button>
                     </form>
@@ -344,16 +344,16 @@ const SignIn = () => {
 
                       <div className="text-xs text-muted-foreground">
                         By creating an account, you agree to our{" "}
-                        <Button variant="link" size="sm" className="p-0 text-primary text-xs">
+                        <Button variant="link" size="sm" className="p-0 text-nobel-gold text-xs h-auto">
                           Terms of Service
                         </Button>{" "}
                         and{" "}
-                        <Button variant="link" size="sm" className="p-0 text-primary text-xs">
+                        <Button variant="link" size="sm" className="p-0 text-nobel-gold text-xs h-auto">
                           Privacy Policy
                         </Button>
                       </div>
 
-                      <Button type="submit" className="w-full glass-button" disabled={isLoading}>
+                      <Button type="submit" className="w-full" disabled={isLoading}>
                         {isLoading ? "Creating account..." : "Create Account"}
                       </Button>
                     </form>
@@ -379,14 +379,14 @@ const SignIn = () => {
 
             {/* Features for Signed-in Users */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="glass border-border/50 p-4 text-center">
-                <Chrome className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h3 className="font-semibold text-sm">InterpreCoach Extension</h3>
+              <Card className="bg-card border-border p-4 text-center hover:border-nobel-gold/50 transition-colors">
+                <Chrome className="w-8 h-8 text-nobel-gold mx-auto mb-2" />
+                <h3 className="font-serif text-sm">InterpreCoach Extension</h3>
                 <p className="text-xs text-muted-foreground">AI-powered interpretation assistant</p>
               </Card>
-              <Card className="glass border-border/50 p-4 text-center">
-                <Shield className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h3 className="font-semibold text-sm">Professional Dashboard</h3>
+              <Card className="bg-card border-border p-4 text-center hover:border-nobel-gold/50 transition-colors">
+                <Shield className="w-8 h-8 text-nobel-gold mx-auto mb-2" />
+                <h3 className="font-serif text-sm">Professional Dashboard</h3>
                 <p className="text-xs text-muted-foreground">Track progress and performance</p>
               </Card>
             </div>

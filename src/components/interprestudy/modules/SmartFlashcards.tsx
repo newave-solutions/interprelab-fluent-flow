@@ -4,6 +4,31 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+<<<<<<< HEAD
+=======
+
+// --- API UTILITIES ---
+const callGemini = async (prompt: string) => {
+  try {
+    const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+      body: {
+        action: 'completion',
+        messages: [{ role: 'user', content: prompt }]
+      }
+    });
+
+    if (error) {
+      console.error('Error calling AI:', error);
+      throw new Error(error.message);
+    }
+
+    return data.content || "No content generated.";
+  } catch (error) {
+    console.error("AI Error:", error);
+    return "Connection error. Please try again later.";
+  }
+};
+>>>>>>> lovable
 
 // --- DATA ---
 const INITIAL_VOCABULARY_DATA = [

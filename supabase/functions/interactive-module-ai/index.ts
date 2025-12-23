@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,6 +11,12 @@ const corsHeaders = {
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
   }
 
   try {
@@ -26,18 +33,18 @@ serve(async (req) => {
 
     const rawData = await req.json();
     const validationResult = requestSchema.safeParse(rawData);
-    
+
     if (!validationResult.success) {
       console.error("Validation error:", validationResult.error.errors);
       return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { action, topic, specialty, messages, term } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -78,6 +85,7 @@ serve(async (req) => {
         break;
 
       case 'completion':
+<<<<<<< HEAD
         // No default system prompt for completion, user provides it in messages
         break;
     }
@@ -85,6 +93,17 @@ serve(async (req) => {
     const apiMessages = (action === 'chat' || action === 'completion') && messages
       ? (action === 'chat' ? [{ role: "system", content: systemPrompt }, ...messages] : messages)
       : [
+=======
+        // Generic completion, relies on provided messages
+        break;
+    }
+
+    const apiMessages = action === 'chat' && messages
+      ? [{ role: "system", content: systemPrompt }, ...messages]
+      : (action === 'completion') && messages
+        ? messages
+        : [
+>>>>>>> lovable
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ];
@@ -116,7 +135,7 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      
+
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
           status: 429,
@@ -139,7 +158,7 @@ serve(async (req) => {
       });
     }
 
-    // For non-streaming responses (quiz, insight)
+    // For non-streaming responses (quiz, insight, completion)
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
@@ -175,3 +194,5 @@ serve(async (req) => {
     });
   }
 });
+
+

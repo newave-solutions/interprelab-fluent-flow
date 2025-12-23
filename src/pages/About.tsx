@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Users, Target, Award, Heart, Globe, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const About = () => {
   const values = [
@@ -132,8 +133,9 @@ const About = () => {
       </section>
 
       {/* Values */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 bg-gradient-subtle overflow-hidden">
+        <ParticlesBackground particleCount={80} variant="mixed" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Our Core Values

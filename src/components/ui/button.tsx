@@ -9,16 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-glow",
+        default: "bg-nobel-gold text-background hover:bg-nobel-gold/90 hover:shadow-glow",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-lg",
+        outline: "border border-border bg-background hover:bg-accent hover:text-accent-foreground hover:border-nobel-gold/50",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-primary text-primary-foreground hover:scale-105 hover:shadow-glow font-semibold",
-        glass: "bg-card/80 backdrop-blur-sm border border-border/50 text-card-foreground hover:bg-card/90 hover:border-primary/30",
+        link: "text-nobel-gold underline-offset-4 hover:underline",
+        hero: "bg-nobel-gold text-background hover:bg-nobel-gold/90 hover:scale-105 hover:shadow-glow font-semibold rounded-full",
+        glass: "bg-card/80 backdrop-blur-sm border border-border/50 text-card-foreground hover:bg-card/90 hover:border-nobel-gold/30",
         success: "bg-success text-success-foreground hover:bg-success/90 hover:shadow-lg",
-        premium: "bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary/90 hover:to-secondary/90 hover:shadow-glow font-semibold",
+        premium: "bg-gradient-to-r from-nobel-gold to-nobel-gold/70 text-background hover:from-nobel-gold/90 hover:to-nobel-gold/60 hover:shadow-glow font-semibold",
       },
       size: {
         default: "h-11 px-6 py-2.5",

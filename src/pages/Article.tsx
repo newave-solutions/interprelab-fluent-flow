@@ -4,7 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import { ReactNode } from "react";
+=======
+import DOMPurify from "dompurify";
+>>>>>>> lovable
 
 // Mock data for articles - in a real app this would come from an API/CMS
 // In a real app, this content would likely be Markdown or HTML sanitized on the server or via a library like dompurify
@@ -130,6 +134,7 @@ const Article = () => {
 
         {/* Article Content */}
         <div className="container mx-auto px-6 max-w-3xl py-12">
+<<<<<<< HEAD
           {/*
             Refactored to use React components directly instead of dangerouslySetInnerHTML.
             This prevents XSS vulnerabilities.
@@ -137,6 +142,12 @@ const Article = () => {
           <div className="prose prose-invert prose-lg max-w-none">
             {article.content}
           </div>
+=======
+          <div
+            className="prose prose-invert prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
+          />
+>>>>>>> lovable
 
           <div className="mt-16 pt-8 border-t border-border flex justify-between items-center">
             <div className="text-muted-foreground">
