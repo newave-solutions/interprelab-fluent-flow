@@ -1,5 +1,5 @@
 import { Navigation } from "@/components/Navigation";
-import { Hero } from "@/components/landing/Hero";
+import { Hero } from "@/components/Hero";
 import { ValueProposition } from "@/components/ValueProposition";
 import { ProblemSolution } from "@/components/ProblemSolution";
 import { HowItWorks } from "@/components/HowItWorks";
