@@ -51,16 +51,13 @@ const InterpreTrackFeature = () => {
                             </div>
                         </div>
 
-                        {/* Right Visual - InterpreTrack Bot with Enhanced Shadows */}
+                        {/* Right Visual - Dashboard Preview with Enhanced Shadows */}
                         <div className="relative animate-fade-in">
-                            <div className="relative rounded-3xl overflow-hidden flex items-center justify-center">
+                            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                                 <img
-                                    src={interpretrackBot}
-                                    alt="InterpreTrack bot assistant"
-                                    className="w-full max-w-md h-auto drop-shadow-2xl"
-                                    style={{
-                                        filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
-                                    }}
+                                    src={callTrackerPreview}
+                                    alt="InterpreTrack Dashboard Preview"
+                                    className="w-full h-auto rounded-xl border border-border/50"
                                 />
                             </div>
                             {/* Floating stats cards with enhanced shadows */}
