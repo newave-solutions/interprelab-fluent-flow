@@ -11,7 +11,7 @@ interface Translations {
 const translations: Translations = {
   en: {
     solutions: 'Solutions',
-    interpreHub: 'InterpreHub',
+    interpreHub: 'InterpreLink',
     dashboard: 'Dashboard',
     settings: 'Settings',
     resources: 'Resources',
@@ -22,7 +22,7 @@ const translations: Translations = {
   },
   es: {
     solutions: 'Soluciones',
-    interpreHub: 'InterpreHub',
+    interpreHub: 'InterpreLink',
     dashboard: 'Panel',
     settings: 'Configuración',
     resources: 'Recursos',
@@ -33,7 +33,7 @@ const translations: Translations = {
   },
   fr: {
     solutions: 'Solutions',
-    interpreHub: 'InterpreHub',
+    interpreHub: 'InterpreLink',
     dashboard: 'Tableau de bord',
     settings: 'Paramètres',
     resources: 'Ressources',
@@ -59,7 +59,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   const loadUserLanguage = useCallback(async () => {
     if (!user?.id) return;
-    
+
     const { data } = await supabase
       .from('user_settings')
       .select('preferred_language')
@@ -79,7 +79,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   const setLanguage = async (lang: string) => {
     setLanguageState(lang);
-    
+
     if (user) {
       await supabase
         .from('user_settings')

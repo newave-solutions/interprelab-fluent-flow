@@ -1,0 +1,144 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
+  }
+
+  try {
+    const scenarioSchema = z.object({
+      setting: z.string().min(1).max(100),
+      difficulty: z.enum(['beginner', 'intermediate', 'advanced']).default('intermediate'),
+      languagePair: z.string().default('English-Spanish')
+    });
+
+    const rawData = await req.json();
+    const validationResult = scenarioSchema.safeParse(rawData);
+
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { setting, difficulty, languagePair } = validationResult.data;
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
+    }
+
+    const difficultyGuidance = {
+      beginner: "Simple vocabulary, short sentences, common medical situations.",
+      intermediate: "Medical terminology, moderate complexity, realistic clinical exchanges.",
+      advanced: "Complex cases, rapid exchanges, specialized terminology, emotional content."
+    };
+
+    const systemPrompt = `You are an expert medical interpreter trainer creating realistic practice scenarios for ${languagePair} interpreters.
+
+Create a medical interpretation practice scenario for a ${setting.replace('-', ' ')} setting at the ${difficulty} level.
+
+${difficultyGuidance[difficulty]}
+
+You MUST return ONLY a valid JSON object with this exact structure (no markdown, no explanation):
+{
+  "title": "Brief descriptive title",
+  "setting": "${setting}",
+  "difficulty": "${difficulty}",
+  "lines": [
+    {"speaker": "doctor", "language": "en", "text": "English dialogue from doctor"},
+    {"speaker": "interpreter", "language": "es", "text": "Spanish interpretation"},
+    {"speaker": "patient", "language": "es", "text": "Spanish response from patient"},
+    {"speaker": "interpreter", "language": "en", "text": "English interpretation of patient response"}
+  ]
+}
+
+Include 10-14 dialogue exchanges. Make it realistic with:
+- Appropriate medical terminology for the ${difficulty} level
+- Natural conversational flow
+- Cultural considerations
+- Proper register and formality`;
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `Generate a realistic ${difficulty} level medical interpretation scenario for a ${setting.replace('-', ' ')}.` }
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 429 || response.status === 402) {
+        return new Response(JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }), {
+          status: response.status,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      throw new Error("AI gateway error");
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content || "";
+
+    // Parse the JSON from the response
+    try {
+      const cleanedContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const scenarioData = JSON.parse(jsonMatch[0]);
+
+        // Validate the scenario structure
+        if (scenarioData.title && Array.isArray(scenarioData.lines)) {
+          return new Response(JSON.stringify(scenarioData), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+      }
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError);
+    }
+
+    // Fallback scenario
+    return new Response(JSON.stringify({
+      title: "Practice Scenario",
+      setting: setting,
+      difficulty: difficulty,
+      lines: [
+        { speaker: "doctor", language: "en", text: "Good morning. How are you feeling today?" },
+        { speaker: "interpreter", language: "es", text: "Buenos días. ¿Cómo se siente hoy?" },
+        { speaker: "patient", language: "es", text: "No muy bien, doctor. Tengo dolor." },
+        { speaker: "interpreter", language: "en", text: "Not very well, doctor. I have pain." }
+      ]
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("generate-scenario error:", error);
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});

@@ -2,110 +2,157 @@
 @tailwind components;
 @tailwind utilities;
 
-/* InterpreLab Design System - Advanced Medical/Legal Interpretation Platform
-All colors MUST be HSL for consistency and theming.
+/* Interpreter Dilemma Design System
+   Nobel Gold accent with Playfair Display serif headings
+   All colors MUST be HSL for consistency and theming.
 */
 
 @layer base {
   :root {
-    /* Core Background & Text */
-    --background: 240 10% 3.9%;
-    --foreground: 210 30% 98%;
+    /* Core Background & Text - Deep dark theme */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
 
     /* Cards & Surfaces */
-    --card: 240 10% 6%;
-    --card-foreground: 210 30% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
 
     /* Popovers & Modals */
-    --popover: 240 12% 8%;
-    --popover-foreground: 210 30% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Brand Colors - Logo-Harmonized Navy & Purple */
-    --primary: 209 46% 31%;
-    --primary-foreground: 210 40% 98%;
-    --primary-glow: 209 46% 45%;
+    /* Nobel Gold - Primary accent */
+    --nobel-gold: 41 52% 56%;
+    --primary: 41 52% 56%;
+    --primary-foreground: 0 0% 7%;
+    --primary-glow: 41 52% 70%;
 
-    /* Secondary - Logo-Harmonized Deep Purple */
-    --secondary: 237 26% 41%;
-    --secondary-foreground: 210 40% 98%;
+    /* Navy Blue - Deep accent */
+    --navy-blue: 215 25% 15%;
+    --navy-blue-light: 215 25% 20%;
+    --navy-blue-foreground: 0 0% 98%;
 
-    /* Success Green - Real-time Active */
-    --success: 142 71% 45%;
-    --success-foreground: 210 40% 98%;
+    /* Secondary - Muted stone */
+    --secondary: 30 6% 25%;
+    --secondary-foreground: 0 0% 98%;
 
-    /* Warning Amber - Attention States */
+    /* Success */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 98%;
+
+    /* Warning Amber */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 9%;
 
     /* Muted Surfaces */
-    --muted: 240 10% 12%;
-    --muted-foreground: 210 20% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 30 5% 60%;
 
-    /* Accent for Highlights */
-    --accent: 237 26% 41%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent - Nobel Gold variant */
+    --accent: 41 52% 20%;
+    --accent-foreground: 0 0% 98%;
 
     /* Destructive States */
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
 
     /* Borders & Inputs */
-    --border: 240 10% 18%;
-    --input: 240 12% 15%;
-    --ring: 209 46% 31%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 41 52% 56%;
 
     /* Glass Effect Variables */
-    --glass-bg: 240 10% 6% / 0.8;
-    --glass-border: 210 30% 98% / 0.1;
+    --glass-bg: 0 0% 10% / 0.85;
+    --glass-border: 0 0% 98% / 0.1;
     --glass-blur: blur(12px);
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(209 46% 31%), hsl(237 26% 41%));
-    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(209 46% 31%));
-    --gradient-glow: radial-gradient(circle at 50% 50%, hsl(209 46% 31% / 0.3), transparent 70%);
-    
+    /* Gradients with Nobel Gold */
+    --gradient-primary: linear-gradient(135deg, hsl(41 52% 56%), hsl(41 52% 40%));
+    --gradient-success: linear-gradient(135deg, hsl(160 84% 39%), hsl(41 52% 56%));
+    --gradient-glow: radial-gradient(circle at 50% 50%, hsl(41 52% 56% / 0.2), transparent 70%);
+
     /* Shadows */
-    --shadow-glow: 0 0 50px hsl(209 46% 31% / 0.3);
-    --shadow-card: 0 8px 32px hsl(240 10% 3.9% / 0.6);
-    --shadow-extension: 0 20px 60px hsl(240 10% 3.9% / 0.8);
+    --shadow-glow: 0 0 50px hsl(41 52% 56% / 0.25);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-extension: 0 20px 60px hsl(0 0% 0% / 0.6);
 
     /* Animation Variables */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar Variables */
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 41 52% 56%;
+    --sidebar-primary-foreground: 0 0% 7%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 41 52% 56%;
   }
 
-  /* Light mode alternative (medical/legal environments prefer dark) */
+  /* Light mode - Enhanced with better contrast and shadows */
   .light {
-    --background: 210 30% 98%;
-    --foreground: 240 10% 3.9%;
+    --background: 38 42% 97%;
+    /* #F9F8F4 - nobel cream */
+    --foreground: 0 0% 10%;
+    /* #1a1a1a - nobel dark - Enhanced for readability */
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 30 10% 15%;
+    /* Darker for better readability */
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --muted: 210 15% 95%;
-    --muted-foreground: 240 10% 45%;
-    --border: 210 15% 90%;
-    --input: 210 15% 95%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 39 38% 57%;
+    /* #C5A059 - nobel gold */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 20% 85%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 30 25% 95%;
+    --muted-foreground: 30 10% 40%;
+    /* Minimum for accessibility */
+    --accent: 39 38% 57%;
+    --accent-foreground: 0 0% 100%;
+    --border: 30 15% 88%;
+    --input: 30 20% 95%;
+    --ring: 39 38% 57%;
     --glass-bg: 0 0% 100% / 0.9;
-    --glass-border: 240 10% 3.9% / 0.1;
+    --glass-border: 0 0% 10% / 0.1;
+
+    /* Light theme shadow variables for depth */
+    --shadow-card-light: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover-light: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-input-light: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    --sidebar-background: 38 42% 97%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 39 38% 57%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 25% 95%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 39 38% 57%;
+  }
+
+  /* Dark sections in light mode for visual variety */
+  .light .dark-section {
+    background: linear-gradient(135deg, hsl(0 0% 10%), hsl(240 10% 12%));
+    color: hsl(48 15% 97%);
+  }
+
+  .light .dark-section .glass {
+    background: hsl(240 10% 8% / 0.8);
+    border-color: hsl(39 48% 56% / 0.2);
+  }
+
+  .light .dark-section .text-muted-foreground {
+    color: hsl(210 20% 75%);
+  }
+
+  .light .gold-accent-section {
+    background: linear-gradient(135deg, hsl(39 48% 96%), hsl(45 40% 98%));
+    border: 2px solid hsl(39 48% 56% / 0.2);
   }
 
   /* Sidebar Variables */
@@ -131,18 +178,32 @@ All colors MUST be HSL for consistency and theming.
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  /* Serif headings */
+  h1,
+  h2,
+  h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: white;
+  }
+
   /* Accessibility improvements */
   *:focus-visible {
     @apply outline-2 outline-offset-2 outline-primary ring-2 ring-primary/20;
   }
 
-  /* Smooth scrolling */
+  /* Smooth scrolling with padding for fixed nav */
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
   }
 
   /* Reduced motion for accessibility */
   @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -161,7 +222,35 @@ All colors MUST be HSL for consistency and theming.
   }
 
   .glow {
-    text-shadow: 0 0 50px hsl(209 46% 31% / 0.3);
+    text-shadow: 0 0 50px hsl(41 52% 56% / 0.3);
+  }
+
+  /* CTA Button Glow Effects */
+  .warm-glow {
+    box-shadow: 0 0 20px hsl(var(--secondary) / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .warm-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--secondary) / 0.6);
+  }
+
+  .success-glow {
+    box-shadow: 0 0 20px hsl(var(--success) / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .success-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--success) / 0.6);
+  }
+
+  .financial-glow {
+    box-shadow: 0 0 20px hsl(142 71% 45% / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .financial-glow:hover {
+    box-shadow: 0 0 30px hsl(142 71% 45% / 0.6);
   }
 
   /* Animation classes */
@@ -238,6 +327,19 @@ All colors MUST be HSL for consistency and theming.
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
   }
+
+  /* Typography utilities matching the Interpreter Dilemma theme */
+  .eyebrow {
+    @apply text-xs font-bold tracking-widest text-muted-foreground uppercase;
+  }
+
+  .pull-quote {
+    @apply font-serif italic text-xl text-foreground;
+  }
+
+  .source-card {
+    @apply p-8 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 hover:border-nobel-gold/50;
+  }
 }
 
 @keyframes fadeIn {
@@ -245,6 +347,7 @@ All colors MUST be HSL for consistency and theming.
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -256,6 +359,7 @@ All colors MUST be HSL for consistency and theming.
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -263,18 +367,24 @@ All colors MUST be HSL for consistency and theming.
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.02);
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -286,6 +396,7 @@ All colors MUST be HSL for consistency and theming.
     opacity: 0;
     filter: blur(10px);
   }
+
   to {
     opacity: 1;
     filter: blur(0);
@@ -297,6 +408,7 @@ All colors MUST be HSL for consistency and theming.
     opacity: 1;
     filter: blur(0);
   }
+
   to {
     opacity: 0;
     filter: blur(10px);
@@ -308,6 +420,7 @@ All colors MUST be HSL for consistency and theming.
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -319,9 +432,22 @@ All colors MUST be HSL for consistency and theming.
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -336,4 +462,34 @@ All colors MUST be HSL for consistency and theming.
 
 .animate-scale-in {
   animation: scaleIn 0.4s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Stagger animation delays */
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+
+.stagger-6 {
+  animation-delay: 0.6s;
 }

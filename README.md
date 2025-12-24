@@ -1,158 +1,193 @@
 # InterpreLab - AI-Driven Medical Interpreter Platform
 
-## 📚 Documentation
+## 🎯 Overview
 
-**Complete Documentation:** See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all available documentation.
+InterpreLab is a comprehensive AI-powered platform designed to train, support, and empower medical interpreters through cutting-edge technology and evidence-based learning methodologies.
 
-**Key Documentation:**
-- 📖 [**Platform Documentation**](./PLATFORM_DOCUMENTATION.md) - Complete technical reference (33 KB)
-- 🗺️ [**Optimization Roadmap**](./OPTIMIZATION_ROADMAP.md) - Strategic planning Q1-Q4 2026 (38 KB)
-- 🚀 [**Implementation Guide**](./IMPLEMENTATION_GUIDE.md) - Step-by-step deployment
-- 📊 [**Executive Summary**](./EXECUTIVE_SUMMARY.md) - Project overview and metrics
+## 🚀 Products & Features
 
-## Project info
+### InterpreTest 🤖 (AI Assessment & Training)
 
-**URL**: https://lovable.dev/projects/61694cb5-bbd8-44b1-aa9e-2b4cead1a91a
+Realistic, interactive linguistic assessments with deep grammatical and contextual analysis. Provides personalized learning paths based on performance.
 
-## A/B Testing Note
+### InterpreCoach 🎧 (Real-Time AI Assistant)
 
-**InterpreCoach Implementation:**
-This project implements two different versions of the InterpreCoach solution for A/B testing purposes:
+Browser extension providing real-time terminology assistance, voice coaching, and predictive support during live interpretation sessions.
 
-1. **Current Version** (in `/interprecoach` route): Standard solution with AI coaching features
-2. **Agentic Version** (removed from Extension UI): Multi-agent system implementation with distributed AI agents
+### InterpreStudy 📚 (Interactive Learning)
 
-The agentic version with multi-agent architecture has been removed to allow for performance comparison. Future A/B testing will help determine which approach users prefer and which performs better in real-world scenarios.
+Multimodal training modules covering ethics, cultural competency, medical terminology, and scenario-based practice.
 
-Key differences to test:
-- Single AI model vs. multi-agent system
-- User experience and response quality
-- Performance and resource usage
-- User preference and satisfaction
+### InterpreSigns 🤟 (ASL Recognition)
 
-## Development Sprints
+AI-powered American Sign Language recognition and training using TensorFlow.js with support for both static and motion-based gestures.
 
-### Sprint 1 & 2: Core Visuals & Interactivity (Completed)
-✅ Hero background images generated and implemented
-✅ Animated stats counters with scroll-triggered visibility
-✅ Scroll-triggered animations for all major sections
-✅ Enhanced hover effects and micro-interactions on cards
-✅ Testimonial avatar images and auto-rotation
-✅ Basic accessibility improvements
+### InterpreWellness 💆 (Self-Care)
 
-### Sprint 3: Polish & Optimization (Completed)
-✅ **Scroll Progress Indicator** - Visual feedback for page navigation
-✅ **Enhanced Accessibility**
-   - ARIA labels on all interactive elements
-   - Focus-visible states with primary color ring
-   - Reduced motion support for accessibility
-   - Semantic HTML with proper role attributes
-✅ **Advanced Micro-interactions**
-   - Button shine effects on hover
-   - Icon rotations and scaling on hover
-   - Staggered fade-in animations with delay
-   - Smooth scroll snap for video sections
-✅ **Loading States** - Created reusable LoadingSpinner component
-✅ **Custom Hooks** - useScrollAnimation and useParallax for smooth interactions
-✅ **Design System Enhancements**
-   - Glass button effects with animated shine
-   - Skeleton loading patterns
-   - Scroll snap containers
-✅ **Performance Optimization**
-   - Lazy loading support in CSS
-   - Passive event listeners for scroll
-   - Optimized animation performance
+Mental health and wellness resources specifically designed for interpreters, including stress management and burnout prevention.
 
-## How can I edit this code?
+### InterpreLink 🤝 (Professional Network)
 
-There are several ways of editing your application.
+Community platform featuring forums, job boards, and curated resources for interpreter professional development.
 
-**Use Lovable**
+## 🛠️ Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/61694cb5-bbd8-44b1-aa9e-2b4cead1a91a) and start prompting.
+### Frontend
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: React Query + Context API
+- **Routing**: React Router v6
 
-**Use your preferred IDE**
+### Backend & Services
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Edge Functions**: Supabase Edge Functions
+- **AI/ML**: Google Gemini API, TensorFlow.js
+- **Real-time**: Supabase Realtime subscriptions
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### DevOps
 
-Follow these steps:
+- **Version Control**: Git / GitHub
+- **CI/CD**: GitHub Actions
+- **Environment Management**: `.env` files
+- **Package Manager**: npm / pnpm
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📋 Prerequisites
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Node.js 18+ and npm (or pnpm)
+- Supabase account and project
+- Google Gemini API key
+- Git
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🔧 Local Development Setup
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+# 1. Clone the repository
+git clone https://github.com/newave-solutions/interprelab-fluent-flow.git
+cd interprelab-fluent-flow
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env with your Supabase and Gemini credentials
+
+# 4. Run database migrations
+npx supabase db push
+
+# 5. Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🌿 Branch Strategy
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### `main` Branch
 
-**Use GitHub Codespaces**
+- **Purpose**: Production-ready independent deployment
+- **Dependencies**: Standard React/Vite stack only
+- **Deployment**: Self-hosted or cloud platforms (Firebase, Vercel, Netlify, etc.)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### `lovable` Branch  
 
-## What technologies are used for this project?
+- **Purpose**: Development workflow integrated with Lovable.dev
+- **Dependencies**: Includes Lovable-specific packages
+- **Use**: For rapid prototyping and AI-assisted development
 
-This project is built with:
+## 📦 Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+# Supabase Configuration
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-## How can I deploy this project?
+# Google Gemini API
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-Simply open [Lovable](https://lovable.dev/projects/61694cb5-bbd8-44b1-aa9e-2b4cead1a91a) and click on Share -> Publish.
+See `.env.example` for complete configuration.
 
-## Can I connect a custom domain to my Lovable project?
+## 🚀 Deployment
 
-Yes, you can!
+### Option 1: Vercel (Recommended)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```bash
+npm run build
+# Deploy dist folder to Vercel
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Option 2: Firebase Hosting
+
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+### Option 3: Docker
+
+```bash
+docker build -t interprelab .
+docker run -p 3000:3000 interprelab
+```
+
+See [GCP_CLOUDRUN_DEPLOY.md](./GCP_CLOUDRUN_DEPLOY.md) for Cloud Run deployment.
+
+## 📚 Documentation
+
+### Core Documentation
+
+- **[PLATFORM_DOCUMENTATION.md](./PLATFORM_DOCUMENTATION.md)** - Complete technical reference
+- **[PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md)** - System architecture and design
+- **[GEMINI.md](./GEMINI.md)** - AI assistant knowledge base
+- **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - API reference
+
+### Setup Guides
+
+- **[ENV_CONFIG.md](./ENV_CONFIG.md)** - Environment configuration guide
+- **[IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md)** - Step-by-step deployment
+- **[GITHUB_ACTIONS_SETUP.md](./GITHUB_ACTIONS_SETUP.md)** - CI/CD configuration
+
+### Strategic Planning
+
+- **[OPTIMIZATION_ROADMAP.md](./OPTIMIZATION_ROADMAP.md)** - 2026 roadmap and priorities
+- **[EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md)** - Project overview and metrics
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run E2E tests
+npm run test:e2e
+
+# Linting
+npm run lint
+
+# Type checking
+npm run type-check
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch from `main`
+3. Make your changes with tests
+4. Submit a pull request
+
+## 📄 License
+
+Proprietary - © 2024-2025 InterpreLab. All rights reserved.
+
+## 📞 Support
+
+- **Email**: <admin.ceo@interprelab.com>
+- **Documentation**: See `/docs` directory
+- **Issues**: GitHub Issues
 
 ---
 
-## 📖 Additional Resources
-
-For comprehensive platform information, please refer to our documentation:
-
-- **[Documentation Index](./DOCUMENTATION_INDEX.md)** - Central hub for all documentation
-- **[Platform Documentation](./PLATFORM_DOCUMENTATION.md)** - Complete technical guide
-  - All 6 product features (InterpreBot, InterpreCoach, InterpreStudy, InterpreWellness, InterpreTrack, InterpreLink)
-  - Technical architecture and database schema
-  - API reference and authentication
-  - Deployment guide and development workflow
-  
-- **[Optimization Roadmap](./OPTIMIZATION_ROADMAP.md)** - Strategic planning for 2026
-  - Performance optimization strategy
-  - Code quality improvements
-  - Security enhancements
-  - Feature prioritization timeline
-  - Testing & QA strategy
-  
-- **[Implementation Guide](./IMPLEMENTATION_GUIDE.md)** - Production deployment steps
-- **[Executive Summary](./EXECUTIVE_SUMMARY.md)** - Project status and achievements
-- **[Project Optimization Report](./PROJECT_OPTIMIZATION_REPORT.md)** - Technical analysis
-
-**Support:** admin.ceo@interprelab.com
+**Built with ❤️ by working interpreters, for working interpreters.**

@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { contactSchema } from "@/lib/validations";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -141,8 +142,9 @@ const Contact = () => {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden">
+        <ParticlesBackground particleCount={60} variant="dots" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Form */}
             <div className="lg:col-span-2">

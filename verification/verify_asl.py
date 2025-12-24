@@ -1,5 +1,5 @@
 
-from playwright.sync_api import sync_playwright, expect
+from playwright.sync_api import sync_playwright
 
 def verify_asl_page():
     with sync_playwright() as p:
@@ -20,7 +20,7 @@ def verify_asl_page():
             if page.get_by_text("ASL Teacher").count() > 0:
                 print("Found 'ASL Teacher' text")
             else:
-                 print("Did NOT find 'ASL Teacher' text")
+                print("Did NOT find 'ASL Teacher' text")
 
 
             # Take screenshot

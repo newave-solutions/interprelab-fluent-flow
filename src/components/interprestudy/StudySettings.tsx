@@ -1,27 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Settings as SettingsIcon, Save } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+
+const STORAGE_KEY = 'interprestudy_settings';
+
+const defaultSettings = {
+  difficulty: 'intermediate',
+  specialty: 'medical',
+  targetLanguage: 'spanish',
+  providerAccent: 'neutral',
+  providerGender: 'any',
+  responseTime: '8',
+  preferredVocabulary: '',
+  autoSave: true,
+  audioFeedback: true,
+};
 
 export const StudySettings = () => {
-  const [settings, setSettings] = useState({
-    difficulty: 'intermediate',
-    specialty: 'medical',
-    targetLanguage: 'spanish',
-    providerAccent: 'neutral',
-    providerGender: 'any',
-    responseTime: '8',
-    autoSave: true,
-    audioFeedback: true,
-  });
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [settings, setSettings] = useState(defaultSettings);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setSettings({ ...defaultSettings, ...JSON.parse(stored) });
+      } catch {
+        // Use defaults if parsing fails
+      }
+    }
+  }, []);
 
   const handleSave = () => {
-    // TODO: Save settings
-    console.log('Saving settings:', settings);
+    setLoading(true);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+      toast({
+        title: "Success",
+        description: "Study preferences saved successfully.",
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -147,6 +181,8 @@ export const StudySettings = () => {
           <Label>Preferred Vocabulary to Practice</Label>
           <Input
             placeholder="Enter terms separated by commas (e.g., diagnosis, treatment, prescription)"
+            value={settings.preferredVocabulary}
+            onChange={(e) => setSettings({ ...settings, preferredVocabulary: e.target.value })}
           />
         </div>
 
@@ -179,8 +215,12 @@ export const StudySettings = () => {
           </div>
         </div>
 
-        <Button onClick={handleSave} className="w-full">
-          <Save className="w-4 h-4 mr-2" />
+        <Button onClick={handleSave} className="w-full" disabled={loading}>
+          {loading ? (
+             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+             <Save className="w-4 h-4 mr-2" />
+          )}
           Save Preferences
         </Button>
       </CardContent>

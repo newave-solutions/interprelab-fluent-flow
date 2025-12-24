@@ -1,18 +1,21 @@
-import { memo } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { MoreHorizontal, Heart, MessageCircle, Share2, Bookmark } from "lucide-react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import React from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  MessageCircle, Heart, Share2, MoreHorizontal,
+  Bookmark
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 import { Post } from "./types";
 
 interface PostCardProps {
   post: Post;
 }
 
-// Memoized to prevent re-renders when parent state updates
-const PostCard = memo(({ post }: PostCardProps) => {
+// Memoized to prevent re-renders when parent state (like search query) changes
+const PostCard = React.memo(({ post }: PostCardProps) => {
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
