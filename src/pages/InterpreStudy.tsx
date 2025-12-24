@@ -1,9 +1,13 @@
+import { Suspense, lazy } from 'react';
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, MessageSquare, Layers, Settings, Brain, Languages, Accessibility, GraduationCap, HelpCircle, PlayCircle } from 'lucide-react';
 import { PainPointBadge } from '@/components/PainPointBadge';
 import { MissionCollaborationCTA } from '@/components/MissionCollaborationCTA';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+// Lazy load components to reduce initial bundle size
 import { ParticlesBackground } from '@/components/ParticlesBackground';
 import interprestudyBot from '@/assets/interprestudy-bot.png';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -29,6 +33,12 @@ const TabLoading = () => (
 );
 
 export default function InterpreStudy() {
+  const TabFallback = () => (
+    <div className="flex items-center justify-center p-12">
+      <LoadingSpinner size="lg" text="Loading module..." />
+    </div>
+  );
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
