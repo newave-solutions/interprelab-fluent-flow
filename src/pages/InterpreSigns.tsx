@@ -1,58 +1,78 @@
 import { Layout } from "@/components/Layout";
 import SignDetection from "@/components/interpresigns/SignDetection";
 import React, { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Hand } from "lucide-react";
-import { PainPointBadge } from "@/components/PainPointBadge";
+import { Hand, Award, TrendingUp } from "lucide-react";
+import { BenefitBadge } from "@/components/BenefitBadge";
 import { getGestureHint, isMotionGesture } from "@/components/interpresigns/motion-gestures";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
+import { Card, CardContent } from "@/components/ui/card";
 
 // Extended to include all 26 letters including motion-based gestures J, X, Z
 const signsToPractice = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+// Local storage key for progress
+const PROGRESS_KEY = 'interpresigns_progress';
+
+interface ASLProgress {
+  [letter: string]: {
+    attempts: number;
+    successCount: number;
+    lastPracticed: string;
+  };
+}
 
 const ASLTeacher = () => {
   const [currentTargetSign, setCurrentTargetSign] = useState('A');
   const [isCorrect, setIsCorrect] = useState(false);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
+  const [progress, setProgress] = useState<ASLProgress>({});
+  const [totalMastered, setTotalMastered] = useState(0);
 
-  const saveProgress = useCallback(async (sign: string) => {
-    if (!user) return;
-
-    try {
-      const { data: existingData } = await supabase
-        .from('asl_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('sign_letter', sign)
-        .maybeSingle();
-
-      if (existingData) {
-        await supabase
-          .from('asl_progress')
-          .update({
-            attempts: (existingData.attempts || 0) + 1,
-            success_count: (existingData.success_count || 0) + 1,
-            last_practiced: new Date().toISOString(),
-          })
-          .eq('id', existingData.id);
-      } else {
-        await supabase
-          .from('asl_progress')
-          .insert({
-            user_id: user.id,
-            sign_letter: sign,
-            attempts: 1,
-            success_count: 1,
-          });
+  // Load progress from localStorage on mount
+  useEffect(() => {
+    const savedProgress = localStorage.getItem(PROGRESS_KEY);
+    if (savedProgress) {
+      try {
+        const parsed = JSON.parse(savedProgress) as ASLProgress;
+        setProgress(parsed);
+        // Count mastered signs (3+ successful attempts)
+        const mastered = Object.values(parsed).filter(p => p.successCount >= 3).length;
+        setTotalMastered(mastered);
+      } catch (e) {
+        console.error('Failed to parse saved progress:', e);
       }
-      toast.success(`Progress saved for sign ${sign}!`);
-    } catch (error) {
-      console.error('Error saving ASL progress:', error);
-      toast.error("Failed to save progress.");
     }
-  }, [user]);
+  }, []);
+
+  const saveProgress = useCallback((sign: string) => {
+    setProgress(prev => {
+      const existing = prev[sign] || { attempts: 0, successCount: 0, lastPracticed: '' };
+      const updated = {
+        ...prev,
+        [sign]: {
+          attempts: existing.attempts + 1,
+          successCount: existing.successCount + 1,
+          lastPracticed: new Date().toISOString(),
+        }
+      };
+      
+      // Save to localStorage
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(updated));
+      
+      // Update mastered count
+      const mastered = Object.values(updated).filter(p => p.successCount >= 3).length;
+      setTotalMastered(mastered);
+      
+      return updated;
+    });
+    
+    toast.success(`Progress saved for sign ${sign}!`);
+  }, []);
+
+  const handleSuccessfulSign = useCallback((sign: string) => {
+    saveProgress(sign);
+  }, [saveProgress]);
 
   useEffect(() => {
     if (detectedSign && detectedSign === currentTargetSign) {
@@ -65,7 +85,7 @@ const ASLTeacher = () => {
         setDetectedSign(null);
       }, 2000);
     }
-  }, [detectedSign, currentTargetSign, saveProgress]);
+  }, [detectedSign, currentTargetSign, handleSuccessfulSign]);
 
   return (
     <Layout>
@@ -78,7 +98,7 @@ const ASLTeacher = () => {
           <div className="absolute inset-0 bg-black/70 rounded-3xl" />
 
           <div className="relative z-10 max-w-4xl mx-auto">
-            <PainPointBadge painPoint="Addressing Pain Point #4: Accessible ASL Training" />
+            <BenefitBadge benefit="Master ASL with Real-Time AI Feedback" />
             <div className="flex items-center justify-center gap-3 mb-4">
               <Hand className="w-12 h-12 text-primary" />
               <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
@@ -86,11 +106,43 @@ const ASLTeacher = () => {
               </h1>
             </div>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-              AI-powered ASL learning with real-time hand detection. Practice American Sign Language with instant feedback and progress tracking.
+              Accelerate your ASL learning with AI-powered hand detection. Get instant feedback on your signs and track your progress as you master the complete alphabet.
             </p>
           </div>
         </div>
       </div>
+
+      {/* Progress Stats */}
+      <section className="container mx-auto px-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <Card className="bg-card border-border">
+            <CardContent className="p-4 text-center">
+              <Award className="w-8 h-8 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{totalMastered}</p>
+              <p className="text-sm text-muted-foreground">Signs Mastered</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card border-border">
+            <CardContent className="p-4 text-center">
+              <TrendingUp className="w-8 h-8 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">{Object.values(progress).reduce((sum, p) => sum + p.successCount, 0)}</p>
+              <p className="text-sm text-muted-foreground">Total Correct</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card border-border">
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{signsToPractice.indexOf(currentTargetSign) + 1}</p>
+              <p className="text-sm text-muted-foreground">Current Position</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card border-border">
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">{Math.round((totalMastered / 26) * 100)}%</p>
+              <p className="text-sm text-muted-foreground">Complete</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       {/* ASL Practice Section with Particles */}
       <section className="relative py-16 overflow-hidden">
