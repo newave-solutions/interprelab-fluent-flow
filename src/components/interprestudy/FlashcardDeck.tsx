@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, RotateCw } from 'lucide-react';
@@ -20,24 +22,68 @@ export const FlashcardDeck = ({ cardType }: FlashcardDeckProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [direction, setDirection] = useState<'next' | 'prev' | null>(null);
 
-  // Sample data - will be replaced with real data
-  const sampleCards: FlashcardData[] = [
-    {
-      front: 'Diagnosis',
-      back: 'Diagnóstico',
-      pronunciation: '/di.aɡˈnos.ti.ko/',
-    },
-    {
-      front: 'Treatment',
-      back: 'Tratamiento',
-      pronunciation: '/tɾa.taˈmjen.to/',
-    },
-    {
-      front: 'Prescription',
-      back: 'Receta médica',
-      pronunciation: '/re.ˈse.ta ˈme.ði.ka/',
-    },
-  ];
+  const [flashcards, setFlashcards] = useState<FlashcardData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const { data, error } = await supabase.functions.invoke('generate-flashcards', {
+          body: { cardType, count: 5 }
+        });
+
+        if (error) throw error;
+        if (data.error) throw new Error(data.error);
+
+        if (data.flashcards) {
+          setFlashcards(data.flashcards);
+          setCurrentIndex(0);
+          setDirection(null);
+          setIsFlipped(false);
+        }
+      } catch (err) {
+        console.error('Error fetching flashcards:', err);
+        setError('Failed to generate flashcards. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlashcards();
+  }, [cardType]);
+
+  const sampleCards = flashcards;
+
+  if (loading) {
+    return (
+      <div className="w-full h-[500px] flex flex-col items-center justify-center text-muted-foreground animate-pulse">
+        <Loader2 className="w-10 h-10 mb-4 animate-spin text-primary" />
+        <p>Generating flashcards with AI...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-[500px] flex flex-col items-center justify-center text-destructive">
+        <p>{error}</p>
+        <Button onClick={() => window.location.reload()} variant="outline" className="mt-4">
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  if (sampleCards.length === 0) {
+    return (
+      <div className="w-full h-[500px] flex items-center justify-center text-muted-foreground">
+        No flashcards found.
+      </div>
+    );
+  }
 
   const currentCard = sampleCards[currentIndex];
 

@@ -38,19 +38,19 @@ export const StatsSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6 relative" ref={ref} aria-labelledby="stats-heading">
+    <section className="py-20 px-6 relative bg-stone-50 dark:bg-background" ref={ref} aria-labelledby="stats-heading">
       <div className="container mx-auto">
-        <div className="glass border-border/30 rounded-3xl p-12 md:p-16 relative overflow-hidden">
+        <div className="bg-white dark:bg-card/50 border border-stone-200 dark:border-border/30 rounded-3xl p-12 md:p-16 relative overflow-hidden">
           {/* Background glow */}
           <div className="absolute inset-0 bg-gradient-glow opacity-10" />
           
           <div className="relative z-10">
             {/* Header */}
             <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <Badge className="mb-4 px-6 py-3">
+              <Badge className="mb-4 px-6 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
                 Trusted Globally
               </Badge>
-              <h2 id="stats-heading" className="text-3xl md:text-5xl font-bold text-foreground">
+              <h2 id="stats-heading" className="font-serif text-3xl md:text-5xl font-medium text-foreground">
                 Transforming Interpretation
               </h2>
             </div>
