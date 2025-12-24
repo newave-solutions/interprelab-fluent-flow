@@ -5,73 +5,73 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star, Brain, Newspaper } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const resources = [
+  {
+    title: "Interpretation Techniques Masterclass",
+    description: "Advanced techniques for simultaneous and consecutive interpretation",
+    type: "Video Course",
+    duration: "4 hours",
+    level: "Advanced",
+    icon: Video,
+    featured: true
+  },
+  {
+    title: "Medical Terminology Guide",
+    description: "Comprehensive guide to medical interpretation terminology",
+    type: "PDF Guide",
+    pages: "120 pages",
+    level: "Intermediate",
+    icon: FileText,
+    featured: false
+  },
+  {
+    title: "Legal Interpretation Handbook",
+    description: "Essential guide for court and legal interpretation",
+    type: "eBook",
+    pages: "85 pages",
+    level: "Intermediate",
+    icon: BookOpen,
+    featured: false
+  },
+  {
+    title: "Community of Practice Webinars",
+    description: "Monthly webinars with industry experts and peers",
+    type: "Live Session",
+    duration: "1 hour",
+    level: "All Levels",
+    icon: Users,
+    featured: true
+  }
+];
+
+const externalResources = [
+  {
+    title: "National Board of Certification for Medical Interpreters",
+    description: "Official certification body for medical interpreters",
+    url: "https://www.certifiedmedicalinterpreters.org/",
+    organization: "NBCMI"
+  },
+  {
+    title: "Certification Commission for Healthcare Interpreters",
+    description: "Professional certification for healthcare interpreters",
+    url: "https://www.cchipeaks.org/",
+    organization: "CCHI"
+  },
+  {
+    title: "International Association of Conference Interpreters",
+    description: "Global professional association for conference interpreters",
+    url: "https://aiic.org/",
+    organization: "AIIC"
+  },
+  {
+    title: "Registry of Interpreters for the Deaf",
+    description: "Professional organization for ASL interpreters",
+    url: "https://www.rid.org/",
+    organization: "RID"
+  }
+];
+
 const Resources = () => {
-  const resources = [
-    {
-      title: "Interpretation Techniques Masterclass",
-      description: "Advanced techniques for simultaneous and consecutive interpretation",
-      type: "Video Course",
-      duration: "4 hours",
-      level: "Advanced",
-      icon: Video,
-      featured: true
-    },
-    {
-      title: "Medical Terminology Guide",
-      description: "Comprehensive guide to medical interpretation terminology",
-      type: "PDF Guide",
-      pages: "120 pages",
-      level: "Intermediate",
-      icon: FileText,
-      featured: false
-    },
-    {
-      title: "Legal Interpretation Handbook",
-      description: "Essential guide for court and legal interpretation",
-      type: "eBook",
-      pages: "85 pages",
-      level: "Intermediate",
-      icon: BookOpen,
-      featured: false
-    },
-    {
-      title: "Community of Practice Webinars",
-      description: "Monthly webinars with industry experts and peers",
-      type: "Live Session",
-      duration: "1 hour",
-      level: "All Levels",
-      icon: Users,
-      featured: true
-    }
-  ];
-
-  const externalResources = [
-    {
-      title: "National Board of Certification for Medical Interpreters",
-      description: "Official certification body for medical interpreters",
-      url: "https://www.certifiedmedicalinterpreters.org/",
-      organization: "NBCMI"
-    },
-    {
-      title: "Certification Commission for Healthcare Interpreters",
-      description: "Professional certification for healthcare interpreters",
-      url: "https://www.cchipeaks.org/",
-      organization: "CCHI"
-    },
-    {
-      title: "International Association of Conference Interpreters",
-      description: "Global professional association for conference interpreters",
-      url: "https://aiic.org/",
-      organization: "AIIC"
-    },
-    {
-      title: "Registry of Interpreters for the Deaf",
-      description: "Professional organization for ASL interpreters",
-      url: "https://www.rid.org/",
-      organization: "RID"
-    }
-  ];
-
   return (
     <Layout>
       {/* Hero Section */}
