@@ -8,7 +8,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { UserProgress, Badge } from '@/types/learning-path';
 import { INTERPRETER_BADGES, checkBadgeUnlock } from '@/types/interpreter-badges';
-import { getPathProgress } from '@/lib/interpreter-learning-paths';
+import { INTERPRETER_LEARNING_PATHS } from '@/lib/interpreter-learning-paths';
 import { toast } from 'sonner';
 
 interface ProgressContextType {
@@ -174,7 +174,22 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const getPathProgressPercent = useCallback(
     (pathId: string) => {
-      return getPathProgress(pathId, progress.completedActivities);
+      const path = INTERPRETER_LEARNING_PATHS[pathId];
+      if (!path) return 0;
+      
+      // Get all activity IDs from the path
+      const allActivityIds = path.modules.flatMap(module => 
+        module.activities.map(activity => activity.id)
+      );
+      
+      if (allActivityIds.length === 0) return 0;
+      
+      // Count completed activities
+      const completedCount = allActivityIds.filter(id => 
+        progress.completedActivities.includes(id)
+      ).length;
+      
+      return Math.round((completedCount / allActivityIds.length) * 100);
     },
     [progress.completedActivities]
   );
