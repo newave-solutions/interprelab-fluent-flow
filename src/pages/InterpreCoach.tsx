@@ -1,6 +1,5 @@
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Chrome, Zap, Shield, Globe, Download, Star, ArrowRight, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PainPointBadge } from "@/components/PainPointBadge";
@@ -10,6 +9,96 @@ import { FeatureGrid } from "@/components/FeatureGrid";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 import extensionPreview from "@/assets/coach-frontned-design.png";
+
+// Optimization: Hoist static data to prevent re-allocation on every render
+const FEATURES = [
+  {
+    icon: Zap,
+    title: "Real-time Assistance",
+    description: "Get instant terminology suggestions, context clues, and cultural references while you interpret.",
+  },
+  {
+    icon: Globe,
+    title: "Multi-language Support",
+    description: "Support for 50+ language pairs with specialized terminology databases for medical, legal, and technical fields.",
+  },
+  {
+    icon: Shield,
+    title: "Privacy Secured",
+    description: "HIPAA-compliant with end-to-end encryption. Your sessions remain completely confidential and secure.",
+  },
+  {
+    icon: Star,
+    title: "Performance Analytics",
+    description: "Track your improvement with detailed session analytics and personalized feedback reports.",
+  },
+  {
+    icon: Download,
+    title: "Offline Capability",
+    description: "Access core features even without internet connection for uninterrupted interpretation sessions.",
+  },
+  {
+    icon: Chrome,
+    title: "Easy Integration",
+    description: "Works with popular video conferencing platforms and interpretation management systems.",
+  },
+];
+
+const STEPS = [
+  {
+    showIcon: true,
+    icon: Chrome,
+    title: "Install Extension",
+    description: "Add InterpreCoach to Chrome from the Web Store. One-click installation, no complex setup required.",
+    buttonText: "Add to Chrome",
+    buttonAction: () => console.log("Add to Chrome"),
+    content: (
+      <Button className="glass-button">
+        <Chrome className="w-4 h-4 mr-2" />
+        Add to Chrome
+      </Button>
+    ),
+  },
+  {
+    icon: Star,
+    title: "Configure Your Profile",
+    description: "Set your language pairs, specialty areas, and preferences for personalized coaching suggestions.",
+    content: (
+      <div className="grid grid-cols-2 gap-4">
+        <div className="p-4 glass rounded-lg">
+          <p className="text-sm font-semibold mb-1">Language Pairs</p>
+          <p className="text-xs text-muted-foreground">EN ↔ ES, EN ↔ FR</p>
+        </div>
+        <div className="p-4 glass rounded-lg">
+          <p className="text-sm font-semibold mb-1">Specialty</p>
+          <p className="text-xs text-muted-foreground">Medical, Legal</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    showIcon: true,
+    icon: Zap,
+    title: "Start Your Session",
+    description: "Join a video call and activate InterpreCoach. Get instant terminology support and cultural context suggestions.",
+    content: (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-primary rounded-full" />
+          <span className="text-sm">Click the extension icon</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-primary rounded-full" />
+          <span className="text-sm">Activate coaching mode</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-primary rounded-full" />
+          <span className="text-sm">Get real-time assistance</span>
+        </div>
+      </div>
+    ),
+  },
+];
 
 const InterpreCoach = () => {
   return (
@@ -86,38 +175,7 @@ const InterpreCoach = () => {
           <FeatureGrid
             title="Key Features"
             subtitle="Seamless browser integration for real-time assistance during video calls."
-            features={[
-              {
-                icon: Zap,
-                title: "Real-time Assistance",
-                description: "Get instant terminology suggestions, context clues, and cultural references while you interpret.",
-              },
-              {
-                icon: Globe,
-                title: "Multi-language Support",
-                description: "Support for 50+ language pairs with specialized terminology databases for medical, legal, and technical fields.",
-              },
-              {
-                icon: Shield,
-                title: "Privacy Secured",
-                description: "HIPAA-compliant with end-to-end encryption. Your sessions remain completely confidential and secure.",
-              },
-              {
-                icon: Star,
-                title: "Performance Analytics",
-                description: "Track your improvement with detailed session analytics and personalized feedback reports.",
-              },
-              {
-                icon: Download,
-                title: "Offline Capability",
-                description: "Access core features even without internet connection for uninterrupted interpretation sessions.",
-              },
-              {
-                icon: Chrome,
-                title: "Easy Integration",
-                description: "Works with popular video conferencing platforms and interpretation management systems.",
-              },
-            ]}
+            features={FEATURES}
           />
         </div>
       </section>
@@ -132,61 +190,7 @@ const InterpreCoach = () => {
           <GetStartedSteps
             title="Get Started in 3 Steps"
             subtitle="Your path to real-time interpretation assistance"
-            steps={[
-              {
-                showIcon: true,
-                icon: Chrome,
-                title: "Install Extension",
-                description: "Add InterpreCoach to Chrome from the Web Store. One-click installation, no complex setup required.",
-                buttonText: "Add to Chrome",
-                buttonAction: () => console.log("Add to Chrome"),
-                content: (
-                  <Button className="glass-button">
-                    <Chrome className="w-4 h-4 mr-2" />
-                    Add to Chrome
-                  </Button>
-                ),
-              },
-              {
-                icon: Star,
-                title: "Configure Your Profile",
-                description: "Set your language pairs, specialty areas, and preferences for personalized coaching suggestions.",
-                content: (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 glass rounded-lg">
-                      <p className="text-sm font-semibold mb-1">Language Pairs</p>
-                      <p className="text-xs text-muted-foreground">EN ↔ ES, EN ↔ FR</p>
-                    </div>
-                    <div className="p-4 glass rounded-lg">
-                      <p className="text-sm font-semibold mb-1">Specialty</p>
-                      <p className="text-xs text-muted-foreground">Medical, Legal</p>
-                    </div>
-                  </div>
-                ),
-              },
-              {
-                showIcon: true,
-                icon: Zap,
-                title: "Start Your Session",
-                description: "Join a video call and activate InterpreCoach. Get instant terminology support and cultural context suggestions.",
-                content: (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Click the extension icon</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Activate coaching mode</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full" />
-                      <span className="text-sm">Get real-time assistance</span>
-                    </div>
-                  </div>
-                ),
-              },
-            ]}
+            steps={STEPS}
             finalCTAText="Get InterpreCoach"
             finalCTAIcon={Chrome}
             finalCTAAction={() => console.log("Get InterpreCoach")}
