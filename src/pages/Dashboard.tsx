@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
 import LearningProgress from '@/components/dashboard/learning-progress';
+import { QuickAccess } from '@/components/dashboard/QuickAccess';
 
 interface CallRecord {
   id: string;
@@ -244,6 +245,11 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">All time</p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Quick Access */}
+        <div className="mb-8">
+          <QuickAccess />
         </div>
 
         {/* Learning Progress and Recent Calls */}

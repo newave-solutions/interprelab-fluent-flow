@@ -11,6 +11,7 @@ import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
+import { RelatedFeatures } from "@/components/RelatedFeatures";
 
 const InterpreBot = () => {
   const [userQuestion, setUserQuestion] = useState("");
@@ -193,6 +194,9 @@ const InterpreBot = () => {
           />
         </div>
       </section>
+
+      {/* Related Features */}
+      <RelatedFeatures currentFeature="interpretest" />
 
       {/* Mission & Collaboration CTA */}
       <MissionCollaborationCTA
