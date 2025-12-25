@@ -1,28 +1,49 @@
 from playwright.sync_api import sync_playwright
 
-def verify_interprelink_postcard():
+def verify_postcard_tooltips():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
+        # Use a larger viewport to ensure tooltips have space to render
+        context = browser.new_context(viewport={"width": 1280, "height": 720})
         page = context.new_page()
 
-        # Mock the Supabase query for posts to avoid needing a real backend
-        page.route("**/rest/v1/posts*", lambda route: route.fulfill(
-            status=200,
-            content_type="application/json",
-            body='[{"id": "1", "content": "Test post content", "created_at": "2023-01-01T00:00:00Z", "user_id": "user1", "tags": ["test"]}]'
-        ))
+        # Navigate to our test page
+        page.goto("http://localhost:8080/test-postcard")
 
-        # Go to InterpreLink page
-        page.goto("http://localhost:8080/interprelink")
+        # Wait for the card to be visible
+        page.wait_for_selector("text=This is a test post")
 
-        # Wait for content to load
-        page.wait_for_selector("text=Test post content", timeout=10000)
+        # 1. Hover over the "More options" button (MoreHorizontal icon)
+        # It has aria-label="More options"
+        more_btn = page.locator('button[aria-label="More options"]')
+        more_btn.hover()
 
-        # Take screenshot
-        page.screenshot(path="verification/interprelink_postcard.png")
+        # Wait for tooltip
+        page.wait_for_selector("text=More options")
 
-        browser.close()
+        # Take screenshot of More options tooltip
+        page.screenshot(path="verification/tooltip_more.png")
+        print("Captured More options tooltip")
+
+        # Move mouse away to close tooltip
+        page.mouse.move(0, 0)
+        page.wait_for_timeout(500) # Wait for animation
+
+        # 2. Hover over "Like" button
+        like_btn = page.locator('button[aria-label="Like post"]')
+        like_btn.hover()
+        page.wait_for_selector("text=Like")
+        page.screenshot(path="verification/tooltip_like.png")
+        print("Captured Like tooltip")
+
+        # 3. Hover over "Bookmark" button
+        bookmark_btn = page.locator('button[aria-label="Save post"]')
+        bookmark_btn.hover()
+        page.wait_for_selector("text=Save post")
+
+        # Take final verification screenshot showing the bookmark tooltip
+        page.screenshot(path="verification/verification.png")
+        print("Captured Save post tooltip")
 
 if __name__ == "__main__":
-    verify_interprelink_postcard()
+    verify_postcard_tooltips()
