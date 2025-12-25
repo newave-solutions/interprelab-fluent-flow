@@ -6,57 +6,57 @@ import { MapPin, Users, Target, Award, Heart, Globe, ArrowRight } from "lucide-r
 import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 
+const values = [
+  {
+    icon: Target,
+    title: "Precision",
+    description: "We believe every word matters in interpretation, and our technology reflects this commitment to accuracy."
+  },
+  {
+    icon: Heart,
+    title: "Empathy",
+    description: "Understanding the human element in communication drives everything we build and every decision we make."
+  },
+  {
+    icon: Globe,
+    title: "Accessibility",
+    description: "Breaking down language barriers to make essential services accessible to everyone, everywhere."
+  },
+  {
+    icon: Award,
+    title: "Excellence",
+    description: "Continuous improvement and innovation in interpretation technology and professional development."
+  }
+];
+
+const teamMembers = [
+  {
+    name: "Dr. Maria Rodriguez",
+    role: "Founder & CEO",
+    background: "Former court interpreter with 15+ years experience, PhD in Applied Linguistics",
+    specialization: "AI in Language Processing"
+  },
+  {
+    name: "David Chen",
+    role: "CTO",
+    background: "Former Google engineer, expert in machine learning and natural language processing",
+    specialization: "AI Architecture"
+  },
+  {
+    name: "Sarah Ahmed",
+    role: "Head of Clinical Affairs",
+    background: "Certified medical interpreter, healthcare administration background",
+    specialization: "Healthcare Interpretation"
+  },
+  {
+    name: "Carlos Mendoza",
+    role: "Director of Training",
+    background: "Conference interpreter, former training director at major interpretation agency",
+    specialization: "Professional Development"
+  }
+];
+
 const About = () => {
-  const values = [
-    {
-      icon: Target,
-      title: "Precision",
-      description: "We believe every word matters in interpretation, and our technology reflects this commitment to accuracy."
-    },
-    {
-      icon: Heart,
-      title: "Empathy",
-      description: "Understanding the human element in communication drives everything we build and every decision we make."
-    },
-    {
-      icon: Globe,
-      title: "Accessibility",
-      description: "Breaking down language barriers to make essential services accessible to everyone, everywhere."
-    },
-    {
-      icon: Award,
-      title: "Excellence",
-      description: "Continuous improvement and innovation in interpretation technology and professional development."
-    }
-  ];
-
-  const teamMembers = [
-    {
-      name: "Dr. Maria Rodriguez",
-      role: "Founder & CEO",
-      background: "Former court interpreter with 15+ years experience, PhD in Applied Linguistics",
-      specialization: "AI in Language Processing"
-    },
-    {
-      name: "David Chen",
-      role: "CTO",
-      background: "Former Google engineer, expert in machine learning and natural language processing",
-      specialization: "AI Architecture"
-    },
-    {
-      name: "Sarah Ahmed",
-      role: "Head of Clinical Affairs",
-      background: "Certified medical interpreter, healthcare administration background",
-      specialization: "Healthcare Interpretation"
-    },
-    {
-      name: "Carlos Mendoza",
-      role: "Director of Training",
-      background: "Conference interpreter, former training director at major interpretation agency",
-      specialization: "Professional Development"
-    }
-  ];
-
   return (
     <Layout>
       {/* Hero Section */}

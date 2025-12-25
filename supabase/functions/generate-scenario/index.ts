@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,6 +13,12 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
+  }
+
   try {
     const scenarioSchema = z.object({
       setting: z.string().min(1).max(100),
@@ -21,17 +28,17 @@ serve(async (req) => {
 
     const rawData = await req.json();
     const validationResult = scenarioSchema.safeParse(rawData);
-    
+
     if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { setting, difficulty, languagePair } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
@@ -94,14 +101,14 @@ Include 10-14 dialogue exchanges. Make it realistic with:
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
-    
+
     // Parse the JSON from the response
     try {
       const cleanedContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const scenarioData = JSON.parse(jsonMatch[0]);
-        
+
         // Validate the scenario structure
         if (scenarioData.title && Array.isArray(scenarioData.lines)) {
           return new Response(JSON.stringify(scenarioData), {

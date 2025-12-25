@@ -2,70 +2,70 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Badge } from "@/components/ui/badge";
 import { Quote } from "lucide-react";
 
+const TESTIMONIALS = [
+  {
+    name: "Sofia Martinez",
+    credentials: "CMI, CoreCHI-Spanish",
+    role: "Medical Interpreter",
+    location: "Houston, TX",
+    quote: "InterpreLab transformed my practice. The real-time terminology suggestions have improved my accuracy by 40% during complex surgical procedures.",
+  },
+  {
+    name: "Nguyễn Thị Lan",
+    credentials: "CCHI-Vietnamese",
+    role: "Healthcare Interpreter",
+    location: "Orange County, CA",
+    quote: "The cultural competency modules helped me bridge communication gaps I didn't even know existed. My patients feel truly heard now.",
+  },
+  {
+    name: "Dmitry Volkov",
+    credentials: "CoreCHI-Russian",
+    role: "Medical & Legal Interpreter",
+    location: "Brooklyn, NY",
+    quote: "Passed both NBCMI and CCHI certifications on first attempts. The exam prep is incredibly thorough and mirrors real-world scenarios perfectly.",
+  },
+  {
+    name: "Dr. Sarah Chen",
+    credentials: "CMI, NBCMI",
+    role: "Healthcare Interpreter Manager",
+    location: "Seattle, WA",
+    quote: "Our team of 200+ interpreters saw a 35% performance improvement. The analytics dashboard is a game-changer for training programs.",
+  },
+  {
+    name: "Ahmed Al-Rashid",
+    credentials: "CoreCHI-Arabic",
+    role: "Medical Interpreter",
+    location: "Dearborn, MI",
+    quote: "The multilingual terminology database is unmatched. I confidently handle everything from cardiology to oncology consultations now.",
+  },
+  {
+    name: "Mei Lin Wang",
+    credentials: "CMI, CCHI-Mandarin",
+    role: "Conference Interpreter",
+    location: "San Francisco, CA",
+    quote: "The AI-powered context suggestions during live sessions are like having a senior interpreter mentoring you in real-time. Absolutely invaluable.",
+  },
+  {
+    name: "Carlos Mendez",
+    credentials: "NBCMI, CoreCHI-Spanish",
+    role: "Court & Medical Interpreter",
+    location: "Miami, FL",
+    quote: "The ethics and legal compliance modules are exceptional. I feel prepared for the most challenging courtroom and hospital scenarios.",
+  },
+  {
+    name: "Olga Petrova",
+    credentials: "CCHI-Russian",
+    role: "Community Health Interpreter",
+    location: "Chicago, IL",
+    quote: "Connected with interpreters globally through InterpreLink. Landed three hospital contracts and found an amazing mentor community.",
+  },
+];
+
+// Duplicate for seamless infinite scroll
+const ALL_TESTIMONIALS = [...TESTIMONIALS, ...TESTIMONIALS];
+
 export const Testimonials = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
-
-  const testimonials = [
-    {
-      name: "Sofia Martinez",
-      credentials: "CMI, CoreCHI-Spanish",
-      role: "Medical Interpreter",
-      location: "Houston, TX",
-      quote: "InterpreLab transformed my practice. The real-time terminology suggestions have improved my accuracy by 40% during complex surgical procedures.",
-    },
-    {
-      name: "Nguyễn Thị Lan",
-      credentials: "CCHI-Vietnamese",
-      role: "Healthcare Interpreter",
-      location: "Orange County, CA",
-      quote: "The cultural competency modules helped me bridge communication gaps I didn't even know existed. My patients feel truly heard now.",
-    },
-    {
-      name: "Dmitry Volkov",
-      credentials: "CoreCHI-Russian",
-      role: "Medical & Legal Interpreter",
-      location: "Brooklyn, NY",
-      quote: "Passed both NBCMI and CCHI certifications on first attempts. The exam prep is incredibly thorough and mirrors real-world scenarios perfectly.",
-    },
-    {
-      name: "Dr. Sarah Chen",
-      credentials: "CMI, NBCMI",
-      role: "Healthcare Interpreter Manager",
-      location: "Seattle, WA",
-      quote: "Our team of 200+ interpreters saw a 35% performance improvement. The analytics dashboard is a game-changer for training programs.",
-    },
-    {
-      name: "Ahmed Al-Rashid",
-      credentials: "CoreCHI-Arabic",
-      role: "Medical Interpreter",
-      location: "Dearborn, MI",
-      quote: "The multilingual terminology database is unmatched. I confidently handle everything from cardiology to oncology consultations now.",
-    },
-    {
-      name: "Mei Lin Wang",
-      credentials: "CMI, CCHI-Mandarin",
-      role: "Conference Interpreter",
-      location: "San Francisco, CA",
-      quote: "The AI-powered context suggestions during live sessions are like having a senior interpreter mentoring you in real-time. Absolutely invaluable.",
-    },
-    {
-      name: "Carlos Mendez",
-      credentials: "NBCMI, CoreCHI-Spanish",
-      role: "Court & Medical Interpreter",
-      location: "Miami, FL",
-      quote: "The ethics and legal compliance modules are exceptional. I feel prepared for the most challenging courtroom and hospital scenarios.",
-    },
-    {
-      name: "Olga Petrova",
-      credentials: "CCHI-Russian",
-      role: "Community Health Interpreter",
-      location: "Chicago, IL",
-      quote: "Connected with interpreters globally through InterpreLink. Landed three hospital contracts and found an amazing mentor community.",
-    },
-  ];
-
-  // Duplicate for seamless infinite scroll
-  const allTestimonials = [...testimonials, ...testimonials];
 
   return (
     <section
@@ -101,7 +101,7 @@ export const Testimonials = () => {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-nobel-cream dark:from-background to-transparent z-10 pointer-events-none" />
 
         <div className="flex gap-4 py-4 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none will-change-transform">
-          {allTestimonials.map((testimonial, index) => (
+          {ALL_TESTIMONIALS.map((testimonial, index) => (
             <div
               key={`testimonial-${index}`}
               className="min-w-[380px] max-w-[380px] flex-shrink-0 group/card"
@@ -139,7 +139,7 @@ export const Testimonials = () => {
 
         {/* Duplicate for seamless loop */}
         <div className="flex gap-4 py-4 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none will-change-transform" aria-hidden="true">
-          {allTestimonials.map((testimonial, index) => (
+          {ALL_TESTIMONIALS.map((testimonial, index) => (
             <div
               key={`testimonial-dup-${index}`}
               className="min-w-[380px] max-w-[380px] flex-shrink-0 group/card"
@@ -178,7 +178,7 @@ export const Testimonials = () => {
 
       {/* Mobile fallback - show grid on smaller screens */}
       <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6 container mx-auto">
-        {testimonials.slice(0, 4).map((testimonial, index) => (
+        {TESTIMONIALS.slice(0, 4).map((testimonial, index) => (
           <div key={`mobile-${index}`} className="group/card">
             <div className="bg-white dark:bg-card border border-border group-hover/card:border-nobel-gold/50 transition-colors rounded-2xl p-6 shadow-sm">
               {/* Quote with icon */}

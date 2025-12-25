@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,9 +12,15 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
+  }
+
   try {
     const { sessionData } = await req.json();
-    
+
     console.log('Generating interpreter feedback for session:', sessionData);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -122,25 +129,25 @@ Provide professional coaching feedback following the format specified.`;
 
 function generateBasicFeedback(sessionData: any): string {
   const duration = Math.round(sessionData.duration / 60);
-  
+
   let feedback = '<div class="feedback-section"><h3>💪 Strengths</h3><ul>';
-  
+
   if (sessionData.clarifications > 0) {
     feedback += '<li>Demonstrated professionalism by requesting clarifications when needed</li>';
   }
-  
+
   if (sessionData.terminologyCount > 5) {
     feedback += '<li>Good exposure to medical terminology during the session</li>';
   }
-  
+
   if (duration > 5) {
     feedback += '<li>Maintained focus throughout an extended session</li>';
   }
-  
+
   feedback += '</ul></div>';
-  
+
   feedback += '<div class="feedback-section"><h3>🎯 Areas for Improvement</h3>';
-  
+
   if (sessionData.paceIssues > 2) {
     feedback += `
       <div class="improvement-item">
@@ -157,7 +164,7 @@ function generateBasicFeedback(sessionData: any): string {
       </div>
     `;
   }
-  
+
   if (sessionData.terminologyCount < 3) {
     feedback += `
       <div class="improvement-item">
@@ -174,15 +181,15 @@ function generateBasicFeedback(sessionData: any): string {
       </div>
     `;
   }
-  
+
   feedback += '</div>';
-  
+
   feedback += `
     <div class="feedback-section encouragement">
       <h3>🌟 Encouragement</h3>
       <p>You completed a ${duration}-minute session with ${sessionData.interactionCount} interactions. This shows dedication to your professional development. Continue practicing with InterpreCoach and InterpreStudy to refine your skills. Remember, every session is an opportunity to grow as a medical interpreter. Your commitment to excellence will serve patients and providers well.</p>
     </div>
   `;
-  
+
   return feedback;
 }

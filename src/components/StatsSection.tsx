@@ -3,39 +3,39 @@ import { TrendingUp, Users, Globe, Award } from "lucide-react";
 import CountUp from 'react-countup';
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-const stats = [
-  {
-    icon: Users,
-    value: 10000,
-    label: "Active Interpreters",
-    gradient: "from-primary to-primary-glow",
-    suffix: "+"
-  },
-  {
-    icon: Globe,
-    value: 50,
-    label: "Countries Worldwide",
-    gradient: "from-success to-primary",
-    suffix: "+"
-  },
-  {
-    icon: TrendingUp,
-    value: 40,
-    label: "Accuracy Improvement",
-    gradient: "from-secondary to-accent",
-    suffix: "%"
-  },
-  {
-    icon: Award,
-    value: 98,
-    label: "Client Satisfaction",
-    gradient: "from-primary to-secondary",
-    suffix: "%"
-  }
-];
-
 export const StatsSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.3 });
+
+  const stats = [
+    {
+      icon: Users,
+      value: 10000,
+      label: "Active Interpreters",
+      gradient: "from-primary to-primary-glow",
+      suffix: "+"
+    },
+    {
+      icon: Globe,
+      value: 50,
+      label: "Countries Worldwide",
+      gradient: "from-success to-primary",
+      suffix: "+"
+    },
+    {
+      icon: TrendingUp,
+      value: 40,
+      label: "Accuracy Improvement",
+      gradient: "from-secondary to-accent",
+      suffix: "%"
+    },
+    {
+      icon: Award,
+      value: 98,
+      label: "Client Satisfaction",
+      gradient: "from-primary to-secondary",
+      suffix: "%"
+    }
+  ];
 
   return (
     <section className="py-20 px-6 relative bg-stone-50 dark:bg-background" ref={ref} aria-labelledby="stats-heading">

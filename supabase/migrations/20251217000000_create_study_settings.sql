@@ -23,19 +23,23 @@ create index if not exists study_settings_user_id_idx on study_settings(user_id)
 alter table study_settings enable row level security;
 
 -- RLS Policies for study_settings
+DROP POLICY IF EXISTS "Users can view their own study settings" ON study_settings;
 create policy "Users can view their own study settings"
   on study_settings for select
   using (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own study settings" ON study_settings;
 create policy "Users can insert their own study settings"
   on study_settings for insert
   with check (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own study settings" ON study_settings;
 create policy "Users can update their own study settings"
   on study_settings for update
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own study settings" ON study_settings;
 create policy "Users can delete their own study settings"
   on study_settings for delete
   using (auth.uid() = user_id);

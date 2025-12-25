@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,75 +9,75 @@ const corsHeaders = {
 
 // Medical terminology database
 const MEDICAL_TERMS_DB: Record<string, { definition: string; translation?: string; category: string }> = {
-  'hypertension': { 
-    definition: 'High blood pressure', 
-    translation: 'Presión arterial alta', 
-    category: 'cardiovascular' 
+  'hypertension': {
+    definition: 'High blood pressure',
+    translation: 'Presión arterial alta',
+    category: 'cardiovascular'
   },
-  'diabetes': { 
-    definition: 'Metabolic disorder characterized by high blood sugar', 
-    translation: 'Diabetes', 
-    category: 'endocrine' 
+  'diabetes': {
+    definition: 'Metabolic disorder characterized by high blood sugar',
+    translation: 'Diabetes',
+    category: 'endocrine'
   },
-  'myocardial infarction': { 
-    definition: 'Heart attack - blockage of blood flow to the heart muscle', 
-    translation: 'Infarto de miocardio', 
-    category: 'cardiovascular' 
+  'myocardial infarction': {
+    definition: 'Heart attack - blockage of blood flow to the heart muscle',
+    translation: 'Infarto de miocardio',
+    category: 'cardiovascular'
   },
-  'pneumonia': { 
-    definition: 'Infection that inflames air sacs in lungs', 
-    translation: 'Neumonía', 
-    category: 'respiratory' 
+  'pneumonia': {
+    definition: 'Infection that inflames air sacs in lungs',
+    translation: 'Neumonía',
+    category: 'respiratory'
   },
-  'fracture': { 
-    definition: 'Broken bone', 
-    translation: 'Fractura', 
-    category: 'orthopedic' 
+  'fracture': {
+    definition: 'Broken bone',
+    translation: 'Fractura',
+    category: 'orthopedic'
   },
-  'abdominal': { 
-    definition: 'Relating to the abdomen/belly area', 
-    translation: 'Abdominal', 
-    category: 'anatomy' 
+  'abdominal': {
+    definition: 'Relating to the abdomen/belly area',
+    translation: 'Abdominal',
+    category: 'anatomy'
   },
-  'acute': { 
-    definition: 'Sudden onset, severe', 
-    translation: 'Agudo', 
-    category: 'general' 
+  'acute': {
+    definition: 'Sudden onset, severe',
+    translation: 'Agudo',
+    category: 'general'
   },
-  'chronic': { 
-    definition: 'Long-lasting, persistent', 
-    translation: 'Crónico', 
-    category: 'general' 
+  'chronic': {
+    definition: 'Long-lasting, persistent',
+    translation: 'Crónico',
+    category: 'general'
   },
-  'dosage': { 
-    definition: 'Amount of medication to be taken', 
-    translation: 'Dosis', 
-    category: 'medication' 
+  'dosage': {
+    definition: 'Amount of medication to be taken',
+    translation: 'Dosis',
+    category: 'medication'
   },
-  'adverse': { 
-    definition: 'Harmful, unfavorable', 
-    translation: 'Adverso', 
-    category: 'general' 
+  'adverse': {
+    definition: 'Harmful, unfavorable',
+    translation: 'Adverso',
+    category: 'general'
   },
-  'benign': { 
-    definition: 'Not cancerous, non-threatening', 
-    translation: 'Benigno', 
-    category: 'oncology' 
+  'benign': {
+    definition: 'Not cancerous, non-threatening',
+    translation: 'Benigno',
+    category: 'oncology'
   },
-  'malignant': { 
-    definition: 'Cancerous, life-threatening', 
-    translation: 'Maligno', 
-    category: 'oncology' 
+  'malignant': {
+    definition: 'Cancerous, life-threatening',
+    translation: 'Maligno',
+    category: 'oncology'
   },
-  'inflammation': { 
-    definition: 'Swelling, redness, pain as immune response', 
-    translation: 'Inflamación', 
-    category: 'general' 
+  'inflammation': {
+    definition: 'Swelling, redness, pain as immune response',
+    translation: 'Inflamación',
+    category: 'general'
   },
-  'hemorrhage': { 
-    definition: 'Excessive bleeding', 
-    translation: 'Hemorragia', 
-    category: 'emergency' 
+  'hemorrhage': {
+    definition: 'Excessive bleeding',
+    translation: 'Hemorragia',
+    category: 'emergency'
   }
 };
 
@@ -84,7 +85,7 @@ const MEDICAL_TERMS_DB: Record<string, { definition: string; translation?: strin
 function detectMedicalTerms(text: string) {
   const detected: Array<{ term: string; definition: string; translation?: string; category: string }> = [];
   const lowerText = text.toLowerCase();
-  
+
   Object.entries(MEDICAL_TERMS_DB).forEach(([term, info]) => {
     if (lowerText.includes(term.toLowerCase())) {
       detected.push({
@@ -95,7 +96,7 @@ function detectMedicalTerms(text: string) {
       });
     }
   });
-  
+
   return detected;
 }
 
@@ -141,7 +142,7 @@ Important: The text is already de-identified. Do not reference any PHI.`;
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
-    
+
     if (content) {
       try {
         const parsed = JSON.parse(content);
@@ -160,21 +161,21 @@ Important: The text is already de-identified. Do not reference any PHI.`;
 
 function generateBasicHighlights(text: string, medications: string[], conversions: any[]) {
   const highlights = [];
-  
+
   if (medications.length > 0) {
     highlights.push({
       icon: '💊',
       text: `${medications.length} medication(s) mentioned`
     });
   }
-  
+
   if (conversions.length > 0) {
     highlights.push({
       icon: '📊',
       text: `${conversions.length} unit conversion(s) detected`
     });
   }
-  
+
   // Detect vital signs patterns
   if (text.match(/\d+\/\d+/)) {
     highlights.push({
@@ -182,14 +183,14 @@ function generateBasicHighlights(text: string, medications: string[], conversion
       text: 'Blood pressure measurement detected'
     });
   }
-  
+
   if (text.match(/\d+\s*(bpm|beats)/i)) {
     highlights.push({
       icon: '💓',
       text: 'Heart rate measurement detected'
     });
   }
-  
+
   return highlights;
 }
 
@@ -199,11 +200,17 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
+  }
+
   try {
     const { text, medications = [], conversions = [] } = await req.json();
-    
+
     console.log('Processing de-identified text:', text.substring(0, 100));
-    
+
     if (!text) {
       throw new Error('No text provided');
     }

@@ -22,18 +22,22 @@ create table if not exists glossary_terms (
 
 alter table glossary_terms enable row level security;
 
+DROP POLICY IF EXISTS "Users can view their own glossary terms or public ones" ON glossary_terms;
 create policy "Users can view their own glossary terms or public ones"
   on glossary_terms for select
   using ( auth.uid() = user_id or is_public = true );
 
+DROP POLICY IF EXISTS "Users can insert their own glossary terms" ON glossary_terms;
 create policy "Users can insert their own glossary terms"
   on glossary_terms for insert
   with check ( auth.uid() = user_id );
 
+DROP POLICY IF EXISTS "Users can update their own glossary terms" ON glossary_terms;
 create policy "Users can update their own glossary terms"
   on glossary_terms for update
   using ( auth.uid() = user_id );
 
+DROP POLICY IF EXISTS "Users can delete their own glossary terms" ON glossary_terms;
 create policy "Users can delete their own glossary terms"
   on glossary_terms for delete
   using ( auth.uid() = user_id );
