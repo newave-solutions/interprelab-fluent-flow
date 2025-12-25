@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Bot, BookOpen, Users, Heart } from "lucide-react";
+import { Brain, Bot, BookOpen, Users, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import interprebotsGroup from "@/assets/interprebots-group-features.png";
+import interpretrackBot from "@/assets/interpretrack-bot.png";
 
 interface Solution {
   id: string;
@@ -12,6 +13,7 @@ interface Solution {
   highlights: string[];
   icon: React.ReactNode;
   videoSrc?: string;
+  imageSrc?: string;
   route: string;
   badge?: string;
 }
@@ -112,7 +114,8 @@ const solutions: Solution[] = [
       "Transparency reports",
       "Detailed session analytics"
     ],
-    icon: <div className="text-xl font-bold">Log</div>,
+    icon: <Clock className="w-8 h-8" />,
+    imageSrc: interpretrackBot,
     route: "/interpretrack"
   }
 ];
@@ -141,7 +144,7 @@ export const SolutionsShowcase = () => {
         </div>
 
         {/* Floating Bot Group Image */}
-        <div className="relative mb-16 flex justify-center">
+        <div className="relative mb-8 flex justify-center">
           <img
             src={interprebotsGroup}
             alt="InterpreLab AI Assistants"
@@ -172,6 +175,16 @@ export const SolutionsShowcase = () => {
                     </span>
                   )}
                 </div>
+
+                {solution.imageSrc && (
+                  <div className="mb-4 flex justify-center">
+                    <img
+                      src={solution.imageSrc}
+                      alt={`${solution.title} preview`}
+                      className="w-48 h-48 object-contain"
+                    />
+                  </div>
+                )}
 
                 <CardTitle className="font-serif text-2xl mb-2">{solution.title}</CardTitle>
                 <CardDescription className="text-base text-stone-600 dark:text-stone-400">

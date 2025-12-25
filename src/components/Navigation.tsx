@@ -37,12 +37,12 @@ export const Navigation = () => {
     {
       label: t('solutions'),
       submenu: [
-        { label: 'InterpreBot', href: '/interprebot' },
+        { label: 'InterpreTest', href: '/interpretest' },
         { label: 'InterpreCoach', href: '/interprecoach' },
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreStudy', href: '/interprestudy' },
-        { label: 'ASL Teacher', href: '/asl-teacher' },
-        { label: 'Interpre-Wellness', href: '/interpre-wellness' },
+        { label: 'InterpreSigns', href: '/interpresigns' },
+        { label: 'InterpreWellness', href: '/intreperwellness' },
         { label: 'InterpreLink', href: '/interprelink' },
       ]
     },
@@ -126,8 +126,8 @@ export const Navigation = () => {
                     Join Waitlist
                   </Link>
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="px-5 py-2 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full shadow-sm font-medium"
                   asChild
                 >
@@ -203,7 +203,7 @@ export const Navigation = () => {
                           Join Waitlist
                         </Link>
                       </Button>
-                      <Button 
+                      <Button
                         className="w-full bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium"
                         asChild
                       >

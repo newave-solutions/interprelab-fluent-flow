@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,6 +11,12 @@ const corsHeaders = {
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
   }
 
   try {
@@ -22,17 +29,17 @@ serve(async (req) => {
 
     const rawData = await req.json();
     const validationResult = chatSchema.safeParse(rawData);
-    
+
     if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { messages } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }

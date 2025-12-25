@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,6 +13,12 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Verify authentication
+  const authResult = await verifyAuthQuick(req);
+  if ('error' in authResult) {
+    return authResult.error;
+  }
+
   try {
     const lookupSchema = z.object({
       term: z.string().min(1).max(200),
@@ -21,17 +28,17 @@ serve(async (req) => {
 
     const rawData = await req.json();
     const validationResult = lookupSchema.safeParse(rawData);
-    
+
     if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }), 
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { term, targetLanguage, context } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
@@ -57,7 +64,7 @@ Format your response as a valid JSON object with this structure:
   "relatedTerms": ["related term 1", "related term 2"]
 }`;
 
-    const userPrompt = context 
+    const userPrompt = context
       ? `Look up the medical term "${term}" in the context of: ${context}`
       : `Look up the medical term "${term}"`;
 
@@ -88,7 +95,7 @@ Format your response as a valid JSON object with this structure:
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
-    
+
     // Try to parse the JSON from the response
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -102,7 +109,7 @@ Format your response as a valid JSON object with this structure:
       // If JSON parsing fails, return structured response from raw content
     }
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       english: term,
       translation: content,
       pronunciation: "",

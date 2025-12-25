@@ -8,12 +8,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
-import { DollarSign, Globe, Save } from 'lucide-react';
+import { DollarSign, Globe, Save, Loader2 } from 'lucide-react';
 
 export const SettingsPanel = () => {
   const [payRate, setPayRate] = useState('0');
   const [payRateType, setPayRateType] = useState('per_hour');
   const [currency, setCurrency] = useState('USD');
+  const [isSaving, setIsSaving] = useState(false);
   const { user } = useAuth();
   const { language, setLanguage, availableLanguages } = useLanguage();
   const { toast } = useToast();
@@ -52,42 +53,49 @@ export const SettingsPanel = () => {
 
   const handleSave = async () => {
     if (!user) return;
+    setIsSaving(true);
 
-    const payRateValue = parseFloat(payRate);
-    if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
+    try {
+      const payRateValue = parseFloat(payRate);
+      if (isNaN(payRateValue) || payRateValue < 0 || payRateValue > 10000) {
+        toast({
+          title: 'Invalid Pay Rate',
+          description: 'Pay rate must be between 0 and 10,000',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('user_settings')
+        .upsert({
+          user_id: user.id,
+          pay_rate: payRateValue,
+          pay_rate_type: payRateType,
+          preferred_currency: currency,
+          preferred_language: language,
+        }, {
+          onConflict: 'user_id'
+        });
+
+      if (error) {
+        throw error;
+      }
+
       toast({
-        title: 'Invalid Pay Rate',
-        description: 'Pay rate must be between 0 and 10,000',
-        variant: 'destructive',
+        title: 'Success',
+        description: 'Settings saved successfully',
       });
-      return;
-    }
-
-    const { error } = await supabase
-      .from('user_settings')
-      .upsert({
-        user_id: user.id,
-        pay_rate: payRateValue,
-        pay_rate_type: payRateType,
-        preferred_currency: currency,
-        preferred_language: language,
-      }, {
-        onConflict: 'user_id'
-      });
-
-    if (error) {
+    } catch (error) {
+      console.error('Error saving settings:', error);
       toast({
         title: 'Error',
         description: 'Failed to save settings',
         variant: 'destructive',
       });
-      return;
+    } finally {
+      setIsSaving(false);
     }
-
-    toast({
-      title: 'Success',
-      description: 'Settings saved successfully',
-    });
   };
 
   return (
@@ -177,9 +185,18 @@ export const SettingsPanel = () => {
         </CardContent>
       </Card>
 
-      <Button onClick={handleSave} className="w-full" size="lg">
-        <Save className="w-4 h-4 mr-2" />
-        Save Settings
+      <Button onClick={handleSave} className="w-full" size="lg" disabled={isSaving}>
+        {isSaving ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <Save className="w-4 h-4 mr-2" />
+            Save Settings
+          </>
+        )}
       </Button>
     </div>
   );
