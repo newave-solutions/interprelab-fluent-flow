@@ -28,6 +28,24 @@ const debriefingQuestions = [
   "Is there anything specific you'd like to talk about or process?"
 ];
 
+const wellbeingTopics = [
+  {
+    icon: Heart,
+    title: "Compassion Fatigue",
+    description: "The emotional and physical exhaustion from deep empathy for suffering patients."
+  },
+  {
+    icon: MessageCircle,
+    title: "Vicarious Trauma",
+    description: "A cognitive shift from empathic engagement with trauma survivors, intensified by first-person narration."
+  },
+  {
+    icon: Users,
+    title: "Burnout Prevention",
+    description: "Managing the exhaustion from high-stakes interactions and cognitive load of simultaneous interpretation."
+  }
+];
+
 export default function InterpreWellness() {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [chatInput, setChatInput] = useState('');
@@ -37,24 +55,6 @@ export default function InterpreWellness() {
   const [debriefingAnalysis, setDebriefingAnalysis] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
-
-  const wellbeingTopics = [
-    {
-      icon: Heart,
-      title: "Compassion Fatigue",
-      description: "The emotional and physical exhaustion from deep empathy for suffering patients."
-    },
-    {
-      icon: MessageCircle,
-      title: "Vicarious Trauma",
-      description: "A cognitive shift from empathic engagement with trauma survivors, intensified by first-person narration."
-    },
-    {
-      icon: Users,
-      title: "Burnout Prevention",
-      description: "Managing the exhaustion from high-stakes interactions and cognitive load of simultaneous interpretation."
-    }
-  ];
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
