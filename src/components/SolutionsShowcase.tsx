@@ -136,11 +136,20 @@ export const SolutionsShowcase = () => {
             Our Solutions
           </div>
           <h2 className="font-serif text-4xl md:text-5xl font-medium mb-6 text-foreground">
-            Embrace the Change, <span className="text-nobel-gold">Don't Get Replaced By It</span>
+            Empower Your Practice with <span className="text-nobel-gold">AI-Enhanced Tools</span>
           </h2>
-          <p className="text-lg md:text-xl text-stone-600 dark:text-muted-foreground max-w-3xl mx-auto font-light">
-            AI-powered solutions addressing every pain point—built by interpreters, for interpreters
+          <p className="text-lg md:text-xl text-stone-600 dark:text-muted-foreground max-w-3xl mx-auto font-light mb-4">
+            Professional tools designed to elevate your interpretation career—built by interpreters, for interpreters
           </p>
+          <Link
+            to="/resources/industry-challenges"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            Learn about the challenges we're addressing
+            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
 
         {/* Floating Bot Group Image */}

@@ -37,6 +37,7 @@ const Dilemma = lazy(() => import("./pages/Dilemma"));
 const InterpreTrackFeature = lazy(() => import("./pages/InterpreTrackFeature"));
 const InterpreSignsFeature = lazy(() => import("./pages/InterpreSignsFeature"));
 const InterpreLinkFeature = lazy(() => import("./pages/InterpreLinkFeature"));
+const IndustryChallenges = lazy(() => import("./pages/IndustryChallenges"));
 
 const queryClient = new QueryClient();
 
@@ -119,6 +120,7 @@ const App = () => (
                     {/* Public Pages */}
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/resources/industry-insights" element={<IndustryInsights />} />
+                    <Route path="/resources/industry-challenges" element={<IndustryChallenges />} />
                     <Route path="/resources/articles/:slug" element={<Article />} />
                     <Route path="/careers" element={<Careers />} />
                     <Route path="/about" element={<About />} />

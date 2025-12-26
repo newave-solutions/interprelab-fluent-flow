@@ -98,24 +98,24 @@ const Resources = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <Link to="/resources/industry-insights">
+            <Link to="/resources/industry-challenges">
               <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 h-full cursor-pointer hover:scale-105">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 bg-primary/10 rounded-lg">
                       <Brain className="w-6 h-6 text-primary" />
                     </div>
-                    <Badge variant="default">Industry Research</Badge>
+                    <Badge variant="default">Industry Insights</Badge>
                   </div>
-                  <CardTitle className="text-2xl">Industry Pain Points & Insights</CardTitle>
+                  <CardTitle className="text-2xl">Understanding Industry Challenges</CardTitle>
                   <CardDescription className="text-base">
-                    Research-backed insights exposing systemic challenges facing interpreters and LEP communities.
-                    Understand the compensation crisis, workforce exploitation, and psychological toll.
+                    A comprehensive look at the six core challenges facing medical and legal interpreters—
+                    from wage theft to burnout—and how technology can help address them.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button variant="outline" className="w-full">
-                    Explore Insights
+                    Read Article
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>

@@ -33,6 +33,7 @@ const routeConfig: Record<string, RouteConfig> = {
   // Resources
   '/resources': { label: 'Resources' },
   '/resources/industry-insights': { label: 'Industry Insights', parent: '/resources' },
+  '/resources/industry-challenges': { label: 'Industry Challenges', parent: '/resources' },
 
   // Static pages
   '/about': { label: 'About Us' },
