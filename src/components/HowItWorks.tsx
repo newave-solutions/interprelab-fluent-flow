@@ -1,27 +1,27 @@
 import { ArrowRight } from "lucide-react";
 
-export const HowItWorks = () => {
-  const steps = [
-    {
-      number: "01",
-      title: "Take the Assessment",
-      description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
-      color: "bg-blue-500"
-    },
-    {
-      number: "02",
-      title: "Get Your Personalized Path",
-      description: "Receive a customized learning roadmap based on your assessment results. Focus on exactly what you need to improve—no wasted time on what you already know.",
-      color: "bg-nobel-gold"
-    },
-    {
-      number: "03",
-      title: "Level Up with AI Support",
-      description: "Use InterpreCoach during live calls for real-time terminology assistance. Track your progress with InterpreTrack. Build expertise with InterpreStudy's targeted modules.",
-      color: "bg-green-500"
-    }
-  ];
+const steps = [
+  {
+    number: "01",
+    title: "Take the Assessment",
+    description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
+    color: "bg-blue-500"
+  },
+  {
+    number: "02",
+    title: "Get Your Personalized Path",
+    description: "Receive a customized learning roadmap based on your assessment results. Focus on exactly what you need to improve—no wasted time on what you already know.",
+    color: "bg-nobel-gold"
+  },
+  {
+    number: "03",
+    title: "Level Up with AI Support",
+    description: "Use InterpreCoach during live calls for real-time terminology assistance. Track your progress with InterpreTrack. Build expertise with InterpreStudy's targeted modules.",
+    color: "bg-green-500"
+  }
+];
 
+export const HowItWorks = () => {
   return (
     <section className="py-24 bg-stone-50 dark:bg-stone-950">
       <div className="container mx-auto px-6">
