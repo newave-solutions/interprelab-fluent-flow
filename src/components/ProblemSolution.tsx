@@ -1,27 +1,27 @@
 import { CheckCircle2, DollarSign, Clock, Brain } from "lucide-react";
 
-export const ProblemSolution = () => {
-  const challenges = [
-    {
-      icon: DollarSign,
-      problem: "Expensive Training",
-      solution: "Affordable AI-powered assessment and courses approved by NBCMI and CCHI",
-      stat: "90% less expensive than traditional courses"
-    },
-    {
-      icon: Clock,
-      problem: "Time-Consuming Process",
-      solution: "Get instant feedback and personalized learning paths in minutes",
-      stat: "30-minute assessments vs. months of coursework"
-    },
-    {
-      icon: Brain,
-      problem: "No Real-Time Support",
-      solution: "InterpreCoach provides live assistance during actual calls",
-      stat: "24/7 AI support when you need it"
-    }
-  ];
+const challenges = [
+  {
+    icon: DollarSign,
+    problem: "Expensive Training",
+    solution: "Affordable AI-powered assessment and courses approved by NBCMI and CCHI",
+    stat: "90% less expensive than traditional courses"
+  },
+  {
+    icon: Clock,
+    problem: "Time-Consuming Process",
+    solution: "Get instant feedback and personalized learning paths in minutes",
+    stat: "30-minute assessments vs. months of coursework"
+  },
+  {
+    icon: Brain,
+    problem: "No Real-Time Support",
+    solution: "InterpreCoach provides live assistance during actual calls",
+    stat: "24/7 AI support when you need it"
+  }
+];
 
+export const ProblemSolution = () => {
   return (
     <section className="py-24 bg-white dark:bg-background">
       <div className="container mx-auto px-6">

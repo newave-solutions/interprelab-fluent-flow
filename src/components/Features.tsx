@@ -12,51 +12,51 @@ import {
   Award
 } from "lucide-react";
 
+const features = [
+  {
+    icon: Monitor,
+    title: "Continuous Quality Assurance",
+    description: "Real-time monitoring combines AI precision with human expertise for comprehensive quality control."
+  },
+  {
+    icon: TrendingUp,
+    title: "Performance Analytics",
+    description: "Track terminology fidelity, ethical decisions, and get session-based performance reports."
+  },
+  {
+    icon: BookOpen,
+    title: "Resource Management",
+    description: "Upload, test, and refine language resources. Integrate glossaries and experiment with custom models."
+  },
+  {
+    icon: Shield,
+    title: "Data Security & Privacy",
+    description: "Enterprise-grade security with HIPAA compliance and SOC 2 certification for sensitive environments."
+  },
+  {
+    icon: Users,
+    title: "Collaborative Platform",
+    description: "Space for linguists, developers, and educators to share insights and best practices."
+  },
+  {
+    icon: Database,
+    title: "Conversation Analytics",
+    description: "Comprehensive dashboards track logs, usage statistics, and model performance metrics."
+  },
+  {
+    icon: Clock,
+    title: "Real-time Feedback",
+    description: "Instant feedback during sessions with adaptive scenarios and AI-driven simulations."
+  },
+  {
+    icon: Award,
+    title: "Certification Support",
+    description: "Structured preparation for professional certification with graded assessments."
+  }
+];
+
 export const Features = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
-
-  const features = [
-    {
-      icon: Monitor,
-      title: "Continuous Quality Assurance",
-      description: "Real-time monitoring combines AI precision with human expertise for comprehensive quality control."
-    },
-    {
-      icon: TrendingUp,
-      title: "Performance Analytics",
-      description: "Track terminology fidelity, ethical decisions, and get session-based performance reports."
-    },
-    {
-      icon: BookOpen,
-      title: "Resource Management",
-      description: "Upload, test, and refine language resources. Integrate glossaries and experiment with custom models."
-    },
-    {
-      icon: Shield,
-      title: "Data Security & Privacy",
-      description: "Enterprise-grade security with HIPAA compliance and SOC 2 certification for sensitive environments."
-    },
-    {
-      icon: Users,
-      title: "Collaborative Platform",
-      description: "Space for linguists, developers, and educators to share insights and best practices."
-    },
-    {
-      icon: Database,
-      title: "Conversation Analytics",
-      description: "Comprehensive dashboards track logs, usage statistics, and model performance metrics."
-    },
-    {
-      icon: Clock,
-      title: "Real-time Feedback",
-      description: "Instant feedback during sessions with adaptive scenarios and AI-driven simulations."
-    },
-    {
-      icon: Award,
-      title: "Certification Support",
-      description: "Structured preparation for professional certification with graded assessments."
-    }
-  ];
 
   return (
     <section className="py-20 px-6 relative" ref={ref} aria-labelledby="features-heading">
