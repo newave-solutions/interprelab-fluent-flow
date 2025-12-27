@@ -10,6 +10,9 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { LandingPageErrorBoundary } from "@/components/LandingPageErrorBoundary";
+import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient, enableDevTools } from "@/lib/queryClient";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -18,7 +21,7 @@ const InterpreCoach = lazy(() => import("./pages/InterpreCoach"));
 const InterpreStudy = lazy(() => import("./pages/InterpreStudy"));
 const InterpreLink = lazy(() => import("./pages/InterpreLink"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const CallTracker = lazy(() => import("./pages/CallTracker"));
+const InterpreTrack = lazy(() => import("./pages/InterpreTrack"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Resources = lazy(() => import("./pages/Resources"));
 const IndustryInsights = lazy(() => import("./pages/IndustryInsights"));
@@ -39,7 +42,7 @@ const InterpreSignsFeature = lazy(() => import("./pages/InterpreSignsFeature"));
 const InterpreLinkFeature = lazy(() => import("./pages/InterpreLinkFeature"));
 const IndustryChallenges = lazy(() => import("./pages/IndustryChallenges"));
 
-const queryClient = new QueryClient();
+
 
 const App = () => (
   <LandingPageErrorBoundary>
@@ -50,6 +53,7 @@ const App = () => (
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              {enableDevTools && <ReactQueryDevtools initialIsOpen={false} />}
               <BrowserRouter>
                 <Suspense
                   fallback={
@@ -75,29 +79,39 @@ const App = () => (
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={
                       <ProtectedRoute>
-                        <Dashboard />
+                        <FeatureErrorBoundary featureName="Dashboard">
+                          <Dashboard />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
 
                     {/* Feature-Specific Dashboards (Protected) */}
                     <Route path="/interprelink/dashboard" element={
                       <ProtectedRoute>
-                        <InterpreLink />
+                        <FeatureErrorBoundary featureName="InterpreLink">
+                          <InterpreLink />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
                     <Route path="/interpretrack/dashboard" element={
                       <ProtectedRoute>
-                        <CallTracker />
+                        <FeatureErrorBoundary featureName="InterpreTrack">
+                          <InterpreTrack />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
                     <Route path="/interpresigns/dashboard" element={
                       <ProtectedRoute>
-                        <InterpreSigns />
+                        <FeatureErrorBoundary featureName="InterpreSigns">
+                          <InterpreSigns />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
                     <Route path="/interpretest/dashboard" element={
                       <ProtectedRoute>
-                        <InterpreTest />
+                        <FeatureErrorBoundary featureName="InterpreTest">
+                          <InterpreTest />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
 
@@ -108,7 +122,9 @@ const App = () => (
 
                     <Route path="/settings" element={
                       <ProtectedRoute>
-                        <Settings />
+                        <FeatureErrorBoundary featureName="Settings">
+                          <Settings />
+                        </FeatureErrorBoundary>
                       </ProtectedRoute>
                     } />
                     <Route path="/account" element={

@@ -5,6 +5,12 @@ import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import interprebotsGroup from "@/assets/interprebots-group-features.png";
 import interpretrackBot from "@/assets/interpretrack-bot.png";
+import interprewellnessBot from "/interpre-wellness-bot.png";
+import interprecoachBot from "/interprecoach-bot.png";
+import interprestudyBot from "/interprestudy-bot.png";
+import interpresignsBot from "/interpresigns-bot.png";
+import interprelinkBot from "/interprelink-bot.png";
+import interpretestBot from "/interpretest-bot.png";
 
 interface Solution {
   id: string;
@@ -31,6 +37,7 @@ const solutions: Solution[] = [
       "Track your progress over time"
     ],
     icon: <Bot className="w-8 h-8" />,
+    imageSrc: interpretestBot,
     route: "/interprebot"
   },
   {
@@ -45,6 +52,7 @@ const solutions: Solution[] = [
       "Confidence booster during high-stakes calls"
     ],
     icon: <Brain className="w-8 h-8" />,
+    imageSrc: interprecoachBot,
     route: "/interprecoach"
   },
   {
@@ -59,6 +67,7 @@ const solutions: Solution[] = [
       "Accessible training at your fingertips"
     ],
     icon: <BookOpen className="w-8 h-8" />,
+    imageSrc: interprestudyBot,
     route: "/interprestudy"
   },
   {
@@ -73,6 +82,7 @@ const solutions: Solution[] = [
       "The professional network you deserve"
     ],
     icon: <Users className="w-8 h-8" />,
+    imageSrc: interprelinkBot,
     route: "/interprelink"
   },
   {
@@ -87,6 +97,7 @@ const solutions: Solution[] = [
       "Understanding your unique burden"
     ],
     icon: <Heart className="w-8 h-8" />,
+    imageSrc: interprewellnessBot,
     route: "/interpre-wellness"
   },
   {
@@ -101,6 +112,7 @@ const solutions: Solution[] = [
       "Medical ASL focus"
     ],
     icon: <div className="text-xl font-bold">🤟</div>,
+    imageSrc: interpresignsBot,
     route: "/interpresigns"
   },
   {
@@ -190,7 +202,7 @@ export const SolutionsShowcase = () => {
                     <img
                       src={solution.imageSrc}
                       alt={`${solution.title} preview`}
-                      className="w-48 h-48 object-contain"
+                      className="w-48 h-48 object-contain transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2"
                     />
                   </div>
                 )}
