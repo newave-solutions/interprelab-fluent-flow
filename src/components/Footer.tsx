@@ -13,6 +13,11 @@ import {
   Scale,
   Globe
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Footer = () => {
   return (
@@ -160,30 +165,53 @@ export const Footer = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
-                aria-label="GitHub"
-              >
-                <Github className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
+                    aria-label="Twitter"
+                  >
+                    <Twitter className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Follow us on Twitter</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Connect on LinkedIn</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-stone-800 hover:text-nobel-gold"
+                    aria-label="GitHub"
+                  >
+                    <Github className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>View source on GitHub</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>
