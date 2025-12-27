@@ -85,15 +85,6 @@ serve(async (req) => {
         break;
 
       case 'completion':
-<<<<<<< HEAD
-        // No default system prompt for completion, user provides it in messages
-        break;
-    }
-
-    const apiMessages = (action === 'chat' || action === 'completion') && messages
-      ? (action === 'chat' ? [{ role: "system", content: systemPrompt }, ...messages] : messages)
-      : [
-=======
         // Generic completion, relies on provided messages
         break;
     }
@@ -103,7 +94,6 @@ serve(async (req) => {
       : (action === 'completion') && messages
         ? messages
         : [
->>>>>>> lovable
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ];
@@ -194,5 +184,3 @@ serve(async (req) => {
     });
   }
 });
-
-
