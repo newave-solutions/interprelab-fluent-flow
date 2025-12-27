@@ -39,7 +39,7 @@ The extension uses a multi-agent system for processing:
 
 ### Chrome Extension Structure
 
-```
+```text
 interprecoach-extension/
 ├── manifest.json              # Extension manifest v3
 ├── background/
@@ -58,7 +58,7 @@ interprecoach-extension/
 
 ### Backend Microservice
 
-```
+```text
 interprecoach-backend/
 ├── services/
 │   ├── stt-service/          # Speech-to-text processing
@@ -151,7 +151,7 @@ ws.send(JSON.stringify({
 
 ## Data Flow
 
-```
+```text
 ┌──────────────┐  Audio Stream   ┌───────────────────┐
 │   Browser    │ ──────────────► │  Extension        │
 │   (Zoom/etc) │                 │  Content Script   │
@@ -246,13 +246,13 @@ ws.send(JSON.stringify({
 
 ## Development Timeline Estimate
 
-| Phase | Duration | Deliverables |
-|-------|----------|--------------|
-| **Backend Microservice** | 4-6 weeks | WebSocket server, agent services, API |
-| **Chrome Extension** | 3-4 weeks | UI, audio capture, WebSocket client |
-| **Integration Testing** | 2 weeks | E2E testing, bug fixes |
-| **Chrome Web Store** | 1-2 weeks | Review, approval, launch |
-| **Total** | **10-14 weeks** | Fully functional extension |
+| Phase                     | Duration       | Deliverables                              |
+| ------------------------- | -------------- | ----------------------------------------- |
+| **Backend Microservice**  | 4-6 weeks      | WebSocket server, agent services, API     |
+| **Chrome Extension**      | 3-4 weeks      | UI, audio capture, WebSocket client       |
+| **Integration Testing**   | 2 weeks        | E2E testing, bug fixes                    |
+| **Chrome Web Store**      | 1-2 weeks      | Review, approval, launch                  |
+| **Total**                 | **10-14 weeks**| Fully functional extension                |
 
 ---
 

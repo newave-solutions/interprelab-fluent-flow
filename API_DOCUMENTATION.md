@@ -32,6 +32,7 @@ Content-Type: application/json
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -46,6 +47,7 @@ Content-Type: application/json
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "user": {
@@ -62,6 +64,7 @@ Content-Type: application/json
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` - Invalid email or password format
 - `422 Unprocessable Entity` - Email already registered
 
@@ -73,6 +76,7 @@ Content-Type: application/json
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -81,6 +85,7 @@ Content-Type: application/json
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "access_token": "jwt_token",
@@ -95,6 +100,7 @@ Content-Type: application/json
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` - Invalid credentials
 - `401 Unauthorized` - Invalid email or password
 
@@ -106,12 +112,14 @@ Content-Type: application/json
 **Method:** `POST`
 
 **Headers:**
+
 ```http
 Authorization: Bearer <access_token>
 ```
 
 **Response (204 No Content):**
-```
+
+```text
 (Empty body)
 ```
 
@@ -120,6 +128,7 @@ Authorization: Bearer <access_token>
 ## Edge Functions API
 
 All Edge Function endpoints:
+
 - Base URL: `https://0ec90b57d6e95fcbda19832f.supabase.co/functions/v1`
 - Require Authorization header
 - Return CORS headers for cross-origin requests
@@ -135,6 +144,7 @@ AI-powered counseling support for medical interpreters dealing with emotional st
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "messages": [
@@ -147,14 +157,16 @@ AI-powered counseling support for medical interpreters dealing with emotional st
 ```
 
 **Request Schema:**
+
 | Field | Type | Required | Constraints | Description |
-|-------|------|----------|-------------|-------------|
+| ------- | ------ | ---------- | ------------- | ------------- |
 | messages | Array | Yes | 1-50 items | Conversation history |
 | messages[].role | String | Yes | "user", "assistant", "system" | Message sender role |
 | messages[].content | String | Yes | 1-5000 chars | Message content |
 
 **Response (200 OK):**
-```
+
+```http
 Content-Type: text/event-stream
 
 data: {"choices":[{"delta":{"content":"I hear you..."}}]}
@@ -166,6 +178,7 @@ The response uses Server-Sent Events (SSE) format. Each chunk contains partial A
 **Error Responses:**
 
 **400 Bad Request:**
+
 ```json
 {
   "error": "Invalid input",
@@ -179,6 +192,7 @@ The response uses Server-Sent Events (SSE) format. Each chunk contains partial A
 ```
 
 **429 Too Many Requests:**
+
 ```json
 {
   "error": "Rate limits exceeded, please try again later."
@@ -186,6 +200,7 @@ The response uses Server-Sent Events (SSE) format. Each chunk contains partial A
 ```
 
 **402 Payment Required:**
+
 ```json
 {
   "error": "Payment required, please add funds to your Lovable AI workspace."
@@ -193,6 +208,7 @@ The response uses Server-Sent Events (SSE) format. Each chunk contains partial A
 ```
 
 **500 Internal Server Error:**
+
 ```json
 {
   "error": "AI gateway error"
@@ -209,6 +225,7 @@ Educational AI assistant for medical terminology and interpretation techniques.
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "messages": [
@@ -222,21 +239,24 @@ Educational AI assistant for medical terminology and interpretation techniques.
 ```
 
 **Request Schema:**
+
 | Field | Type | Required | Constraints | Description |
-|-------|------|----------|-------------|-------------|
+| ------- | ------ | ---------- | ------------- | ------------- |
 | messages | Array | Yes | 1-50 items | Conversation history |
 | messages[].role | String | Yes | "user", "assistant", "system" | Message sender role |
 | messages[].content | String | Yes | 1-5000 chars | Message content |
 | specialty | String | No | Max 100 chars | Medical specialty focus |
 
 **Response (200 OK):**
-```
+
+```http
 Content-Type: text/event-stream
 
 data: {"choices":[{"delta":{"content":"Myocardial infarction..."}}]}
 ```
 
 **Specialty Options:**
+
 - `cardiology` - Heart and cardiovascular system
 - `oncology` - Cancer treatment
 - `genetics` - Genetic conditions
@@ -245,6 +265,7 @@ data: {"choices":[{"delta":{"content":"Myocardial infarction..."}}]}
 - `general medical` - General medical terminology (default)
 
 **Error Responses:**
+
 - `400 Bad Request` - Invalid input format
 - `429 Too Many Requests` - Service temporarily unavailable
 - `500 Internal Server Error` - AI gateway error
@@ -259,6 +280,7 @@ Analyzes de-identified medical text and provides real-time assistance for interp
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "text": "The patient presents with acute abdominal pain. Blood pressure is 140/90. Administer 500mg of medication.",
@@ -273,13 +295,15 @@ Analyzes de-identified medical text and provides real-time assistance for interp
 ```
 
 **Request Schema:**
+
 | Field | Type | Required | Description |
-|-------|------|----------|-------------|
+| ------- | ------ | ---------- | ------------- |
 | text | String | Yes | De-identified medical text to analyze |
 | medications | Array\<String\> | No | List of medications mentioned |
 | conversions | Array\<Object\> | No | Unit conversions needed |
 
 **Response (200 OK):**
+
 ```json
 {
   "medicalTerms": [
@@ -316,6 +340,7 @@ Analyzes de-identified medical text and provides real-time assistance for interp
 
 **Built-in Medical Terms Database:**
 The endpoint includes terminology for:
+
 - Cardiovascular conditions
 - Respiratory conditions
 - Endocrine disorders
@@ -327,6 +352,7 @@ The endpoint includes terminology for:
 **Error Responses:**
 
 **400 Bad Request:**
+
 ```json
 {
   "error": "No text provided"
@@ -334,6 +360,7 @@ The endpoint includes terminology for:
 ```
 
 **500 Internal Server Error:**
+
 ```json
 {
   "error": "Processing error"
@@ -350,6 +377,7 @@ Generates professional coaching feedback based on interpretation session data.
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "sessionData": {
@@ -364,8 +392,9 @@ Generates professional coaching feedback based on interpretation session data.
 ```
 
 **Request Schema:**
+
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | sessionData.duration | Number | Session duration in seconds |
 | sessionData.interactionCount | Number | Number of interactions |
 | sessionData.terminologyCount | Number | Medical terms used |
@@ -374,6 +403,7 @@ Generates professional coaching feedback based on interpretation session data.
 | sessionData.omissions | Number | Potential omissions |
 
 **Response (200 OK):**
+
 ```json
 {
   "feedback": "<div class=\"feedback-section\"><h3>💪 Strengths</h3><ul><li>Demonstrated professionalism by requesting clarifications when needed</li><li>Good exposure to medical terminology during the session</li></ul></div><div class=\"feedback-section\"><h3>🎯 Areas for Improvement</h3><div class=\"improvement-item\"><h4>Pacing</h4><p><strong>Standard:</strong> NCIHC Standard 2 - Appropriate pace, tone, and volume</p><div class=\"coaching-plan\"><strong>Coaching Plan:</strong><ol><li>Practice pausing between phrases</li><li>Use breathing exercises to control pace</li><li>Record and review your interpretations for pace consistency</li></ol></div></div></div><div class=\"feedback-section encouragement\"><h3>🌟 Encouragement</h3><p>You completed a 30-minute session with 25 interactions...</p></div>"
@@ -382,17 +412,20 @@ Generates professional coaching feedback based on interpretation session data.
 
 **Response Format:**
 The feedback is returned as HTML with structured sections:
+
 - **Strengths** - Positive observations
 - **Areas for Improvement** - Issues with coaching plans
 - **Encouragement** - Motivational message
 
 **Standards Referenced:**
+
 - NCIHC (National Council on Interpreting in Health Care)
 - CHIA (California Healthcare Interpreting Association)
 - IMIA (International Medical Interpreters Association)
 - NBCMI (National Board of Certification for Medical Interpreters)
 
 **Error Responses:**
+
 - `500 Internal Server Error` - Processing error
 
 ---
@@ -405,6 +438,7 @@ AI-generated flashcards for medical interpreter training.
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "cardType": "term-translation",
@@ -414,19 +448,22 @@ AI-generated flashcards for medical interpreter training.
 ```
 
 **Request Schema:**
+
 | Field | Type | Required | Constraints | Description |
-|-------|------|----------|-------------|-------------|
+| ------- | ------ | ---------- | ------------- | ------------- |
 | cardType | String | Yes | Enum | Type of flashcard to generate |
 | specialty | String | No | Max 50 chars | Medical specialty |
 | count | Number | No | 1-50 | Number of cards (default: 10) |
 
 **Card Types:**
+
 - `root-words` - Medical root words with meanings
 - `term-translation` - Medical terms with Spanish translations
 - `term-definition` - Medical terms with definitions
 - `custom` - Mixed content cards
 
 **Response (200 OK):**
+
 ```json
 {
   "flashcards": [
@@ -447,8 +484,9 @@ AI-generated flashcards for medical interpreter training.
 ```
 
 **Flashcard Structure:**
+
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | front | String | Term or question |
 | back | String | Translation, definition, or answer |
 | pronunciation | String | Phonetic pronunciation (if applicable) |
@@ -457,6 +495,7 @@ AI-generated flashcards for medical interpreter training.
 **Error Responses:**
 
 **400 Bad Request:**
+
 ```json
 {
   "error": "Invalid input",
@@ -470,6 +509,7 @@ AI-generated flashcards for medical interpreter training.
 ```
 
 **500 Internal Server Error:**
+
 ```json
 {
   "error": "AI gateway error"
@@ -486,6 +526,7 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 **Method:** `POST`
 
 **Request Body:**
+
 ```json
 {
   "responses": "Today's session was emotionally challenging. I interpreted for a terminal cancer diagnosis. I felt the patient's pain deeply and found it difficult to maintain professional distance. I'm concerned about carrying this emotional weight."
@@ -493,11 +534,13 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 ```
 
 **Request Schema:**
+
 | Field | Type | Required | Constraints | Description |
-|-------|------|----------|-------------|-------------|
+| ------- | ------ | ---------- | ------------- | ------------- |
 | responses | String | Yes | 10-10000 chars | Debriefing questionnaire responses |
 
 **Response (200 OK):**
+
 ```json
 {
   "analysis": "Thank you for sharing your experience. What you're describing is a natural response to the emotionally intense nature of medical interpreting...\n\n**Validation:**\nYour feelings are completely valid. Interpreting terminal diagnoses is one of the most challenging aspects of medical interpreting...\n\n**Coping Strategies:**\n1. Practice grounding techniques immediately after difficult sessions\n2. Establish clear emotional boundaries through self-talk\n3. Use the 'professional distance' visualization technique\n\n**Self-Care Recommendations:**\n- Schedule regular check-ins with yourself\n- Engage in activities that bring you joy\n- Connect with other interpreters who understand\n\n**When to Seek Support:**\nIf you notice persistent symptoms of vicarious trauma, consider speaking with a mental health professional who understands interpreter experiences.\n\n**Encouragement:**\nYour awareness of these emotions shows professional maturity..."
@@ -505,6 +548,7 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 ```
 
 **Analysis Components:**
+
 1. **Validation** - Acknowledges feelings
 2. **Pattern Identification** - Identifies vicarious trauma, compassion fatigue, or burnout
 3. **Coping Strategies** - Practical techniques
@@ -515,6 +559,7 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 **Error Responses:**
 
 **400 Bad Request:**
+
 ```json
 {
   "error": "Invalid input",
@@ -528,6 +573,7 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 ```
 
 **429 Too Many Requests:**
+
 ```json
 {
   "error": "Service temporarily unavailable"
@@ -535,6 +581,7 @@ Analyzes interpreter debriefing responses and provides compassionate insights.
 ```
 
 **500 Internal Server Error:**
+
 ```json
 {
   "error": "AI gateway error"
@@ -556,6 +603,7 @@ Manage interpreter call records.
 **Method:** `CallLogService.createCallLog(callLog)`
 
 **Parameters:**
+
 ```typescript
 {
   user_id: string;              // Required: User UUID
@@ -573,6 +621,7 @@ Manage interpreter call records.
 ```
 
 **Response:**
+
 ```typescript
 {
   data: {
@@ -587,6 +636,7 @@ Manage interpreter call records.
 ```
 
 **Example:**
+
 ```typescript
 import { CallLogService } from '@/integrations/supabase/services';
 
@@ -610,12 +660,14 @@ const result = await CallLogService.createCallLog({
 **Method:** `CallLogService.updateCallLog(id, updates)`
 
 **Parameters:**
+
 ```typescript
 id: string;                  // Call log UUID
 updates: Partial<CallLog>;   // Fields to update
 ```
 
 **Example:**
+
 ```typescript
 await CallLogService.updateCallLog('call-log-uuid', {
   end_time: '2025-12-01T10:35:00Z',
@@ -631,11 +683,13 @@ await CallLogService.updateCallLog('call-log-uuid', {
 **Method:** `CallLogService.getCallLogs(userId)`
 
 **Parameters:**
+
 ```typescript
 userId: string;  // User UUID
 ```
 
 **Response:**
+
 ```typescript
 {
   data: Array<CallLog>,
@@ -644,6 +698,7 @@ userId: string;  // User UUID
 ```
 
 **Example:**
+
 ```typescript
 const { data: logs, error } = await CallLogService.getCallLogs('user-uuid');
 ```
@@ -655,11 +710,13 @@ const { data: logs, error } = await CallLogService.getCallLogs('user-uuid');
 **Method:** `CallLogService.deleteCallLog(id)`
 
 **Parameters:**
+
 ```typescript
 id: string;  // Call log UUID
 ```
 
 **Example:**
+
 ```typescript
 await CallLogService.deleteCallLog('call-log-uuid');
 ```
@@ -675,11 +732,13 @@ Manage user preferences and settings.
 **Method:** `UserSettingsService.getUserSettings(userId)`
 
 **Parameters:**
+
 ```typescript
 userId: string;  // User UUID
 ```
 
 **Response:**
+
 ```typescript
 {
   data: {
@@ -700,12 +759,14 @@ userId: string;  // User UUID
 **Method:** `UserSettingsService.updateUserSettings(userId, settings)`
 
 **Parameters:**
+
 ```typescript
 userId: string;
 settings: Partial<UserSettings>;
 ```
 
 **Example:**
+
 ```typescript
 await UserSettingsService.updateUserSettings('user-uuid', {
   theme: 'dark',
@@ -725,6 +786,7 @@ Manage contact form submissions.
 **Method:** `ContactsService.createContact(contact)`
 
 **Parameters:**
+
 ```typescript
 {
   name: string;              // Required
@@ -738,6 +800,7 @@ Manage contact form submissions.
 ```
 
 **Example:**
+
 ```typescript
 await ContactsService.createContact({
   name: 'John Doe',
@@ -755,6 +818,7 @@ await ContactsService.createContact({
 **Method:** `ContactsService.getContacts(userId?)`
 
 **Parameters:**
+
 ```typescript
 userId?: string;  // Optional: Filter by user
 ```
@@ -770,6 +834,7 @@ Manage waitlist signups.
 **Method:** `WaitlistService.addToWaitlist(entry)`
 
 **Parameters:**
+
 ```typescript
 {
   email: string;             // Required
@@ -780,6 +845,7 @@ Manage waitlist signups.
 ```
 
 **Example:**
+
 ```typescript
 await WaitlistService.addToWaitlist({
   email: 'user@example.com',
@@ -806,6 +872,7 @@ Manage user profile information.
 **Method:** `ProfilesService.updateProfile(userId, updates)`
 
 **Example:**
+
 ```typescript
 await ProfilesService.updateProfile('user-uuid', {
   first_name: 'John',
@@ -836,7 +903,7 @@ await ProfilesService.updateProfile('user-uuid', {
 ### Common HTTP Status Codes
 
 | Code | Meaning | Description |
-|------|---------|-------------|
+| ------ | --------- | ------------- |
 | 200 | OK | Request successful |
 | 201 | Created | Resource created successfully |
 | 204 | No Content | Request successful, no content to return |
@@ -851,6 +918,7 @@ await ProfilesService.updateProfile('user-uuid', {
 ### Error Handling Best Practices
 
 1. **Always check for errors:**
+
 ```typescript
 const { data, error } = await CallLogService.getCallLogs(userId);
 if (error) {
@@ -859,7 +927,8 @@ if (error) {
 }
 ```
 
-2. **Handle authentication errors:**
+1. **Handle authentication errors:**
+
 ```typescript
 try {
   const response = await fetch(endpoint, {
@@ -875,7 +944,8 @@ try {
 }
 ```
 
-3. **Implement retry logic for rate limits:**
+1. **Implement retry logic for rate limits:**
+
 ```typescript
 async function fetchWithRetry(url, options, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
@@ -1111,11 +1181,13 @@ await handleStreamingResponse(
 Generate interactive API documentation from OpenAPI specifications.
 
 **Installation:**
+
 ```bash
 npm install swagger-ui-react swagger-jsdoc
 ```
 
 **Setup:**
+
 ```typescript
 // swagger.config.ts
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -1146,6 +1218,7 @@ export const swaggerSpec = swaggerJsdoc(options);
 Create collections for testing and documentation.
 
 **Benefits:**
+
 - Interactive testing
 - Auto-generated documentation
 - Team collaboration
@@ -1161,11 +1234,13 @@ Download the Postman collection template for this API.
 Beautiful API documentation from OpenAPI specs.
 
 **Installation:**
+
 ```bash
 npm install redoc
 ```
 
 **Usage:**
+
 ```typescript
 import { RedocStandalone } from 'redoc';
 
@@ -1181,11 +1256,13 @@ function ApiDocs() {
 Generate documentation from TypeScript code.
 
 **Installation:**
+
 ```bash
 npm install --save-dev typedoc
 ```
 
 **Configuration:**
+
 ```json
 {
   "typedoc": {
@@ -1203,6 +1280,7 @@ npm install --save-dev typedoc
 Generate types and documentation from database schema.
 
 **Generate Types:**
+
 ```bash
 npx supabase gen types typescript --project-id 0ec90b57d6e95fcbda19832f > src/types/database.ts
 ```
@@ -1213,7 +1291,7 @@ npx supabase gen types typescript --project-id 0ec90b57d6e95fcbda19832f > src/ty
 
 As your API grows, maintain this structure:
 
-```
+```text
 API_DOCUMENTATION.md
 ├── Authentication
 ├── Edge Functions
@@ -1229,6 +1307,7 @@ API_DOCUMENTATION.md
 ```
 
 **For each new endpoint, document:**
+
 1. Purpose and use case
 2. Request/response formats
 3. Authentication requirements
@@ -1241,6 +1320,7 @@ API_DOCUMENTATION.md
 ## Changelog
 
 ### Version 1.0.0 (2025-12-01)
+
 - Initial API documentation
 - 6 Edge Functions documented
 - 5 Database services documented
@@ -1253,9 +1333,10 @@ API_DOCUMENTATION.md
 ## Support
 
 For API support:
-- Email: support@interprehub.com
-- Documentation: https://interprehub.com/docs
-- GitHub Issues: https://github.com/interprehub/api/issues
+
+- Email: <support@interprehub.com>
+- Documentation: <https://interprehub.com/docs>
+- GitHub Issues: <https://github.com/interprehub/api/issues>
 
 ---
 

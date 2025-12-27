@@ -6,7 +6,7 @@ This Edge Function provides AI-powered grading for all InterpreTest assessment m
 
 ## Architecture
 
-```
+```text
 gradetest/
 ├── index.ts                  # Main entry point & routing
 ├── grammar-generator.ts      # Dynamic question generation
@@ -18,7 +18,7 @@ gradetest/
 
 ### Base URL
 
-```
+```text
 https://[your-project-ref].supabase.co/functions/v1/gradetest
 ```
 
