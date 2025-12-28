@@ -13,7 +13,7 @@ export const BenefitBadge = ({
   showIcon = true
 }: BenefitBadgeProps) => {
   return (
-    <Badge className={`inline-flex items-center gap-2 ${className}`}>
+    <Badge className={cn("inline-flex items-center gap-2", className)}>
       {showIcon && <Sparkles className="w-3 h-3" />}
       {benefit}
     </Badge>
