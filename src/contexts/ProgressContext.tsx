@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * Learning Progress Context
  * Manages user progress, points, badges, and achievements for InterpreStudy
