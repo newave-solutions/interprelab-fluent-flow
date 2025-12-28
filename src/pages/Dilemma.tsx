@@ -314,37 +314,62 @@ const Dilemma: React.FC = () => {
               <p className="text-muted-foreground max-w-2xl mx-auto">Based on official USMCA texts, IRS guidelines, and industry data.</p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8 justify-center items-center flex-wrap">
-              <SourceCard
-                title="USMCA Text"
-                detail="Chapter 15 (Services), Chapter 19 (Digital Trade), Chapter 23 (Labor)"
-                delay="0s"
-              />
-              <SourceCard
-                title="IRS Form SS-8"
-                detail="Determination of Worker Status for Purposes of Federal Employment Taxes"
-                delay="0.1s"
-              />
-              <SourceCard
-                title="NOM-037-STPS"
-                detail="Mexican Official Standard for Telework (2023)"
-                delay="0.2s"
-              />
-              <SourceCard
-                title="Bureau of Labor Statistics"
-                detail="Occupational Outlook: Interpreters and Translators (2023)"
-                delay="0.3s"
-              />
-              <SourceCard
-                title="ZipRecruiter Data"
-                detail="Remote Medical Interpreter Salary Surveys (2025)"
-                delay="0.4s"
-              />
-              <SourceCard
-                title="Industry Reports"
-                detail="CSA Research & Slator on Language Service Provider pricing"
-                delay="0.5s"
-              />
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-card rounded-xl border border-border p-8 space-y-4">
+                <h3 className="font-serif text-2xl text-foreground mb-6">References</h3>
+
+                <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                  <p className="hanging-indent">
+                    Bureau of Labor Statistics, U.S. Department of Labor. (2023). <em>Occupational outlook handbook: Interpreters and translators</em>.
+                    Retrieved from https://www.bls.gov/ooh/media-and-communication/interpreters-and-translators.htm
+                  </p>
+
+                  <p className="hanging-indent">
+                    CSA Research. (2024). <em>Language services market report: Global trends and pricing analysis</em>.
+                    Common Sense Advisory.
+                  </p>
+
+                  <p className="hanging-indent">
+                    Internal Revenue Service. (2024). <em>Form SS-8: Determination of worker status for purposes of federal employment taxes and income tax withholding</em>.
+                    U.S. Department of the Treasury. Retrieved from https://www.irs.gov/forms-pubs/about-form-ss-8
+                  </p>
+
+                  <p className="hanging-indent">
+                    Internal Revenue Service. (2024). <em>Independent contractor (self-employed) or employee?</em>
+                    U.S. Department of the Treasury. Retrieved from https://www.irs.gov/businesses/small-businesses-self-employed/independent-contractor-self-employed-or-employee
+                  </p>
+
+                  <p className="hanging-indent">
+                    Secretaría del Trabajo y Previsión Social. (2023). <em>NOM-037-STPS-2023: Teletrabajo - Condiciones de seguridad y salud en el trabajo</em> [Official Mexican Standard for Telework - Health and safety conditions at work].
+                    Diario Oficial de la Federación, México.
+                  </p>
+
+                  <p className="hanging-indent">
+                    Slator. (2024). <em>Language industry market sizing and trends: Remote interpreting platforms</em>.
+                    Slator Language Industry Intelligence.
+                  </p>
+
+                  <p className="hanging-indent">
+                    United States-Mexico-Canada Agreement (USMCA). (2020). Chapter 15: Cross-border trade in services.
+                    Office of the United States Trade Representative. Retrieved from https://ustr.gov/trade-agreements/free-trade-agreements/united-states-mexico-canada-agreement/agreement-between
+                  </p>
+
+                  <p className="hanging-indent">
+                    United States-Mexico-Canada Agreement (USMCA). (2020). Chapter 19: Digital trade.
+                    Office of the United States Trade Representative. Retrieved from https://ustr.gov/trade-agreements/free-trade-agreements/united-states-mexico-canada-agreement/agreement-between
+                  </p>
+
+                  <p className="hanging-indent">
+                    United States-Mexico-Canada Agreement (USMCA). (2020). Chapter 23: Labor.
+                    Office of the United States Trade Representative. Retrieved from https://ustr.gov/trade-agreements/free-trade-agreements/united-states-mexico-canada-agreement/agreement-between
+                  </p>
+
+                  <p className="hanging-indent">
+                    ZipRecruiter. (2025). <em>Remote medical interpreter salary survey</em>.
+                    Retrieved from https://www.ziprecruiter.com/Salaries/Remote-Medical-Interpreter-Salary
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

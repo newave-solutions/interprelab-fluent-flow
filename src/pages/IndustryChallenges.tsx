@@ -13,15 +13,15 @@ const IndustryChallenges = () => {
   const challenges = [
     {
       icon: DollarSign,
-      title: "Exploitation & Wage Theft",
+      title: "Financial Transparency & Compensation",
       severity: "Critical",
-      description: "Medical and legal interpreters face systemic wage theft, particularly in VRI and OPI settings. Many platforms hide call duration data, making it nearly impossible to verify earnings or contest unpaid time.",
+      description: "Medical and legal interpreters often face challenges with payment accuracy and transparency, particularly in VRI and OPI settings. Many platforms do not provide clear call duration data, making it difficult to verify earnings or address discrepancies.",
       stats: [
         "Average 15-20% wage discrepancy between logged and actual hours",
         "83% of interpreters report payment disputes with platforms",
         "VRI calls often unpaid for technical delays and setup time"
       ],
-      impact: "Interpreters lose thousands of dollars annually to untracked time and platform manipulation.",
+      impact: "Interpreters may experience financial discrepancies due to incomplete tracking systems and lack of transparent reporting mechanisms.",
       solution: "InterpreTrack provides transparent, real-time call logging and earnings verification."
     },
     {
@@ -371,7 +371,7 @@ const IndustryChallenges = () => {
                   <CardHeader>
                     <CardTitle className="text-lg">InterpreTrack</CardTitle>
                     <CardDescription>
-                      Combat wage theft with transparent call logging
+                      Ensure payment accuracy with transparent call logging and verification
                     </CardDescription>
                   </CardHeader>
                 </Card>

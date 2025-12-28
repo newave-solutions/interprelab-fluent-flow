@@ -80,6 +80,8 @@ Format your response as a valid JSON object with this structure:
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
+        temperature: 0.1,  // Lower = more deterministic
+        max_tokens: 500,   // Limit length for JSON response
       }),
     });
 
@@ -96,9 +98,16 @@ Format your response as a valid JSON object with this structure:
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
 
+    // Post-processing cleanup - remove markdown artifacts
+    const cleanedContent = content
+      .replace(/\*\*/g, '')  // Remove bold
+      .replace(/\#{1,6}\s/g, '')  // Remove headers
+      .replace(/^[-•]\s/gm, '')  // Remove bullets
+      .trim();
+
     // Try to parse the JSON from the response
     try {
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const termData = JSON.parse(jsonMatch[0]);
         return new Response(JSON.stringify(termData), {
@@ -111,9 +120,9 @@ Format your response as a valid JSON object with this structure:
 
     return new Response(JSON.stringify({
       english: term,
-      translation: content,
+      translation: cleanedContent,
       pronunciation: "",
-      definition: content,
+      definition: cleanedContent,
       notes: "Response could not be fully structured"
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

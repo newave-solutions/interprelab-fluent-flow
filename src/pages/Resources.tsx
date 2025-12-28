@@ -110,7 +110,7 @@ const Resources = () => {
                   <CardTitle className="text-2xl">Understanding Industry Challenges</CardTitle>
                   <CardDescription className="text-base">
                     A comprehensive look at the six core challenges facing medical and legal interpreters—
-                    from wage theft to burnout—and how technology can help address them.
+                    from financial transparency and fair compensation to professional wellbeing—and how technology can help address them.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -122,28 +122,28 @@ const Resources = () => {
               </Card>
             </Link>
 
-            <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 h-full">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Brain className="w-6 h-6 text-primary" />
+            <Link to="/dilemma">
+              <Card className="glass border-border/50 hover:border-primary/50 transition-all duration-300 h-full cursor-pointer hover:scale-105">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Brain className="w-6 h-6 text-primary" />
+                    </div>
+                    <Badge variant="secondary">Research Article</Badge>
                   </div>
-                  <Badge variant="secondary">Interactive Experience</Badge>
-                </div>
-                <CardTitle className="text-2xl">The Interpreter Dilemma</CardTitle>
-                <CardDescription className="text-base">
-                  Navigate complex ethical scenarios in this interactive 3D experience. Test your decision-making skills in real-world interpreter situations.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" className="w-full" asChild>
-                  <a href="http://localhost:3001" target="_blank" rel="noopener noreferrer">
-                    Start Experience
+                  <CardTitle className="text-2xl">The Interpreter Dilemma</CardTitle>
+                  <CardDescription className="text-base">
+                    An in-depth analysis of worker classification, USMCA implications, and the economic realities facing remote medical interpreters in North America.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" className="w-full">
+                    Read Article
                     <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
 
           <div className="text-center mb-16">

@@ -340,6 +340,12 @@
   .source-card {
     @apply p-8 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 hover:border-nobel-gold/50;
   }
+
+  /* APA citation hanging indent */
+  .hanging-indent {
+    padding-left: 2rem;
+    text-indent: -2rem;
+  }
 }
 
 @keyframes fadeIn {

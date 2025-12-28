@@ -17,15 +17,19 @@ export const Hero = () => {
                 style={{ backgroundImage: `url(${heroBg})` }}
                 aria-hidden="true"
             >
-                {/* Darker, more opaque overlay to prevent text opacity issues */}
-                <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background shadow-2xl" />
+                {/* Enhanced Dual-Layer Overlay System for Optimal Visibility */}
+                {/* Layer 1: Semi-transparent dark layer to preserve image visibility while adding contrast */}
+                <div className="absolute inset-0 bg-black/40 dark:bg-black/30" />
+
+                {/* Layer 2: Gradient overlay for depth and focus - stronger in light mode */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent dark:from-background/70 dark:via-background/50 dark:to-background/90" />
             </div>
 
-            {/* Radial Glow Effect */}
+            {/* Radial Glow Effect - More pronounced in light mode for better text readability */}
             <div
                 className="absolute inset-0 z-0 pointer-events-none"
                 style={{
-                    background: 'radial-gradient(circle at 50% 30%, hsl(41 52% 56% / 0.1), transparent 60%)'
+                    background: 'radial-gradient(circle at 50% 40%, hsl(41 52% 56% / 0.25) 0%, transparent 60%)'
                 }}
                 aria-hidden="true"
             />
@@ -40,8 +44,8 @@ export const Hero = () => {
                         AI-Powered Interpretation Platform
                     </Badge>
 
-                    {/* Main Headline - Elegant serif style */}
-                    <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1]">
+                    {/* Main Headline - Elegant serif style with text shadow for visibility */}
+                    <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1]" style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4)' }}>
                         <span className="text-nobel-gold">
                             Master Medical
                         </span>
@@ -51,8 +55,8 @@ export const Hero = () => {
                         </span>
                     </h1>
 
-                    {/* Subtitle - Lighter font weight */}
-                    <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-light leading-relaxed">
+                    {/* Subtitle - Lighter font weight with text shadow */}
+                    <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto font-light leading-relaxed" style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.5)' }}>
                         Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
                     </p>
 

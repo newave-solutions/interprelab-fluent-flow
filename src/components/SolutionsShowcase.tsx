@@ -4,7 +4,7 @@ import { Brain, Bot, BookOpen, Users, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import interprebotsGroup from "@/assets/interprebots-group-features.png";
-import interpretrackBot from "@/assets/interpretrack-bot.png";
+import interpretrackBot from "/interpretrack-bot.png";
 import interprewellnessBot from "/interpre-wellness-bot.png";
 import interprecoachBot from "/interprecoach-bot.png";
 import interprestudyBot from "/interprestudy-bot.png";
@@ -202,7 +202,7 @@ export const SolutionsShowcase = () => {
                     <img
                       src={solution.imageSrc}
                       alt={`${solution.title} preview`}
-                      className="w-48 h-48 object-contain transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2"
+                      className={`${solution.id === 'interpretrack' ? 'w-64 h-64' : 'w-48 h-48'} object-contain transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2`}
                     />
                   </div>
                 )}
