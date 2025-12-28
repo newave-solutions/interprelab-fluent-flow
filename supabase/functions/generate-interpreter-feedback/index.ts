@@ -1,5 +1,7 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
@@ -7,189 +9,183 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Log AI content
+async function logAIContent(userId: string, inputData: any, outputData: any, processingTime: number) {
+  try {
+    await supabase.from('ai_content_log').insert({
+      function_name: 'generate-interpreter-feedback',
+      user_id: userId,
+      input_data: inputData,
+      output_data: outputData,
+      model_used: 'gemini-2.5-flash',
+      processing_time_ms: processingTime
+    })
+  } catch (error) {
+    console.error('Failed to log AI content:', error)
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Verify authentication
   const authResult = await verifyAuthQuick(req);
   if ('error' in authResult) {
     return authResult.error;
   }
 
+  const userId = authResult.user.id
+
   try {
-    const { sessionData } = await req.json();
-
-    console.log('Generating interpreter feedback for session:', sessionData);
-
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      console.log('LOVABLE_API_KEY not set, returning basic feedback');
-      return new Response(
-        JSON.stringify({ feedback: generateBasicFeedback(sessionData) }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const systemPrompt = `You are a professional medical interpreter coach providing constructive feedback based on NCIHC, CHIA, IMIA, and NBCMI standards. 
-
-Analyze the session data and provide feedback in HTML format with the following structure:
-
-<div class="feedback-section">
-  <h3>💪 Strengths</h3>
-  <ul>
-    <li>List specific strengths observed</li>
-  </ul>
-</div>
-
-<div class="feedback-section">
-  <h3>🎯 Areas for Improvement</h3>
-  <div class="improvement-item">
-    <h4>Issue: [Specific issue]</h4>
-    <p><strong>Standard:</strong> [Relevant NCIHC/CHIA standard]</p>
-    <div class="coaching-plan">
-      <strong>Coaching Plan:</strong>
-      <ol>
-        <li>Step 1: [Specific action]</li>
-        <li>Step 2: [Specific action]</li>
-        <li>Step 3: [Specific practice exercise]</li>
-      </ol>
-    </div>
-  </div>
-</div>
-
-<div class="feedback-section encouragement">
-  <h3>🌟 Encouragement</h3>
-  <p>Provide positive reinforcement and motivation for continued growth.</p>
-</div>
-
-Focus on:
-- Professional tone and accuracy
-- Medical terminology precision
-- Pacing and completeness
-- Cultural competency
-- Ethical adherence
-- Specific, actionable coaching steps`;
-
-    const userPrompt = `Session Analysis:
-- Duration: ${Math.round(sessionData.duration / 60)} minutes
-- Interactions: ${sessionData.interactionCount}
-- Medical terminology used: ${sessionData.terminologyCount}
-- Clarification requests: ${sessionData.clarifications}
-- Potential pacing issues: ${sessionData.paceIssues}
-- Potential omissions: ${sessionData.omissions}
-
-Provide professional coaching feedback following the format specified.`;
-
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 1500
-      }),
+    const feedbackSchema = z.object({
+      sessionType: z.string().max(100),
+      userTranscript: z.string().min(10).max(3000),
+      targetScript: z.string().min(10).max(3000).optional(),
+      focusAreas: z.array(z.string()).max(5).optional()
     });
 
-    if (!response.ok) {
-      console.error('AI API error:', response.status);
+    const rawData = await req.json();
+    const validationResult = feedbackSchema.safeParse(rawData);
+
+    if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ feedback: generateBasicFeedback(sessionData) }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Invalid input', details: validationResult.error.errors }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const data = await response.json();
-    const feedback = data.choices?.[0]?.message?.content || generateBasicFeedback(sessionData);
+    const { sessionType, userTranscript, targetScript, focusAreas } = validationResult.data;
 
-    return new Response(
-      JSON.stringify({ feedback }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-  } catch (error) {
-    console.error('Error generating feedback:', error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
-  }
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
+    }
+
+    const systemPrompt = `You are an expert medical interpreter trainer providing constructive performance feedback.
+
+CRITICAL RULES:
+- Be supportive yet honest
+- Provide specific, actionable feedback
+- Highlight both strengths and areas for improvement
+- Reference professional standards (NCIHC, CHIA)
+- Keep feedback concise and structured
+- Return ONLY valid JSON
+
+Example output:
+{
+  "overallAssessment": "Strong interpretation with good accuracy and professional tone.",
+  "strengths": [
+    "Excellent medical terminology accuracy",
+    "Maintained appropriate register and formality"
+  ],
+  "areasForImprovement": [
+    "Consider using more natural phrasing in target language",
+    "Practice managing longer utterances with note-taking"
+  ],
+  "specificExamples": {
+    "good": "Your rendering of 'hypertension' as 'presión arterial alta' was culturally appropriate",
+    "improve": "The phrase 'dolor en el pecho' could be more precisely rendered as 'dolor torácico' in clinical context"
+  },
+  "nextSteps": [
+    "Practice consecutive interpreting with 2-3 minute segments",
+    "Review cardiovascular terminology list"
+  ]
+}`;
+
+    let userPrompt = `Session type: ${sessionType}\n\nUser's interpretation:\n${userTranscript}`
+
+    if (target Script) {
+  userPrompt += `\n\nExpected/target script:\n${targetScript}`
+}
+
+if (focusAreas && focusAreas.length > 0) {
+  userPrompt += `\n\nFocus feedback on: ${focusAreas.join(', ')}`
+}
+
+const startTime = Date.now()
+
+const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "google/gemini-2.5-flash",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt }
+    ],
+    temperature: 0.3,
+    max_tokens: 800,
+  }),
 });
 
-function generateBasicFeedback(sessionData: any): string {
-  const duration = Math.round(sessionData.duration / 60);
+if (!response.ok) {
+  const errorText = await response.text();
+  console.error("AI gateway error:", response.status, errorText);
 
-  let feedback = '<div class="feedback-section"><h3>💪 Strengths</h3><ul>';
-
-  if (sessionData.clarifications > 0) {
-    feedback += '<li>Demonstrated professionalism by requesting clarifications when needed</li>';
+  if (response.status === 429 || response.status === 402) {
+    return new Response(JSON.stringify({ error: "Service temporarily unavailable" }), {
+      status: response.status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
-
-  if (sessionData.terminologyCount > 5) {
-    feedback += '<li>Good exposure to medical terminology during the session</li>';
-  }
-
-  if (duration > 5) {
-    feedback += '<li>Maintained focus throughout an extended session</li>';
-  }
-
-  feedback += '</ul></div>';
-
-  feedback += '<div class="feedback-section"><h3>🎯 Areas for Improvement</h3>';
-
-  if (sessionData.paceIssues > 2) {
-    feedback += `
-      <div class="improvement-item">
-        <h4>Pacing</h4>
-        <p><strong>Standard:</strong> NCIHC Standard 2 - Appropriate pace, tone, and volume</p>
-        <div class="coaching-plan">
-          <strong>Coaching Plan:</strong>
-          <ol>
-            <li>Practice pausing between phrases</li>
-            <li>Use breathing exercises to control pace</li>
-            <li>Record and review your interpretations for pace consistency</li>
-          </ol>
-        </div>
-      </div>
-    `;
-  }
-
-  if (sessionData.terminologyCount < 3) {
-    feedback += `
-      <div class="improvement-item">
-        <h4>Medical Terminology</h4>
-        <p><strong>Standard:</strong> Professional competency and accuracy</p>
-        <div class="coaching-plan">
-          <strong>Coaching Plan:</strong>
-          <ol>
-            <li>Review common medical terms and their Spanish equivalents</li>
-            <li>Create flashcards for frequently used terminology</li>
-            <li>Practice pronunciation with InterpreStudy's terminology tools</li>
-          </ol>
-        </div>
-      </div>
-    `;
-  }
-
-  feedback += '</div>';
-
-  feedback += `
-    <div class="feedback-section encouragement">
-      <h3>🌟 Encouragement</h3>
-      <p>You completed a ${duration}-minute session with ${sessionData.interactionCount} interactions. This shows dedication to your professional development. Continue practicing with InterpreCoach and InterpreStudy to refine your skills. Remember, every session is an opportunity to grow as a medical interpreter. Your commitment to excellence will serve patients and providers well.</p>
-    </div>
-  `;
-
-  return feedback;
+  throw new Error("AI gateway error");
 }
+
+const data = await response.json();
+let content = data.choices?.[0]?.message?.content || "";
+
+const processingTime = Date.now() - startTime
+
+try {
+  const cleanedContent = content
+    .replace(/```json\n?/g, '')
+    .replace(/```\n?/g, '')
+    .trim();
+
+  const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    const feedback = JSON.parse(jsonMatch[0]);
+
+    if (feedback.overallAssessment) {
+      // Log AI content
+      await logAIContent(userId, { sessionType, focusAreas }, feedback, processingTime)
+
+      return new Response(JSON.stringify(feedback), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  }
+} catch (parseError) {
+  console.error("JSON parse error:", parseError);
+  await logAIContent(userId, { sessionType }, { error: 'Parse failed' }, processingTime)
+}
+
+// Fallback
+const fallback = {
+  overallAssessment: "Thank you for submitting your interpretation for feedback.",
+  strengths: ["Completion of the exercise"],
+  areasForImprovement: ["Unable to generate detailed feedback - please try again"],
+  specificExamples: {},
+  nextSteps: ["Review foundational interpretation techniques"]
+}
+
+return new Response(JSON.stringify(fallback), {
+  headers: { ...corsHeaders, "Content-Type": "application/json" },
+});
+  } catch (error) {
+  console.error("generate-interpreter-feedback error:", error);
+  return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+    status: 500,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+});
