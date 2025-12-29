@@ -14,6 +14,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
   const intervalRef = useRef<number | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const isMountedRef = useRef(true);
+  const isInitializedRef = useRef(false); // Track if initialization has already happened
 
   const [cameraState, setCameraState] = useState<CameraState>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -173,7 +174,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
       if (videoRef.current) {
         const video = videoRef.current;
         intervalRef.current = window.setInterval(async () => {
-          if (!isMountedRef.current || cameraState === 'error') {
+          if (!isMountedRef.current) {
             if (intervalRef.current) clearInterval(intervalRef.current);
             return;
           }
@@ -196,7 +197,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
       setError(err instanceof Error ? err.message : 'Failed to initialize camera and detection system');
       setCameraState('error');
     }
-  }, [checkCameraPermission, requestCameraAccess, onSignDetected, cameraState]);
+  }, [checkCameraPermission, requestCameraAccess, onSignDetected]);
 
   // Retry initialization
   const retry = useCallback(() => {
@@ -210,17 +211,25 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
       streamRef.current = null;
     }
 
-    // Reset state and reinitialize
+    // Reset state and flags
     setError(null);
     setDetectedSign(null);
     setCameraState('idle');
+    isInitializedRef.current = false; // Reset initialization flag
+
+    // Reinitialize
     initializeDetection();
   }, [initializeDetection]);
 
   // Initialize on mount
   useEffect(() => {
     isMountedRef.current = true;
-    initializeDetection();
+
+    // Only initialize once
+    if (!isInitializedRef.current) {
+      isInitializedRef.current = true;
+      initializeDetection();
+    }
 
     return () => {
       isMountedRef.current = false;
