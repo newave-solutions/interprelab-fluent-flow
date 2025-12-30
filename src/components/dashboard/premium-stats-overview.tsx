@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, DollarSign, Clock, Phone, Target, Zap, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { formatCurrency } from '@/utils/currency';
 
 interface StatCardProps {
   title: string;
@@ -71,10 +72,6 @@ interface PremiumStatsOverviewProps {
 }
 
 export default function PremiumStatsOverview({ stats, isPremium }: PremiumStatsOverviewProps) {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-  };
-
   const formatTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -92,7 +89,7 @@ export default function PremiumStatsOverview({ stats, isPremium }: PremiumStatsO
         trend="up"
         subtitle="This month"
       />
-      
+
       <StatCard
         title="Total Calls"
         value={stats.totalCalls}
@@ -102,7 +99,7 @@ export default function PremiumStatsOverview({ stats, isPremium }: PremiumStatsO
         trend="up"
         subtitle="This month"
       />
-      
+
       <StatCard
         title="Active Time"
         value={formatTime(stats.totalMinutes)}

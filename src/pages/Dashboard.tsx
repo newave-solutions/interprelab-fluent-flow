@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
 import LearningProgress from '@/components/dashboard/learning-progress';
+import { QuickAccess } from '@/components/dashboard/QuickAccess';
+import { formatCurrency } from '@/utils/currency';
 
 interface CallRecord {
   id: string;
@@ -131,7 +133,7 @@ const Dashboard = () => {
     });
 
     setRecentCalls(recent || []);
-    
+
     // Load learning metrics
     await loadLearningMetrics();
   };
@@ -183,13 +185,6 @@ const Dashboard = () => {
     return `${hours}h ${minutes}m`;
   };
 
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
-  };
-
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
@@ -203,7 +198,7 @@ const Dashboard = () => {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.monthEarnings)}</div>
+              <div className="text-2xl font-bold">{formatCurrency(stats.monthEarnings, { currency })}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.monthCalls} calls • {formatDuration(stats.monthTotal)}
               </p>
@@ -216,7 +211,7 @@ const Dashboard = () => {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.yearEarnings)}</div>
+              <div className="text-2xl font-bold">{formatCurrency(stats.yearEarnings, { currency })}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.yearCalls} calls • {formatDuration(stats.yearTotal)}
               </p>
@@ -244,6 +239,11 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">All time</p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Quick Access */}
+        <div className="mb-8">
+          <QuickAccess />
         </div>
 
         {/* Learning Progress and Recent Calls */}
@@ -278,7 +278,7 @@ const Dashboard = () => {
                         )}
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold">{formatCurrency(call.earnings || 0)}</div>
+                        <div className="font-semibold">{formatCurrency(call.earnings || 0, { currency })}</div>
                         <div className="text-sm text-muted-foreground">
                           {formatDuration(call.duration_seconds)}
                         </div>

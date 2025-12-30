@@ -2,6 +2,9 @@
 // Dynamic imports for lazy loading TensorFlow.js dependencies
 import type * as handposeType from '@tensorflow-models/handpose';
 import type * as fpType from 'fingerpose';
+// Import TensorFlow.js core and backend for proper initialization
+import '@tensorflow/tfjs-core';
+import '@tensorflow/tfjs-backend-webgl';
 import { gestures } from './asl-gestures';
 import MotionTracker from './MotionTracker';
 

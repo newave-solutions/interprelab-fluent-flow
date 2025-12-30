@@ -4,8 +4,8 @@ import { ValueProposition } from "@/components/ValueProposition";
 import { ProblemSolution } from "@/components/ProblemSolution";
 import { HowItWorks } from "@/components/HowItWorks";
 import { DarkSection } from "@/components/DarkSection";
-import { InterpreCoachShowcase } from "@/components/InterpreCoachShowcase";
 import { SolutionsShowcase } from "@/components/SolutionsShowcase";
+import { ProductDemoVideo } from "@/components/ProductDemoVideo";
 import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
@@ -31,11 +31,11 @@ const Index = () => {
         {/* Dark Section - Mission Statement */}
         <DarkSection />
 
-        {/* InterpreCoach Video Showcase */}
-        <InterpreCoachShowcase />
-
         {/* Solutions Showcase */}
         <SolutionsShowcase />
+
+        {/* Product Demo Video */}
+        <ProductDemoVideo />
 
         {/* Social Proof & Stats */}
         <StatsSection />

@@ -1,4 +1,4 @@
-project_id = "ggyzlvbtkibqnkfhgnbe"
+project_id = "iokgkrnbawhizmuejluz"
 
 [functions.generate-interpreter-feedback]
 verify_jwt = true
@@ -24,8 +24,14 @@ verify_jwt = true
 [functions.terminology-lookup]
 verify_jwt = true
 
+[functions.advanced-terminology-search]
+verify_jwt = true
+
 [functions.generate-quiz]
 verify_jwt = true
 
 [functions.generate-scenario]
+verify_jwt = true
+
+[functions.gradetest]
 verify_jwt = true

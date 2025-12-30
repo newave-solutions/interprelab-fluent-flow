@@ -52,17 +52,13 @@ export const Navigation = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/60 backdrop-blur-md py-3' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-nobel-gold rounded-full flex items-center justify-center shadow-sm">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            <div className={`transition-opacity ${scrolled ? 'opacity-100' : 'opacity-0 md:opacity-100'}`}>
-              <h1 className="font-serif text-xl font-bold tracking-wide">InterpreLab</h1>
-              <p className="text-xs text-muted-foreground font-normal">Advanced Interpretation</p>
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="transition-all duration-300">
+              <h1 className="font-serif text-xl font-semibold tracking-wide text-foreground/60 group-hover:text-foreground transition-colors duration-300">InterpreLab</h1>
             </div>
           </Link>
 
@@ -73,7 +69,7 @@ export const Navigation = () => {
                 <NavigationMenu key={item.label}>
                   <NavigationMenuList>
                     <NavigationMenuItem>
-                      <NavigationMenuTrigger className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold bg-transparent uppercase">
+                      <NavigationMenuTrigger className="text-xs font-medium tracking-wider text-foreground/50 hover:text-foreground/90 bg-transparent uppercase transition-all duration-300 border-0">
                         {item.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
@@ -96,7 +92,7 @@ export const Navigation = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium tracking-wide text-foreground/70 hover:text-nobel-gold transition-colors uppercase"
+                  className="text-xs font-medium tracking-wider text-foreground/50 hover:text-foreground/90 transition-all duration-300 uppercase"
                 >
                   {item.label}
                 </Link>
@@ -105,7 +101,7 @@ export const Navigation = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
             {user ? (
               <>
@@ -121,14 +117,14 @@ export const Navigation = () => {
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-nobel-gold" asChild>
+                <Button variant="ghost" size="sm" className="text-foreground/50 hover:text-foreground/90 text-xs" asChild>
                   <Link to="/waitlist">
                     Join Waitlist
                   </Link>
                 </Button>
                 <Button
                   size="sm"
-                  className="px-5 py-2 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full shadow-sm font-medium"
+                  className="px-4 py-1.5 bg-foreground/10 hover:bg-foreground/20 text-foreground/70 hover:text-foreground rounded-full font-medium border border-foreground/20 hover:border-foreground/40 transition-all duration-300 text-xs"
                   asChild
                 >
                   <Link to="/signin">

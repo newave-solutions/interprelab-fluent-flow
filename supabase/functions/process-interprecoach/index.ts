@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
@@ -7,97 +8,64 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Medical terminology database
-const MEDICAL_TERMS_DB: Record<string, { definition: string; translation?: string; category: string }> = {
-  'hypertension': {
-    definition: 'High blood pressure',
-    translation: 'Presión arterial alta',
-    category: 'cardiovascular'
-  },
-  'diabetes': {
-    definition: 'Metabolic disorder characterized by high blood sugar',
-    translation: 'Diabetes',
-    category: 'endocrine'
-  },
-  'myocardial infarction': {
-    definition: 'Heart attack - blockage of blood flow to the heart muscle',
-    translation: 'Infarto de miocardio',
-    category: 'cardiovascular'
-  },
-  'pneumonia': {
-    definition: 'Infection that inflames air sacs in lungs',
-    translation: 'Neumonía',
-    category: 'respiratory'
-  },
-  'fracture': {
-    definition: 'Broken bone',
-    translation: 'Fractura',
-    category: 'orthopedic'
-  },
-  'abdominal': {
-    definition: 'Relating to the abdomen/belly area',
-    translation: 'Abdominal',
-    category: 'anatomy'
-  },
-  'acute': {
-    definition: 'Sudden onset, severe',
-    translation: 'Agudo',
-    category: 'general'
-  },
-  'chronic': {
-    definition: 'Long-lasting, persistent',
-    translation: 'Crónico',
-    category: 'general'
-  },
-  'dosage': {
-    definition: 'Amount of medication to be taken',
-    translation: 'Dosis',
-    category: 'medication'
-  },
-  'adverse': {
-    definition: 'Harmful, unfavorable',
-    translation: 'Adverso',
-    category: 'general'
-  },
-  'benign': {
-    definition: 'Not cancerous, non-threatening',
-    translation: 'Benigno',
-    category: 'oncology'
-  },
-  'malignant': {
-    definition: 'Cancerous, life-threatening',
-    translation: 'Maligno',
-    category: 'oncology'
-  },
-  'inflammation': {
-    definition: 'Swelling, redness, pain as immune response',
-    translation: 'Inflamación',
-    category: 'general'
-  },
-  'hemorrhage': {
-    definition: 'Excessive bleeding',
-    translation: 'Hemorragia',
-    category: 'emergency'
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Fetch medical terms from database
+async function fetchMedicalTerms() {
+  const { data, error } = await supabase
+    .from('medical_terms')
+    .select('term, definition, translation_spanish, category')
+    .eq('is_verified', true)
+
+  if (error || !data) {
+    console.error('Failed to fetch medical terms:', error)
+    return []
   }
-};
+
+  return data
+}
 
 // Detect medical terms in de-identified text
-function detectMedicalTerms(text: string) {
-  const detected: Array<{ term: string; definition: string; translation?: string; category: string }> = [];
-  const lowerText = text.toLowerCase();
+async function detectMedicalTerms(text: string) {
+  const terms = await fetchMedicalTerms()
+  const detected: Array<{ term: string; definition: string; translation?: string; category: string }> = []
+  const lowerText = text.toLowerCase()
 
-  Object.entries(MEDICAL_TERMS_DB).forEach(([term, info]) => {
-    if (lowerText.includes(term.toLowerCase())) {
+  terms.forEach(termData => {
+    if (lowerText.includes(termData.term.toLowerCase())) {
       detected.push({
-        term: term,
-        definition: info.definition,
-        translation: info.translation,
-        category: info.category
-      });
-    }
-  });
+        term: termData.term,
+        definition: termData.definition,
+        translation: termData.translation_spanish,
+        category: termData.category
+      })
 
-  return detected;
+      // Increment usage count
+      supabase.rpc('increment_medical_term_usage', {
+        term_id: termData.id
+      }).catch(console.error)
+    }
+  })
+
+  return detected
+}
+
+// Log AI content
+async function logAIContent(userId: string, inputData: any, outputData: any, processingTime: number) {
+  try {
+    await supabase.from('ai_content_log').insert({
+      function_name: 'process-interprecoach',
+      user_id: userId,
+      input_data: inputData,
+      output_data: outputData,
+      model_used: 'gemini-2.5-flash',
+      processing_time_ms: processingTime
+    })
+  } catch (error) {
+    console.error('Failed to log AI content:', error)
+  }
 }
 
 // Generate contextual highlights using AI
@@ -109,14 +77,24 @@ async function generateHighlights(text: string, medications: string[], conversio
   }
 
   try {
-    const systemPrompt = `You are a medical interpretation assistant. Analyze de-identified medical text and provide:
-1. Key clinical highlights (symptoms, diagnoses, procedures)
-2. Important numerical values (vital signs, lab results)
-3. Critical action items (medications, follow-ups)
+    const systemPrompt = `You are a medical interpretation assistant. Analyze de-identified medical text and provide key insights.
 
-Respond in JSON format: { "highlights": [{ "icon": "emoji", "text": "highlight text" }] }
+CRITICAL RULES:
+- Return ONLY valid JSON
+- NO markdown formatting
+- Focus on clinical highlights
+- Keep descriptions concise
 
-Important: The text is already de-identified. Do not reference any PHI.`;
+Example output:
+{
+  "highlights": [
+    {"icon": "💊", "text": "2 new medications prescribed"},
+    {"icon": "❤️", "text": "Blood pressure: 140/90 mmHg"},
+    {"icon": "📋", "text": "Follow-up in 2 weeks"}
+  ]
+}`;
+
+    const startTime = Date.now()
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -125,13 +103,13 @@ Important: The text is already de-identified. Do not reference any PHI.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze this de-identified medical text:\n\n${text}\n\nMedications mentioned: ${medications.join(', ')}\nUnit conversions needed: ${JSON.stringify(conversions)}` }
+          { role: 'user', content: `Analyze: ${text}\n\nMedications: ${medications.join(', ')}` }
         ],
-        temperature: 0.7,
-        max_tokens: 500
+        temperature: 0.2,
+        max_tokens: 300
       }),
     });
 
@@ -142,11 +120,20 @@ Important: The text is already de-identified. Do not reference any PHI.`;
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
+    const processingTime = Date.now() - startTime
 
     if (content) {
       try {
-        const parsed = JSON.parse(content);
-        return parsed.highlights || generateBasicHighlights(text, medications, conversions);
+        const cleanedContent = content
+          .replace(/```json\n?/g, '')
+          .replace(/```\n?/g, '')
+          .trim();
+
+        const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          return parsed.highlights || generateBasicHighlights(text, medications, conversions);
+        }
       } catch {
         return generateBasicHighlights(text, medications, conversions);
       }
@@ -195,16 +182,16 @@ function generateBasicHighlights(text: string, medications: string[], conversion
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Verify authentication
   const authResult = await verifyAuthQuick(req);
   if ('error' in authResult) {
     return authResult.error;
   }
+
+  const userId = authResult.user.id
 
   try {
     const { text, medications = [], conversions = [] } = await req.json();
@@ -215,9 +202,20 @@ serve(async (req) => {
       throw new Error('No text provided');
     }
 
-    // Process de-identified text only
-    const medicalTerms = detectMedicalTerms(text);
+    const startTime = Date.now()
+
+    // Process de-identified text with database lookup
+    const medicalTerms = await detectMedicalTerms(text);
     const highlights = await generateHighlights(text, medications, conversions);
+
+    const processingTime = Date.now() - startTime
+
+    // Log AI content (for highlights generation)
+    await logAIContent(userId,
+      { textLength: text.length, medicationCount: medications.length },
+      { termsFound: medicalTerms.length, highlightsGenerated: highlights.length },
+      processingTime
+    )
 
     return new Response(
       JSON.stringify({

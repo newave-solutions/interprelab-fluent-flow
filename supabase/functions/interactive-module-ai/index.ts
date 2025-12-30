@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyAuthQuick } from "../_shared/auth.ts";
 
 const corsHeaders = {
@@ -8,16 +9,37 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Log AI content
+async function logAIContent(userId: string, action: string, inputData: any, outputData: any, processingTime: number) {
+  try {
+    await supabase.from('ai_content_log').insert({
+      function_name: `interactive-module-ai-${action}`,
+      user_id: userId,
+      input_data: inputData,
+      output_data: outputData,
+      model_used: 'gemini-2.5-flash',
+      processing_time_ms: processingTime
+    })
+  } catch (error) {
+    console.error('Failed to log AI content:', error)
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Verify authentication
   const authResult = await verifyAuthQuick(req);
   if ('error' in authResult) {
     return authResult.error;
   }
+
+  const userId = authResult.user.id
 
   try {
     const requestSchema = z.object({
@@ -53,56 +75,78 @@ serve(async (req) => {
     let systemPrompt = "";
     let userPrompt = "";
     let useJson = false;
+    let temperature = 0.5;
+    let maxTokens = 500;
 
     switch (action) {
       case 'generate-quiz':
         systemPrompt = `You are an expert medical terminology instructor specializing in ${specialty || 'general medical'} terminology for medical interpreters.`;
-        userPrompt = `Generate a unique multiple-choice clinical case question about ${topic || 'the male reproductive system'} (pathology, anatomy, or diagnostic). 
-        Return strictly valid JSON with this schema:
-        {
-          "question": "string (clinical scenario question)",
-          "options": ["string", "string", "string", "string"],
-          "correctIndex": integer (0-3),
-          "explanation": "string (brief explanation of why correct answer is right)"
-        }`;
+        userPrompt = `Generate a unique multiple-choice clinical case question about ${topic || 'medical terminology'}. 
+        
+CRITICAL RULES:
+- Return ONLY valid JSON
+- NO markdown formatting
+- Create realistic clinical scenario
+
+Schema:
+{
+  "question": "clinical scenario question",
+  "options": ["option 1", "option 2", "option 3", "option 4"],
+  "correctIndex": 0,
+  "explanation": "why correct answer is right"
+}`;
         useJson = true;
+        temperature = 0.4;
+        maxTokens = 400;
         break;
 
       case 'chat':
-        systemPrompt = `You are a friendly, concise medical tutor for students learning ${specialty || 'reproductive systems'} terminology for medical interpretation. 
-        Keep answers educational, clear, and supportive. Focus on building interpreter confidence and competence.
-        Answer in 2-3 sentences max. Keep it simple and encouraging.`;
-        // For chat, we'll use the messages array
+        systemPrompt = `You are a friendly, concise medical tutor for students learning ${specialty || 'medical'} terminology for interpretation. 
+        
+CRITICAL RULES:
+- Keep answers educational and clear
+- Answer in 2-3 sentences max
+- Be encouraging and supportive
+- Focus on practical interpreter skills`;
+        temperature = 0.6;
+        maxTokens = 300;
         break;
 
       case 'get-insight':
         systemPrompt = `You are an expert in medical etymology and terminology for medical interpreters.`;
         userPrompt = `Provide a brief insight about the medical term "${term || 'anatomy'}". Include:
-        1. Etymology (origin of the term)
-        2. A helpful mnemonic or memory trick
-        3. Common related terms
-        Keep it concise and educational (max 100 words).`;
+1. Etymology (origin)
+2. Helpful mnemonic
+3. Related terms
+
+Keep it concise (max 100 words).`;
+        temperature = 0.5;
+        maxTokens = 250;
         break;
 
       case 'completion':
         // Generic completion, relies on provided messages
+        temperature = 0.5;
+        maxTokens = 500;
         break;
     }
 
-    const apiMessages = action === 'chat' && messages
-      ? [{ role: "system", content: systemPrompt }, ...messages]
-      : (action === 'completion') && messages
-        ? messages
-        : [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ];
+    const apiMessages = (action === 'chat' || action === 'completion') && messages
+      ? (action === 'chat' ? [{ role: "system", content: systemPrompt }, ...messages] : messages)
+      : [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ];
 
     console.log(`Processing ${action} request for topic: ${topic || specialty || term || 'general'}`);
+
+    const startTime = Date.now()
 
     const requestBody: Record<string, unknown> = {
       model: "google/gemini-2.5-flash",
       messages: apiMessages,
+      temperature,
+      max_tokens: maxTokens
     };
 
     if (useJson) {
@@ -152,14 +196,24 @@ serve(async (req) => {
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
+    const processingTime = Date.now() - startTime
+
     if (!content) {
       throw new Error("No content in AI response");
     }
 
+    // Log AI content (non-streaming only)
+    await logAIContent(userId, action, { topic, specialty, term }, { responseLength: content.length }, processingTime)
+
     // For JSON responses, parse and return
     if (useJson) {
       try {
-        const parsed = JSON.parse(content);
+        const cleanedContent = content
+          .replace(/```json\n?/g, '')
+          .replace(/```\n?/g, '')
+          .trim();
+
+        const parsed = JSON.parse(cleanedContent);
         return new Response(JSON.stringify(parsed), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });

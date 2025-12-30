@@ -7,6 +7,7 @@ import { GetStartedSteps } from "@/components/GetStartedSteps";
 import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
+import { InterpreCoachShowcase } from "@/components/InterpreCoachShowcase";
 
 import extensionPreview from "@/assets/coach-frontned-design.png";
 
@@ -167,6 +168,9 @@ const InterpreCoach = () => {
           </div>
         </div>
       </section>
+
+      {/* InterpreCoach Video Showcase - Moved from landing page */}
+      <InterpreCoachShowcase />
 
       {/* Features Section with Particles */}
       <section className="relative py-16 overflow-hidden">

@@ -1,24 +1,25 @@
-import { CheckCircle2, DollarSign, Clock, Brain } from "lucide-react";
+import { CheckCircle2, DollarSign, Clock, Brain, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const ProblemSolution = () => {
-  const challenges = [
+  const benefits = [
     {
       icon: DollarSign,
-      problem: "Expensive Training",
-      solution: "Affordable AI-powered assessment and courses approved by NBCMI and CCHI",
-      stat: "90% less expensive than traditional courses"
+      title: "Accessible & Affordable",
+      description: "Professional development that fits your budget with AI-powered assessments and NBCMI/CCHI-aligned courses",
+      stat: "90% more affordable than traditional programs"
     },
     {
       icon: Clock,
-      problem: "Time-Consuming Process",
-      solution: "Get instant feedback and personalized learning paths in minutes",
-      stat: "30-minute assessments vs. months of coursework"
+      title: "Instant Results",
+      description: "Get personalized feedback and actionable insights in minutes, not months",
+      stat: "Results in 30 minutes vs. months of waiting"
     },
     {
       icon: Brain,
-      problem: "No Real-Time Support",
-      solution: "InterpreCoach provides live assistance during actual calls",
-      stat: "24/7 AI support when you need it"
+      title: "24/7 AI Support",
+      description: "InterpreCoach provides real-time assistance during live calls when you need it most",
+      stat: "Always available when you need help"
     }
   ];
 
@@ -29,54 +30,55 @@ export const ProblemSolution = () => {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
-              The Challenge
+              Why InterpreLab
             </div>
             <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              Professional Development Shouldn't Be This Hard
+              Professional Development, <span className="text-nobel-gold">Reimagined</span>
             </h2>
-            <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-3xl mx-auto">
-              As working interpreters, we've experienced the frustration firsthand. Expensive courses with minimal support. No real-time assistance during calls. Guesswork about where to improve. <strong>There had to be a better way.</strong>
+            <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-3xl mx-auto mb-4">
+              As working interpreters, we built the tools we wished existed. Affordable, accessible, and available when you need them—because advancing your career shouldn't require sacrificing your livelihood.
             </p>
+            <Link
+              to="/resources/industry-challenges"
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Learn about the industry challenges we're addressing
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
 
-          {/* Problem-Solution Cards */}
+          {/* Benefits Cards */}
           <div className="grid md:grid-cols-3 gap-6">
-            {challenges.map((item, index) => {
+            {benefits.map((item, index) => {
               const Icon = item.icon;
               return (
-                <div 
+                <div
                   key={index}
-                  className="bg-stone-50 dark:bg-stone-950 rounded-xl p-8 border border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 transition-all duration-300"
+                  className="bg-gradient-to-br from-stone-50 to-nobel-gold/5 dark:from-stone-950 dark:to-nobel-gold/5 rounded-xl p-8 border border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 transition-all duration-300 hover:shadow-lg"
                 >
-                  {/* Icon */}
+                  {/* Icon & Title */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-red-50 dark:bg-red-950/30 rounded-lg">
-                      <Icon className="w-6 h-6 text-red-600 dark:text-red-400" />
+                    <div className="p-3 bg-nobel-gold/10 rounded-lg">
+                      <Icon className="w-6 h-6 text-nobel-gold" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-serif text-xl font-medium mb-2 text-red-900 dark:text-red-200">
-                        {item.problem}
+                      <h3 className="font-serif text-xl font-medium mb-2 text-foreground">
+                        {item.title}
                       </h3>
                     </div>
                   </div>
 
-                  {/* Divider */}
-                  <div className="h-px bg-gradient-to-r from-red-200 via-nobel-gold to-green-200 dark:from-red-900 dark:via-nobel-gold dark:to-green-900 my-6" />
-
-                  {/* Solution */}
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="p-3 bg-green-50 dark:bg-green-950/30 rounded-lg">
-                      <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-stone-700 dark:text-stone-300 font-medium">
-                        {item.solution}
-                      </p>
-                    </div>
+                  {/* Description */}
+                  <div className="mb-6">
+                    <p className="text-stone-700 dark:text-stone-300">
+                      {item.description}
+                    </p>
                   </div>
 
                   {/* Stat */}
-                  <div className="mt-6 p-3 bg-nobel-gold/10 rounded-lg border border-nobel-gold/20">
+                  <div className="mt-auto p-3 bg-nobel-gold/10 rounded-lg border border-nobel-gold/20">
                     <p className="text-sm font-bold text-nobel-gold text-center">
                       {item.stat}
                     </p>
@@ -87,25 +89,28 @@ export const ProblemSolution = () => {
           </div>
 
           {/* Bottom CTA */}
-          <div className="mt-16 text-center bg-stone-50 dark:bg-stone-950 rounded-xl p-8 border border-stone-200 dark:border-border">
-            <h3 className="font-serif text-2xl font-medium mb-4">
-              Ready to Transform Your Practice?
-            </h3>
-            <p className="text-stone-600 dark:text-stone-400 mb-6 max-w-2xl mx-auto">
-              Join thousands of interpreters who've made the switch to smarter, more affordable professional development.
+          <div className="mt-16 text-center bg-gradient-to-br from-nobel-gold/5 to-primary/5 dark:from-nobel-gold/10 dark:to-primary/10 rounded-xl p-8 border border-nobel-gold/20">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Sparkles className="w-6 h-6 text-nobel-gold" />
+              <h3 className="font-serif text-2xl font-medium">
+                Ready to Elevate Your Practice?
+              </h3>
+            </div>
+            <p className="text-stone-600 dark:text-stone-300 mb-6 max-w-2xl mx-auto">
+              Join thousands of interpreters who are advancing their careers with AI-powered tools designed specifically for professionals like you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <div className="flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+              <div className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
                 <span>No credit card required</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+              <div className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
-                <span>NBCMI & CCHI approved</span>
+                <span>NBCMI & CCHI aligned</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+              <div className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
-                <span>Instant results</span>
+                <span>Instant feedback</span>
               </div>
             </div>
           </div>

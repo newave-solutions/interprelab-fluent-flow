@@ -20,6 +20,7 @@ interface TermResult {
 }
 
 const STORAGE_KEY = 'interprestudy_glossary';
+const USE_ADVANCED_SEARCH = true; // Toggle between 'advanced-terminology-search' and 'terminology-lookup'
 
 export const TerminologyLookup = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,27 +56,58 @@ export const TerminologyLookup = () => {
     setResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('terminology-lookup', {
+      const functionName = USE_ADVANCED_SEARCH ? 'advanced-terminology-search' : 'terminology-lookup';
+
+      const { data, error } = await supabase.functions.invoke(functionName, {
         body: { term: searchTerm.trim(), targetLanguage: 'Spanish' }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error(`${functionName} error:`, error);
+        throw new Error(error.message || 'Edge function invocation failed');
+      }
 
-      setResult({
-        english: data.english || searchTerm,
-        translation: data.translation || '',
-        pronunciation: data.pronunciation || '',
-        definition: data.definition || '',
-        context: data.context,
-        notes: data.notes,
-        relatedTerms: data.relatedTerms,
-        imageUrl: undefined,
-      });
+      // Handle response based on which function was used
+      if (USE_ADVANCED_SEARCH) {
+        // Advanced search returns nested data structure
+        if (!data.success) {
+          throw new Error(data.error || 'Advanced search failed');
+        }
+
+        const responseData = data.data;
+        setResult({
+          english: responseData.english || searchTerm,
+          translation: responseData.translation || '',
+          pronunciation: responseData.pronunciation || '',
+          definition: responseData.definition || '',
+          context: responseData.context,
+          notes: responseData.notes,
+          relatedTerms: responseData.relatedTerms,
+          imageUrl: undefined,
+        });
+      } else {
+        // Standard lookup returns flat structure
+        setResult({
+          english: data.english || searchTerm,
+          translation: data.translation || '',
+          pronunciation: data.pronunciation || '',
+          definition: data.definition || '',
+          context: data.context,
+          notes: data.notes,
+          relatedTerms: data.relatedTerms,
+          imageUrl: undefined,
+        });
+      }
     } catch (error) {
       console.error('Terminology lookup error:', error);
+
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Failed to look up term. Please try again.';
+
       toast({
         title: 'Error',
-        description: 'Failed to look up term. Please try again.',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {

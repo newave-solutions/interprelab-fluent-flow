@@ -51,20 +51,20 @@ export const Footer = () => {
 
           {/* Products */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Services</h4>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wide">Solutions</h4>
             <ul className="space-y-2 text-sm text-stone-400">
               <li>
-                <Link to="/interprebot" className="hover:text-white transition-colors flex items-center gap-2">
-                  InterpreBot
+                <Link to="/interpretest" className="hover:text-nobel-gold transition-colors">
+                  InterpreTest
                 </Link>
               </li>
               <li>
-                <Link to="/interprecoach" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link to="/interprecoach" className="hover:text-nobel-gold transition-colors">
                   InterpreCoach
                 </Link>
               </li>
               <li>
-                <Link to="/interprestudy" className="hover:text-white transition-colors">
+                <Link to="/interprestudy" className="hover:text-nobel-gold transition-colors">
                   InterpreStudy
                 </Link>
               </li>
@@ -73,34 +73,69 @@ export const Footer = () => {
                   InterpreTrack
                 </Link>
               </li>
+              <li>
+                <Link to="/interpresigns" className="hover:text-nobel-gold transition-colors">
+                  InterpreSigns
+                </Link>
+              </li>
+              <li>
+                <Link to="/interprelink" className="hover:text-nobel-gold transition-colors">
+                  InterpreLink
+                </Link>
+              </li>
+              <li>
+                <Link to="/interpre-wellness" className="hover:text-nobel-gold transition-colors">
+                  InterpreWellness
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Solutions */}
+          {/* Resources & Company */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Resources</h4>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wide">Company</h4>
             <ul className="space-y-2 text-sm text-stone-400">
               <li>
-                <a href="https://www.certifiedmedicalinterpreters.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-                  NBCMI
-                </a>
+                <Link to="/about" className="hover:text-nobel-gold transition-colors">
+                  About Us
+                </Link>
               </li>
               <li>
-                <a href="https://cchicertification.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-                  CCHI
-                </a>
+                <Link to="/resources" className="hover:text-nobel-gold transition-colors">
+                  Resources
+                </Link>
               </li>
               <li>
-                <Link to="/careers" className="hover:text-white transition-colors">
+                <Link to="/resources/industry-insights" className="hover:text-nobel-gold transition-colors">
+                  Industry Insights
+                </Link>
+              </li>
+              <li>
+                <Link to="/careers" className="hover:text-nobel-gold transition-colors">
                   Careers
                 </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-nobel-gold transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <a href="https://www.certifiedmedicalinterpreters.org/" target="_blank" rel="noopener noreferrer" className="hover:text-nobel-gold transition-colors">
+                  NBCMI Certification
+                </a>
+              </li>
+              <li>
+                <a href="https://cchicertification.org/" target="_blank" rel="noopener noreferrer" className="hover:text-nobel-gold transition-colors">
+                  CCHI Certification
+                </a>
               </li>
             </ul>
           </div>
 
           {/* Contact & Support */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Contact</h4>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wide">Contact</h4>
             <div className="space-y-3 text-sm text-stone-400">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
@@ -114,6 +149,14 @@ export const Footer = () => {
                 <MapPin className="w-4 h-4 text-nobel-gold" />
                 <span>Houston, Texas</span>
               </div>
+            </div>
+
+            <div className="pt-2">
+              <Link to="/waitlist">
+                <Button size="sm" className="w-full bg-nobel-gold hover:bg-nobel-gold/90 text-white">
+                  Join Waitlist
+                </Button>
+              </Link>
             </div>
 
             <div className="flex gap-2">

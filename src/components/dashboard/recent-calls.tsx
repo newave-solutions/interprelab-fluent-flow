@@ -5,12 +5,10 @@ import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Phone, Video } from 'lucide-react';
+import { formatCurrency } from '@/utils/currency';
 
 export default function RecentCalls() {
   const recentCalls = callRecords.slice(0, 5);
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-  };
 
   return (
     <Card>
