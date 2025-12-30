@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Quote } from "lucide-react";
+import { AccessibleCarousel } from "@/components/ui/accessible-carousel";
 
 export const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
   const testimonials = [
     {
       name: "Dr. Maria Rodriguez",
@@ -64,22 +62,17 @@ export const Testimonials = () => {
     }
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 4000);
-
-    return () => clearInterval(timer);
-  }, [testimonials.length]);
-
   return (
-    <section className="py-32 px-6 relative bg-card/50">
+    <section className="py-32 px-6 relative bg-card/50" aria-labelledby="testimonials-heading">
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16 space-y-6">
           <div className="inline-block mb-3 text-xs font-bold tracking-widest text-muted-foreground uppercase animate-fade-in-up stagger-1">
             Testimonials
           </div>
-          <h2 className="font-serif text-4xl md:text-5xl leading-tight text-foreground animate-fade-in-up stagger-2">
+          <h2 
+            id="testimonials-heading"
+            className="font-serif text-4xl md:text-5xl leading-tight text-foreground animate-fade-in-up stagger-2"
+          >
             Loved by
             <br />
             <span className="text-muted-foreground italic font-normal text-3xl md:text-4xl block mt-4">
@@ -93,65 +86,52 @@ export const Testimonials = () => {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          <div className="relative overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-            >
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="glass border-border hover:border-amber-500/30 transition-all duration-300 hover:shadow-md">
-                    <CardContent className="p-8 md:p-12">
-                      <div className="space-y-6">
-                        {/* Quote */}
-                        <div className="relative">
-                          <Quote className="w-10 h-10 text-amber-500/20 absolute -top-4 -left-4" />
-                          <blockquote className="text-lg md:text-xl text-foreground leading-relaxed pl-8 font-light">
-                            "{testimonial.quote}"
-                          </blockquote>
-                        </div>
+          <AccessibleCarousel
+            autoPlay={true}
+            autoPlayInterval={5000}
+            showControls={true}
+            showIndicators={true}
+            ariaLabel="Customer testimonials"
+            className="px-4"
+          >
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="glass border-border hover:border-amber-500/30 transition-all duration-300 hover:shadow-md">
+                <CardContent className="p-8 md:p-12">
+                  <div className="space-y-6">
+                    {/* Quote */}
+                    <div className="relative">
+                      <Quote className="w-10 h-10 text-amber-500/20 absolute -top-4 -left-4" aria-hidden="true" />
+                      <blockquote className="text-lg md:text-xl text-foreground leading-relaxed pl-8 font-light">
+                        "{testimonial.quote}"
+                      </blockquote>
+                    </div>
 
-                        {/* Rating */}
-                        <div className="flex items-center gap-1">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <span key={i} className="text-amber-500 text-xl">★</span>
-                          ))}
-                        </div>
+                    {/* Rating */}
+                    <div className="flex items-center gap-1" role="img" aria-label={`${testimonial.rating} out of 5 stars`}>
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <span key={i} className="text-amber-500 text-xl" aria-hidden="true">★</span>
+                      ))}
+                    </div>
 
-                        {/* Author */}
-                        <div className="flex items-center gap-4 pt-4 border-t border-border/50">
-                          <Avatar className="w-14 h-14 ring-2 ring-amber-500/20">
-                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                            <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h4 className="text-lg font-semibold text-foreground">{testimonial.name}</h4>
-                            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                          <Badge className="glass border-amber-500/30 text-amber-500">
-                            {testimonial.specialty}
-                          </Badge>
-                        </div>
+                    {/* Author */}
+                    <div className="flex items-center gap-4 pt-4 border-t border-border/50">
+                      <Avatar className="w-14 h-14 ring-2 ring-amber-500/20">
+                        <AvatarImage src={testimonial.avatar} alt={`Photo of ${testimonial.name}`} />
+                        <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <h4 className="text-lg font-semibold text-foreground">{testimonial.name}</h4>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dots indicator */}
-          <div className="flex justify-center gap-2 mt-10">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentIndex ? 'w-8 bg-amber-500' : 'w-2 bg-amber-500/30'
-                }`}
-                onClick={() => setCurrentIndex(index)}
-              />
+                      <Badge className="glass border-amber-500/30 text-amber-500">
+                        {testimonial.specialty}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </div>
+          </AccessibleCarousel>
         </div>
       </div>
     </section>
