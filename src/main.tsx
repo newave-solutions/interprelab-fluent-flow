@@ -1,6 +1,7 @@
 // Force rebuild to reload environment variables
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import { logPerformanceMetrics } from "./utils/performance";
@@ -12,6 +13,8 @@ if (import.meta.env.DEV) {
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
   </React.StrictMode>
 );

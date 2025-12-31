@@ -47,11 +47,11 @@ export const Hero = () => {
                     {/* Main Headline - Elegant serif style with text shadow for visibility */}
                     <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1]" style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4)' }}>
                         <span className="text-nobel-gold">
-                            Master Medical
+                            Master Medical & Legal
                         </span>
                         <br />
                         <span className="text-white">
-                            Interpretation
+                            Interpretation with AI
                         </span>
                     </h1>
 
