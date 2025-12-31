@@ -80,11 +80,6 @@ export default function Home() {
         <meta name="author" content="InterpreLab" />
       </Helmet>
 
-      {/* Add semantic H1 for SEO - hidden visually but accessible to search engines */}
-      <h1 className="sr-only">
-        AI-Powered Training and Skills Assessment for Medical and Legal Interpreters
-      </h1>
-
       <div className="min-h-screen bg-background">
         <ScrollProgress />
         <Navigation />
