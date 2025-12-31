@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Navigation } from "../components/Navigation";
 import { FullScreenVideoHero } from "../components/VideoSection";
 import { SolutionHero } from "../components/SolutionHero";
@@ -35,9 +36,58 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <ScrollProgress />
-      <Navigation />
+    <>
+      <Helmet>
+        {/* Primary Meta Tags */}
+        <title>InterpreLab - AI Training for Medical & Legal Interpreters | Free Assessment</title>
+        <meta name="title" content="InterpreLab - AI Training for Medical & Legal Interpreters" />
+        <meta
+          name="description"
+          content="Master medical and legal interpretation with AI-powered training. Get instant skills assessment, real-time coaching, and NBCMI/CCHI approved courses. Start free."
+        />
+        <meta
+          name="keywords"
+          content="medical interpreter training, legal interpreter certification, interpreter skills assessment, AI interpreter coach, medical interpretation courses, NBCMI certification, CCHI certification"
+        />
+        <link rel="canonical" href="https://interprelab.com" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://interprelab.com" />
+        <meta property="og:title" content="InterpreLab - AI Training for Medical & Legal Interpreters" />
+        <meta
+          property="og:description"
+          content="Free skills assessment for medical and legal interpreters. AI-powered training, real-time coaching, and affordable certification prep."
+        />
+        <meta property="og:image" content="https://interprelab.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://interprelab.com" />
+        <meta name="twitter:title" content="InterpreLab - AI Training for Interpreters" />
+        <meta
+          name="twitter:description"
+          content="Free skills assessment and AI-powered training for medical and legal interpreters. Start improving today."
+        />
+        <meta name="twitter:image" content="https://interprelab.com/twitter-image.jpg" />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="author" content="InterpreLab" />
+      </Helmet>
+
+      {/* Add semantic H1 for SEO - hidden visually but accessible to search engines */}
+      <h1 className="sr-only">
+        AI-Powered Training and Skills Assessment for Medical and Legal Interpreters
+      </h1>
+
+      <div className="min-h-screen bg-background">
+        <ScrollProgress />
+        <Navigation />
 
       {/* Full-screen video sections with snap scrolling */}
       <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-snap-container" role="region" aria-label="Pain points and solutions showcase">
@@ -59,7 +109,8 @@ export default function Home() {
         <Testimonials />
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 }
