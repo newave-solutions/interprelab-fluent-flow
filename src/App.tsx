@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { FirebaseAuthProvider } from "@/contexts/FirebaseAuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -13,6 +14,14 @@ import { LandingPageErrorBoundary } from "@/components/LandingPageErrorBoundary"
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient, enableDevTools } from "@/lib/queryClient";
+
+// Determine which auth provider to use based on environment variable
+const useFirebase = import.meta.env.VITE_USE_FIREBASE === 'true';
+const AuthProviderComponent = useFirebase ? FirebaseAuthProvider : AuthProvider;
+
+if (import.meta.env.DEV) {
+  console.log(`🔐 Using ${useFirebase ? 'Firebase' : 'Supabase'} for authentication`);
+}
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -48,7 +57,7 @@ const App = () => (
   <LandingPageErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-        <AuthProvider>
+        <AuthProviderComponent>
           <LanguageProvider>
             <TooltipProvider>
               <Toaster />
@@ -155,7 +164,7 @@ const App = () => (
               </BrowserRouter>
             </TooltipProvider>
           </LanguageProvider>
-        </AuthProvider>
+        </AuthProviderComponent>
       </ThemeProvider>
     </QueryClientProvider>
   </LandingPageErrorBoundary>
