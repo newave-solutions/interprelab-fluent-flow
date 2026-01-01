@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { waitlistSchema } from "@/lib/validations";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const Waitlist = () => {
   const { toast } = useToast();
@@ -69,8 +70,8 @@ const Waitlist = () => {
           variant: "destructive",
         });
       } else {
-        const errorMessage = error && typeof error === 'object' && 'message' in error 
-          ? (error as { message: string }).message 
+        const errorMessage = error && typeof error === 'object' && 'message' in error
+          ? (error as { message: string }).message
           : "Failed to join waitlist. Please try again.";
         toast({
           title: "Error",
@@ -85,8 +86,9 @@ const Waitlist = () => {
 
   return (
     <Layout>
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6 text-center">
+      <section className="relative py-20 overflow-hidden bg-gradient-subtle">
+        <ParticlesBackground particleCount={80} variant="stars" />
+        <div className="relative z-10 container mx-auto px-6 text-center">
           <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
             <Star className="w-4 h-4 mr-2" />
             Early Access
@@ -95,7 +97,7 @@ const Waitlist = () => {
             Join the Waitlist
           </h1>
           <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Be among the first to experience the future of interpretation technology. 
+            Be among the first to experience the future of interpretation technology.
             Get exclusive early access to InterpreLab's AI-powered platform.
           </p>
 
@@ -134,7 +136,7 @@ const Waitlist = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
                     <div className="relative">
@@ -151,9 +153,9 @@ const Waitlist = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    type="submit" 
-                    size="lg" 
+                  <Button
+                    type="submit"
+                    size="lg"
                     className="w-full glass-button"
                     disabled={isSubmitting}
                   >

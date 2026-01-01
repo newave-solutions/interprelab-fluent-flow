@@ -60,10 +60,26 @@ const About = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden min-h-[600px]">
+        <ParticlesBackground particleCount={100} variant="mixed" />
+
+        {/* Background Image with Gradient Fade from Left to Right */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "linear-gradient(to right, transparent 0%, transparent 40%, hsl(var(--background)) 70%, hsl(var(--background)) 100%), url('/src/assets/hero-interprelab.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "left center",
+          }}
+        />
+
+        <div className="relative z-10 container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+            {/* Empty left side for image visibility */}
+            <div className="hidden lg:block" />
+
+            {/* Right side content - over the gradient fade */}
+            <div className="backdrop-blur-sm bg-background/30 p-8 rounded-2xl border border-border/30">
               <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
                 Our Story
               </Badge>
@@ -86,22 +102,14 @@ const About = () => {
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="glass rounded-2xl p-8 border border-border/50">
-                <img
-                  src="/src/assets/hero-interprelab.jpg"
-                  alt="InterpreLab Team"
-                  className="w-full rounded-lg shadow-2xl"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden">
+        <ParticlesBackground particleCount={60} variant="dots" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <Card className="glass border-border/50 p-8">
               <CardHeader>
@@ -166,8 +174,9 @@ const About = () => {
       </section>
 
       {/* Team */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden">
+        <ParticlesBackground particleCount={70} variant="stars" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Meet Our Leadership Team
@@ -207,8 +216,9 @@ const About = () => {
       </section>
 
       {/* Company Stats */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden bg-gradient-subtle">
+        <ParticlesBackground particleCount={50} variant="mixed" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">10,000+</div>

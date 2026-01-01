@@ -19,7 +19,7 @@ interface ParticlesBackgroundProps {
 
 export const ParticlesBackground = ({
   className = '',
-  particleCount = 50,
+  particleCount = 100,
   variant = 'mixed'
 }: ParticlesBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

@@ -143,9 +143,9 @@ const Contact = () => {
 
       {/* Contact Form & Info */}
       <section className="relative py-20 overflow-hidden">
-        <ParticlesBackground particleCount={60} variant="dots" />
+        <ParticlesBackground particleCount={80} variant="dots" />
         <div className="relative z-10 container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Form */}
             <div className="lg:col-span-2">
               <Card className="glass border-border/50">

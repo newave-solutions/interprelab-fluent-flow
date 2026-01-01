@@ -1,11 +1,8 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
-import { ValueProposition } from "@/components/ValueProposition";
-import { ProblemSolution } from "@/components/ProblemSolution";
+import { SolutionsBento } from "@/components/SolutionsBento";
+import { CertificateSection } from "@/components/CertificateSection";
 import { HowItWorks } from "@/components/HowItWorks";
-import { DarkSection } from "@/components/DarkSection";
-import { SolutionsShowcase } from "@/components/SolutionsShowcase";
-import { ProductDemoVideo } from "@/components/ProductDemoVideo";
 import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
@@ -16,31 +13,20 @@ const Index = () => {
       <Navigation />
 
       <main>
-        {/* Hero Section */}
+        {/* Hero Section - Bold introduction */}
         <Hero />
 
-        {/* Value Proposition - Why Choose Us */}
-        <ValueProposition />
+        {/* Solutions Bento - Complete AI toolkit showcase */}
+        <SolutionsBento />
 
-        {/* Problem-Solution Section */}
-        <ProblemSolution />
+        {/* Certificate Section - 40-hour training course */}
+        <CertificateSection />
 
-        {/* How It Works - 3 Step Process */}
+        {/* How It Works - Simple 3-step process */}
         <HowItWorks />
 
-        {/* Dark Section - Mission Statement */}
-        <DarkSection />
-
-        {/* Solutions Showcase */}
-        <SolutionsShowcase />
-
-        {/* Product Demo Video */}
-        <ProductDemoVideo />
-
-        {/* Social Proof & Stats */}
+        {/* Stats & Testimonials - Social proof */}
         <StatsSection />
-
-        {/* Testimonials */}
         <Testimonials />
 
       </main>

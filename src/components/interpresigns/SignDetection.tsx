@@ -16,6 +16,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
   const isMountedRef = useRef(true);
   const isInitializedRef = useRef(false); // Track if initialization has already happened
 
+  const [sessionStarted, setSessionStarted] = useState(false); // Track if user has started the session
   const [cameraState, setCameraState] = useState<CameraState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
@@ -221,12 +222,12 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
     initializeDetection();
   }, [initializeDetection]);
 
-  // Initialize on mount
+  // Initialize only when session is started by user
   useEffect(() => {
     isMountedRef.current = true;
 
-    // Only initialize once
-    if (!isInitializedRef.current) {
+    // Only initialize once AND only when user has started the session
+    if (sessionStarted && !isInitializedRef.current) {
       isInitializedRef.current = true;
       initializeDetection();
     }
@@ -240,7 +241,7 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
     };
-  }, [initializeDetection]);
+  }, [sessionStarted, initializeDetection]);
 
   // Render loading states
   const renderStatus = () => {
@@ -297,6 +298,28 @@ const SignDetection: React.FC<SignDetectionProps> = ({ onSignDetected }) => {
         playsInline
         muted
       />
+
+      {/* Start Session Prompt - shown before user starts */}
+      {!sessionStarted && cameraState === 'idle' && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-lg p-8">
+          <Camera className="w-20 h-20 text-primary mb-6 animate-pulse" />
+          <h3 className="text-white text-2xl font-bold mb-3">Ready to Practice?</h3>
+          <p className="text-gray-300 text-center max-w-md mb-6">
+            Click the button below to start your ASL practice session. You'll be asked to grant camera permission.
+          </p>
+          <Button
+            onClick={() => setSessionStarted(true)}
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+          >
+            <Camera className="w-5 h-5 mr-2" />
+            Start Practice Session
+          </Button>
+          <p className="text-gray-400 text-sm mt-4">
+            Your camera feed stays private and is never recorded or transmitted
+          </p>
+        </div>
+      )}
 
       {/* Loading/Status overlays */}
       {renderStatus()}

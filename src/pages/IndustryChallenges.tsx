@@ -9,6 +9,7 @@ import {
   BookOpen, Target, Lightbulb
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const IndustryChallenges = () => {
   const challenges = [
@@ -141,8 +142,9 @@ const IndustryChallenges = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-stone-50 to-white dark:from-stone-950 dark:to-background">
-        <div className="container mx-auto px-6">
+      <section className="relative py-20 overflow-hidden bg-gradient-to-b from-stone-50 to-white dark:from-stone-950 dark:to-background">
+        <ParticlesBackground particleCount={80} variant="stars" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
               Industry Insights

@@ -134,7 +134,7 @@ const solutions: Solution[] = [
 
 export const SolutionsShowcase = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white dark:from-stone-950 dark:via-stone-950 dark:to-background relative overflow-hidden">
+    <section data-section="solutions" className="py-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white dark:from-stone-950 dark:via-stone-950 dark:to-background relative overflow-hidden">
       {/* Particles Background */}
       <ParticlesBackground particleCount={150} variant="mixed" />
 

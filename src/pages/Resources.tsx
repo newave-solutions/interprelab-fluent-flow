@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Video, FileText, Users, ExternalLink, Download, Calendar, Star, Brain, Newspaper } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ParticlesBackground } from "@/components/ParticlesBackground";
 
 const resources = [
   {
@@ -75,8 +76,19 @@ const Resources = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-subtle">
-        <div className="container mx-auto px-6 text-center">
+      <section className="relative py-20 overflow-hidden">
+        <ParticlesBackground particleCount={80} variant="stars" />
+        {/* Background Image with Overlay */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/src/assets/studying-learning.jpg')",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95" />
+        </div>
+
+        <div className="relative z-10 container mx-auto px-6 text-center">
           <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
             Professional Development
           </Badge>
