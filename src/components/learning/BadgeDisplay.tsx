@@ -5,22 +5,51 @@ import { badgeRarityColors } from '@/lib/design-tokens';
 import { CheckCircle, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+type BadgeRarity = keyof typeof badgeRarityColors;
+
 interface BadgeDisplayProps {
   badge: Badge;
   progress?: number; // 0-100 for badges not yet earned
   size?: 'sm' | 'md' | 'lg';
   showProgress?: boolean;
+  /**
+   * Optional rarity override. If not provided, the component will try to use
+   * `badge.rarity` when available (e.g., when `badge` is a PathBadge),
+   * falling back to "common" if no valid rarity can be resolved.
+   */
+  rarity?: BadgeRarity;
 }
 
-export function BadgeDisplay({ badge, progress = 0, size = 'md', showProgress = false }: BadgeDisplayProps) {
+export function BadgeDisplay({
+  badge,
+  progress = 0,
+  size = 'md',
+  showProgress = false,
+  rarity,
+}: BadgeDisplayProps) {
   const sizeClasses = {
     sm: 'w-16 h-16 text-2xl',
     md: 'w-24 h-24 text-4xl',
     lg: 'w-32 h-32 text-5xl',
   };
 
-  const rarity = 'common'; // Default, could be passed as prop for PathBadges
-  const rarityColor = badgeRarityColors[rarity];
+  const resolvedRarity: BadgeRarity = (() => {
+    // 1) Explicit prop takes precedence when it matches known rarity colors
+    if (rarity && badgeRarityColors[rarity]) {
+      return rarity;
+    }
+
+    // 2) If badge has a rarity field (e.g., PathBadge), and it's supported, use it
+    const badgeRarityValue = badge.rarity as BadgeRarity | undefined;
+    if (badgeRarityValue && badgeRarityColors[badgeRarityValue]) {
+      return badgeRarityValue;
+    }
+
+    // 3) Fallback to "common"
+    return 'common';
+  })();
+
+  const rarityColor = badgeRarityColors[resolvedRarity];
 
   return (
     <div className="flex flex-col items-center gap-2">

@@ -232,6 +232,7 @@ export interface Badge {
   category: BadgeCategory;
   earned: boolean;
   earnedAt?: string;
+  rarity?: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 }
 
 export type BadgeCategory =
