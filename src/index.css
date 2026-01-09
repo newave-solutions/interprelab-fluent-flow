@@ -221,6 +221,50 @@
     border: 1px solid hsl(var(--glass-border));
   }
 
+  /* 3D Transform Utilities - From Blue-Gold Design */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* Enhanced Glassmorphism - Blue-Gold Inspired */
+  .glass-dark {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-dark-gold {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+  }
+
+  /* Nobel Gold Gradient Text Utilities */
+  .text-gradient-nobel {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #C5A059, #E5C580);
+  }
+
+  .text-gradient-nobel-shimmer {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #9A7B3C, #C5A059, #E5C580);
+    background-size: 200% auto;
+  }
+
   .glow {
     text-shadow: 0 0 50px hsl(41 52% 56% / 0.3);
   }

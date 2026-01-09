@@ -1,4 +1,4 @@
-import interpreTestMockup from "@/assets/interpre-hub-mockup.png"; // TODO: Replace with InterpreTest-specific mockup
+import interpreTestMockup from "@/assets/interpre-hub-mockup.png";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,10 +12,19 @@ import { MissionCollaborationCTA } from "@/components/MissionCollaborationCTA";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import { RelatedFeatures } from "@/components/RelatedFeatures";
+import InterpreBotAssessment from "@/components/assessments/InterpreBotAssessment";
 
 const InterpreBot = () => {
-  const [userQuestion, setUserQuestion] = useState("");
-  const [showChat, setShowChat] = useState(false);
+  const [showAssessment, setShowAssessment] = useState(false);
+
+  // If assessment is active, show full-screen assessment
+  if (showAssessment) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+        <InterpreBotAssessment />
+      </div>
+    );
+  }
 
   const commonQuestions = [
     "How does the assessment work?",
@@ -67,7 +76,7 @@ const InterpreBot = () => {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="glass-button">
+                <Button size="lg" className="glass-button" onClick={() => setShowAssessment(true)}>
                   <Play className="w-5 h-5 mr-2" />
                   Take the Assessment
                 </Button>
@@ -139,7 +148,7 @@ const InterpreBot = () => {
                 title: "Take the Assessment",
                 description: "Complete a 30-minute comprehensive assessment covering various interpretation scenarios in your target language pair.",
                 buttonText: "Start Assessment",
-                buttonAction: () => console.log("Start assessment"),
+                buttonAction: () => setShowAssessment(true),
               },
               {
                 icon: BarChart,
@@ -190,7 +199,7 @@ const InterpreBot = () => {
             ]}
             finalCTAText="Start Your Journey Now"
             finalCTAIcon={Play}
-            finalCTAAction={() => console.log("Start journey")}
+            finalCTAAction={() => setShowAssessment(true)}
           />
         </div>
       </section>

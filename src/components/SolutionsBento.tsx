@@ -62,13 +62,13 @@ export const SolutionsBento = () => {
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
                     <div className="text-center mb-20">
-                        <Badge className="mb-6 px-8 py-3 bg-gradient-to-r from-nobel-gold/10 to-amber-500/10 text-nobel-gold dark:text-yellow-400 border-nobel-gold/20 text-sm font-semibold">
+                        <Badge className="mb-6 px-8 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20 text-sm font-semibold backdrop-blur-md">
                             Complete AI Ecosystem
                         </Badge>
                         <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
                             One Platform,{" "}
                             <span className="bg-gradient-to-r from-nobel-gold via-yellow-500 to-amber-600 bg-clip-text text-transparent">
-                                9 AI-Powered Tools
+                                7 AI-Powered Tools
                             </span>
                         </h2>
                         <p className="text-xl md:text-2xl text-stone-600 dark:text-stone-400 max-w-3xl mx-auto font-light">

@@ -27,7 +27,7 @@ export const CertificateSection = () => {
                 <div className="max-w-6xl mx-auto">
                     {/* Section Header */}
                     <div className="text-center mb-16">
-                        <Badge className="mb-6 px-6 py-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 text-green-600 dark:text-green-400 border-green-500/20 font-semibold">
+                        <Badge className="mb-6 px-6 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20 font-semibold backdrop-blur-md">
                             <span className="animate-pulse mr-2">●</span>
                             NEW OFFERING
                         </Badge>
