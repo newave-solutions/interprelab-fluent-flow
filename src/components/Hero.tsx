@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Play, ChevronDown, Zap } from "lucide-react";
+import { ArrowRight, ChevronDown, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBg from '../assets/hero-homepage.jpg';
+import CardStack3D from './CardStack3D';
 
 export const Hero = () => {
   const scrollToContent = () => {
@@ -30,56 +31,66 @@ export const Hero = () => {
         aria-hidden="true"
       />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center">
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+      {/* Content - Two Column Layout */}
+      <div className="relative z-10 container mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
 
-          {/* Badge */}
-          <Badge className="glass px-6 py-3 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm">
-            <Zap className="w-4 h-4 mr-2" />
-            AI-Powered Interpretation Platform
-          </Badge>
+          {/* Left Column - Text Content */}
+          <div className="space-y-8 animate-fade-in text-center lg:text-left">
 
-          {/* Main Headline - Elegant serif style */}
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight md:leading-[1.1]">
-            <span className="text-nobel-gold">
-              Master Medical
-            </span>
-            <br />
-            <span className="text-white">
-              Interpretation
-            </span>
-          </h1>
+            {/* Badge */}
+            <Badge className="glass px-6 py-3 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm inline-flex items-center">
+              <Zap className="w-4 h-4 mr-2" />
+              AI-Powered Interpretation Platform
+            </Badge>
 
-          {/* Subtitle - Lighter font weight */}
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-light leading-relaxed">
-            Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
-          </p>
+            {/* Main Headline - Elegant serif style */}
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium leading-tight">
+              <span className="text-nobel-gold">
+                Master Medical
+              </span>
+              <br />
+              <span className="text-white">
+                Interpretation
+              </span>
+            </h1>
 
-          {/* CTA Buttons - Updated styling */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up">
-            <Button
-              variant="default"
-              size="lg"
-              className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-              asChild
-            >
-              <Link to="/interprebot" aria-label="Start your assessment">
-                Take the Assessment
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
+            {/* Subtitle - Lighter font weight */}
+            <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl lg:max-w-none">
+              Train smarter with AI-driven assessment, real-time coaching, and automated tracking.
+            </p>
 
-          {/* Trust Indicators */}
-          <div className="pt-8 text-sm text-white/60 animate-slide-up">
-            <p className="font-light">Trusted by healthcare systems and legal firms across 50+ countries</p>
-            <div className="flex justify-center gap-8 mt-4">
-              <span><span role="img" aria-label="hospital">🏥</span> Medical Centers</span>
-              <span><span role="img" aria-label="scales of justice">⚖️</span> Legal Firms</span>
-              <span><span role="img" aria-label="globe">🌍</span> Global Organizations</span>
+            {/* CTA Buttons - Updated styling */}
+            <div className="flex flex-col sm:flex-row gap-4 lg:justify-start justify-center items-center animate-slide-up">
+              <Button
+                variant="default"
+                size="lg"
+                className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                asChild
+              >
+                <Link to="/interprebot" aria-label="Start your assessment">
+                  Take the Assessment
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="pt-4 text-sm text-white/60 animate-slide-up">
+              <p className="font-light">Trusted by healthcare systems and legal firms across 50+ countries</p>
+              <div className="flex lg:justify-start justify-center gap-6 mt-4 flex-wrap">
+                <span className="flex items-center gap-2"><span role="img" aria-label="hospital">🏥</span> Medical Centers</span>
+                <span className="flex items-center gap-2"><span role="img" aria-label="scales of justice">⚖️</span> Legal Firms</span>
+                <span className="flex items-center gap-2"><span role="img" aria-label="globe">🌍</span> Global Organizations</span>
+              </div>
             </div>
           </div>
+
+          {/* Right Column - CardStack3D */}
+          <div className="flex items-center justify-center lg:justify-end animate-fade-in">
+            <CardStack3D />
+          </div>
+
         </div>
       </div>
 

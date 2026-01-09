@@ -1,0 +1,227 @@
+﻿import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bot, Brain, GraduationCap, HandMetal, Award } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+// Import bot images
+import interpretestBot from "/interpretest-bot.png";
+import interprecoachBot from "/interprecoach-bot.png";
+import interprestudyBot from "/interprestudy-bot.png";
+
+const cards = [
+    {
+        id: 1,
+        title: 'InterpreTest',
+        subtitle: 'Skills Assessment',
+        description: 'AI-powered evaluation of your interpretation skills with personalized feedback',
+        icon: Bot,
+        imageSrc: interpretestBot,
+        gradient: 'from-nobel-gold/20 to-amber-500/20',
+        route: '/interprebot',
+        features: ['Real-time Assessment', 'Detailed Feedback', 'Progress Tracking']
+    },
+    {
+        id: 2,
+        title: 'InterpreCoach',
+        subtitle: 'Real-Time Assistant',
+        description: 'Your AI co-pilot during live calls with instant terminology and insights',
+        icon: Brain,
+        imageSrc: interprecoachBot,
+        gradient: 'from-yellow-600/20 to-nobel-gold/20',
+        route: '/interprecoach',
+        features: ['Live Assistance', 'Smart Terminology', 'Context Insights']
+    },
+    {
+        id: 3,
+        title: 'InterpreStudy',
+        subtitle: 'Personalized Learning',
+        description: 'AI-curated training paths tailored to your skill level and goals',
+        icon: GraduationCap,
+        imageSrc: interprestudyBot,
+        gradient: 'from-amber-600/20 to-yellow-500/20',
+        route: '/interprestudy',
+        features: ['Custom Learning', 'Adaptive Content', 'Skill Mastery']
+    },
+    {
+        id: 4,
+        title: 'InterpreSigns',
+        subtitle: 'ASL Learning',
+        description: 'Interactive American Sign Language training with real-time AI feedback',
+        icon: HandMetal,
+        imageSrc: null, // Using icon-based design
+        gradient: 'from-amber-500/20 to-nobel-gold/20',
+        route: '/interpresigns',
+        features: ['Sign Recognition', 'Practice Sessions', 'AI Feedback']
+    },
+    {
+        id: 5,
+        title: 'Certification Courses',
+        subtitle: 'NBCMI & CCHI Approved',
+        description: '40-60 hour training courses approved as prerequisites for certification exams',
+        icon: Award,
+        imageSrc: null, // Using icon-based design
+        gradient: 'from-yellow-500/20 to-amber-600/20',
+        route: '/courses',
+        features: ['NBCMI Approved', 'CCHI Approved', '40-60 Hours']
+    },
+];
+
+export default function CardStack3D() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    useEffect(() => {
+        if (isPaused) return;
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % cards.length);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [isPaused]);
+
+    return (
+        <div
+            className="relative w-full max-w-lg h-[500px] md:h-[550px] flex items-start justify-center perspective-1000 pt-0"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+        >
+            <AnimatePresence mode="popLayout">
+                {cards.map((card, index) => {
+                    const position = (index - currentIndex + cards.length) % cards.length;
+                    const Icon = card.icon;
+
+                    return (
+                        <Link key={card.id} to={card.route}>
+                            <motion.div
+                                className="absolute w-[min(340px,90vw)] md:w-[min(380px,85vw)] lg:w-[380px] h-[480px] md:h-[520px] rounded-2xl overflow-hidden cursor-pointer group"
+                                style={{
+                                    border: '2px solid #C5A059',
+                                    boxShadow: '0 0 40px rgba(197, 160, 89, 0.4), 0 0 80px rgba(229, 197, 128, 0.2), 0 20px 60px rgba(0, 0, 0, 0.6)',
+                                }}
+                                initial={{ opacity: 0, scale: 0.8, rotateY: -20 }}
+                                animate={{
+                                    opacity: position === 0 ? 1 : 0.5,
+                                    scale: position === 0 ? 1 : 0.85 - position * 0.08,
+                                    rotateY: position * 12,
+                                    x: position * 100,
+                                    z: -position * 80,
+                                    zIndex: cards.length - position,
+                                }}
+                                exit={{ opacity: 0, scale: 0.8, rotateY: 20 }}
+                                transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+                                whileHover={{ scale: position === 0 ? 1.03 : 0.85 - position * 0.08 }}
+                            >
+                                {/* Gradient Background */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} backdrop-blur-xl`} />
+
+                                {/* Dark Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
+
+                                {/* Nobel Gold Glow Effect */}
+                                <div
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                    style={{
+                                        background: 'radial-gradient(circle at 50% 50%, hsl(var(--nobel-gold) / 0.15), transparent 70%)'
+                                    }}
+                                />
+
+                                {/* Content */}
+                                <div className="relative h-full p-6 md:p-8 flex flex-col items-center justify-between text-center">
+
+                                    {/* Top Section - Bot Image or Icon */}
+                                    <div className="flex-1 flex items-center justify-center pt-4">
+                                        {card.imageSrc ? (
+                                            <img
+                                                src={card.imageSrc}
+                                                alt={`${card.title} Bot`}
+                                                className="w-40 h-40 md:w-48 md:h-48 object-contain animate-float group-hover:scale-110 transition-transform duration-500"
+                                                style={{
+                                                    filter: 'drop-shadow(0 10px 30px hsl(var(--nobel-gold) / 0.4))',
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="w-40 h-40 md:w-48 md:h-48 flex items-center justify-center">
+                                                <Icon
+                                                    className="w-32 h-32 md:w-40 md:h-40 text-nobel-gold animate-float group-hover:scale-110 transition-transform duration-500"
+                                                    style={{
+                                                        filter: 'drop-shadow(0 10px 30px hsl(var(--nobel-gold) / 0.5))',
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Bottom Section - Text and Features */}
+                                    <div className="w-full">
+                                        <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-nobel-gold transition-colors duration-300">
+                                            {card.title}
+                                        </h3>
+                                        <p className="text-sm md:text-base font-semibold text-nobel-gold mb-3">
+                                            {card.subtitle}
+                                        </p>
+                                        <p className="text-xs md:text-sm text-white/70 mb-4 line-clamp-2">
+                                            {card.description}
+                                        </p>
+
+                                        {/* Feature Pills */}
+                                        <div className="flex flex-wrap justify-center gap-2 mb-6">
+                                            {card.features.map((feature, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-md border transition-all duration-300 group-hover:border-nobel-gold/50"
+                                                    style={{
+                                                        background: 'rgba(255, 255, 255, 0.05)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                        color: 'rgba(255, 255, 255, 0.9)'
+                                                    }}
+                                                >
+                                                    {feature}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Progress Dots */}
+                                        <div className="flex gap-2 justify-center">
+                                            {cards.map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="w-2 h-2 rounded-full transition-all duration-300"
+                                                    style={{
+                                                        backgroundColor: (index - currentIndex + cards.length) % cards.length === 0
+                                                            ? 'hsl(var(--nobel-gold))'
+                                                            : 'rgba(255, 255, 255, 0.3)',
+                                                        boxShadow: (index - currentIndex + cards.length) % cards.length === 0
+                                                            ? '0 0 8px hsl(var(--nobel-gold))'
+                                                            : 'none'
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Hover Shine Effect */}
+                                <div
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                                    style={{
+                                        background: 'linear-gradient(135deg, transparent 0%, hsl(var(--nobel-gold) / 0.1) 50%, transparent 100%)',
+                                    }}
+                                />
+                            </motion.div>
+                        </Link>
+                    );
+                })}
+            </AnimatePresence>
+
+            {/* Ambient Background Glow */}
+            <div
+                className="absolute inset-0 pointer-events-none -z-10"
+                style={{
+                    background: 'radial-gradient(circle at 50% 50%, hsl(var(--nobel-gold) / 0.1), transparent 60%)',
+                    filter: 'blur(60px)'
+                }}
+            />
+        </div>
+    );
+}
