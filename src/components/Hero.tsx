@@ -4,7 +4,7 @@ import { ArrowRight, Play, GraduationCap, Bot, TrendingUp, Heart, Users, Award }
 import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
 import heroBg from '../assets/hero-homepage.jpg';
-import interprebotsGroup from "@/assets/interprebots-group-features.png";
+import theCrewImage from "@/assets/the_crew.png";
 import CardStack3D from "@/components/CardStack3D";
 
 export const Hero = () => {

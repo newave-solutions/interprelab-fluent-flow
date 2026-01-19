@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Brain, Bot, BookOpen, Users, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ParticlesBackground } from "@/components/ParticlesBackground";
-import interprebotsGroup from "@/assets/interprebots-group-features.png";
+import theCrewImage from "@/assets/the_crew.png";
 import interpretrackBot from "/interpretrack-bot.png";
 import interprewellnessBot from "/interpre-wellness-bot.png";
 import interprecoachBot from "/interprecoach-bot.png";
@@ -165,13 +165,13 @@ export const SolutionsShowcase = () => {
         </div>
 
         {/* Floating Bot Group Image */}
-        <div className="relative mb-8 flex justify-center">
+        <div className="relative mb-12 flex justify-center">
           <img
-            src={interprebotsGroup}
-            alt="InterpreLab AI Assistants"
-            className="w-full max-w-md md:max-w-lg animate-float drop-shadow-2xl"
+            src={theCrewImage}
+            alt="InterpreLab AI Assistants - The Crew"
+            className="w-full max-w-2xl md:max-w-3xl animate-float drop-shadow-2xl"
             style={{
-              filter: 'drop-shadow(0 20px 40px hsl(var(--nobel-gold) / 0.3))',
+              filter: 'drop-shadow(0 30px 60px hsl(var(--nobel-gold) / 0.4))',
             }}
           />
         </div>

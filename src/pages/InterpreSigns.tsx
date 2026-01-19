@@ -553,6 +553,7 @@ const ASLTeacher = () => {
             </div>
           </div>
         </section>
+      </div>
     </Layout>
   );
 };

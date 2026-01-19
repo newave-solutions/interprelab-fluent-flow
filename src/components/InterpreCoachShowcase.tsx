@@ -1,5 +1,4 @@
-import { BrowserVideoMockup } from "@/components/BrowserVideoMockup";
-import coachImage from "@/assets/coach-frontned-design.png";
+import { InterpreCoachLiveDemo } from "@/components/InterpreCoachLiveDemo";
 
 export const InterpreCoachShowcase = () => {
     return (
@@ -7,19 +6,15 @@ export const InterpreCoachShowcase = () => {
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                        Meet <span className="text-primary">InterpreCoach</span>
+                        See <span className="text-primary">InterpreCoach</span> in Action
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                        Real-time AI assistance during video interpretation sessions. See how InterpreCoach seamlessly integrates into your workflow.
+                        Watch how InterpreCoach provides real-time AI assistance during a live medical interpretation session. Terminology suggestions, live transcription, and intelligent tips—all working together to support you.
                     </p>
                 </div>
 
-                {/* Browser Video Mockup */}
-                <BrowserVideoMockup
-                    posterSrc={coachImage}
-                    alt="InterpreCoach Real-Time AI Assistant Demo"
-                    className="max-w-5xl mx-auto"
-                />
+                {/* Live Demo */}
+                <InterpreCoachLiveDemo />
 
                 <div className="mt-12 text-center">
                     <p className="text-muted-foreground mb-6">

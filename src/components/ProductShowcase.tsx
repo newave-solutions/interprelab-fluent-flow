@@ -15,6 +15,7 @@ import {
   LineChart
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import theCrewImage from "@/assets/the_crew.png";
 
 export const ProductShowcase = () => {
   const products = [
@@ -101,9 +102,12 @@ export const ProductShowcase = () => {
           </h2>
           <div className="relative w-full max-w-3xl mx-auto h-48 md:h-64 mt-8">
             <img
-              src="/interprebots-group.png"
-              alt="InterpreLab AI Bots Team"
+              src={theCrewImage}
+              alt="InterpreLab AI Assistants - The Crew"
               className="w-full h-full object-contain animate-float"
+              style={{
+                filter: 'drop-shadow(0 30px 60px hsl(var(--nobel-gold) / 0.4))',
+              }}
             />
           </div>
         </div>
