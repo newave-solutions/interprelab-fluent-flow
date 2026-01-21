@@ -7,14 +7,14 @@ const stats = [
   {
     icon: Users,
     value: 10000,
-    label: "Active Interpreters",
+    label: "Elite Interpreters",
     gradient: "from-primary to-primary-glow",
     suffix: "+"
   },
   {
     icon: Globe,
     value: 50,
-    label: "Countries Worldwide",
+    label: "Countries Trust InterpreLab",
     gradient: "from-success to-primary",
     suffix: "+"
   },
@@ -28,7 +28,7 @@ const stats = [
   {
     icon: Award,
     value: 98,
-    label: "Client Satisfaction",
+    label: "Interpreter Satisfaction",
     gradient: "from-primary to-secondary",
     suffix: "%"
   }
@@ -48,11 +48,14 @@ export const StatsSection = () => {
             {/* Header */}
             <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Badge className="mb-4 px-6 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
-                Trusted Globally
+                Trusted by the Best
               </Badge>
-              <h2 id="stats-heading" className="font-serif text-3xl md:text-5xl font-medium text-foreground">
+              <h2 id="stats-heading" className="font-serif text-3xl md:text-5xl font-medium text-foreground mb-4">
                 Transforming Interpretation
               </h2>
+              <p className="text-stone-600 dark:text-muted-foreground max-w-2xl mx-auto">
+                Trusted by interpreters at the world's leading healthcare systems and legal firms
+              </p>
             </div>
 
             {/* Stats Grid */}

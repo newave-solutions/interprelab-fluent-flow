@@ -20,13 +20,13 @@ const solutions: Solution[] = [
   {
     id: "interpretest",
     title: "InterpreTest",
-    description: "AI-Powered Skills Assessment",
+    description: "Discover Your Full Potential",
     badge: "Assessment",
     highlights: [
-      "Free professional assessment",
-      "Real-time performance feedback",
-      "Personalized improvement roadmap",
-      "Track your progress over time"
+      "Elite-level professional assessment",
+      "Real-time performance insights",
+      "Personalized excellence roadmap",
+      "Track your growth over time"
     ],
     icon: <Bot className="w-8 h-8" />,
     route: "/interprebot"
@@ -34,13 +34,13 @@ const solutions: Solution[] = [
   {
     id: "interprecoach",
     title: "InterpreCoach",
-    description: "Real-Time AI Companion",
+    description: "Your AI Partner for Excellence",
     badge: "Assistant",
     highlights: [
-      "Live call support & guidance",
-      "Terminology suggestions",
+      "Real-time confidence boost",
+      "Precision terminology support",
       "Performance insights",
-      "Confidence booster during high-stakes calls"
+      "Like a senior mentor by your side"
     ],
     icon: <Brain className="w-8 h-8" />,
     route: "/interprecoach"
@@ -48,13 +48,13 @@ const solutions: Solution[] = [
   {
     id: "interprestudy",
     title: "InterpreStudy",
-    description: "Personalized Learning Path",
+    description: "Master Your Expertise",
     badge: "Training",
     highlights: [
       "Specialized medical terminology",
       "AI-generated flashcards",
       "Interactive mock scenarios",
-      "Accessible training at your fingertips"
+      "Learn smarter, not harder"
     ],
     icon: <BookOpen className="w-8 h-8" />,
     route: "/interprestudy"
@@ -62,13 +62,13 @@ const solutions: Solution[] = [
   {
     id: "interprelink",
     title: "InterpreLink",
-    description: "Professional Networking",
+    description: "Your Professional Community",
     badge: "Community",
     highlights: [
       "Connect with fellow interpreters",
-      "Share experiences & strategies",
-      "Community support network",
-      "The professional network you deserve"
+      "Share experiences & insights",
+      "Elite support network",
+      "The community you deserve"
     ],
     icon: <Users className="w-8 h-8" />,
     route: "/interprelink"
@@ -76,13 +76,13 @@ const solutions: Solution[] = [
   {
     id: "interprewellness",
     title: "InterpreWellness",
-    description: "Mental Health Support",
+    description: "Your Wellbeing, Our Priority",
     badge: "Wellness",
     highlights: [
-      "24/7 AI wellness coach",
+      "24/7 AI wellness companion",
       "Vicarious trauma support",
       "Stress management tools",
-      "Understanding your unique burden"
+      "Because you matter too"
     ],
     icon: <Heart className="w-8 h-8" />,
     route: "/interpre-wellness"
@@ -90,13 +90,13 @@ const solutions: Solution[] = [
   {
     id: "interpresigns",
     title: "InterpreSigns",
-    description: "Interactive Sign Language Learning",
+    description: "Expand Your Expertise with ASL",
     badge: "Interactive",
     highlights: [
       "AI-powered sign detection",
       "Real-time feedback",
       "Progress tracking",
-      "Medical ASL focus"
+      "Medical ASL mastery"
     ],
     icon: <div className="text-xl font-bold">🤟</div>,
     route: "/interpresigns"
@@ -104,10 +104,10 @@ const solutions: Solution[] = [
   {
     id: "interpretrack",
     title: "InterpreTrack",
-    description: "Precision Interpretation Logging",
+    description: "Know Your Worth",
     badge: "Productivity",
     highlights: [
-      "Track earnings in real-time",
+      "Track every minute, every dollar",
       "VRI & OPI call logging",
       "Transparency reports",
       "Detailed session analytics"
@@ -130,13 +130,13 @@ export const SolutionsShowcase = () => {
         {/* Section Header */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
-            Our Solutions
+            The Complete Excellence Suite
           </div>
           <h2 className="font-serif text-4xl md:text-5xl font-medium mb-6 text-foreground">
             Embrace the Change, <span className="text-nobel-gold">Don't Get Replaced By It</span>
           </h2>
           <p className="text-lg md:text-xl text-stone-600 dark:text-muted-foreground max-w-3xl mx-auto font-light">
-            AI-powered solutions addressing every pain point—built by interpreters, for interpreters
+            AI-powered solutions designed to elevate every aspect of your practice—crafted by interpreters who've walked in your shoes
           </p>
         </div>
 

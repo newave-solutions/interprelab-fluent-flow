@@ -1,23 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ValueProposition = () => {
   const benefits = [
     {
-      title: "Instant AI Assessment",
-      description: "Get detailed feedback on your interpretation skills in minutes, not months. No expensive courses required.",
+      title: "Elite-Level Assessment",
+      description: "Discover exactly where you stand among the best in the field. Get detailed feedback in minutes, not months—no expensive courses required.",
       icon: "🎯"
     },
     {
-      title: "Real-Time Assistance",
-      description: "InterpreCoach acts as your AI co-pilot during live calls, providing terminology suggestions and performance insights.",
+      title: "Your AI Co-Pilot",
+      description: "Like having a senior mentor whispering the perfect term at the perfect moment. InterpreCoach provides real-time support during live calls.",
       icon: "⚡"
     },
     {
-      title: "Affordable Training",
-      description: "NBCMI and CCHI approved courses at a fraction of traditional costs. Professional development shouldn't break the bank.",
+      title: "Professional Excellence, Accessible",
+      description: "NBCMI and CCHI approved courses that fit your budget and your ambition. World-class training shouldn't require a second mortgage.",
       icon: "💰"
     }
   ];
@@ -29,14 +29,14 @@ export const ValueProposition = () => {
           {/* Section Header */}
           <div className="text-center mb-16">
             <Badge className="mb-4 px-6 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Why Interpreters Choose Us
+              <Crown className="w-4 h-4 mr-2" />
+              Where Ambition Meets Excellence
             </Badge>
             <h2 id="value-proposition-heading" className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              Professional Development, <span className="text-nobel-gold">Reimagined</span>
+              Why Elite Interpreters <span className="text-nobel-gold">Choose Us</span>
             </h2>
             <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-2xl mx-auto">
-              Built by working interpreters who understand your challenges. Our AI-powered platform makes professional growth accessible, affordable, and actually helpful.
+              Built by working interpreters who understand your challenges. Our AI-powered platform makes professional growth accessible, effective, and actually helpful.
             </p>
           </div>
 
@@ -54,6 +54,16 @@ export const ValueProposition = () => {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Personal Connection Block */}
+          <div className="bg-stone-50 dark:bg-stone-950 rounded-xl p-8 mb-12 border border-stone-200 dark:border-border">
+            <p className="text-stone-700 dark:text-stone-300 leading-relaxed text-center italic">
+              "After spending $2,000 on a certification course that barely prepared us for real-world scenarios, we knew there had to be a better way. We've sat through outdated lectures, memorized terminology from PDF lists, and faced high-stakes calls with zero support. <strong className="text-foreground not-italic">InterpreLab is the platform we wished existed when we started.</strong>"
+            </p>
+            <p className="text-stone-500 dark:text-stone-400 text-sm text-center mt-4">
+              — The InterpreLab Team, Working Interpreters
+            </p>
           </div>
 
           {/* CTA */}

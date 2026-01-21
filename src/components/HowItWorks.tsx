@@ -6,18 +6,21 @@ export const HowItWorks = () => {
       number: "01",
       title: "Take the Assessment",
       description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
+      subtext: "Join thousands who've discovered their true potential",
       color: "bg-blue-500"
     },
     {
       number: "02",
       title: "Get Your Personalized Path",
-      description: "Receive a customized learning roadmap based on your assessment results. Focus on exactly what you need to improve—no wasted time on what you already know.",
+      description: "Receive a customized learning roadmap based on your assessment results. Your personalized roadmap to excellence—not a one-size-fits-all curriculum.",
+      subtext: "Focus only on what you need to grow",
       color: "bg-nobel-gold"
     },
     {
       number: "03",
       title: "Level Up with AI Support",
-      description: "Use InterpreCoach during live calls for real-time terminology assistance. Track your progress with InterpreTrack. Build expertise with InterpreStudy's targeted modules.",
+      description: "Access the same AI tools trusted by interpreters at leading healthcare systems. Real-time coaching, targeted learning, and progress tracking.",
+      subtext: "Never interpret alone again",
       color: "bg-green-500"
     }
   ];
@@ -34,8 +37,11 @@ export const HowItWorks = () => {
             <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
               How It Works
             </h2>
-            <p className="text-lg text-stone-600 dark:text-stone-400 font-light max-w-2xl mx-auto">
-              Start improving your interpretation skills today with our three-step approach
+            <p className="text-lg text-stone-600 dark:text-stone-400 font-light max-w-2xl mx-auto mb-4">
+              Three steps. One transformed practice. Zero guesswork.
+            </p>
+            <p className="text-base text-stone-500 dark:text-stone-500 font-light max-w-2xl mx-auto">
+              We designed this process because we've been through the frustration of not knowing where to start. Here's the clarity we wished we had.
             </p>
           </div>
 
@@ -61,8 +67,11 @@ export const HowItWorks = () => {
                   
                   {/* Content */}
                   <h3 className="font-serif text-2xl font-medium mb-4">{step.title}</h3>
-                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed">
+                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed mb-4">
                     {step.description}
+                  </p>
+                  <p className="text-sm text-nobel-gold font-medium">
+                    {step.subtext}
                   </p>
                 </div>
               </div>
