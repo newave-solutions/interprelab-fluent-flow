@@ -85,10 +85,10 @@ export const Testimonials = () => {
             id="testimonials-heading"
             className="font-serif text-5xl md:text-6xl font-medium text-foreground mb-6"
           >
-            Loved by <span className="text-nobel-gold">Interpreters</span>
+            Trusted by <span className="text-nobel-gold">the Best</span>
           </h2>
           <p className="text-xl text-stone-600 dark:text-muted-foreground max-w-2xl mx-auto font-light">
-            Join thousands of professionals who've transformed their practice.
+            Join the elite community of interpreters who refuse to settle for less.
           </p>
         </div>
       </div>

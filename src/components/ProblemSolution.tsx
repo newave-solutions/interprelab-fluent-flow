@@ -1,24 +1,24 @@
-import { CheckCircle2, DollarSign, Clock, Brain } from "lucide-react";
+import { CheckCircle2, Sparkles, Clock, Brain } from "lucide-react";
 
 export const ProblemSolution = () => {
-  const challenges = [
+  const transformations = [
     {
-      icon: DollarSign,
-      problem: "Expensive Training",
-      solution: "Affordable AI-powered assessment and courses approved by NBCMI and CCHI",
-      stat: "90% less expensive than traditional courses"
+      icon: Sparkles,
+      before: "Expensive, Outdated Courses",
+      after: "Smart investment in NBCMI and CCHI approved AI-powered training",
+      benefit: "Save 90% compared to traditional courses"
     },
     {
       icon: Clock,
-      problem: "Time-Consuming Process",
-      solution: "Get instant feedback and personalized learning paths in minutes",
-      stat: "30-minute assessments vs. months of coursework"
+      before: "Months of Guesswork",
+      after: "Instant feedback and personalized learning paths in minutes",
+      benefit: "30-minute assessments, not months of uncertainty"
     },
     {
       icon: Brain,
-      problem: "No Real-Time Support",
-      solution: "InterpreCoach provides live assistance during actual calls",
-      stat: "24/7 AI support when you need it"
+      before: "Navigating Calls Alone",
+      after: "InterpreCoach provides real-time AI support during actual calls",
+      benefit: "24/7 guidance when you need it most"
     }
   ];
 
@@ -27,58 +27,67 @@ export const ProblemSolution = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
-              The Challenge
+              Your Transformation
             </div>
             <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              Professional Development Shouldn't Be This Hard
+              Transform Every Aspect of Your Practice
             </h2>
-            <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-3xl mx-auto">
-              As working interpreters, we've experienced the frustration firsthand. Expensive courses with minimal support. No real-time assistance during calls. Guesswork about where to improve. <strong>There had to be a better way.</strong>
+          </div>
+
+          {/* Personal Story Introduction */}
+          <div className="max-w-3xl mx-auto mb-16 text-center">
+            <p className="text-lg text-stone-600 dark:text-muted-foreground font-light leading-relaxed">
+              We've walked every step of this journey. Early mornings cramming terminology before certification exams. Late nights replaying difficult calls in our heads, wondering if we could have done better. Years of feeling like we were navigating this career alone.
+            </p>
+            <p className="text-lg text-foreground font-medium mt-4">
+              These aren't just features we built—they're solutions to problems we've lived.
             </p>
           </div>
 
-          {/* Problem-Solution Cards */}
+          {/* Transformation Cards */}
           <div className="grid md:grid-cols-3 gap-6">
-            {challenges.map((item, index) => {
+            {transformations.map((item, index) => {
               const Icon = item.icon;
               return (
                 <div 
                   key={index}
                   className="bg-stone-50 dark:bg-stone-950 rounded-xl p-8 border border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 transition-all duration-300"
                 >
-                  {/* Icon */}
+                  {/* Before */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-red-50 dark:bg-red-950/30 rounded-lg">
-                      <Icon className="w-6 h-6 text-red-600 dark:text-red-400" />
+                    <div className="p-3 bg-stone-200 dark:bg-stone-800 rounded-lg">
+                      <Icon className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-serif text-xl font-medium mb-2 text-red-900 dark:text-red-200">
-                        {item.problem}
+                      <p className="text-sm text-stone-500 dark:text-stone-400 mb-1">Before</p>
+                      <h3 className="font-serif text-lg font-medium text-stone-600 dark:text-stone-300">
+                        {item.before}
                       </h3>
                     </div>
                   </div>
 
-                  {/* Divider */}
-                  <div className="h-px bg-gradient-to-r from-red-200 via-nobel-gold to-green-200 dark:from-red-900 dark:via-nobel-gold dark:to-green-900 my-6" />
+                  {/* Transformation Arrow */}
+                  <div className="h-px bg-gradient-to-r from-stone-200 via-nobel-gold to-green-300 dark:from-stone-800 dark:via-nobel-gold dark:to-green-700 my-6" />
 
-                  {/* Solution */}
+                  {/* After */}
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-green-50 dark:bg-green-950/30 rounded-lg">
                       <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                     <div className="flex-1">
+                      <p className="text-sm text-green-600 dark:text-green-400 mb-1">With InterpreLab</p>
                       <p className="text-stone-700 dark:text-stone-300 font-medium">
-                        {item.solution}
+                        {item.after}
                       </p>
                     </div>
                   </div>
 
-                  {/* Stat */}
+                  {/* Benefit */}
                   <div className="mt-6 p-3 bg-nobel-gold/10 rounded-lg border border-nobel-gold/20">
                     <p className="text-sm font-bold text-nobel-gold text-center">
-                      {item.stat}
+                      {item.benefit}
                     </p>
                   </div>
                 </div>
@@ -89,10 +98,10 @@ export const ProblemSolution = () => {
           {/* Bottom CTA */}
           <div className="mt-16 text-center bg-stone-50 dark:bg-stone-950 rounded-xl p-8 border border-stone-200 dark:border-border">
             <h3 className="font-serif text-2xl font-medium mb-4">
-              Ready to Transform Your Practice?
+              Ready to Join the Elite?
             </h3>
             <p className="text-stone-600 dark:text-stone-400 mb-6 max-w-2xl mx-auto">
-              Join thousands of interpreters who've made the switch to smarter, more affordable professional development.
+              Join thousands of interpreters who've elevated their practice with smarter, more accessible professional development.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <div className="flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
