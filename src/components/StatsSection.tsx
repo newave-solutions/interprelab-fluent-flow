@@ -48,11 +48,14 @@ export const StatsSection = () => {
             {/* Header */}
             <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Badge className="mb-4 px-6 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
-                Trusted Globally
+                Trusted Worldwide
               </Badge>
               <h2 id="stats-heading" className="font-serif text-3xl md:text-5xl font-medium text-foreground">
-                Transforming Interpretation
+                You're in <span className="text-nobel-gold">Good Company</span>
               </h2>
+              <p className="text-lg text-stone-600 dark:text-muted-foreground mt-4 font-light max-w-2xl mx-auto">
+                Thousands of interpreters around the world use InterpreLab every day. Here's what they're achieving together
+              </p>
             </div>
 
             {/* Stats Grid */}

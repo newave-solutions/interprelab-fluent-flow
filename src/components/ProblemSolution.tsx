@@ -5,20 +5,20 @@ export const ProblemSolution = () => {
   const benefits = [
     {
       icon: DollarSign,
-      title: "Accessible & Affordable",
-      description: "Professional development that fits your budget with AI-powered assessments and NBCMI/CCHI-aligned courses",
+      title: "Actually Affordable",
+      description: "Professional development that doesn't force you to choose between advancing your career and paying your bills. AI-powered assessments and NBCMI/CCHI-aligned courses at prices that make sense",
       stat: "90% more affordable than traditional programs"
     },
     {
       icon: Clock,
-      title: "Instant Results",
-      description: "Get personalized feedback and actionable insights in minutes, not months",
+      title: "Get Answers Fast",
+      description: "No more waiting months for feedback or certification results. Get personalized insights and a clear action plan in 30 minutes",
       stat: "Results in 30 minutes vs. months of waiting"
     },
     {
       icon: Brain,
-      title: "24/7 AI Support",
-      description: "InterpreCoach provides real-time assistance during live calls when you need it most",
+      title: "Help That's Always There",
+      description: "InterpreCoach is ready whenever you need it—during a 2 AM call or a tricky medical procedure. Real-time support that actually understands what you're dealing with",
       stat: "Always available when you need help"
     }
   ];
@@ -30,13 +30,13 @@ export const ProblemSolution = () => {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block mb-3 text-xs font-bold tracking-widest text-nobel-gold uppercase">
-              Why InterpreLab
+              Why We Built This
             </div>
             <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              Professional Development, <span className="text-nobel-gold">Reimagined</span>
+              Training That Actually <span className="text-nobel-gold">Makes Sense</span>
             </h2>
             <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-3xl mx-auto mb-4">
-              As working interpreters, we built the tools we wished existed. Affordable, accessible, and available when you need them—because advancing your career shouldn't require sacrificing your livelihood.
+              We're working interpreters too. We got tired of expensive courses, vague feedback, and waiting forever for results. So we built something better—tools that are affordable, accessible, and ready when you actually need them.
             </p>
             <Link
               to="/resources/industry-challenges"

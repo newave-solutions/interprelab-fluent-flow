@@ -6,18 +6,18 @@ import { Link } from "react-router-dom";
 export const ValueProposition = () => {
   const benefits = [
     {
-      title: "Instant AI Assessment",
-      description: "Get detailed feedback on your interpretation skills in minutes, not months. No expensive courses required.",
+      title: "Know Your Strengths Fast",
+      description: "Find out exactly where you stand in 30 minutes. Get specific feedback you can actually use—not vague suggestions that leave you guessing what to do next.",
       icon: "🎯"
     },
     {
-      title: "Real-Time Assistance",
-      description: "InterpreCoach acts as your AI co-pilot during live calls, providing terminology suggestions and performance insights.",
+      title: "Help When You Need It",
+      description: "Stuck on terminology during a call? InterpreCoach has your back with instant suggestions. It's like having an experienced interpreter ready to help 24/7.",
       icon: "⚡"
     },
     {
-      title: "Affordable Training",
-      description: "NBCMI and CCHI approved courses at a fraction of traditional costs. Professional development shouldn't break the bank.",
+      title: "Training You Can Actually Afford",
+      description: "Get NBCMI and CCHI-aligned courses without the huge price tag. Advancing your career shouldn't mean choosing between rent and professional development.",
       icon: "💰"
     }
   ];
@@ -33,10 +33,10 @@ export const ValueProposition = () => {
               Why Interpreters Choose Us
             </Badge>
             <h2 id="value-proposition-heading" className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              Professional Development, <span className="text-nobel-gold">Reimagined</span>
+              Built By Interpreters, <span className="text-nobel-gold">For Interpreters</span>
             </h2>
             <p className="text-lg text-stone-600 dark:text-muted-foreground font-light max-w-2xl mx-auto">
-              Built by working interpreters who understand your challenges. Our AI-powered platform makes professional growth accessible, affordable, and actually helpful.
+              We've been in your shoes. We know the challenges. So we built the tools we wish we'd had—affordable, accessible, and actually helpful when you need them most.
             </p>
           </div>
 

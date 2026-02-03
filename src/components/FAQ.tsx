@@ -9,44 +9,44 @@ import { Badge } from "@/components/ui/badge";
 export const FAQ = () => {
   const faqs = [
     {
-      question: "What is InterpreLab?",
+      question: "What exactly is InterpreLab?",
       answer:
-        "InterpreLab is an AI-powered platform designed specifically for medical and legal interpreters. We provide three integrated tools: InterpreBot for skills assessment, InterpreCoach for real-time terminology support, and InterpreTrack for performance tracking and earnings management.",
+        "Think of it as your complete AI toolkit for interpretation. You get seven tools that cover everything: assessment to find your weak spots, real-time help during calls, study materials, session tracking, wellness support, community connection, and ASL practice. All in one place.",
     },
     {
-      question: "How does InterpreBot assess my interpretation skills?",
+      question: "How does the assessment work?",
       answer:
-        "InterpreBot uses advanced AI to analyze your interpretation sessions across multiple dimensions including accuracy, fluency, terminology usage, cultural competency, and ethical compliance. You receive detailed feedback with personalized improvement recommendations after each assessment.",
+        "You take a 30-minute test that evaluates your accuracy, fluency, terminology knowledge, cultural awareness, and ethics. Then you get a detailed report showing exactly what you're good at and what needs work, plus a custom learning plan. No vague feedback—just specific, actionable advice.",
     },
     {
-      question: "Is my data secure and HIPAA compliant?",
+      question: "Is my data actually safe?",
       answer:
-        "Absolutely. We take security seriously. InterpreLab is fully HIPAA compliant, SOC 2 certified, and ISO 27001 certified. All data is encrypted both in transit and at rest. We never share your personal information or interpretation sessions with third parties.",
+        "Yes. We're HIPAA compliant, SOC 2 certified, and ISO 27001 certified. Everything is encrypted. We never sell your data or share your sessions with anyone. Your information stays private, period.",
     },
     {
-      question: "Can I use InterpreCoach during live interpretation sessions?",
+      question: "Can I use InterpreCoach while I'm on a live call?",
       answer:
-        "Yes! InterpreCoach is a browser extension that provides real-time terminology support during your live sessions. It runs discreetly in the background and offers instant access to medical and legal terminology databases without interrupting your workflow.",
+        "Absolutely! It's a browser extension that runs quietly in the background. If you get stuck on terminology, just glance at it for instant suggestions. It won't interrupt your flow or be visible to anyone else on the call.",
     },
     {
-      question: "What languages does InterpreLab support?",
+      question: "What languages do you support?",
       answer:
-        "InterpreLab currently supports over 50 languages including Spanish, Mandarin, Arabic, French, Russian, Portuguese, and many more. We're constantly expanding our language offerings based on user demand. Contact us if you need support for a specific language pair.",
+        "Over 50 languages right now, including Spanish, Mandarin, Arabic, French, Russian, Portuguese, and lots more. We keep adding new ones based on what people need. If yours isn't on the list yet, let us know and we'll prioritize it.",
     },
     {
-      question: "Do you offer training for healthcare organizations?",
+      question: "Do you work with hospitals and agencies?",
       answer:
-        "Yes, we offer enterprise solutions for healthcare systems, hospitals, and interpretation agencies. Our platform can be customized for institutional training programs with admin dashboards, team analytics, and white-label options. Contact our sales team for more information.",
+        "Yes! We have enterprise plans for healthcare systems, hospitals, and interpretation agencies. You can customize everything—branding, dashboards, team analytics, the whole package. Just reach out to our sales team to talk details.",
     },
     {
-      question: "How much does InterpreLab cost?",
+      question: "How much does this cost?",
       answer:
-        "We offer flexible pricing plans to suit different needs. Individual interpreters can start with our free trial, then choose from monthly or annual subscriptions. Enterprise clients receive custom pricing based on team size and features. Visit our pricing page or contact sales for detailed information.",
+        "You can start with a free trial to test everything out. After that, we have monthly and yearly plans for individual interpreters. If you're buying for a team or organization, we'll build a custom plan that fits your budget. Check our pricing page or contact sales for specifics.",
     },
     {
-      question: "Can I track my interpretation sessions and earnings?",
+      question: "Can I track all my sessions and earnings?",
       answer:
-        "Yes! InterpreTrack automatically logs your interpretation sessions, tracks your hours, calculates your earnings, and generates reports for invoicing and tax purposes. It's perfect for freelance interpreters who need to manage multiple clients and track their business performance.",
+        "Yes! InterpreTrack logs every session automatically—times, dates, earnings, clients, everything. It even generates reports for invoicing and taxes. Perfect if you're freelancing and juggling multiple platforms or clients.",
     },
   ];
 
@@ -55,13 +55,13 @@ export const FAQ = () => {
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <Badge className="glass px-6 py-3 mb-4 border-primary/20">
-            FAQ
+            Got Questions?
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Frequently Asked Questions
+            Here Are the Answers
           </h2>
           <p className="text-muted-foreground">
-            Everything you need to know about InterpreLab
+            The most common questions we get about InterpreLab, answered honestly
           </p>
         </div>
 
