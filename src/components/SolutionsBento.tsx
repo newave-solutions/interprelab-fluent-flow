@@ -55,7 +55,7 @@ export const SolutionsBento = () => {
     ];
 
     return (
-        <section className="py-32 bg-gradient-to-b from-white via-stone-50 to-white dark:from-background dark:via-stone-950 dark:to-background relative overflow-hidden">
+        <section id="solutions-section" className="py-32 bg-gradient-to-b from-white via-stone-50 to-white dark:from-background dark:via-stone-950 dark:to-background relative overflow-hidden">
             <ParticlesBackground particleCount={80} variant="dots" />
 
             <div className="container mx-auto px-6 relative z-10">

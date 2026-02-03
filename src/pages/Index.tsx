@@ -3,7 +3,6 @@ import { Hero } from "@/components/Hero";
 import { SolutionsBento } from "@/components/SolutionsBento";
 import { CertificateSection } from "@/components/CertificateSection";
 import { HowItWorks } from "@/components/HowItWorks";
-import { StatsSection } from "@/components/StatsSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
 
@@ -25,8 +24,7 @@ const Index = () => {
         {/* How It Works - Simple 3-step process */}
         <HowItWorks />
 
-        {/* Stats & Testimonials - Social proof */}
-        <StatsSection />
+        {/* Testimonials - Social proof */}
         <Testimonials />
 
       </main>
