@@ -4,20 +4,20 @@ export const HowItWorks = () => {
   const steps = [
     {
       number: "01",
-      title: "Take the Assessment",
-      description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
+      title: "Find Out Where You Stand",
+      description: "Take a 30-minute assessment that shows you exactly what you're great at and what needs work. No surprises, just honest feedback you can actually use.",
       color: "bg-blue-500"
     },
     {
       number: "02",
-      title: "Get Your Personalized Path",
-      description: "Receive a customized learning roadmap based on your assessment results. Focus on exactly what you need to improve—no wasted time on what you already know.",
+      title: "Get a Plan That Makes Sense",
+      description: "We'll build you a custom learning path based on your results. Only work on what you actually need—skip the stuff you've already mastered.",
       color: "bg-nobel-gold"
     },
     {
       number: "03",
-      title: "Level Up with AI Support",
-      description: "Use InterpreCoach during live calls for real-time terminology assistance. Track your progress with InterpreTrack. Build expertise with InterpreStudy's targeted modules.",
+      title: "Grow with AI By Your Side",
+      description: "Get real-time help during calls with InterpreCoach. Track every session with InterpreTrack. Practice tough scenarios with InterpreStudy. It's like having a mentor available 24/7.",
       color: "bg-green-500"
     }
   ];
@@ -29,13 +29,13 @@ export const HowItWorks = () => {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block mb-3 text-xs font-bold tracking-widest text-stone-500 uppercase">
-              Simple Process
+              Getting Started Is Easy
             </div>
             <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">
-              How It Works
+              Here's How It Works
             </h2>
             <p className="text-lg text-stone-600 dark:text-stone-400 font-light max-w-2xl mx-auto">
-              Start improving your interpretation skills today with our three-step approach
+              Three simple steps to start improving your skills today. No complicated setup, no confusion—just straightforward help when you need it
             </p>
           </div>
 

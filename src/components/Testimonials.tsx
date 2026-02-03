@@ -79,16 +79,16 @@ export const Testimonials = () => {
             }`}
         >
           <Badge className="px-6 py-3 mb-6 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20">
-            Testimonials
+            Real Stories
           </Badge>
           <h2
             id="testimonials-heading"
             className="font-serif text-5xl md:text-6xl font-medium text-foreground mb-6"
           >
-            Loved by <span className="text-nobel-gold">Interpreters</span>
+            Hear From <span className="text-nobel-gold">Real Interpreters</span>
           </h2>
           <p className="text-xl text-stone-600 dark:text-muted-foreground max-w-2xl mx-auto font-light">
-            Join thousands of professionals who've transformed their practice.
+            These are actual professionals using InterpreLab every day. Here's what they have to say about it
           </p>
         </div>
       </div>

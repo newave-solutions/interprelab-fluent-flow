@@ -18,8 +18,8 @@ export const SolutionsBento = () => {
         {
             id: "interpretest",
             title: "InterpreTest",
-            subtitle: "Skills Assessment",
-            description: "AI-powered evaluation of your interpretation skills with personalized feedback",
+            subtitle: "Know Where You Stand",
+            description: "Find out your exact skill level in 30 minutes. Get honest, detailed feedback that shows you exactly what to work on—no guessing games",
             icon: Bot,
             imageSrc: interpretestBot,
             gradient: "from-blue-500/20 to-cyan-500/20",
@@ -28,8 +28,8 @@ export const SolutionsBento = () => {
         {
             id: "interprecoach",
             title: "InterpreCoach",
-            subtitle: "Real-Time Assistant",
-            description: "Your AI co-pilot during live calls with instant terminology and insights",
+            subtitle: "Your Live Call Sidekick",
+            description: "Never get stuck on terminology again. Get instant suggestions and context during live sessions, like having a senior interpreter whispering in your ear",
             icon: Brain,
             imageSrc: interprecoachBot,
             gradient: "from-purple-500/20 to-pink-500/20",
@@ -38,8 +38,8 @@ export const SolutionsBento = () => {
         {
             id: "interprestudy",
             title: "InterpreStudy",
-            subtitle: "Personalized Learning",
-            description: "AI-curated training paths tailored to your skill level and goals",
+            subtitle: "Learn What You Actually Need",
+            description: "Skip the one-size-fits-all courses. Focus on what you need to improve based on your assessment, with practice scenarios that feel real",
             icon: GraduationCap,
             imageSrc: interprestudyBot,
             gradient: "from-amber-500/20 to-orange-500/20",
@@ -48,10 +48,10 @@ export const SolutionsBento = () => {
     ];
 
     const additionalSolutions = [
-        { icon: Clock, title: "InterpreTrack", subtitle: "Session Logging", imageSrc: interpretrackBot, route: "/interpretrack" },
-        { icon: Heart, title: "InterpreWellness", subtitle: "Mental Health", imageSrc: interprewellnessBot, route: "/interpre-wellness" },
-        { icon: MessageCircle, title: "InterpreLink", subtitle: "Community", imageSrc: interprelinkBot, route: "/interprelink" },
-        { icon: Users, title: "InterpreSigns", subtitle: "Sign Language", imageSrc: interpresignsBot, route: "/interpresigns" },
+        { icon: Clock, title: "InterpreTrack", subtitle: "Track Your Growth", imageSrc: interpretrackBot, route: "/interpretrack" },
+        { icon: Heart, title: "InterpreWellness", subtitle: "Stay Balanced", imageSrc: interprewellnessBot, route: "/interpre-wellness" },
+        { icon: MessageCircle, title: "InterpreLink", subtitle: "Find Your People", imageSrc: interprelinkBot, route: "/interprelink" },
+        { icon: Users, title: "InterpreSigns", subtitle: "ASL Practice", imageSrc: interpresignsBot, route: "/interpresigns" },
     ];
 
     return (
@@ -63,16 +63,16 @@ export const SolutionsBento = () => {
                     {/* Section Header */}
                     <div className="text-center mb-20">
                         <Badge className="mb-6 px-8 py-3 bg-nobel-gold/10 text-nobel-gold border-nobel-gold/20 text-sm font-semibold backdrop-blur-md">
-                            Complete AI Ecosystem
+                            Everything You Need, One Place
                         </Badge>
                         <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
-                            One Platform,{" "}
+                            Your Complete{" "}
                             <span className="bg-gradient-to-r from-nobel-gold via-yellow-500 to-amber-600 bg-clip-text text-transparent">
-                                7 AI-Powered Tools
+                                AI Toolkit
                             </span>
                         </h2>
-                        <p className="text-xl md:text-2xl text-stone-600 dark:text-stone-400 max-w-3xl mx-auto font-light">
-                            Built for every stage of your interpretation career
+                        <p className="text-lg md:text-xl text-stone-600 dark:text-stone-400 max-w-3xl mx-auto leading-relaxed">
+                            Whether you're just starting out or you've been interpreting for years, these seven tools have your back at every step
                         </p>
                     </div>
 
@@ -157,10 +157,10 @@ export const SolutionsBento = () => {
                     <div className="mt-20 text-center">
                         <div className="inline-block p-12 rounded-3xl bg-gradient-to-br from-nobel-gold/10 via-amber-500/5 to-nobel-gold/10 border-2 border-nobel-gold/20 backdrop-blur-sm">
                             <h3 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-                                Ready to Experience the Full Platform?
+                                Ready to See What You're Capable Of?
                             </h3>
-                            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-                                Start with a free skills assessment and unlock your personalized learning path
+                            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                                Take the free assessment and find out where you stand. It only takes 30 minutes, and you'll get a personalized roadmap to level up your skills
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Button
