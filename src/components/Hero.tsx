@@ -14,7 +14,7 @@ const bots = [
         name: 'InterpreTest',
         tagline: 'Skills Assessment Pro',
         image: '/interpretest-bot.png',
-        route: '/interprebot'
+        route: '/interpretest'
     },
     {
         id: 'interprecoach',
@@ -38,11 +38,11 @@ const bots = [
         route: '/interpretrack'
     },
     {
-        id: 'intrepewellness',
+        id: 'interpre-wellness',
         name: 'InterpreWellness',
         tagline: 'Mental Health Coach',
         image: '/interpre-wellness-bot.png',
-        route: '/intreperwellness'
+        route: '/interpre-wellness'
     },
     {
         id: 'interprelink',
@@ -197,7 +197,7 @@ export const Hero = () => {
                                 className="w-full sm:w-auto px-10 py-6 md:py-7 bg-gradient-to-r from-nobel-gold via-yellow-500 to-amber-600 hover:from-amber-600 hover:via-yellow-500 hover:to-nobel-gold text-white text-base md:text-lg font-bold rounded-full shadow-2xl hover:shadow-nobel-gold/50 hover:scale-105 transition-all duration-300"
                                 asChild
                             >
-                                <Link to="/interprebot">
+                                <Link to="/interpretest">
                                     Start Free Assessment
                                     <ArrowRight className="w-5 h-5 ml-2" />
                                 </Link>

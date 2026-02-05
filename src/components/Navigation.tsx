@@ -42,7 +42,7 @@ export const Navigation = () => {
         { label: 'InterpreTrack', href: '/interpretrack' },
         { label: 'InterpreStudy', href: '/interprestudy' },
         { label: 'InterpreSigns', href: '/interpresigns' },
-        { label: 'InterpreWellness', href: '/intreperwellness' },
+        { label: 'InterpreWellness', href: '/interpre-wellness' },
         { label: 'InterpreLink', href: '/interprelink' },
       ]
     },

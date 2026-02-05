@@ -10,8 +10,6 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 // Lazy load components to reduce initial bundle size
 import { ParticlesBackground } from '@/components/ParticlesBackground';
 import interprestudyBot from '@/assets/interprestudy-bot.png';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Suspense, lazy } from 'react';
 
 // Lazy load components for performance
 const InteractiveChat = lazy(() => import('@/components/interprestudy/InteractiveChat').then(module => ({ default: module.InteractiveChat })));

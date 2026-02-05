@@ -26,7 +26,7 @@ export const ProductShowcase = () => {
       description: "Tired of not knowing how your skills measure up? InterpreBot has your back! Take the AI-powered language assessment to get an indepth analysis and personalized learning path.",
       icon: Brain,
       gradient: "from-purple-500 to-pink-500",
-      link: "/interprebot",
+      link: "/interpretest",
       cta: "Find out more",
       ctaIcon: TrendingUp,
       features: [

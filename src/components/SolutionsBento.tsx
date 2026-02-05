@@ -23,7 +23,7 @@ export const SolutionsBento = () => {
             icon: Bot,
             imageSrc: interpretestBot,
             gradient: "from-blue-500/20 to-cyan-500/20",
-            route: "/interprebot"
+            route: "/interpretest"
         },
         {
             id: "interprecoach",
@@ -168,7 +168,7 @@ export const SolutionsBento = () => {
                                     className="px-10 py-7 bg-gradient-to-r from-nobel-gold to-amber-600 hover:from-amber-600 hover:to-nobel-gold text-white text-lg font-bold rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
                                     asChild
                                 >
-                                    <Link to="/interprebot">
+                                    <Link to="/interpretest">
                                         Start Free Assessment
                                     </Link>
                                 </Button>
