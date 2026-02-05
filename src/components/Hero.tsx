@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, ChevronDown, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBg from '../assets/hero-homepage.jpg';
-import CardStack3D from './CardStack3D';
+import CardStackStacked from './CardStackStacked';
 
 export const Hero = () => {
   const scrollToContent = () => {
@@ -12,88 +12,71 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" role="banner">
-      {/* Background Image with Enhanced Overlay for better visibility */}
+      {/* Background */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${heroBg})` }}
         aria-hidden="true"
       >
-        {/* Darker, more opaque overlay to prevent text opacity issues */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background shadow-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background" />
       </div>
 
-      {/* Radial Glow Effect */}
+      {/* Radial Glow */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 50% 30%, hsl(41 52% 56% / 0.1), transparent 60%)'
-        }}
+        style={{ background: 'radial-gradient(circle at 50% 30%, hsl(41 52% 56% / 0.1), transparent 60%)' }}
         aria-hidden="true"
       />
 
-      {/* Content - Two Column Layout */}
+      {/* Content - Centered Layout */}
       <div className="relative z-10 container mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16 max-w-7xl mx-auto">
 
-          {/* Left Column - Text Content */}
-          <div className="space-y-8 animate-fade-in text-center lg:text-left">
-
-            {/* Badge */}
-            <Badge className="glass px-6 py-3 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm inline-flex items-center">
+          {/* Left Column - Text */}
+          <div className="flex-1 max-w-xl space-y-6 animate-fade-in text-center lg:text-left">
+            <Badge className="glass px-4 py-2 text-sm font-medium border-nobel-gold/20 bg-white/10 backdrop-blur-sm inline-flex items-center">
               <Crown className="w-4 h-4 mr-2" />
               The Interpreter's Choice for Excellence
             </Badge>
 
-            {/* Main Headline - Elegant serif style */}
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium leading-tight">
-              <span className="text-nobel-gold">
-                Elevate Your
-              </span>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium leading-tight">
+              <span className="text-nobel-gold">Elevate Your</span>
               <br />
-              <span className="text-white">
-                Practice
-              </span>
+              <span className="text-white">Practice</span>
             </h1>
 
-            {/* Subtitle - Prestige messaging */}
-            <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-2xl lg:max-w-none">
+            <p className="text-lg text-white/80 font-light leading-relaxed">
               Join the elite community of interpreters who refuse to settle for outdated training methods. Your expertise deserves cutting-edge tools.
             </p>
 
-            {/* Personal Connection Paragraph */}
-            <p className="text-base text-white/60 font-light leading-relaxed max-w-2xl lg:max-w-none italic border-l-2 border-nobel-gold/40 pl-4">
-              We remember the feeling—finishing a complex cardiac procedure interpretation, knowing we nailed every term, but having no one to share that victory with. No feedback. No recognition. Just silence and the next call. That's why we built InterpreLab.
-            </p>
-
-            {/* CTA Buttons - Updated styling */}
-            <div className="flex flex-col sm:flex-row gap-4 lg:justify-start justify-center items-center animate-slide-up">
+            <div className="flex flex-col sm:flex-row gap-4 lg:justify-start justify-center items-center">
               <Button
                 variant="default"
                 size="lg"
-                className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="px-8 py-6 bg-nobel-gold hover:bg-nobel-gold/90 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg"
                 asChild
               >
-                <Link to="/interprebot" aria-label="Start your assessment">
+                <Link to="/interpretest">
                   Discover Your Potential
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </Button>
             </div>
 
             {/* Trust Indicators */}
-            <div className="pt-4 text-sm text-white/60 animate-slide-up">
-              <p className="font-light">Chosen by 10,000+ elite interpreters across 50+ countries</p>
-              <div className="flex lg:justify-start justify-center gap-6 mt-4 flex-wrap">
-                <span className="flex items-center gap-2"><span role="img" aria-label="trophy">🏆</span> NBCMI Approved</span>
-                <span className="flex items-center gap-2"><span role="img" aria-label="certificate">📜</span> CCHI Approved</span>
-                <span className="flex items-center gap-2"><span role="img" aria-label="globe">🌍</span> Global Community</span>
+            <div className="pt-4 text-sm text-white/60">
+              <p className="font-light">Chosen by 10,000+ interpreters across 50+ countries</p>
+              <div className="flex lg:justify-start justify-center gap-4 mt-3 flex-wrap text-xs">
+                <span className="flex items-center gap-1">🏆 NBCMI Approved</span>
+                <span className="flex items-center gap-1">📜 CCHI Approved</span>
+                <span className="flex items-center gap-1">🌍 Global Community</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column - CardStack3D */}
-          <div className="flex items-center justify-center lg:justify-end animate-fade-in">
-            <CardStack3D />
+          {/* Right Column - Stacked Cards */}
+          <div className="flex-shrink-0 animate-fade-in">
+            <CardStackStacked />
           </div>
 
         </div>
