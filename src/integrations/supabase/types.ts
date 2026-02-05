@@ -320,6 +320,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_flashcards: {
+        Row: {
+          back_text: string
+          category: string | null
+          created_at: string | null
+          front_text: string
+          id: string
+          tags: string[] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          back_text: string
+          category?: string | null
+          created_at?: string | null
+          front_text: string
+          id?: string
+          tags?: string[] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          back_text?: string
+          category?: string | null
+          created_at?: string | null
+          front_text?: string
+          id?: string
+          tags?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_goals: {
         Row: {
           created_at: string
