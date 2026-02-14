@@ -30,6 +30,24 @@ Mental health and wellness resources specifically designed for interpreters, inc
 
 Community platform featuring forums, job boards, and curated resources for interpreter professional development.
 
+## ♿ Accessibility Features
+
+InterpreLab is committed to inclusive design and WCAG 2.1 AA compliance:
+
+- **Keyboard Navigation**: Full keyboard support for all interactive elements
+- **Screen Reader Support**: Proper ARIA labels, roles, and live regions
+- **Accessible Components**: Custom-built components following best practices
+  - AccessibleCarousel with pause/play controls
+  - AccessibleInfiniteScroll with manual "Load More" button
+  - AccessibleSelect with search and keyboard navigation
+  - AccessibleTabs with proper ARIA roles
+- **Motion Preferences**: Respects `prefers-reduced-motion` settings
+- **Progressive Enhancement**: Core functionality works without JavaScript
+- **High Contrast**: Meets color contrast requirements (4.5:1 for text)
+- **Responsive Design**: Works at various zoom levels and screen sizes
+
+See [ACCESSIBILITY_GUIDE.md](./ACCESSIBILITY_GUIDE.md) for detailed information.
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -143,6 +161,14 @@ See [GCP_CLOUDRUN_DEPLOY.md](./GCP_CLOUDRUN_DEPLOY.md) for Cloud Run deployment.
 - **[PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md)** - System architecture and design
 - **[GEMINI.md](./GEMINI.md)** - AI assistant knowledge base
 - **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - API reference
+
+### Accessibility Documentation ♿
+
+- **[ACCESSIBILITY_GUIDE.md](./ACCESSIBILITY_GUIDE.md)** - Comprehensive accessibility guidelines and patterns
+- **[ACCESSIBLE_COMPONENTS_USAGE.md](./ACCESSIBLE_COMPONENTS_USAGE.md)** - Usage guide for accessible components
+- **[MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md)** - How to migrate to accessible patterns
+- **[ACCESSIBILITY_CHECKLIST.md](./ACCESSIBILITY_CHECKLIST.md)** - Quick reference checklist for developers
+- **[ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md](./ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md)** - Summary of all improvements
 
 ### Setup Guides
 
