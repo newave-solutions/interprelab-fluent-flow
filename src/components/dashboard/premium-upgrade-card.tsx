@@ -3,16 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Zap, Crown, Check, TrendingUp, Target, BarChart3, Flame } from 'lucide-react';
 
-export default function PremiumUpgradeCard() {
-  const features = [
-    { icon: <Target className="h-4 w-4" />, text: 'Unlimited goal tracking' },
-    { icon: <Flame className="h-4 w-4" />, text: 'Peak performance heatmaps' },
-    { icon: <BarChart3 className="h-4 w-4" />, text: 'Platform comparison analytics' },
-    { icon: <TrendingUp className="h-4 w-4" />, text: 'Advanced AI insights & predictions' },
-    { icon: <Zap className="h-4 w-4" />, text: 'Real-time sync with InterpreCoach' },
-    { icon: <Crown className="h-4 w-4" />, text: 'Priority support' },
-  ];
+const FEATURES = [
+  { icon: <Target className="h-4 w-4" />, text: 'Unlimited goal tracking' },
+  { icon: <Flame className="h-4 w-4" />, text: 'Peak performance heatmaps' },
+  { icon: <BarChart3 className="h-4 w-4" />, text: 'Platform comparison analytics' },
+  { icon: <TrendingUp className="h-4 w-4" />, text: 'Advanced AI insights & predictions' },
+  { icon: <Zap className="h-4 w-4" />, text: 'Real-time sync with InterpreCoach' },
+  { icon: <Crown className="h-4 w-4" />, text: 'Priority support' },
+];
 
+export default function PremiumUpgradeCard() {
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-accent border-primary/20">
       {/* Background Pattern */}
@@ -58,7 +58,7 @@ export default function PremiumUpgradeCard() {
 
           {/* Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
-            {features.map((feature, index) => (
+            {FEATURES.map((feature, index) => (
               <div key={index} className="flex items-center gap-3 text-background/90 bg-background/10 backdrop-blur-sm rounded-lg p-3 border border-background/20">
                 <div className="flex-shrink-0 h-6 w-6 rounded-full bg-background/20 flex items-center justify-center">
                   <Check className="h-4 w-4 text-background" />

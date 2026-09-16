@@ -10,6 +10,18 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Globe, Save, Loader2 } from 'lucide-react';
 
+const currencies = [
+  { code: 'USD', name: 'US Dollar' },
+  { code: 'EUR', name: 'Euro' },
+  { code: 'GBP', name: 'British Pound' },
+  { code: 'JPY', name: 'Japanese Yen' },
+  { code: 'CAD', name: 'Canadian Dollar' },
+  { code: 'AUD', name: 'Australian Dollar' },
+  { code: 'CHF', name: 'Swiss Franc' },
+  { code: 'CNY', name: 'Chinese Yuan' },
+  { code: 'MXN', name: 'Mexican Peso' },
+];
+
 export const SettingsPanel = () => {
   const [payRate, setPayRate] = useState('0');
   const [payRateType, setPayRateType] = useState('per_hour');
@@ -18,18 +30,6 @@ export const SettingsPanel = () => {
   const { user } = useAuth();
   const { language, setLanguage, availableLanguages } = useLanguage();
   const { toast } = useToast();
-
-  const currencies = [
-    { code: 'USD', name: 'US Dollar' },
-    { code: 'EUR', name: 'Euro' },
-    { code: 'GBP', name: 'British Pound' },
-    { code: 'JPY', name: 'Japanese Yen' },
-    { code: 'CAD', name: 'Canadian Dollar' },
-    { code: 'AUD', name: 'Australian Dollar' },
-    { code: 'CHF', name: 'Swiss Franc' },
-    { code: 'CNY', name: 'Chinese Yuan' },
-    { code: 'MXN', name: 'Mexican Peso' },
-  ];
 
   useEffect(() => {
     if (user) {
