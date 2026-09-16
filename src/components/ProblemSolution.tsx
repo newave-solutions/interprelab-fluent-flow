@@ -1,27 +1,28 @@
 import { CheckCircle2, Sparkles, Clock, Brain } from "lucide-react";
 
-export const ProblemSolution = () => {
-  const transformations = [
-    {
-      icon: Sparkles,
-      before: "Expensive, Outdated Courses",
-      after: "Smart investment in NBCMI and CCHI approved AI-powered training",
-      benefit: "Save 90% compared to traditional courses"
-    },
-    {
-      icon: Clock,
-      before: "Months of Guesswork",
-      after: "Instant feedback and personalized learning paths in minutes",
-      benefit: "30-minute assessments, not months of uncertainty"
-    },
-    {
-      icon: Brain,
-      before: "Navigating Calls Alone",
-      after: "InterpreCoach provides real-time AI support during actual calls",
-      benefit: "24/7 guidance when you need it most"
-    }
-  ];
+// Hoisted outside the component to prevent unnecessary re-allocations on every render
+const transformations = [
+  {
+    icon: Sparkles,
+    before: "Expensive, Outdated Courses",
+    after: "Smart investment in NBCMI and CCHI approved AI-powered training",
+    benefit: "Save 90% compared to traditional courses"
+  },
+  {
+    icon: Clock,
+    before: "Months of Guesswork",
+    after: "Instant feedback and personalized learning paths in minutes",
+    benefit: "30-minute assessments, not months of uncertainty"
+  },
+  {
+    icon: Brain,
+    before: "Navigating Calls Alone",
+    after: "InterpreCoach provides real-time AI support during actual calls",
+    benefit: "24/7 guidance when you need it most"
+  }
+];
 
+export const ProblemSolution = () => {
   return (
     <section className="py-24 bg-white dark:bg-background">
       <div className="container mx-auto px-6">
