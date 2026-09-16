@@ -1,30 +1,31 @@
 import { ArrowRight } from "lucide-react";
 
-export const HowItWorks = () => {
-  const steps = [
-    {
-      number: "01",
-      title: "Take the Assessment",
-      description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
-      subtext: "Join thousands who've discovered their true potential",
-      color: "bg-blue-500"
-    },
-    {
-      number: "02",
-      title: "Get Your Personalized Path",
-      description: "Receive a customized learning roadmap based on your assessment results. Your personalized roadmap to excellence—not a one-size-fits-all curriculum.",
-      subtext: "Focus only on what you need to grow",
-      color: "bg-nobel-gold"
-    },
-    {
-      number: "03",
-      title: "Level Up with AI Support",
-      description: "Access the same AI tools trusted by interpreters at leading healthcare systems. Real-time coaching, targeted learning, and progress tracking.",
-      subtext: "Never interpret alone again",
-      color: "bg-green-500"
-    }
-  ];
+// Hoisted outside the component to prevent unnecessary re-allocations on every render
+const steps = [
+  {
+    number: "01",
+    title: "Take the Assessment",
+    description: "Complete our AI-powered evaluation in 30 minutes. Get instant, detailed feedback on your interpretation skills, terminology usage, and areas for improvement.",
+    subtext: "Join thousands who've discovered their true potential",
+    color: "bg-blue-500"
+  },
+  {
+    number: "02",
+    title: "Get Your Personalized Path",
+    description: "Receive a customized learning roadmap based on your assessment results. Your personalized roadmap to excellence—not a one-size-fits-all curriculum.",
+    subtext: "Focus only on what you need to grow",
+    color: "bg-nobel-gold"
+  },
+  {
+    number: "03",
+    title: "Level Up with AI Support",
+    description: "Access the same AI tools trusted by interpreters at leading healthcare systems. Real-time coaching, targeted learning, and progress tracking.",
+    subtext: "Never interpret alone again",
+    color: "bg-green-500"
+  }
+];
 
+export const HowItWorks = () => {
   return (
     <section className="py-24 bg-stone-50 dark:bg-stone-950">
       <div className="container mx-auto px-6">
