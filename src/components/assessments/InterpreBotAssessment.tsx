@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
     Mic,
     Square,
@@ -687,13 +688,20 @@ export default function InterpreBotAssessment() {
                         <div key={`en-${item.id}`} className="group relative p-5 bg-slate-50/80 rounded-2xl font-semibold text-slate-700 border border-slate-100 shadow-sm transition-all hover:bg-white hover:shadow-md">
                             <div className="flex items-center justify-between">
                                 <span>{item.en}</span>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
-                                    className="text-slate-300 hover:text-indigo-500 transition-colors"
-                                    title="Generate example sentence"
-                                >
-                                    {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
-                                </button>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
+                                            className="text-slate-300 hover:text-indigo-500 transition-colors"
+                                            aria-label="Generate example sentence"
+                                        >
+                                            {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
+                                        </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Generate example sentence</p>
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                             {vocabContexts[item.id] && (
                                 <div className="mt-3 text-xs text-indigo-600 font-medium bg-indigo-50 p-2 rounded-lg animate-fadeIn border border-indigo-100">
