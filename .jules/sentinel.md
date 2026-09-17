@@ -9,3 +9,9 @@
 **Vulnerability:** Found hardcoded `VITE_SUPABASE_ANON_KEY` and project URL in `setup-github-actions.sh`.
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
+
+## 2025-02-23 - JSON-LD Script Injection XSS Risk
+
+**Vulnerability:** Found `dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}` inside `<script type="application/ld+json">` tags in `src/components/Breadcrumbs.tsx`. `structuredData` contained potentially unsanitized dynamic user input or route parameters (e.g. from breadcrumb labels).
+**Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. If user input contains something like `</script><script>alert('XSS')</script>`, the browser will terminate the current script block and execute the injected payload, resulting in a Cross-Site Scripting (XSS) vulnerability.
+**Prevention:** Always sanitize or safely escape JSON payloads before injecting them into HTML script tags. A common pattern is replacing all `<` characters with `\u003c`, which is perfectly valid JSON but prevents script tag breakouts. Created `safeJsonStringify` utility to enforce this pattern.
