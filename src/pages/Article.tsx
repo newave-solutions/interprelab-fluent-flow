@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import DOMPurify from "dompurify";
 
 // Mock data for articles - in a real app this would come from an API/CMS
@@ -128,9 +129,16 @@ const Article = () => {
               Share this article:
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(window.location.href)}>
-                <Share2 className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(window.location.href)} aria-label="Share article">
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Share article</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>
