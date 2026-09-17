@@ -1,27 +1,27 @@
 import { ArrowRight } from "lucide-react";
 
-export const HowItWorks = () => {
-  const steps = [
-    {
-      number: "01",
-      title: "Find Out Where You Stand",
-      description: "Take a 30-minute assessment that shows you exactly what you're great at and what needs work. No surprises, just honest feedback you can actually use.",
-      color: "bg-blue-500"
-    },
-    {
-      number: "02",
-      title: "Get a Plan That Makes Sense",
-      description: "We'll build you a custom learning path based on your results. Only work on what you actually need—skip the stuff you've already mastered.",
-      color: "bg-nobel-gold"
-    },
-    {
-      number: "03",
-      title: "Grow with AI By Your Side",
-      description: "Get real-time help during calls with InterpreCoach. Track every session with InterpreTrack. Practice tough scenarios with InterpreStudy. It's like having a mentor available 24/7.",
-      color: "bg-green-500"
-    }
-  ];
+const STEPS = [
+  {
+    number: "01",
+    title: "Find Out Where You Stand",
+    description: "Take a 30-minute assessment that shows you exactly what you're great at and what needs work. No surprises, just honest feedback you can actually use.",
+    color: "bg-blue-500"
+  },
+  {
+    number: "02",
+    title: "Get a Plan That Makes Sense",
+    description: "We'll build you a custom learning path based on your results. Only work on what you actually need—skip the stuff you've already mastered.",
+    color: "bg-nobel-gold"
+  },
+  {
+    number: "03",
+    title: "Grow with AI By Your Side",
+    description: "Get real-time help during calls with InterpreCoach. Track every session with InterpreTrack. Practice tough scenarios with InterpreStudy. It's like having a mentor available 24/7.",
+    color: "bg-green-500"
+  }
+];
 
+export const HowItWorks = () => {
   return (
     <section className="py-24 bg-stone-50 dark:bg-stone-950">
       <div className="container mx-auto px-6">
@@ -46,7 +46,7 @@ export const HowItWorks = () => {
               className="hidden md:block absolute top-16 left-[100px] w-[calc(100%-200px)] h-0.5 bg-gradient-to-r from-blue-500 via-nobel-gold to-green-500 opacity-20"
             />
 
-            {steps.map((step, index) => (
+            {STEPS.map((step, index) => (
               <div key={index} className="relative">
                 <div className="bg-white dark:bg-card rounded-xl p-8 border border-stone-200 dark:border-border hover:border-nobel-gold/50 dark:hover:border-nobel-gold/50 transition-all duration-300 hover:shadow-lg h-full">
                   {/* Step Number */}
@@ -54,7 +54,7 @@ export const HowItWorks = () => {
                     <div className={`w-14 h-14 ${step.color} rounded-full flex items-center justify-center shadow-lg`}>
                       <span className="text-white font-serif font-bold text-xl">{step.number}</span>
                     </div>
-                    {index < steps.length - 1 && (
+                    {index < STEPS.length - 1 && (
                       <ArrowRight className="hidden md:block text-stone-300 dark:text-stone-700 absolute -right-6 top-11" size={24} />
                     )}
                   </div>
