@@ -3,31 +3,32 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, BookOpen, BarChart3, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const SolutionHero = () => {
-  const solutions = [
-    {
-      icon: <Bot className="w-6 h-6" />,
-      title: "InterpreBot",
-      description: "AI-powered assessment tool that provides instant feedback on your interpretation skills",
-      link: "/interprebot",
-      color: "text-primary",
-    },
-    {
-      icon: <BookOpen className="w-6 h-6" />,
-      title: "InterpreCoach",
-      description: "Personalized AI coaching to help you master medical terminology and improve techniques",
-      link: "/interprecoach",
-      color: "text-success",
-    },
-    {
-      icon: <BarChart3 className="w-6 h-6" />,
-      title: "InterpreTrack",
-      description: "Track your performance, analyze patterns, and measure your growth over time",
-      link: "/interpretrack",
-      color: "text-warning",
-    },
-  ];
+// ⚡ Bolt Optimization: Moved static array outside component to prevent reallocation on every render
+const solutions = [
+  {
+    icon: <Bot className="w-6 h-6" />,
+    title: "InterpreBot",
+    description: "AI-powered assessment tool that provides instant feedback on your interpretation skills",
+    link: "/interprebot",
+    color: "text-primary",
+  },
+  {
+    icon: <BookOpen className="w-6 h-6" />,
+    title: "InterpreCoach",
+    description: "Personalized AI coaching to help you master medical terminology and improve techniques",
+    link: "/interprecoach",
+    color: "text-success",
+  },
+  {
+    icon: <BarChart3 className="w-6 h-6" />,
+    title: "InterpreTrack",
+    description: "Track your performance, analyze patterns, and measure your growth over time",
+    link: "/interpretrack",
+    color: "text-warning",
+  },
+];
 
+export const SolutionHero = () => {
   return (
     <section className="min-h-screen flex items-center justify-center py-20 px-4 bg-gradient-to-b from-background via-background/95 to-primary/5">
       <div className="container mx-auto">

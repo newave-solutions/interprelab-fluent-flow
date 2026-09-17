@@ -5,3 +5,7 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+
+## 2024-05-23 - SolutionHero Component Optimization
+**Learning:** React components defining static data arrays inside the render function (like `solutions` in `SolutionHero.tsx`) cause unnecessary reallocation and object creation on every render.
+**Action:** Successfully moved the `solutions` array outside the `SolutionHero` component function.
