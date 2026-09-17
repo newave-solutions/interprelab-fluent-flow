@@ -7,3 +7,6 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2024-05-17 - Add ARIA Labels and Tooltips to Media Controls
+**Learning:** Icon-only buttons without `aria-label`s or tooltips present significant accessibility barriers and lack clarity for visual users. Wrapping these buttons in Shadcn `Tooltip` components (and providing `aria-label`s) provides immediate and helpful context without altering the core UI design.
+**Action:** When creating or modifying icon-only buttons (like player controls or toolbar actions), systematically apply `Tooltip` wrappers and descriptive `aria-label` attributes to ensure universal accessibility.
