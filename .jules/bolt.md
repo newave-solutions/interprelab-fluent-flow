@@ -1,7 +1,3 @@
-## 2024-05-23 - Static Data Allocation in Render
-**Learning:** React components often define large static data structures (like navigation arrays, feature lists) inside the component body. This causes unnecessary reallocation on every render.
-**Action:** When reviewing components, check for `const` definitions of static data that don't depend on props or state. Move them outside the component or to a separate file.
-
-## 2024-05-23 - InterpreLink Feed Optimization
-**Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
-**Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-06-25 - O(n^2) Render Complexity in PerformanceHeatmap
+**Learning:** The `PerformanceHeatmap` component was calculating max earnings and performing an array `.find()` on the data set inside a loop rendering 168 cells, resulting in a minimum of 168 * n operations on every render. This nested array lookup within render loops is a common source of performance bottlenecks in data visualization components.
+**Action:** Always pre-compute lookup maps (e.g., using `new Map()`) inside a `useMemo` hook when rendering grids or lists that require finding specific data points from an array by key, reducing lookup complexity from O(n) to O(1). Combine aggregate calculations (like max/min) in the same pass.
