@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useMemo } from 'react';
 
 interface HeatmapData {
   hour: number;
@@ -19,8 +20,17 @@ export default function PerformanceHeatmap({ data, isPremium }: PerformanceHeatm
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  const maxEarnings = Math.max(...data.map(d => d.earnings));
-  
+  // Optimization: Pre-compute data map for O(1) lookups and find max earnings in a single pass
+  const { dataMap, maxEarnings } = useMemo(() => {
+    const map = new Map<string, HeatmapData>();
+    let max = 0;
+    data.forEach((d) => {
+      map.set(`${d.day}-${d.hour}`, d);
+      if (d.earnings > max) max = d.earnings;
+    });
+    return { dataMap: map, maxEarnings: max };
+  }, [data]);
+
   const getHeatColor = (earnings: number) => {
     if (earnings === 0) return 'bg-muted/30';
     const intensity = earnings / maxEarnings;
@@ -29,10 +39,6 @@ export default function PerformanceHeatmap({ data, isPremium }: PerformanceHeatm
     if (intensity > 0.4) return 'bg-emerald-300';
     if (intensity > 0.2) return 'bg-emerald-200';
     return 'bg-emerald-100';
-  };
-
-  const getDataForCell = (day: string, hour: number) => {
-    return data.find(d => d.day === day && d.hour === hour);
   };
 
   if (!isPremium) {
@@ -115,7 +121,7 @@ export default function PerformanceHeatmap({ data, isPremium }: PerformanceHeatm
                   <div className="text-xs text-muted-foreground w-10 text-right">{day}</div>
                   <div className="flex gap-1">
                     {hours.map(hour => {
-                      const cellData = getDataForCell(day, hour);
+                      const cellData = dataMap.get(`${day}-${hour}`);
                       const earnings = cellData?.earnings || 0;
                       return (
                         <div
