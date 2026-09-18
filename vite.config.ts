@@ -5,20 +5,14 @@ import { componentTagger } from "lovable-tagger";
 import compression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-// Lovable Cloud credentials (safe to expose - these are publishable/anon keys)
-const LOVABLE_CLOUD_PROJECT_ID = "ggyzlvbtkibqnkfhgnbe";
-const LOVABLE_CLOUD_URL = `https://${LOVABLE_CLOUD_PROJECT_ID}.supabase.co`;
-const LOVABLE_CLOUD_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdneXpsdmJ0a2licW5rZmhnbmJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTQyOTAsImV4cCI6MjA3NDk3MDI5MH0.WKvlxub9oAc0eSn1Nh3wl0xbuedQfzIr6ELfVTpd1pU";
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load env at config time (may be empty if .env isn't present)
   const env = loadEnv(mode, process.cwd(), "");
 
-  // Use Lovable Cloud credentials as guaranteed fallbacks
-  const supabaseProjectId = env.VITE_SUPABASE_PROJECT_ID || LOVABLE_CLOUD_PROJECT_ID;
-  const supabaseUrl = env.VITE_SUPABASE_URL || LOVABLE_CLOUD_URL;
-  const supabaseKey = env.VITE_SUPABASE_PUBLISHABLE_KEY || env.VITE_SUPABASE_ANON_KEY || LOVABLE_CLOUD_ANON_KEY;
+  const supabaseProjectId = env.VITE_SUPABASE_PROJECT_ID || "";
+  const supabaseUrl = env.VITE_SUPABASE_URL || "";
+  const supabaseKey = env.VITE_SUPABASE_PUBLISHABLE_KEY || env.VITE_SUPABASE_ANON_KEY || "";
 
   return {
   // Explicitly set to use .env file from project root
@@ -26,7 +20,7 @@ export default defineConfig(({ mode }) => {
   // Only load .env file, not .env.local or mode-specific files
   envPrefix: 'VITE_',
 
-  // Inline Lovable Cloud credentials into the bundle (guaranteed to work)
+  // Inline environment variables into the bundle
   define: {
     'import.meta.env.VITE_SUPABASE_PROJECT_ID': JSON.stringify(supabaseProjectId ?? ""),
     'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
