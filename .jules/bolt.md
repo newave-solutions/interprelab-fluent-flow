@@ -1,7 +1,3 @@
-## 2024-05-23 - Static Data Allocation in Render
-**Learning:** React components often define large static data structures (like navigation arrays, feature lists) inside the component body. This causes unnecessary reallocation on every render.
-**Action:** When reviewing components, check for `const` definitions of static data that don't depend on props or state. Move them outside the component or to a separate file.
-
-## 2024-05-23 - InterpreLink Feed Optimization
-**Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
-**Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-05-24 - Memoizing Intl.NumberFormat
+**Learning:** Instantiating `Intl.NumberFormat` repeatedly in a render loop or inside utility functions called frequently (like formatting lists of numbers) is a known performance bottleneck in JavaScript. React components in dashboards are especially susceptible to this overhead.
+**Action:** Always cache/memoize `Intl.NumberFormat` instances in a shared utility (using a `Map` keyed by locale and options) rather than instantiating them inline.
