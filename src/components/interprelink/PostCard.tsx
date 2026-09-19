@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Post } from "./types";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PostCardProps {
   post: Post;
@@ -33,9 +34,16 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                 </span>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="More options">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>More options</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -56,22 +64,58 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
 
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex items-center gap-6">
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Heart className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Share2 className="w-4 h-4" />
-              <span>0</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Heart className="w-4 h-4" />
+                  <span className="sr-only">Like post. </span>
+                  <span>0</span>
+                  <span className="sr-only"> likes</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Like post</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="sr-only">Comment on post. </span>
+                  <span>0</span>
+                  <span className="sr-only"> comments</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Comment on post</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Share2 className="w-4 h-4" />
+                  <span className="sr-only">Share post. </span>
+                  <span>0</span>
+                  <span className="sr-only"> shares</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Share post</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
-          <Button variant="ghost" size="sm">
-            <Bookmark className="w-4 h-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm" aria-label="Bookmark post">
+                <Bookmark className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bookmark post</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </CardContent>
     </Card>
