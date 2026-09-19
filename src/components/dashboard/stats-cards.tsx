@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Phone, Clock, DollarSign } from 'lucide-react';
+import { formatCurrency } from '@/utils/currency';
 
 interface StatsCardsProps {
   stats: {
@@ -11,10 +12,6 @@ interface StatsCardsProps {
 
 const StatsCards = ({ stats }: StatsCardsProps) => {
   const { totalCalls, totalMinutes, totalEarnings } = stats;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-  };
 
   return (
     <div className="grid gap-4 md:grid-cols-3">

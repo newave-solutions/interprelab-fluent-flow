@@ -15,6 +15,9 @@ export interface NumberFormatOptions {
  * @param options - Formatting options
  * @returns Formatted number string
  */
+// Cache for Intl.NumberFormat instances to prevent expensive reallocation
+const numberFormattersCache = new Map<string, Intl.NumberFormat>();
+
 export const formatNumber = (
     num: number,
     options: NumberFormatOptions = {}
@@ -26,11 +29,20 @@ export const formatNumber = (
         useGrouping = true,
     } = options;
 
-    return new Intl.NumberFormat(locale, {
-        minimumFractionDigits,
-        maximumFractionDigits,
-        useGrouping,
-    }).format(num);
+    const cacheKey = `${locale}-${minimumFractionDigits}-${maximumFractionDigits}-${useGrouping}`;
+
+    if (!numberFormattersCache.has(cacheKey)) {
+        numberFormattersCache.set(
+            cacheKey,
+            new Intl.NumberFormat(locale, {
+                minimumFractionDigits,
+                maximumFractionDigits,
+                useGrouping,
+            })
+        );
+    }
+
+    return numberFormattersCache.get(cacheKey)!.format(num);
 };
 
 /**

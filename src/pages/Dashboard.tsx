@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, DollarSign, Clock, TrendingUp, Phone } from 'lucide-react';
 import { format, startOfMonth, startOfYear, endOfMonth, endOfYear } from 'date-fns';
 import LearningProgress from '@/components/dashboard/learning-progress';
+import { formatCurrency as utilFormatCurrency } from '@/utils/currency';
 
 interface CallRecord {
   id: string;
@@ -184,10 +185,7 @@ const Dashboard = () => {
   };
 
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
+    return utilFormatCurrency(amount, { currency });
   };
 
   return (

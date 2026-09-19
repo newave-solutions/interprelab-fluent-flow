@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { formatCurrency } from '@/utils/currency';
 
 interface PlatformStats {
   name: string;
@@ -17,9 +18,6 @@ interface PlatformComparisonProps {
 }
 
 export default function PlatformComparison({ platforms, isPremium }: PlatformComparisonProps) {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-  };
 
   const totalEarnings = platforms.reduce((sum, p) => sum + p.earnings, 0);
   const sortedPlatforms = [...platforms].sort((a, b) => b.earnings - a.earnings);
