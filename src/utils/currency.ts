@@ -9,6 +9,10 @@ export interface CurrencyFormatOptions {
     maximumFractionDigits?: number;
 }
 
+// Cache for Intl.NumberFormat instances to prevent expensive re-instantiations
+// and improve formatting performance across dashboard components
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+
 /**
  * Format a number as currency
  * @param amount - The amount to format
@@ -26,12 +30,20 @@ export const formatCurrency = (
         maximumFractionDigits = 2,
     } = options;
 
-    return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency,
-        minimumFractionDigits,
-        maximumFractionDigits,
-    }).format(amount);
+    const cacheKey = `${locale}-${currency}-${minimumFractionDigits}-${maximumFractionDigits}`;
+    let formatter = numberFormatCache.get(cacheKey);
+
+    if (!formatter) {
+        formatter = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency,
+            minimumFractionDigits,
+            maximumFractionDigits,
+        });
+        numberFormatCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(amount);
 };
 
 /**
