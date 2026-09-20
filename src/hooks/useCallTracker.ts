@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { CallLogService, UserSettingsService } from '../integrations/supabase/services';
+import { formatCurrency as utilFormatCurrency } from '../utils/currency';
 
 interface CallSession {
   id?: string;
@@ -193,10 +194,7 @@ export const useCallTracker = () => {
   };
 
   const formatCurrency = (amount: number, currency: string = 'USD'): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
+    return utilFormatCurrency(amount, { locale: 'en-US', currency });
   };
 
   return {
