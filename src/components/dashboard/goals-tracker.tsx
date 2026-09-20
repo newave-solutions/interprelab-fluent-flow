@@ -3,6 +3,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Target, TrendingUp, DollarSign, Clock, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { formatCurrency } from '@/utils/currency';
 
 interface Goal {
   id: string;
@@ -23,7 +24,7 @@ export default function GoalsTracker({ goals, isPremium }: GoalsTrackerProps) {
   const formatValue = (value: number, unit: string) => {
     switch (unit) {
       case 'dollars':
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+        return formatCurrency(value);
       case 'hours':
         return `${value}h`;
       case 'calls':
