@@ -9,6 +9,8 @@ export interface NumberFormatOptions {
     useGrouping?: boolean;
 }
 
+const numberFormatterCache = new Map<string, Intl.NumberFormat>();
+
 /**
  * Format a number with locale-specific formatting
  * @param num - The number to format
@@ -26,11 +28,19 @@ export const formatNumber = (
         useGrouping = true,
     } = options;
 
-    return new Intl.NumberFormat(locale, {
-        minimumFractionDigits,
-        maximumFractionDigits,
-        useGrouping,
-    }).format(num);
+    const cacheKey = `${locale}-${minimumFractionDigits}-${maximumFractionDigits}-${useGrouping}`;
+    let formatter = numberFormatterCache.get(cacheKey);
+
+    if (!formatter) {
+        formatter = new Intl.NumberFormat(locale, {
+            minimumFractionDigits,
+            maximumFractionDigits,
+            useGrouping,
+        });
+        numberFormatterCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(num);
 };
 
 /**

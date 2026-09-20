@@ -9,6 +9,8 @@ export interface CurrencyFormatOptions {
     maximumFractionDigits?: number;
 }
 
+const formatterCache = new Map<string, Intl.NumberFormat>();
+
 /**
  * Format a number as currency
  * @param amount - The amount to format
@@ -26,12 +28,20 @@ export const formatCurrency = (
         maximumFractionDigits = 2,
     } = options;
 
-    return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency,
-        minimumFractionDigits,
-        maximumFractionDigits,
-    }).format(amount);
+    const cacheKey = `${locale}-${currency}-${minimumFractionDigits}-${maximumFractionDigits}`;
+    let formatter = formatterCache.get(cacheKey);
+
+    if (!formatter) {
+        formatter = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency,
+            minimumFractionDigits,
+            maximumFractionDigits,
+        });
+        formatterCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(amount);
 };
 
 /**
