@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, Mic, Video, Phone, Settings, Users } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 interface TerminologyCard {
   term: string;
@@ -152,20 +153,42 @@ export const InterpreCoachLiveDemo = () => {
             </div>
 
             {/* Call Controls */}
-            <div className="flex justify-center gap-4 pt-2">
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Mic className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Video className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
-                <Phone className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Settings className="w-5 h-5 text-white" />
-              </button>
-            </div>
+            <TooltipProvider>
+              <div className="flex justify-center gap-4 pt-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button aria-label="Toggle microphone" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-nobel-gold focus-visible:outline-none">
+                      <Mic className="w-5 h-5 text-white" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Toggle microphone</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button aria-label="Toggle video" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-nobel-gold focus-visible:outline-none">
+                      <Video className="w-5 h-5 text-white" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Toggle video</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button aria-label="End call" className="p-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-nobel-gold focus-visible:outline-none">
+                      <Phone className="w-5 h-5 text-white" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>End call</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button aria-label="Settings" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-nobel-gold focus-visible:outline-none">
+                      <Settings className="w-5 h-5 text-white" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Settings</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           </div>
 
           {/* InterpreCoach Panel - Takes 1 column */}
