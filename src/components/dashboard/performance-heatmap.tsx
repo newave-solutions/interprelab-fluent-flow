@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Flame } from 'lucide-react';
@@ -31,8 +32,12 @@ export default function PerformanceHeatmap({ data, isPremium }: PerformanceHeatm
     return 'bg-emerald-100';
   };
 
+  const cellDataMap = useMemo(() => {
+    return new Map(data.map(d => [`${d.day}-${d.hour}`, d]));
+  }, [data]);
+
   const getDataForCell = (day: string, hour: number) => {
-    return data.find(d => d.day === day && d.hour === hour);
+    return cellDataMap.get(`${day}-${hour}`);
   };
 
   if (!isPremium) {
