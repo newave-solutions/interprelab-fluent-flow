@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 import { TrendingUp, DollarSign, Calendar } from 'lucide-react';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { formatCurrency } from '@/utils/currency';
 
 interface ProjectionData {
   month: string;
@@ -95,7 +96,7 @@ export default function EarningsProjection({ data, isPremium }: EarningsProjecti
                 <span className="text-xs font-medium text-muted-foreground">Current Month</span>
               </div>
               <div className="text-2xl font-bold">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(currentMonthEarnings)}
+                {formatCurrency(currentMonthEarnings, { locale: 'en-US', currency: 'USD' })}
               </div>
             </div>
 
@@ -105,7 +106,7 @@ export default function EarningsProjection({ data, isPremium }: EarningsProjecti
                 <span className="text-xs font-medium text-muted-foreground">Projected (6mo)</span>
               </div>
               <div className="text-2xl font-bold text-accent">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(projectedEndOfYear)}
+                {formatCurrency(projectedEndOfYear, { locale: 'en-US', currency: 'USD' })}
               </div>
             </div>
 
