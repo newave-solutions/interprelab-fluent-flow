@@ -8,6 +8,9 @@ export interface DateFormatOptions {
     timeStyle?: 'full' | 'long' | 'medium' | 'short';
 }
 
+const dateTimeFormatCache = new Map<string, Intl.DateTimeFormat>();
+const relativeTimeFormatCache = new Map<string, Intl.RelativeTimeFormat>();
+
 /**
  * Format a date to a localized string
  * @param date - The date to format
@@ -26,10 +29,18 @@ export const formatDate = (
 
     const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
 
-    return new Intl.DateTimeFormat(locale, {
-        dateStyle,
-        timeStyle,
-    }).format(dateObj);
+    const cacheKey = `${locale}-${dateStyle}-${timeStyle}`;
+    let formatter = dateTimeFormatCache.get(cacheKey);
+
+    if (!formatter) {
+        formatter = new Intl.DateTimeFormat(locale, {
+            dateStyle,
+            timeStyle,
+        });
+        dateTimeFormatCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(dateObj);
 };
 
 /**
@@ -43,7 +54,11 @@ export const getRelativeTime = (date: Date | string | number, locale = 'en-US'):
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
-    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+    let rtf = relativeTimeFormatCache.get(locale);
+    if (!rtf) {
+        rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+        relativeTimeFormatCache.set(locale, rtf);
+    }
 
     if (Math.abs(diffInSeconds) < 60) {
         return rtf.format(-diffInSeconds, 'second');
