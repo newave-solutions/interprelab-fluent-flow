@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 // Mock data for articles - in a real app this would come from an API/CMS
 const articles = {
@@ -128,9 +130,24 @@ const Article = () => {
               Share this article:
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(window.location.href)}>
-                <Share2 className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label="Share article link"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast.success("Article link copied to clipboard");
+                    }}
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy link</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>
