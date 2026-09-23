@@ -7,3 +7,8 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2025-12-18 - Toggle Button Accessibility
+
+**Learning:** When using icon-only toggle buttons (like show/hide password), a static `aria-label` is insufficient. The label and tooltip content must dynamically reflect the *next available action* rather than the current state, so users know what clicking the button will do.
+**Action:** Always use dynamic ternary expressions for `aria-label` and `TooltipContent` on toggle buttons (e.g., `aria-label={showPassword ? "Hide password" : "Show password"}`).
