@@ -9,3 +9,9 @@
 **Vulnerability:** Found hardcoded `VITE_SUPABASE_ANON_KEY` and project URL in `setup-github-actions.sh`.
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
+
+## 2025-02-24 - Client-Side API Key Exposure
+
+**Vulnerability:** Direct client-side API calls to Gemini in `src/components/assessments/InterpreBotAssessment.tsx` using `VITE_INTERPRETEST_API_KEY` and `GEMINI_API_KEY` exposed sensitive credentials to the frontend.
+**Learning:** Environment variables starting with `VITE_` are bundled into the client-side code, meaning any API keys stored this way are accessible to anyone inspecting the network traffic or source code.
+**Prevention:** Never make direct calls to third-party APIs requiring sensitive keys from the client. Abstract such calls behind an authenticated backend proxy or edge function (like Supabase Edge Functions) to secure credentials.
