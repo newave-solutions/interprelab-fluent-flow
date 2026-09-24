@@ -7,3 +7,7 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2025-02-27 - Icon-Only Stats Button Accessibility
+
+**Learning:** Buttons containing both an icon and a numeric counter (like Like/Comment/Share buttons) can be confusing for screen reader users if they only hear the number (e.g. "0"). Adding an `aria-label` will overwrite the visual number.
+**Action:** Instead of `aria-label`, use a `<span className="sr-only">Descriptive Action (e.g., Likes)</span>` inside the button alongside the number to provide context without losing the numeric readout.
