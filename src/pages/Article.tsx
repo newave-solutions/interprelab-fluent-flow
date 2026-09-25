@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 import { Calendar, Clock, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
@@ -65,6 +67,7 @@ const articles = {
 
 const Article = () => {
   const { slug } = useParams();
+  const { toast } = useToast();
   const article = articles[slug as keyof typeof articles];
 
   if (!article) {
@@ -128,9 +131,27 @@ const Article = () => {
               Share this article:
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(window.location.href)}>
-                <Share2 className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label="Share article"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast({
+                        title: "Link copied",
+                        description: "Article link copied to clipboard",
+                      });
+                    }}
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy link to article</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>
