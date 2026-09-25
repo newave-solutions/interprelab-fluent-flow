@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, Mic, Video, Phone, Settings, Users } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface TerminologyCard {
   term: string;
@@ -153,18 +154,38 @@ export const InterpreCoachLiveDemo = () => {
 
             {/* Call Controls */}
             <div className="flex justify-center gap-4 pt-2">
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Mic className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Video className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
-                <Phone className="w-5 h-5 text-white" />
-              </button>
-              <button className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors">
-                <Settings className="w-5 h-5 text-white" />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button aria-label="Toggle Microphone" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-stone-900 focus-visible:ring-offset-black">
+                    <Mic className="w-5 h-5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Toggle Microphone</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button aria-label="Toggle Camera" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-stone-900 focus-visible:ring-offset-black">
+                    <Video className="w-5 h-5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Toggle Camera</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button aria-label="End Call" className="p-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-600 focus-visible:ring-offset-black">
+                    <Phone className="w-5 h-5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>End Call</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button aria-label="Settings" className="p-3 bg-stone-800 hover:bg-stone-700 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-stone-900 focus-visible:ring-offset-black">
+                    <Settings className="w-5 h-5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Settings</TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
