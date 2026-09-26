@@ -38,6 +38,16 @@ serve(async (req) => {
       );
     }
 
+    // Security: Prevent quota exhaustion / DoS by limiting text length
+    const MAX_TEXT_LENGTH = 5000;
+    if (text.length > MAX_TEXT_LENGTH) {
+      console.warn(`Attempted to synthesize text exceeding length limit: ${text.length} chars`);
+      return new Response(
+        JSON.stringify({ error: `Text length exceeds maximum allowed limit of ${MAX_TEXT_LENGTH} characters` }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Select voice based on role
     const voiceId = VOICE_IDS[role as keyof typeof VOICE_IDS] || VOICE_IDS.narrator;
 
