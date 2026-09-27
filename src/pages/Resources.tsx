@@ -137,10 +137,11 @@ const Resources = () => {
               </CardHeader>
               <CardContent>
                 <Button variant="outline" className="w-full" asChild>
-                  <a href="http://localhost:3001" target="_blank" rel="noopener noreferrer">
+                  {/* Security Note: Replaced hardcoded localhost URL with relative internal routing to prevent environment leakage */}
+                  <Link to="/dilemma">
                     Start Experience
                     <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

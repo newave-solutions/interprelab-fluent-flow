@@ -15,3 +15,8 @@
 **Vulnerability:** `nginx.conf` contained a hardcoded Content Security Policy (CSP) referencing an outdated/unused Supabase Project ID (`iokgkrnbawhizmuejluz`), while the application code (`.env.production`, `config.toml`) utilized different project IDs (`opmafykbhjinqebgflnl`, `ggyzlvbtkibqnkfhgnbe`).
 **Learning:** Hardcoding specific external domains in static configuration files (like nginx.conf) creates a high risk of service denial in production if the backend infrastructure changes, as the CSP will block legitimate traffic. This is a common "Configuration Drift" issue.
 **Prevention:** Use environment variable substitution (e.g., `envsubst`) in container startup scripts to inject the correct allowed domains into the CSP at runtime, ensuring the security policy always matches the active environment configuration.
+
+## 2025-02-24 - Hardcoded Localhost URL Leakage
+**Vulnerability:** Found hardcoded `http://localhost:3001` URL in `src/pages/Resources.tsx` for a link to the dilemma page.
+**Learning:** Hardcoding local development URLs (`localhost`) creates broken links in production and leaks local development environment details to the public. This happens when developers forget to replace local test URLs with proper relative paths or environment variables before committing.
+**Prevention:** Always use relative paths with `<Link>` components for internal routing, or utilize environment variables for external service URLs. Implement static analysis tools or custom lint rules to detect hardcoded `localhost` strings in production code.
