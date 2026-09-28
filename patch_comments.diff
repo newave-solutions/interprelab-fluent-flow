@@ -1,0 +1,17 @@
+<<<<<<< SEARCH
+    if (monthData) {
+      let totalDuration = 0;
+      let totalRounded = 0;
+      let totalEarnings = 0;
+      let totalRoundedEarnings = 0;
+=======
+    if (monthData) {
+      // ⚡ Bolt Performance Optimization
+      // Replaced 10 sequential O(N) array iterations (reduce/filter) with a single pass
+      // Expected impact: Significant reduction in CPU time and intermediate array allocations
+      // when processing large datasets of monthly call logs.
+      let totalDuration = 0;
+      let totalRounded = 0;
+      let totalEarnings = 0;
+      let totalRoundedEarnings = 0;
+>>>>>>> REPLACE
