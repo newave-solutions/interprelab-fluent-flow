@@ -9,3 +9,7 @@
 **Vulnerability:** Found hardcoded `VITE_SUPABASE_ANON_KEY` and project URL in `setup-github-actions.sh`.
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
+## 2024-05-27 - XSS Vulnerability in Breadcrumbs
+**Vulnerability:** A Cross-Site Scripting (XSS) vulnerability was found in `src/components/Breadcrumbs.tsx` where JSON-LD data was interpolated directly into a script tag using `dangerouslySetInnerHTML` with `JSON.stringify()`. This can allow attackers to inject malicious `<script>` tags through structured data content.
+**Learning:** Using `JSON.stringify()` alone inside a `<script>` tag is not safe from XSS attacks, as closing script tags (`</script>`) within the stringified data can prematurely close the element and execute arbitrary code.
+**Prevention:** Create and use a utility like `safeJsonStringify` that escapes characters such as `<`, `>`, and `&` to neutral unicode equivalents before inserting JSON into HTML attributes or tags.
