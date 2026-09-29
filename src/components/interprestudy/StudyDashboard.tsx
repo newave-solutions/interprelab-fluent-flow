@@ -61,8 +61,17 @@ export function StudyDashboard({ onContinueLearning }: StudyDashboardProps) {
 
         if (data && data.length > 0) {
           // Aggregate progress from all modules
-          const totalXP = data.reduce((sum, d) => sum + (d.xp_earned || 0), 0);
-          const completedModules = data.filter(d => d.is_completed).length;
+          let totalXP = 0;
+          let completedModules = 0;
+
+          // ⚡ Bolt: Consolidate array iterations into a single loop to reduce CPU overhead
+          for (const d of data) {
+            totalXP += (d.xp_earned || 0);
+            if (d.is_completed) {
+              completedModules += 1;
+            }
+          }
+
           const metadata = data[0]?.metadata as Record<string, unknown> | null;
           
           const newProgress: StudyProgress = {
