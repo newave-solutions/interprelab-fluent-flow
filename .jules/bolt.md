@@ -5,3 +5,6 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-05-24 - Over-reliance on chained array methods
+**Learning:** Chaining multiple `.reduce()` and `.filter()` operations on the same dataset (especially inside React components for calculating aggregate dashboard statistics) creates significant CPU overhead and multiple intermediate array allocations.
+**Action:** Consolidate these operations into a single `for...of` loop whenever calculating multiple aggregate metrics from the same dataset.
