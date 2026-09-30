@@ -1,0 +1,144 @@
+<<<<<<< SEARCH
+import {
+    Mic,
+    Square,
+    Play,
+    CheckCircle,
+    AlertCircle,
+    BarChart2,
+    BookOpen,
+    Shield,
+    Brain,
+    MessageSquare,
+    Activity,
+    ArrowRight,
+    RefreshCcw,
+    Sparkles,
+    Loader2,
+    Cpu,
+    Zap,
+    Lightbulb,
+    FileText,
+    Clock
+} from 'lucide-react';
+=======
+import {
+    Mic,
+    Square,
+    Play,
+    CheckCircle,
+    AlertCircle,
+    BarChart2,
+    BookOpen,
+    Shield,
+    Brain,
+    MessageSquare,
+    Activity,
+    ArrowRight,
+    RefreshCcw,
+    Sparkles,
+    Loader2,
+    Cpu,
+    Zap,
+    Lightbulb,
+    FileText,
+    Clock
+} from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+            <div className="flex flex-col items-center gap-6">
+                {!voiceProgress ? (
+                    <button
+                        onClick={handleVoiceRecord}
+                        className={`w-24 h-24 rounded-full flex items-center justify-center transition-all duration-500 shadow-2xl ${isRecording ? 'bg-rose-500 scale-110 shadow-rose-500/40' : 'bg-gradient-to-br from-indigo-600 to-indigo-700 hover:scale-105 shadow-indigo-500/40'}`}
+                    >
+                        {isRecording ? <Square size={32} className="text-white fill-current" /> : <Mic size={36} className="text-white" />}
+                    </button>
+                ) : (
+=======
+            <div className="flex flex-col items-center gap-6">
+                {!voiceProgress ? (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                onClick={handleVoiceRecord}
+                                aria-label={isRecording ? "Stop recording" : "Start voice recording"}
+                                className={`w-24 h-24 rounded-full flex items-center justify-center transition-all duration-500 shadow-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-500 focus-visible:ring-offset-4 ${isRecording ? 'bg-rose-500 scale-110 shadow-rose-500/40' : 'bg-gradient-to-br from-indigo-600 to-indigo-700 hover:scale-105 shadow-indigo-500/40'}`}
+                            >
+                                {isRecording ? <Square size={32} className="text-white fill-current" /> : <Mic size={36} className="text-white" />}
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{isRecording ? "Stop recording" : "Start voice recording"}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                ) : (
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                            <div
+                                key={`en-${item.id}`}
+                                className={`p-4 border-2 rounded-xl flex items-center justify-between cursor-pointer transition-all
+                ${vocabMatches[item.id]
+                                        ? 'bg-slate-50 border-slate-200 opacity-50'
+                                        : activeVocabLeft === item.id
+                                            ? 'border-indigo-500 bg-indigo-50 shadow-md'
+                                            : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
+                                    }`}
+                                onClick={() => !vocabMatches[item.id] && setActiveVocabLeft(item.id)}
+                            >
+                                <span>{item.en}</span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
+                                    className="text-slate-300 hover:text-indigo-500 transition-colors"
+                                    title="Generate example sentence"
+                                >
+                                    {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
+                                </button>
+                            </div>
+=======
+                            <div
+                                key={`en-${item.id}`}
+                                className={`p-4 border-2 rounded-xl flex items-center justify-between cursor-pointer transition-all
+                ${vocabMatches[item.id]
+                                        ? 'bg-slate-50 border-slate-200 opacity-50'
+                                        : activeVocabLeft === item.id
+                                            ? 'border-indigo-500 bg-indigo-50 shadow-md'
+                                            : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
+                                    }`}
+                                onClick={() => !vocabMatches[item.id] && setActiveVocabLeft(item.id)}
+                            >
+                                <span>{item.en}</span>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
+                                            aria-label="Generate example sentence"
+                                            className="text-slate-300 hover:text-indigo-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm"
+                                        >
+                                            {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
+                                        </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Generate example sentence</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                <div className="mt-12 pt-8 border-t border-slate-100 text-center">
+                    <button onClick={resetApp} className="group text-slate-400 hover:text-indigo-600 flex items-center gap-2 mx-auto transition-colors font-bold text-sm uppercase tracking-widest">
+                        <RefreshCcw size={14} className="group-hover:-rotate-180 transition-transform duration-500" /> Restart Simulation
+                    </button>
+                </div>
+=======
+                <div className="mt-12 pt-8 border-t border-slate-100 text-center">
+                    <button onClick={resetApp} className="group text-slate-400 hover:text-indigo-600 flex items-center gap-2 mx-auto transition-colors font-bold text-sm uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-md px-2 py-1">
+                        <RefreshCcw size={14} className="group-hover:-rotate-180 transition-transform duration-500" /> Restart Simulation
+                    </button>
+                </div>
+>>>>>>> REPLACE
