@@ -103,32 +103,57 @@ const CallTracker = () => {
       .lte('start_time', monthEnd.toISOString());
 
     if (monthData) {
-      const totalDuration = monthData.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
-      const totalRounded = monthData.reduce((sum, call) => sum + (call.rounded_duration_seconds || call.duration_seconds || 0), 0);
-      const totalEarnings = monthData.reduce((sum, call) => sum + (call.earnings || 0), 0);
-      const totalRoundedEarnings = monthData.reduce((sum, call) => sum + (call.rounded_earnings || call.earnings || 0), 0);
+      let totalDuration = 0;
+      let totalRounded = 0;
+      let totalEarnings = 0;
+      let totalRoundedEarnings = 0;
+
+      let vriCount = 0;
+      let vriDuration = 0;
+      let vriEarnings = 0;
+
+      let opiCount = 0;
+      let opiDuration = 0;
+      let opiEarnings = 0;
+
+      // Single pass optimization: O(N) instead of O(8N) + 2 array allocations
+      for (const call of monthData) {
+        const durSecs = call.duration_seconds || 0;
+        const earn = call.earnings || 0;
+
+        totalDuration += durSecs;
+        totalRounded += call.rounded_duration_seconds || durSecs;
+        totalEarnings += earn;
+        totalRoundedEarnings += call.rounded_earnings || earn;
+
+        if (call.call_type === 'VRI') {
+          vriCount++;
+          vriDuration += durSecs;
+          vriEarnings += earn;
+        } else if (call.call_type === 'OPI') {
+          opiCount++;
+          opiDuration += durSecs;
+          opiEarnings += earn;
+        }
+      }
       
       // Calculate time lost to rounding
       const timeLost = totalDuration - totalRounded;
       const earningsLost = totalEarnings - totalRoundedEarnings;
 
-      // Call type breakdown
-      const vriCalls = monthData.filter(c => c.call_type === 'VRI');
-      const opiCalls = monthData.filter(c => c.call_type === 'OPI');
-      
       setCallTypeStats([
         {
           type: 'VRI',
-          count: vriCalls.length,
-          duration: vriCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: vriCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
+          count: vriCount,
+          duration: vriDuration,
+          earnings: vriEarnings,
           color: 'hsl(217, 91%, 60%)', // blue
         },
         {
           type: 'OPI',
-          count: opiCalls.length,
-          duration: opiCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: opiCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
+          count: opiCount,
+          duration: opiDuration,
+          earnings: opiEarnings,
           color: 'hsl(271, 81%, 56%)', // purple
         }
       ]);
