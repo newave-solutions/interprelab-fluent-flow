@@ -7,3 +7,6 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2023-10-24 - Tooltip Provider verification
+**Learning:** Playwright may have issues locating tooltips by `role="tooltip"` if the exact DOM structure uses different roles, or if animations delay the tooltip rendering. Use broader locators like `page.locator('.bg-popover')` in Shadcn UI.
+**Action:** Use `.bg-popover` or other styling indicators when waiting for tooltips in Playwright scripts if standard ARIA roles fail.
