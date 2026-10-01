@@ -169,8 +169,16 @@ const Dashboard = () => {
   };
 
   const calculateStats = (data: { duration_seconds: number | null; earnings: number | null }[]) => {
-    const totalDuration = data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
-    const totalEarnings = data.reduce((sum, call) => sum + (call.earnings || 0), 0);
+    let totalDuration = 0;
+    let totalEarnings = 0;
+
+    // ⚡ Bolt: Consolidated multiple array iterations (.reduce) into a single loop
+    // to prevent intermediate array allocations and reduce CPU overhead
+    for (const call of data) {
+      totalDuration += call.duration_seconds || 0;
+      totalEarnings += call.earnings || 0;
+    }
+
     const callCount = data.length;
     const avgDuration = callCount > 0 ? totalDuration / callCount : 0;
 
