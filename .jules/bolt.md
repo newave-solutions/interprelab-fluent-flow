@@ -1,7 +1,3 @@
-## 2024-05-23 - Static Data Allocation in Render
-**Learning:** React components often define large static data structures (like navigation arrays, feature lists) inside the component body. This causes unnecessary reallocation on every render.
-**Action:** When reviewing components, check for `const` definitions of static data that don't depend on props or state. Move them outside the component or to a separate file.
-
-## 2024-05-23 - InterpreLink Feed Optimization
-**Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
-**Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-06-12 - Aggregate Statistics Loop Optimization
+**Learning:** Found multiple instances of back-to-back `.reduce()` and `.filter()` calls used to calculate aggregate statistics over arrays of objects in the codebase (e.g., `useCallLogs.ts`, `Dashboard.tsx`, `CallTracker.tsx`, `InterpreTrack.tsx`, `StudyDashboard.tsx`). While syntactically concise, this approach creates an O(K*N) time complexity where K is the number of array operations, and results in excessive intermediate array allocations in memory. This is particularly problematic in a performance context where arrays could potentially hold hundreds or thousands of records.
+**Action:** Always refactor sequential array method chains used for aggregation (like calculating multiple sums, counts, or grouped subsets) into a single, consolidated `for...of` loop. This brings the time complexity down to strictly O(N) and eliminates the creation of intermediate array copies in memory.
