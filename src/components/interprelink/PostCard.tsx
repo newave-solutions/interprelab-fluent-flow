@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   MessageCircle, Heart, Share2, MoreHorizontal,
   Bookmark
@@ -33,9 +34,15 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                 </span>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="focus-visible:ring-2">
+                      <span className="sr-only">More options</span>
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>More options</TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -56,22 +63,49 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
 
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex items-center gap-6">
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Heart className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Share2 className="w-4 h-4" />
-              <span>0</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2">
+                  <span className="sr-only">Like post</span>
+                  <Heart className="w-4 h-4" />
+                  <span aria-hidden="true">0</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Like</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2">
+                  <span className="sr-only">Comment on post</span>
+                  <MessageCircle className="w-4 h-4" />
+                  <span aria-hidden="true">0</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Comment</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2">
+                  <span className="sr-only">Share post</span>
+                  <Share2 className="w-4 h-4" />
+                  <span aria-hidden="true">0</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Share</TooltipContent>
+            </Tooltip>
           </div>
-          <Button variant="ghost" size="sm">
-            <Bookmark className="w-4 h-4" />
-          </Button>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="focus-visible:ring-2">
+                <span className="sr-only">Bookmark post</span>
+                <Bookmark className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Bookmark</TooltipContent>
+          </Tooltip>
         </div>
       </CardContent>
     </Card>
