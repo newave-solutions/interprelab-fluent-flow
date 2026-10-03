@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, SkipBack, SkipForward, FileText } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const TranscriptSegment = ({ time, text, active, onClick }: { time: string, text: string, active: boolean, onClick: () => void }) => (
     <div
@@ -131,24 +132,48 @@ export const AudioPlayer = () => {
                 </div>
 
                 <div className="flex items-center justify-center gap-6">
-                    <button
-                        className="text-stone-400 hover:text-white transition-colors"
-                        onClick={() => setCurrentTimeSec(Math.max(0, currentTimeSec - 15))}
-                    >
-                        <SkipBack size={20} />
-                    </button>
-                    <button
-                        onClick={() => setPlaying(!playing)}
-                        className="w-12 h-12 rounded-full bg-white text-stone-900 flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-lg"
-                    >
-                        {playing ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-1" />}
-                    </button>
-                    <button
-                        className="text-stone-400 hover:text-white transition-colors"
-                        onClick={() => setCurrentTimeSec(Math.min(durationSec, currentTimeSec + 15))}
-                    >
-                        <SkipForward size={20} />
-                    </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                className="text-stone-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-1"
+                                onClick={() => setCurrentTimeSec(Math.max(0, currentTimeSec - 15))}
+                                aria-label="Skip back 15 seconds"
+                            >
+                                <SkipBack size={20} />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Skip back 15s</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                onClick={() => setPlaying(!playing)}
+                                className="w-12 h-12 rounded-full bg-white text-stone-900 flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1C1917]"
+                                aria-label={playing ? "Pause" : "Play"}
+                            >
+                                {playing ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-1" />}
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{playing ? "Pause" : "Play"}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                className="text-stone-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full p-1"
+                                onClick={() => setCurrentTimeSec(Math.min(durationSec, currentTimeSec + 15))}
+                                aria-label="Skip forward 15 seconds"
+                            >
+                                <SkipForward size={20} />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Skip forward 15s</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             </div>
 

@@ -1,0 +1,3 @@
+## 2025-02-27 - [Add ARIA Labels & Tooltips to Dilemma Media Player]
+**Learning:** Found an audio player component `src/components/dilemma/MediaPlayer.tsx` with icon-only controls (play/pause, skip forward, skip backward) that lacked `aria-label` attributes and tooltip functionality. This is an accessibility issue pattern for custom audio/video players.
+**Action:** Always verify icon-only buttons in interactive player components include dynamic `aria-label`s reflecting the next available action (e.g. Play when paused), keyboard `focus-visible` states, and Tooltips for better visual UI context.
