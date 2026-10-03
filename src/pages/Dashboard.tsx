@@ -87,35 +87,40 @@ const Dashboard = () => {
     const yearStart = startOfYear(now);
     const yearEnd = endOfYear(now);
 
-    // Get month stats
-    const { data: monthData } = await supabase
-      .from('call_logs')
-      .select('duration_seconds, earnings')
-      .eq('user_id', user.id)
-      .gte('start_time', monthStart.toISOString())
-      .lte('start_time', monthEnd.toISOString());
-
-    // Get year stats
-    const { data: yearData } = await supabase
-      .from('call_logs')
-      .select('duration_seconds, earnings')
-      .eq('user_id', user.id)
-      .gte('start_time', yearStart.toISOString())
-      .lte('start_time', yearEnd.toISOString());
-
-    // Get all time stats
-    const { data: allData } = await supabase
-      .from('call_logs')
-      .select('duration_seconds, earnings')
-      .eq('user_id', user.id);
-
-    // Get recent calls
-    const { data: recent } = await supabase
-      .from('call_logs')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('start_time', { ascending: false })
-      .limit(5);
+    // Execute all independent queries concurrently to improve load time
+    const [
+      { data: monthData },
+      { data: yearData },
+      { data: allData },
+      { data: recent }
+    ] = await Promise.all([
+      // Get month stats
+      supabase
+        .from('call_logs')
+        .select('duration_seconds, earnings')
+        .eq('user_id', user.id)
+        .gte('start_time', monthStart.toISOString())
+        .lte('start_time', monthEnd.toISOString()),
+      // Get year stats
+      supabase
+        .from('call_logs')
+        .select('duration_seconds, earnings')
+        .eq('user_id', user.id)
+        .gte('start_time', yearStart.toISOString())
+        .lte('start_time', yearEnd.toISOString()),
+      // Get all time stats
+      supabase
+        .from('call_logs')
+        .select('duration_seconds, earnings')
+        .eq('user_id', user.id),
+      // Get recent calls
+      supabase
+        .from('call_logs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('start_time', { ascending: false })
+        .limit(5)
+    ]);
 
     const monthStats = calculateStats(monthData || []);
     const yearStats = calculateStats(yearData || []);
@@ -171,8 +176,15 @@ const Dashboard = () => {
   };
 
   const calculateStats = (data: { duration_seconds: number | null; earnings: number | null }[]) => {
-    const totalDuration = data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
-    const totalEarnings = data.reduce((sum, call) => sum + (call.earnings || 0), 0);
+    let totalDuration = 0;
+    let totalEarnings = 0;
+
+    // Optimize performance by using a single for...of loop instead of multiple reduce calls
+    for (const call of data) {
+      totalDuration += call.duration_seconds || 0;
+      totalEarnings += call.earnings || 0;
+    }
+
     const callCount = data.length;
     const avgDuration = callCount > 0 ? totalDuration / callCount : 0;
 
