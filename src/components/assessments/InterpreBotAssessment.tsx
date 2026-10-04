@@ -21,6 +21,7 @@ import {
     FileText,
     Clock
 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 // --- API Configuration ---
 const getApiKey = () => {
@@ -611,12 +612,20 @@ export default function InterpreBotAssessment() {
 
             <div className="flex flex-col items-center gap-6">
                 {!voiceProgress ? (
-                    <button
-                        onClick={handleVoiceRecord}
-                        className={`w-24 h-24 rounded-full flex items-center justify-center transition-all duration-500 shadow-2xl ${isRecording ? 'bg-rose-500 scale-110 shadow-rose-500/40' : 'bg-gradient-to-br from-indigo-600 to-indigo-700 hover:scale-105 shadow-indigo-500/40'}`}
-                    >
-                        {isRecording ? <Square size={32} className="text-white fill-current" /> : <Mic size={36} className="text-white" />}
-                    </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                onClick={handleVoiceRecord}
+                                aria-label={isRecording ? "Stop recording audio" : "Start recording audio"}
+                                className={`w-24 h-24 rounded-full flex items-center justify-center transition-all duration-500 shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${isRecording ? 'bg-rose-500 scale-110 shadow-rose-500/40' : 'bg-gradient-to-br from-indigo-600 to-indigo-700 hover:scale-105 shadow-indigo-500/40'}`}
+                            >
+                                {isRecording ? <Square size={32} className="text-white fill-current" /> : <Mic size={36} className="text-white" />}
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{isRecording ? "Stop Recording" : "Record Audio"}</p>
+                        </TooltipContent>
+                    </Tooltip>
                 ) : (
                     <div className="w-full max-w-md space-y-3">
                         <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -687,13 +696,20 @@ export default function InterpreBotAssessment() {
                         <div key={`en-${item.id}`} className="group relative p-5 bg-slate-50/80 rounded-2xl font-semibold text-slate-700 border border-slate-100 shadow-sm transition-all hover:bg-white hover:shadow-md">
                             <div className="flex items-center justify-between">
                                 <span>{item.en}</span>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
-                                    className="text-slate-300 hover:text-indigo-500 transition-colors"
-                                    title="Generate example sentence"
-                                >
-                                    {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
-                                </button>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); generateVocabContext(item.id, item.en); }}
+                                            className="text-slate-300 hover:text-indigo-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-md"
+                                            aria-label="Generate example sentence for this term"
+                                        >
+                                            {generatingContextId === item.id ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
+                                        </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Generate example sentence</p>
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                             {vocabContexts[item.id] && (
                                 <div className="mt-3 text-xs text-indigo-600 font-medium bg-indigo-50 p-2 rounded-lg animate-fadeIn border border-indigo-100">
