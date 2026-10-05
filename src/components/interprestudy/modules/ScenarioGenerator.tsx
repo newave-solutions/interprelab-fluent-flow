@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
     BookOpen, Loader2, Play, RefreshCw, Copy, Check,
     MessageSquare, User, Stethoscope, Sparkles
@@ -237,18 +238,26 @@ export function ScenarioGenerator() {
                                             {line.language.toUpperCase()}
                                         </Badge>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8"
-                                        onClick={() => copyToClipboard(line.text, index)}
-                                    >
-                                        {copiedIndex === index ? (
-                                            <Check className="w-4 h-4 text-green-500" />
-                                        ) : (
-                                            <Copy className="w-4 h-4" />
-                                        )}
-                                    </Button>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 focus-visible:ring-2"
+                                                aria-label={`Copy ${line.speaker}'s line`}
+                                                onClick={() => copyToClipboard(line.text, index)}
+                                            >
+                                                {copiedIndex === index ? (
+                                                    <Check className="w-4 h-4 text-green-500" />
+                                                ) : (
+                                                    <Copy className="w-4 h-4" />
+                                                )}
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Copy text</p>
+                                        </TooltipContent>
+                                    </Tooltip>
                                 </div>
                                 <p className={cn(
                                     "text-sm",

@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Building2, Plus, Trash2, Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface PlatformRate {
   id: string;
@@ -277,20 +278,38 @@ export const PlatformRatesPanel = () => {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => editPlatform(platform)}
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deletePlatform(platform.id)}
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => editPlatform(platform)}
+                        aria-label={`Edit ${platform.platform_name} rate`}
+                        className="focus-visible:ring-2"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Edit platform</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deletePlatform(platform.id)}
+                        aria-label={`Delete ${platform.platform_name} rate`}
+                        className="focus-visible:ring-2"
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete platform</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             ))
