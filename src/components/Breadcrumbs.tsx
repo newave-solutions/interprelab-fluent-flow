@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, safeJsonStringify } from '@/lib/utils';
 import { getBreadcrumbs } from '@/lib/breadcrumbConfig';
 
 export const Breadcrumbs = () => {
@@ -24,9 +24,10 @@ export const Breadcrumbs = () => {
 
   return (
     <>
+      {/* Security: Use safeJsonStringify to prevent XSS via JSON-LD payload */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(structuredData) }}
       />
       <nav
         aria-label="Breadcrumb"
