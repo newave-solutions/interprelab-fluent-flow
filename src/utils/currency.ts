@@ -15,6 +15,9 @@ export interface CurrencyFormatOptions {
  * @param options - Formatting options
  * @returns Formatted currency string
  */
+// Cache for Intl.NumberFormat instances to prevent expensive re-instantiations
+const formattersCache = new Map<string, Intl.NumberFormat>();
+
 export const formatCurrency = (
     amount: number,
     options: CurrencyFormatOptions = {}
@@ -26,12 +29,20 @@ export const formatCurrency = (
         maximumFractionDigits = 2,
     } = options;
 
-    return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency,
-        minimumFractionDigits,
-        maximumFractionDigits,
-    }).format(amount);
+    const cacheKey = `${locale}-${currency}-${minimumFractionDigits}-${maximumFractionDigits}`;
+
+    let formatter = formattersCache.get(cacheKey);
+    if (!formatter) {
+        formatter = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency,
+            minimumFractionDigits,
+            maximumFractionDigits,
+        });
+        formattersCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(amount);
 };
 
 /**
