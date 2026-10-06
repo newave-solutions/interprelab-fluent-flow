@@ -14,6 +14,9 @@ export interface DateFormatOptions {
  * @param options - Formatting options
  * @returns Formatted date string
  */
+// Cache for Intl.DateTimeFormat instances
+const dateFormattersCache = new Map<string, Intl.DateTimeFormat>();
+
 export const formatDate = (
     date: Date | string | number,
     options: DateFormatOptions = {}
@@ -26,11 +29,21 @@ export const formatDate = (
 
     const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
 
-    return new Intl.DateTimeFormat(locale, {
-        dateStyle,
-        timeStyle,
-    }).format(dateObj);
+    const cacheKey = `${locale}-${dateStyle}-${timeStyle || 'none'}`;
+    let formatter = dateFormattersCache.get(cacheKey);
+    if (!formatter) {
+        formatter = new Intl.DateTimeFormat(locale, {
+            dateStyle,
+            timeStyle,
+        });
+        dateFormattersCache.set(cacheKey, formatter);
+    }
+
+    return formatter.format(dateObj);
 };
+
+// Cache for Intl.RelativeTimeFormat instances
+const relativeTimeFormattersCache = new Map<string, Intl.RelativeTimeFormat>();
 
 /**
  * Get relative time string (e.g., "2 hours ago", "in 3 days")
@@ -43,7 +56,11 @@ export const getRelativeTime = (date: Date | string | number, locale = 'en-US'):
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
-    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+    let rtf = relativeTimeFormattersCache.get(locale);
+    if (!rtf) {
+        rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+        relativeTimeFormattersCache.set(locale, rtf);
+    }
 
     if (Math.abs(diffInSeconds) < 60) {
         return rtf.format(-diffInSeconds, 'second');
