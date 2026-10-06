@@ -5,3 +5,6 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-05-24 - Formatting Caching
+**Learning:** Native `Intl` formatters (`Intl.NumberFormat`, `Intl.DateTimeFormat`, `Intl.RelativeTimeFormat`) are expensive to initialize, causing performance bottlenecks when parsing high volumes of strings dynamically without caching implementations.
+**Action:** When finding `Intl.*` formatters across codebases, introduce Map structures mapping options strings to formatter instances to optimize processing times across applications.
