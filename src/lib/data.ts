@@ -71,8 +71,17 @@ export const addCallRecord = (record: Omit<CallRecord, 'id' | 'earnings'>) => {
 
 export const getAggregatedStats = () => {
   const totalCalls = callRecords.length;
-  const totalMinutes = callRecords.reduce((acc, call) => acc + call.duration, 0);
-  const totalEarnings = callRecords.reduce((acc, call) => acc + call.earnings, 0);
+
+  // ⚡ Bolt Performance Optimization:
+  // Consolidated multiple .reduce() calls into a single for...of loop
+  // to avoid iterating the array twice.
+  let totalMinutes = 0;
+  let totalEarnings = 0;
+
+  for (const call of callRecords) {
+    totalMinutes += call.duration;
+    totalEarnings += call.earnings;
+  }
 
   return {
     totalCalls,
@@ -83,13 +92,13 @@ export const getAggregatedStats = () => {
 
 export const getCallTypeStats = (): CallTypeStats => {
   const stats: CallTypeStats = { vri: 0, opi: 0 };
-  callRecords.forEach(call => {
+  for (const call of callRecords) {
     if (call.callType === 'VRI') {
       stats.vri += 1;
     } else {
       stats.opi += 1;
     }
-  });
+  }
   return stats;
 }
 
@@ -107,13 +116,17 @@ export const getWeeklyData = (): WeeklyData[] => {
   const oneWeekAgo = new Date(now);
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-  callRecords
-    .filter(call => call.startTime > oneWeekAgo)
-    .forEach(call => {
-      const dayIndex = call.startTime.getDay();
-      weeklyData[dayIndex].calls += 1;
-      weeklyData[dayIndex].earnings = parseFloat((weeklyData[dayIndex].earnings + call.earnings).toFixed(2));
-    });
+  // ⚡ Bolt Performance Optimization:
+  // Replaced .filter().forEach() chain with a single for...of loop
+  // and an early continue to prevent intermediate array allocation
+  // and reduce iteration overhead.
+  for (const call of callRecords) {
+    if (call.startTime <= oneWeekAgo) continue;
+
+    const dayIndex = call.startTime.getDay();
+    weeklyData[dayIndex].calls += 1;
+    weeklyData[dayIndex].earnings = parseFloat((weeklyData[dayIndex].earnings + call.earnings).toFixed(2));
+  }
 
   weeklyData.forEach((day, index) => {
     if (day.calls === 0) {
