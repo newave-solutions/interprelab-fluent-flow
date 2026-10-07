@@ -3,6 +3,7 @@ import { Mic, MicOff, Play, Volume2, Loader2, ThumbsUp, ThumbsDown, User, Smile,
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { supabase } from '@/integrations/supabase/client';
 
 // --- TYPES ---
@@ -488,7 +489,12 @@ export const ConversationMode = () => {
             <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-full">
               <div className="flex justify-between items-start mb-6">
                 <h3 className="text-2xl font-bold text-slate-800 flex items-center gap-2"><FileText className="w-6 h-6 text-indigo-600" /> SOAP Note</h3>
-                <button onClick={() => { setSoapNote(null); setStarted(false); }} className="p-2 hover:bg-slate-100 rounded-full"><X className="w-5 h-5 text-slate-500" /></button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button onClick={() => { setSoapNote(null); setStarted(false); }} className="p-2 hover:bg-slate-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" aria-label="Close SOAP Note"><X className="w-5 h-5 text-slate-500" /></button>
+                  </TooltipTrigger>
+                  <TooltipContent>Close</TooltipContent>
+                </Tooltip>
               </div>
               <div className="prose prose-slate max-w-none whitespace-pre-wrap font-mono text-sm bg-slate-50 p-6 rounded-xl border border-slate-200">
                 {soapNote}
@@ -513,9 +519,14 @@ export const ConversationMode = () => {
                     {msg.role}
                   </span>
                   {msg.role !== 'Interpreter' && (
-                    <button onClick={() => speakText(msg.text, msg.role === 'Doctor' ? 'en-US' : 'es-MX')} className="opacity-50 hover:opacity-100 transition-opacity p-1 hover:bg-black/5 rounded-full">
-                      <Volume2 className="w-4 h-4" />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button onClick={() => speakText(msg.text, msg.role === 'Doctor' ? 'en-US' : 'es-MX')} className="opacity-50 hover:opacity-100 transition-opacity p-1 hover:bg-black/5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" aria-label={`Play pronunciation for ${msg.role}`}>
+                          <Volume2 className="w-4 h-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Play audio</TooltipContent>
+                    </Tooltip>
                   )}
                 </div>
                 <p className="leading-relaxed text-base font-medium">{msg.text}</p>
@@ -534,14 +545,20 @@ export const ConversationMode = () => {
 
         {/* INPUT AREA */}
         <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-xl flex items-center gap-4">
-          <button
-            onClick={toggleListening}
-            disabled={loading}
-            className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-all shadow-lg
-              ${isListening ? 'bg-red-500 text-white animate-pulse ring-4 ring-red-100' : 'bg-slate-900 text-white hover:bg-slate-800 hover:scale-105'}`}
-          >
-            {isListening ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleListening}
+                disabled={loading}
+                aria-label={isListening ? "Stop listening" : "Start listening"}
+                className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-all shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+                  ${isListening ? 'bg-red-500 text-white animate-pulse ring-4 ring-red-100' : 'bg-slate-900 text-white hover:bg-slate-800 hover:scale-105'}`}
+              >
+                {isListening ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>{isListening ? "Stop Listening" : "Start Listening"}</TooltipContent>
+          </Tooltip>
 
           <div className="flex-1 relative">
             <input
