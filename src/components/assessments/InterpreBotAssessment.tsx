@@ -21,32 +21,24 @@ import {
     FileText,
     Clock
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
-// --- API Configuration ---
-const getApiKey = () => {
-    // Get from environment variable - inject your GEMINI_API_KEY
-    return import.meta.env.VITE_INTERPRETEST_API_KEY || import.meta.env.GEMINI_API_KEY || "";
-};
-
-// --- Helper: Gemini API Call ---
+// --- Helper: Gemini API Call via Supabase Edge Function ---
 const callGemini = async (prompt: string): Promise<string | null> => {
-    const apiKey = getApiKey();
-    if (!apiKey) {
-        console.error("No API key configured");
-        return null;
-    }
-
     try {
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        const { data, error } = await supabase.functions.invoke('interactive-module-ai', {
+            body: {
+                action: 'completion',
+                messages: [{ role: 'user', content: prompt }]
             }
-        );
-        const data = await response.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+        });
+
+        if (error) {
+            console.error('Error calling AI edge function:', error);
+            return null;
+        }
+
+        return data?.content || null;
     } catch (error) {
         console.error("Gemini API Error:", error);
         return null;
