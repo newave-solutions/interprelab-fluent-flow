@@ -35,6 +35,18 @@ const PHI_PATTERNS = {
 };
 
 // Medical terminology database
+
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 const MEDICAL_TERMS_DB = {
   'hypertension': { definition: 'High blood pressure', translation: 'Presión arterial alta', category: 'cardiovascular', pronunciation: 'ee-per-ten-see-OHN' },
   'diabetes': { definition: 'Metabolic disorder with high blood sugar', translation: 'Diabetes', category: 'endocrine', pronunciation: 'dee-ah-BEH-tes' },
@@ -379,21 +391,23 @@ function updateTranscriptDisplay(text) {
   const placeholder = transcriptDiv.querySelector('.interprecoach-placeholder');
   if (placeholder) placeholder.remove();
   
-  let highlightedText = text;
+  let highlightedText = escapeHTML(text);
   
   // Highlight medical terms
   Object.keys(MEDICAL_TERMS_DB).forEach(term => {
-    const regex = new RegExp(`\\b${term}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
+    const safeTerm = escapeHTML(term);
+    const regex = new RegExp(`\\b${safeTerm}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${safeTerm}">$&</span>`);
     }
   });
   
   // Highlight medications
   Object.keys(MEDICATION_DATABASE).forEach(med => {
-    const regex = new RegExp(`\\b${med}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
+    const safeMed = escapeHTML(med);
+    const regex = new RegExp(`\\b${safeMed}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${safeMed}">$&</span>`);
     }
   });
   
@@ -415,11 +429,12 @@ function updateTranscriptDisplay(text) {
 
 function showTermPopup(term, type) {
   const info = type === 'medication' ? MEDICATION_DATABASE[term.toLowerCase()] : MEDICAL_TERMS_DB[term.toLowerCase()];
+  const safeTerm = escapeHTML(term);
   if (!info) return;
   
   displayMedicalTerm(type === 'medication' ? 
-    { term, definition: `Generic: ${info.generic}, Brand: ${info.brand}`, translation: info.spanish, pronunciation: info.pronunciation, category: info.category } :
-    { term, definition: info.definition, translation: info.translation, pronunciation: info.pronunciation, category: info.category }
+    { term: safeTerm, definition: escapeHTML(`Generic: ${info.generic}, Brand: ${info.brand}`), translation: escapeHTML(info.spanish), pronunciation: escapeHTML(info.pronunciation), category: escapeHTML(info.category) } :
+    { term: safeTerm, definition: escapeHTML(info.definition), translation: escapeHTML(info.translation), pronunciation: escapeHTML(info.pronunciation), category: escapeHTML(info.category) }
   );
   
   switchTab('terms');
@@ -480,25 +495,25 @@ function updateInsightsDisplay() {
   
   const medsList = document.getElementById('insight-medications');
   medsList.innerHTML = keyInsights.medications.size === 0 ? '<li class="empty">None detected</li>' : 
-    Array.from(keyInsights.medications).map(med => `<li>${med}</li>`).join('');
+    Array.from(keyInsights.medications).map(med => `<li>${escapeHTML(med)}</li>`).join('');
   
   const vitalsDiv = document.getElementById('insight-vitals');
   if (Object.keys(keyInsights.vitalSigns).length === 0) {
     vitalsDiv.innerHTML = '<p class="empty">None recorded</p>';
   } else {
     vitalsDiv.innerHTML = '';
-    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${keyInsights.vitalSigns.bloodPressure}</p>`;
-    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${keyInsights.vitalSigns.heartRate} bpm</p>`;
-    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${keyInsights.vitalSigns.temperature}°</p>`;
+    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${escapeHTML(keyInsights.vitalSigns.bloodPressure)}</p>`;
+    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${escapeHTML(keyInsights.vitalSigns.heartRate)} bpm</p>`;
+    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${escapeHTML(keyInsights.vitalSigns.temperature)}°</p>`;
   }
   
   const diagList = document.getElementById('insight-diagnoses');
   diagList.innerHTML = keyInsights.diagnoses.size === 0 ? '<li class="empty">None identified</li>' :
-    Array.from(keyInsights.diagnoses).map(diag => `<li>${diag}</li>`).join('');
+    Array.from(keyInsights.diagnoses).map(diag => `<li>${escapeHTML(diag)}</li>`).join('');
   
   const stepsList = document.getElementById('insight-nextsteps');
   stepsList.innerHTML = keyInsights.nextSteps.length === 0 ? '<li class="empty">None specified</li>' :
-    keyInsights.nextSteps.map(step => `<li>${step}</li>`).join('');
+    keyInsights.nextSteps.map(step => `<li>${escapeHTML(step)}</li>`).join('');
 }
 
 function updateStatus(text, status = 'active') {
