@@ -4,3 +4,16 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+/**
+ * Safely stringifies an object to JSON for use within an HTML <script> tag.
+ * Prevents XSS attacks by escaping <, >, &, and line terminators into unicode sequences.
+ */
+export function safeJsonStringify(obj: unknown): string {
+  return JSON.stringify(obj)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
