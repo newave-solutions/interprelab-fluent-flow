@@ -1,0 +1,3 @@
+## 2024-05-18 - Tooltip Validation and Setup
+**Learning:** When using shadcn/radix `Tooltip` components, the application will fatally crash with a white screen if the `TooltipProvider` is not correctly wrapping the component tree (e.g. in `App.tsx` or globally). Furthermore, frontend verification tests using playwright must run in an environment with proper credentials (e.g., Supabase URLs) otherwise the app may crash with a blank screen before the component renders.
+**Action:** Always verify `TooltipProvider` exists higher in the app tree before adding tooltips to deeply nested components. When running playwright scripts to verify UI changes, ensure environment variables (like `.env`) are correctly configured so the dev server does not fail silently.
