@@ -15,3 +15,9 @@
 **Vulnerability:** `nginx.conf` contained a hardcoded Content Security Policy (CSP) referencing an outdated/unused Supabase Project ID (`iokgkrnbawhizmuejluz`), while the application code (`.env.production`, `config.toml`) utilized different project IDs (`opmafykbhjinqebgflnl`, `ggyzlvbtkibqnkfhgnbe`).
 **Learning:** Hardcoding specific external domains in static configuration files (like nginx.conf) creates a high risk of service denial in production if the backend infrastructure changes, as the CSP will block legitimate traffic. This is a common "Configuration Drift" issue.
 **Prevention:** Use environment variable substitution (e.g., `envsubst`) in container startup scripts to inject the correct allowed domains into the CSP at runtime, ensuring the security policy always matches the active environment configuration.
+
+## 2025-02-23 - Hardcoded Secrets in Vite Configuration
+
+**Vulnerability:** Found hardcoded Lovable Cloud Supabase credentials (`LOVABLE_CLOUD_PROJECT_ID`, `LOVABLE_CLOUD_URL`, `LOVABLE_CLOUD_ANON_KEY`) in `vite.config.ts` acting as environment variable fallbacks.
+**Learning:** Hardcoding API keys in build configuration files is a security anti-pattern, even if they are "publishable" or "anon" keys. This bypasses environment configuration validation, leaks project-specific infrastructure details in the codebase, and creates a risk if the repository is cloned or forked.
+**Prevention:** Strictly rely on environment variables (`env.VITE_SUPABASE_*`) for all third-party service configurations. If credentials are required for the build or local development, they must be supplied via a `.env` file that is excluded from version control.
