@@ -7,3 +7,7 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2024-05-24 - Buttons With Numbers Context
+**Learning:** When making buttons accessible with visual numbers (e.g., `<button><Icon/><span>0</span></button>`), adding an `aria-label` to the button overrides the inner text entirely for screen readers, hiding the actual count. Furthermore, if you use a visually hidden `sr-only` span to provide the context (e.g., `<span className="sr-only">Likes: </span>`), you should *not* add `aria-hidden="true"` to the visual counter, otherwise screen readers still won't read the count.
+**Action:** For buttons mixing icons and numbers, use an `sr-only` span before the number for descriptive context and rely on standard element reading rather than `aria-label`.
