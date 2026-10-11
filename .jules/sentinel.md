@@ -15,3 +15,8 @@
 **Vulnerability:** `nginx.conf` contained a hardcoded Content Security Policy (CSP) referencing an outdated/unused Supabase Project ID (`iokgkrnbawhizmuejluz`), while the application code (`.env.production`, `config.toml`) utilized different project IDs (`opmafykbhjinqebgflnl`, `ggyzlvbtkibqnkfhgnbe`).
 **Learning:** Hardcoding specific external domains in static configuration files (like nginx.conf) creates a high risk of service denial in production if the backend infrastructure changes, as the CSP will block legitimate traffic. This is a common "Configuration Drift" issue.
 **Prevention:** Use environment variable substitution (e.g., `envsubst`) in container startup scripts to inject the correct allowed domains into the CSP at runtime, ensuring the security policy always matches the active environment configuration.
+
+## 2024-05-20 - Unsanitized innerHTML in Chrome Extension Content Script
+**Vulnerability:** The Chrome extension content script (`public/chrome-extension/content-script.js`) injected dynamic medical terms and transcripts directly into the DOM using `.innerHTML` without escaping HTML entities.
+**Learning:** Even internal or temporary UI components rendered purely client-side in a content script must sanitize inputs. If the external API returned malicious `<script>` payloads in terms or translations, it could execute arbitrary JS in the context of the webpage being monitored by the extension.
+**Prevention:** Implement an `escapeHTML` utility or use safer DOM manipulation methods (`textContent`, `createElement`) when injecting dynamic user data into the UI, especially in extensions.
