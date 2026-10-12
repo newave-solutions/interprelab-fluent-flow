@@ -7,3 +7,6 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2024-05-24 - Interactive Call Controls Accessibility
+**Learning:** In complex interactive UI mockups (like video call controls), icon-only buttons often lack visual tooltip hints and screen reader accessible labels, leaving users guessing the buttons' purpose.
+**Action:** When implementing icon-only toolbars or call controls, always provide dual context: wrap each button in a Tooltip for mouse users and add descriptive aria-labels for screen readers.
