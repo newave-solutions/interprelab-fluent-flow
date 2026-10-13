@@ -5,3 +5,6 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2024-10-13 - Avoid lockfile churn when typechecking
+**Learning:** Running `npm install --no-save typescript` to temporarily fix a missing `tsc` command modifies `package.json` and `package-lock.json` unprompted. This violates Bolt's constraints and breaks code reviews.
+**Action:** Always strictly use `git restore package.json package-lock.json` directly after a temporary installation, or rely solely on `npx tsc --noEmit` which downloads temporarily without touching package files.
