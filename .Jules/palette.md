@@ -1,9 +1,3 @@
-## 2024-05-22 - Enhanced Audio Feedback
-
-**Learning:** Users often click audio buttons repeatedly because they lack immediate visual feedback that the system is "working" or "playing", especially if the audio takes a split second to start or is quiet.
-**Action:** When triggering `speechSynthesis`, always pair it with a visual state (like a pulsing icon) that persists until the `onend` event fires. This confirms the action and prevents rage-clicking.
-
-## 2025-12-17 - Icon-Only Button Accessibility
-
-**Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
-**Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2024-05-30 - Added ARIA labels and Tooltips to InterpreCoachLiveDemo call controls
+**Learning:** Icon-only call control buttons lacked context for screen readers and visual tooltips for sighted users. The app's convention is to wrap these with Shadcn UI `Tooltip` components (where `TooltipProvider` is globally set) and use `asChild` on `TooltipTrigger` when it wraps native elements like `<button>`.
+**Action:** Always wrap standard interactive elements that act as icon-only buttons with `Tooltip` and `aria-label` attributes, ensuring `focus-visible` styles are set (`focus-visible:outline-none focus-visible:ring-2`) for keyboard accessibility. Match the ring color to the button background/brand color (e.g., `ring-red-400` for red background, `ring-nobel-gold` for dark background).
