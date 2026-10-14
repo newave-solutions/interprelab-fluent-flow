@@ -100,11 +100,21 @@ export const useCallLogStats = (userId: string | undefined) => {
 
             if (error) throw error;
 
+            // ⚡ Bolt: Consolidated multiple reduce iterations into a single O(N) loop
+            // Impact: Reduces CPU overhead for calculating aggregate statistics
+            let totalSeconds = 0;
+            let totalEarnings = 0;
+
+            for (const call of data) {
+              totalSeconds += call.duration_seconds || 0;
+              totalEarnings += call.earnings || 0;
+            }
+
             const stats: CallLogStats = {
                 totalCalls: data.length,
-                totalSeconds: data.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
+                totalSeconds,
                 totalMinutes: 0,
-                totalEarnings: data.reduce((sum, call) => sum + (call.earnings || 0), 0),
+                totalEarnings,
                 avgCallDuration: 0,
             };
 
