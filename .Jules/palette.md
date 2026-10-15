@@ -7,3 +7,8 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2025-12-18 - Tooltips and Accessible Buttons in InterpreBot
+
+**Learning:** Buttons without explicit text labels (like the Mic and Context Gen buttons in InterpreBot) fail accessibility audits if they lack `aria-label` and `focus-visible` styling, hindering screen reader utility and keyboard navigation.
+**Action:** Always provide `aria-label` for icon buttons, wrap them in a Tooltip for mouse hover context, and ensure standard `focus-visible` outline rings are used.
