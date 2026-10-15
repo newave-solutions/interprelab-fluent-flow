@@ -7,3 +7,7 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2024-10-15 - Improve PostCard Accessibility
+**Learning:** Adding aria-labels to buttons containing visual numbers causes screen readers to override the inner text.
+**Action:** Use a visually hidden span alongside the visual number within the button, ensuring screen readers announce both the context and the count correctly. Tooltips provide additional context on hover.
