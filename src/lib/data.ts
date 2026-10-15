@@ -71,8 +71,15 @@ export const addCallRecord = (record: Omit<CallRecord, 'id' | 'earnings'>) => {
 
 export const getAggregatedStats = () => {
   const totalCalls = callRecords.length;
-  const totalMinutes = callRecords.reduce((acc, call) => acc + call.duration, 0);
-  const totalEarnings = callRecords.reduce((acc, call) => acc + call.earnings, 0);
+
+  // ⚡ Bolt: Consolidated multiple reduce traversals into a single pass
+  let totalMinutes = 0;
+  let totalEarnings = 0;
+
+  for (const call of callRecords) {
+    totalMinutes += call.duration;
+    totalEarnings += call.earnings;
+  }
 
   return {
     totalCalls,
