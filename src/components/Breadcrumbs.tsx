@@ -26,7 +26,8 @@ export const Breadcrumbs = () => {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        // Prevent XSS by escaping < characters in JSON stringified data
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
       />
       <nav
         aria-label="Breadcrumb"
