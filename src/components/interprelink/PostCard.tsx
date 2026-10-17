@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Post } from "./types";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PostCardProps {
   post: Post;
@@ -33,9 +34,16 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                 </span>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" aria-label="More options" className="focus-visible:ring-2 focus-visible:ring-ring">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>More options</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
           </div>
@@ -56,22 +64,56 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
 
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex items-center gap-6">
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Heart className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              <span>0</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Share2 className="w-4 h-4" />
-              <span>0</span>
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-ring">
+                    <Heart className="w-4 h-4" />
+                    <span className="sr-only">Likes: </span>
+                    <span>0</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Like</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-ring">
+                    <MessageCircle className="w-4 h-4" />
+                    <span className="sr-only">Comments: </span>
+                    <span>0</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Comment</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-ring">
+                    <Share2 className="w-4 h-4" />
+                    <span className="sr-only">Shares: </span>
+                    <span>0</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Share</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
-          <Button variant="ghost" size="sm">
-            <Bookmark className="w-4 h-4" />
-          </Button>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="sm" aria-label="Save post" className="focus-visible:ring-2 focus-visible:ring-ring">
+                  <Bookmark className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Save</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardContent>
     </Card>
