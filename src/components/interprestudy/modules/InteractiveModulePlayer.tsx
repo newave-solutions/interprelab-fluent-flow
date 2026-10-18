@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ModuleData {
   id: string;
@@ -604,9 +605,22 @@ export function InteractiveModulePlayer() {
               <MessageCircle className="w-5 h-5" />
               <span className="font-semibold">AI Medical Tutor</span>
             </div>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={() => setIsChatOpen(false)}>
-              <X className="w-4 h-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/20 focus-visible:ring-2"
+                  onClick={() => setIsChatOpen(false)}
+                  aria-label="Close chat"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Close chat</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           
           <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-muted/30">
@@ -639,9 +653,22 @@ export function InteractiveModulePlayer() {
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
             />
-            <Button size="icon" className="rounded-full" onClick={sendChatMessage} disabled={isChatLoading}>
-              <Send className="w-4 h-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  className="rounded-full focus-visible:ring-2"
+                  onClick={sendChatMessage}
+                  disabled={isChatLoading}
+                  aria-label="Send message"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Send message</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
