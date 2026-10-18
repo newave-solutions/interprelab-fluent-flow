@@ -5,3 +5,6 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+## 2026-10-18 - Loop Fusion Optimization for Data Processing
+**Learning:** Chaining multiple `.reduce()` and `.filter()` operations on arrays (especially derived state like monthly call logs) forces O(N) array traversals and allocations on every render.
+**Action:** Replaced 10 multiple consecutive `.reduce()` and `.filter()` calls with a single `for...of` loop for calculating aggregated statistics across CallTracker, significantly reducing CPU overhead and intermediate allocations.
