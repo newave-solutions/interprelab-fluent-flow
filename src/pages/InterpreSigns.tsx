@@ -27,7 +27,20 @@ const ASLTeacher = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
   const [progress, setProgress] = useState<ASLProgress>({});
-  const [totalMastered, setTotalMastered] = useState(0);
+
+  // Memoize aggregates computed from progress in a single O(N) pass to prevent intermediate array allocations
+  const { totalMastered, totalCorrect } = React.useMemo(() => {
+    let mastered = 0;
+    let correct = 0;
+    for (const key in progress) {
+      const p = progress[key];
+      if (p.successCount >= 3) {
+        mastered++;
+      }
+      correct += p.successCount;
+    }
+    return { totalMastered: mastered, totalCorrect: correct };
+  }, [progress]);
 
   // Load progress from localStorage on mount
   useEffect(() => {
@@ -36,9 +49,6 @@ const ASLTeacher = () => {
       try {
         const parsed = JSON.parse(savedProgress) as ASLProgress;
         setProgress(parsed);
-        // Count mastered signs (3+ successful attempts)
-        const mastered = Object.values(parsed).filter(p => p.successCount >= 3).length;
-        setTotalMastered(mastered);
       } catch (e) {
         console.error('Failed to parse saved progress:', e);
       }
@@ -59,10 +69,6 @@ const ASLTeacher = () => {
       
       // Save to localStorage
       localStorage.setItem(PROGRESS_KEY, JSON.stringify(updated));
-      
-      // Update mastered count
-      const mastered = Object.values(updated).filter(p => p.successCount >= 3).length;
-      setTotalMastered(mastered);
       
       return updated;
     });
@@ -125,7 +131,7 @@ const ASLTeacher = () => {
           <Card className="bg-card border-border">
             <CardContent className="p-4 text-center">
               <TrendingUp className="w-8 h-8 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">{Object.values(progress).reduce((sum, p) => sum + p.successCount, 0)}</p>
+              <p className="text-2xl font-bold text-foreground">{totalCorrect}</p>
               <p className="text-sm text-muted-foreground">Total Correct</p>
             </CardContent>
           </Card>
