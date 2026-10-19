@@ -7,3 +7,8 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+
+## 2025-12-18 - Tooltip Wrapper Semantics
+
+**Learning:** When using Radix/Shadcn Tooltips to wrap native `<button>` elements, you must use the `asChild` prop on `TooltipTrigger`. Forgetting this leads to invalid DOM nesting (button inside button) which breaks accessibility and can cause hydration errors.
+**Action:** Always use `<TooltipTrigger asChild>` when wrapping interactive elements like buttons or links.
