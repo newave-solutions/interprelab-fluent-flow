@@ -22,6 +22,20 @@ let sessionData = {
   feedback: null
 };
 
+// Security: Escape HTML to prevent DOM-based XSS
+function escapeHTML(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[&<>'"]/g,
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag])
+  );
+}
+
 // HIPAA Compliance: De-identification patterns
 const PHI_PATTERNS = {
   names: /\b(Mr\.|Mrs\.|Ms\.|Dr\.|Miss)\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)*\b/g,
@@ -360,12 +374,12 @@ function displayMedicalTerm(term) {
   const termCard = document.createElement('div');
   termCard.className = 'term-card';
   termCard.innerHTML = `
-    <div class="term-header">🏥 ${term.term}</div>
+    <div class="term-header">🏥 ${escapeHTML(term.term)}</div>
     <div class="term-body">
-      <p><strong>Definition:</strong> ${term.definition}</p>
-      <p><strong>Spanish:</strong> ${term.translation || 'N/A'}</p>
-      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${term.pronunciation}</p>` : ''}
-      <p><strong>Category:</strong> ${term.category}</p>
+      <p><strong>Definition:</strong> ${escapeHTML(term.definition)}</p>
+      <p><strong>Spanish:</strong> ${escapeHTML(term.translation || 'N/A')}</p>
+      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${escapeHTML(term.pronunciation)}</p>` : ''}
+      <p><strong>Category:</strong> ${escapeHTML(term.category)}</p>
     </div>
   `;
   
@@ -379,21 +393,26 @@ function updateTranscriptDisplay(text) {
   const placeholder = transcriptDiv.querySelector('.interprecoach-placeholder');
   if (placeholder) placeholder.remove();
   
-  let highlightedText = text;
+  // First, escape all text to prevent XSS
+  let highlightedText = escapeHTML(text);
   
-  // Highlight medical terms
+  // Highlight medical terms (safely inserting HTML tags around escaped text)
   Object.keys(MEDICAL_TERMS_DB).forEach(term => {
-    const regex = new RegExp(`\\b${term}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
+    // Escape term for regex creation and matching
+    const escapedTerm = escapeHTML(term);
+    const regex = new RegExp(`\\b${escapedTerm}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      // Need to capture the actual matched text (which is already escaped HTML)
+      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${escapeHTML(term)}">$&</span>`);
     }
   });
   
   // Highlight medications
   Object.keys(MEDICATION_DATABASE).forEach(med => {
-    const regex = new RegExp(`\\b${med}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
+    const escapedMed = escapeHTML(med);
+    const regex = new RegExp(`\\b${escapedMed}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${escapeHTML(med)}">$&</span>`);
     }
   });
   
@@ -480,25 +499,25 @@ function updateInsightsDisplay() {
   
   const medsList = document.getElementById('insight-medications');
   medsList.innerHTML = keyInsights.medications.size === 0 ? '<li class="empty">None detected</li>' : 
-    Array.from(keyInsights.medications).map(med => `<li>${med}</li>`).join('');
+    Array.from(keyInsights.medications).map(med => `<li>${escapeHTML(med)}</li>`).join('');
   
   const vitalsDiv = document.getElementById('insight-vitals');
   if (Object.keys(keyInsights.vitalSigns).length === 0) {
     vitalsDiv.innerHTML = '<p class="empty">None recorded</p>';
   } else {
     vitalsDiv.innerHTML = '';
-    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${keyInsights.vitalSigns.bloodPressure}</p>`;
-    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${keyInsights.vitalSigns.heartRate} bpm</p>`;
-    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${keyInsights.vitalSigns.temperature}°</p>`;
+    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${escapeHTML(keyInsights.vitalSigns.bloodPressure)}</p>`;
+    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${escapeHTML(keyInsights.vitalSigns.heartRate)} bpm</p>`;
+    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${escapeHTML(keyInsights.vitalSigns.temperature)}°</p>`;
   }
   
   const diagList = document.getElementById('insight-diagnoses');
   diagList.innerHTML = keyInsights.diagnoses.size === 0 ? '<li class="empty">None identified</li>' :
-    Array.from(keyInsights.diagnoses).map(diag => `<li>${diag}</li>`).join('');
+    Array.from(keyInsights.diagnoses).map(diag => `<li>${escapeHTML(diag)}</li>`).join('');
   
   const stepsList = document.getElementById('insight-nextsteps');
   stepsList.innerHTML = keyInsights.nextSteps.length === 0 ? '<li class="empty">None specified</li>' :
-    keyInsights.nextSteps.map(step => `<li>${step}</li>`).join('');
+    keyInsights.nextSteps.map(step => `<li>${escapeHTML(step)}</li>`).join('');
 }
 
 function updateStatus(text, status = 'active') {
@@ -644,7 +663,7 @@ function showFeedback() {
         <button class="interprecoach-modal-close">&times;</button>
       </div>
       <div class="interprecoach-modal-body">
-        ${sessionData.feedback}
+        ${escapeHTML(sessionData.feedback)}
       </div>
     </div>
   `;
