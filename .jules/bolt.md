@@ -5,3 +5,7 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+
+## 2024-05-23 - Consolidating Array Iterations for Aggregation
+**Learning:** Chaining `.filter` and `.reduce` operations in React components (such as `src/pages/CallTracker.tsx`) to compute multiple aggregate statistics creates unnecessary O(N) traversals per metric.
+**Action:** Replace multiple `.reduce` calls with a single `for...of` loop that computes all required metrics concurrently. This reduces CPU overhead significantly for large arrays.
