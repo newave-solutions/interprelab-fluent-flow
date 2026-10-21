@@ -5,3 +5,7 @@
 ## 2024-05-23 - InterpreLink Feed Optimization
 **Learning:** Social feed pages often have complex render trees. Defining helper data structures inside the component body exacerbates re-render costs.
 **Action:** Successfully moved `SIDEBAR_SECTIONS` and `REELS_DATA` outside `InterpreLink` component.
+
+## 2024-05-23 - Array Method Chaining vs for...of
+**Learning:** Chaining array methods like `.filter().reduce()` or calling `.reduce()` multiple times on the same array to calculate different metrics creates intermediate arrays and forces multiple O(N) traversals.
+**Action:** Consolidate these operations into a single O(N) `for...of` loop to calculate all necessary metrics simultaneously.
