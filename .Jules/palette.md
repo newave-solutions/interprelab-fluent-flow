@@ -7,3 +7,6 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2026-10-22 - Password Visibility Toggle Tooltips
+**Learning:** Icon-only buttons for toggling form states (like password visibility) require both an `aria-label` for screen readers and a visual `Tooltip` for sighted users to ensure full accessibility.
+**Action:** Always wrap interactive icon-only buttons with Shadcn UI's `Tooltip`, use the `asChild` prop on the `TooltipTrigger` to avoid invalid HTML nesting, and include `focus-visible` utility classes for clear keyboard navigation indicators.
