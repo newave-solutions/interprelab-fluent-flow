@@ -9,3 +9,7 @@
 **Vulnerability:** Found hardcoded `VITE_SUPABASE_ANON_KEY` and project URL in `setup-github-actions.sh`.
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
+## 2025-02-28 - Cross-Site Scripting (XSS) via Unescaped JSON-LD and InnerHTML
+**Vulnerability:** XSS vulnerability in `Breadcrumbs.tsx` where unescaped JSON was injected into a `<script>` tag via `dangerouslySetInnerHTML`. Additional DOM-based XSS vectors were found in the Chrome extension (`content-script.js`) where user input was injected directly into `.innerHTML` assignments.
+**Learning:** `JSON.stringify` does not escape HTML characters by default, allowing attackers to prematurely close a `<script>` tag with `</script>` and inject arbitrary code. The Chrome extension, being vanilla JS, lacked built-in sanitization like DOMPurify available in the React app.
+**Prevention:** Always escape `<` to `\u003c` when injecting JSON into script tags. For vanilla JS contexts like browser extensions, implement and consistently use a robust `escapeHTML` helper function before assigning any dynamic data to `.innerHTML`.
