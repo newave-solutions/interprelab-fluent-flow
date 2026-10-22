@@ -10,8 +10,7 @@
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
 
-## 2025-02-23 - Content Security Policy Mismatch
-
-**Vulnerability:** `nginx.conf` contained a hardcoded Content Security Policy (CSP) referencing an outdated/unused Supabase Project ID (`iokgkrnbawhizmuejluz`), while the application code (`.env.production`, `config.toml`) utilized different project IDs (`opmafykbhjinqebgflnl`, `ggyzlvbtkibqnkfhgnbe`).
-**Learning:** Hardcoding specific external domains in static configuration files (like nginx.conf) creates a high risk of service denial in production if the backend infrastructure changes, as the CSP will block legitimate traffic. This is a common "Configuration Drift" issue.
-**Prevention:** Use environment variable substitution (e.g., `envsubst`) in container startup scripts to inject the correct allowed domains into the CSP at runtime, ensuring the security policy always matches the active environment configuration.
+## 2025-05-24 - Cross-Site Scripting (XSS) in Vanilla JS Extension Content Script
+**Vulnerability:** DOM-based XSS via direct `innerHTML` assignments with unsanitized dynamic user input in `public/chrome-extension/content-script.js`.
+**Learning:** The React application correctly uses DOMPurify and structured JSX. However, the Chrome extension runs as a plain vanilla JavaScript content script, where there's no framework protecting against injection, and DOMPurify isn't bundled. Developers mistakenly treated variables mapped to `innerHTML` as safe, opening the door for XSS from spoken transcripts or backend API responses.
+**Prevention:** Always use an `escapeHTML` helper function to sanitize dynamic variables before interpolating them into HTML strings that will be assigned via `.innerHTML`, or prefer `.textContent` where HTML parsing is not required.
