@@ -7,3 +7,6 @@
 
 **Learning:** Icon-only buttons (like volume or social links) are often missed by screen readers if they lack aria-labels. Adding Tooltips provides dual benefit: accessible names for screen readers and visual labels for mouse users.
 **Action:** Always wrap icon-only buttons in a Tooltip component and ensure aria-label is present.
+## 2024-11-20 - Accessible Icon-Only Buttons in ConversationMode
+**Learning:** Icon-only buttons often lack context for screen readers and keyboard users. Using Shadcn UI `Tooltip` components with `aria-label` on the inner `<button>` and `focus-visible` classes ensures a fully accessible and intuitive experience.
+**Action:** Always wrap icon-only buttons in `Tooltip` components (using `asChild` on `TooltipTrigger`) and ensure they have descriptive `aria-label` attributes and visible focus states.
