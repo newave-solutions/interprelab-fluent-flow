@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { 
   ChevronLeft, ChevronRight, Star, Layers, MessageCircle, X,
   Send, Sparkles, CheckCircle, Lock
@@ -604,9 +605,16 @@ export function InteractiveModulePlayer() {
               <MessageCircle className="w-5 h-5" />
               <span className="font-semibold">AI Medical Tutor</span>
             </div>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={() => setIsChatOpen(false)}>
-              <X className="w-4 h-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button aria-label="Close chat" variant="ghost" size="icon" className="text-white hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50" onClick={() => setIsChatOpen(false)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Close chat</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           
           <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-muted/30">
@@ -639,9 +647,16 @@ export function InteractiveModulePlayer() {
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
             />
-            <Button size="icon" className="rounded-full" onClick={sendChatMessage} disabled={isChatLoading}>
-              <Send className="w-4 h-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button aria-label="Send message" size="icon" className="rounded-full focus-visible:ring-2 focus-visible:ring-primary" onClick={sendChatMessage} disabled={isChatLoading}>
+                  <Send className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Send message</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
