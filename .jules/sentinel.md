@@ -9,3 +9,7 @@
 **Vulnerability:** Found hardcoded `VITE_SUPABASE_ANON_KEY` and project URL in `setup-github-actions.sh`.
 **Learning:** Even in setup instructions, hardcoding secrets encourages bad practices and leaks project-specific configuration in the repository history. Users might blindly commit these or assume it's safe to hardcode them elsewhere.
 **Prevention:** Use placeholders (e.g., `<YOUR_KEY>`) in scripts and documentation, and direct users to the source of truth (e.g., dashboard, environment variables).
+## 2025-02-28 - Fix DOM-based XSS in Chrome Extension
+**Vulnerability:** DOM-based XSS in `public/chrome-extension/content-script.js` due to assigning unescaped dynamic content to `innerHTML`.
+**Learning:** The Chrome extension runs in a vanilla JavaScript context without access to the React application's DOMPurify library, making standard string interpolation into `innerHTML` unsafe when handling dynamic data like transcripts or external databases.
+**Prevention:** Always implement a dedicated `escapeHTML` helper function in vanilla JS environments to sanitize user input before directly manipulating `.innerHTML`, or prefer `.textContent` where HTML parsing is unnecessary.
