@@ -33,7 +33,7 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                 </span>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="More options">
                   <MoreHorizontal className="w-4 h-4" />
                 </Button>
               </div>
@@ -58,18 +58,18 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
           <div className="flex items-center gap-6">
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
-              <span>0</span>
+              <span className="sr-only">Likes: </span><span>0</span>
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4" />
-              <span>0</span>
+              <span className="sr-only">Comments: </span><span>0</span>
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <Share2 className="w-4 h-4" />
-              <span>0</span>
+              <span className="sr-only">Shares: </span><span>0</span>
             </Button>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" aria-label="Bookmark">
             <Bookmark className="w-4 h-4" />
           </Button>
         </div>
