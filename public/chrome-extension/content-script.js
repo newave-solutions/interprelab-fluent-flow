@@ -69,6 +69,17 @@ let keyInsights = {
   nextSteps: []
 };
 
+// HTML Escape function to prevent XSS
+function escapeHTML(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // De-identification function
 function deIdentifyText(text) {
   let deIdentified = text;
@@ -360,12 +371,12 @@ function displayMedicalTerm(term) {
   const termCard = document.createElement('div');
   termCard.className = 'term-card';
   termCard.innerHTML = `
-    <div class="term-header">🏥 ${term.term}</div>
+    <div class="term-header">🏥 ${escapeHTML(term.term)}</div>
     <div class="term-body">
-      <p><strong>Definition:</strong> ${term.definition}</p>
-      <p><strong>Spanish:</strong> ${term.translation || 'N/A'}</p>
-      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${term.pronunciation}</p>` : ''}
-      <p><strong>Category:</strong> ${term.category}</p>
+      <p><strong>Definition:</strong> ${escapeHTML(term.definition)}</p>
+      <p><strong>Spanish:</strong> ${escapeHTML(term.translation || 'N/A')}</p>
+      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${escapeHTML(term.pronunciation)}</p>` : ''}
+      <p><strong>Category:</strong> ${escapeHTML(term.category)}</p>
     </div>
   `;
   
@@ -379,7 +390,8 @@ function updateTranscriptDisplay(text) {
   const placeholder = transcriptDiv.querySelector('.interprecoach-placeholder');
   if (placeholder) placeholder.remove();
   
-  let highlightedText = text;
+  // Escape input text before inserting into innerHTML
+  let highlightedText = escapeHTML(text);
   
   // Highlight medical terms
   Object.keys(MEDICAL_TERMS_DB).forEach(term => {
@@ -480,25 +492,25 @@ function updateInsightsDisplay() {
   
   const medsList = document.getElementById('insight-medications');
   medsList.innerHTML = keyInsights.medications.size === 0 ? '<li class="empty">None detected</li>' : 
-    Array.from(keyInsights.medications).map(med => `<li>${med}</li>`).join('');
+    Array.from(keyInsights.medications).map(med => `<li>${escapeHTML(med)}</li>`).join('');
   
   const vitalsDiv = document.getElementById('insight-vitals');
   if (Object.keys(keyInsights.vitalSigns).length === 0) {
     vitalsDiv.innerHTML = '<p class="empty">None recorded</p>';
   } else {
     vitalsDiv.innerHTML = '';
-    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${keyInsights.vitalSigns.bloodPressure}</p>`;
-    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${keyInsights.vitalSigns.heartRate} bpm</p>`;
-    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${keyInsights.vitalSigns.temperature}°</p>`;
+    if (keyInsights.vitalSigns.bloodPressure) vitalsDiv.innerHTML += `<p>🫀 BP: ${escapeHTML(keyInsights.vitalSigns.bloodPressure)}</p>`;
+    if (keyInsights.vitalSigns.heartRate) vitalsDiv.innerHTML += `<p>💓 HR: ${escapeHTML(keyInsights.vitalSigns.heartRate)} bpm</p>`;
+    if (keyInsights.vitalSigns.temperature) vitalsDiv.innerHTML += `<p>🌡️ Temp: ${escapeHTML(keyInsights.vitalSigns.temperature)}°</p>`;
   }
   
   const diagList = document.getElementById('insight-diagnoses');
   diagList.innerHTML = keyInsights.diagnoses.size === 0 ? '<li class="empty">None identified</li>' :
-    Array.from(keyInsights.diagnoses).map(diag => `<li>${diag}</li>`).join('');
+    Array.from(keyInsights.diagnoses).map(diag => `<li>${escapeHTML(diag)}</li>`).join('');
   
   const stepsList = document.getElementById('insight-nextsteps');
   stepsList.innerHTML = keyInsights.nextSteps.length === 0 ? '<li class="empty">None specified</li>' :
-    keyInsights.nextSteps.map(step => `<li>${step}</li>`).join('');
+    keyInsights.nextSteps.map(step => `<li>${escapeHTML(step)}</li>`).join('');
 }
 
 function updateStatus(text, status = 'active') {
