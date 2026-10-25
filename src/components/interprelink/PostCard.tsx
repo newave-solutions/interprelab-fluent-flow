@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -33,9 +34,16 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
                 <span className="text-sm text-muted-foreground">
                   {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                 </span>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="More options">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>More options</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -58,20 +66,30 @@ const PostCard = React.memo(({ post }: PostCardProps) => {
           <div className="flex items-center gap-6">
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
+              <span className="sr-only">Likes: </span>
               <span>0</span>
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4" />
+              <span className="sr-only">Comments: </span>
               <span>0</span>
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <Share2 className="w-4 h-4" />
+              <span className="sr-only">Shares: </span>
               <span>0</span>
             </Button>
           </div>
-          <Button variant="ghost" size="sm">
-            <Bookmark className="w-4 h-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm" aria-label="Bookmark">
+                <Bookmark className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bookmark</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </CardContent>
     </Card>
