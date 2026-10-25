@@ -15,3 +15,7 @@
 **Vulnerability:** `nginx.conf` contained a hardcoded Content Security Policy (CSP) referencing an outdated/unused Supabase Project ID (`iokgkrnbawhizmuejluz`), while the application code (`.env.production`, `config.toml`) utilized different project IDs (`opmafykbhjinqebgflnl`, `ggyzlvbtkibqnkfhgnbe`).
 **Learning:** Hardcoding specific external domains in static configuration files (like nginx.conf) creates a high risk of service denial in production if the backend infrastructure changes, as the CSP will block legitimate traffic. This is a common "Configuration Drift" issue.
 **Prevention:** Use environment variable substitution (e.g., `envsubst`) in container startup scripts to inject the correct allowed domains into the CSP at runtime, ensuring the security policy always matches the active environment configuration.
+## 2024-10-25 - Fix DOM-based XSS in Chrome Extension
+**Vulnerability:** Untrusted text from speech recognition and transcripts was being injected directly into the DOM using `innerHTML` without sanitization.
+**Learning:** The Chrome extension content script runs in vanilla JS and doesn't have access to the React app's `DOMPurify`, leading to unsafe raw DOM manipulation.
+**Prevention:** Always implement and use a custom `escapeHTML` helper function in isolated vanilla JS contexts (like extension content scripts) whenever using `.innerHTML`, even for seemingly internal state updates, to prevent DOM-based XSS.
