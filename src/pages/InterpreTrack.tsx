@@ -94,41 +94,78 @@ const CallTracker = () => {
     const monthStart = startOfMonth(now);
     const monthEnd = endOfMonth(now);
 
-    // Get month stats
-    const { data: monthData } = await supabase
-      .from('call_logs')
-      .select('*')
-      .eq('user_id', user.id)
-      .gte('start_time', monthStart.toISOString())
-      .lte('start_time', monthEnd.toISOString());
+    // Fetch month stats and recent calls concurrently
+    const [monthDataResponse, recentResponse] = await Promise.all([
+      supabase
+        .from('call_logs')
+        .select('*')
+        .eq('user_id', user.id)
+        .gte('start_time', monthStart.toISOString())
+        .lte('start_time', monthEnd.toISOString()),
+      supabase
+        .from('call_logs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('start_time', { ascending: false })
+        .limit(10)
+    ]);
+
+    const monthData = monthDataResponse.data;
+    const recent = recentResponse.data;
 
     if (monthData) {
-      const totalDuration = monthData.reduce((sum, call) => sum + (call.duration_seconds || 0), 0);
-      const totalRounded = monthData.reduce((sum, call) => sum + (call.rounded_duration_seconds || call.duration_seconds || 0), 0);
-      const totalEarnings = monthData.reduce((sum, call) => sum + (call.earnings || 0), 0);
-      const totalRoundedEarnings = monthData.reduce((sum, call) => sum + (call.rounded_earnings || call.earnings || 0), 0);
+      let totalDuration = 0;
+      let totalRounded = 0;
+      let totalEarnings = 0;
+      let totalRoundedEarnings = 0;
+
+      let vriCount = 0;
+      let vriDuration = 0;
+      let vriEarnings = 0;
+
+      let opiCount = 0;
+      let opiDuration = 0;
+      let opiEarnings = 0;
+
+      for (const call of monthData) {
+        const duration = call.duration_seconds || 0;
+        const rounded = call.rounded_duration_seconds || duration;
+        const earnings = call.earnings || 0;
+        const roundedEarnings = call.rounded_earnings || earnings;
+
+        totalDuration += duration;
+        totalRounded += rounded;
+        totalEarnings += earnings;
+        totalRoundedEarnings += roundedEarnings;
+
+        if (call.call_type === 'VRI') {
+          vriCount++;
+          vriDuration += duration;
+          vriEarnings += earnings;
+        } else if (call.call_type === 'OPI') {
+          opiCount++;
+          opiDuration += duration;
+          opiEarnings += earnings;
+        }
+      }
       
       // Calculate time lost to rounding
       const timeLost = totalDuration - totalRounded;
       const earningsLost = totalEarnings - totalRoundedEarnings;
 
-      // Call type breakdown
-      const vriCalls = monthData.filter(c => c.call_type === 'VRI');
-      const opiCalls = monthData.filter(c => c.call_type === 'OPI');
-      
       setCallTypeStats([
         {
           type: 'VRI',
-          count: vriCalls.length,
-          duration: vriCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: vriCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
+          count: vriCount,
+          duration: vriDuration,
+          earnings: vriEarnings,
           color: 'hsl(217, 91%, 60%)', // blue
         },
         {
           type: 'OPI',
-          count: opiCalls.length,
-          duration: opiCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0),
-          earnings: opiCalls.reduce((sum, call) => sum + (call.earnings || 0), 0),
+          count: opiCount,
+          duration: opiDuration,
+          earnings: opiEarnings,
           color: 'hsl(271, 81%, 56%)', // purple
         }
       ]);
@@ -148,14 +185,6 @@ const CallTracker = () => {
         totalRoundedEarnings,
       });
     }
-
-    // Get recent calls
-    const { data: recent } = await supabase
-      .from('call_logs')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('start_time', { ascending: false })
-      .limit(10);
 
     setRecentCalls(recent || []);
   };
