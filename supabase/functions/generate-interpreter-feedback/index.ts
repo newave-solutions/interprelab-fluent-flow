@@ -100,7 +100,7 @@ Example output:
 
     let userPrompt = `Session type: ${sessionType}\n\nUser's interpretation:\n${userTranscript}`
 
-    if (target Script) {
+    if (targetScript) {
   userPrompt += `\n\nExpected/target script:\n${targetScript}`
 }
 
