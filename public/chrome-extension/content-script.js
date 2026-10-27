@@ -132,6 +132,19 @@ function detectAndConvertUnits(text) {
   return conversions;
 }
 
+const escapeHTML = (str) => {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[&<>'"]/g,
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag)
+  );
+};
+
 // Create overlay UI
 function createOverlay() {
   const overlay = document.createElement('div');
@@ -360,12 +373,12 @@ function displayMedicalTerm(term) {
   const termCard = document.createElement('div');
   termCard.className = 'term-card';
   termCard.innerHTML = `
-    <div class="term-header">🏥 ${term.term}</div>
+    <div class="term-header">🏥 ${escapeHTML(term.term)}</div>
     <div class="term-body">
-      <p><strong>Definition:</strong> ${term.definition}</p>
-      <p><strong>Spanish:</strong> ${term.translation || 'N/A'}</p>
-      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${term.pronunciation}</p>` : ''}
-      <p><strong>Category:</strong> ${term.category}</p>
+      <p><strong>Definition:</strong> ${escapeHTML(term.definition)}</p>
+      <p><strong>Spanish:</strong> ${escapeHTML(term.translation || 'N/A')}</p>
+      ${term.pronunciation ? `<p><strong>Pronunciation:</strong> ${escapeHTML(term.pronunciation)}</p>` : ''}
+      <p><strong>Category:</strong> ${escapeHTML(term.category)}</p>
     </div>
   `;
   
@@ -379,21 +392,22 @@ function updateTranscriptDisplay(text) {
   const placeholder = transcriptDiv.querySelector('.interprecoach-placeholder');
   if (placeholder) placeholder.remove();
   
-  let highlightedText = text;
+  // Escape the text before we add safe spans
+  let highlightedText = escapeHTML(text);
   
   // Highlight medical terms
   Object.keys(MEDICAL_TERMS_DB).forEach(term => {
-    const regex = new RegExp(`\\b${term}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${term}">$&</span>`);
+    const regex = new RegExp(`\\b${escapeHTML(term)}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medical-term" data-term="${escapeHTML(term)}">$&</span>`);
     }
   });
   
   // Highlight medications
   Object.keys(MEDICATION_DATABASE).forEach(med => {
-    const regex = new RegExp(`\\b${med}\\b`, 'gi');
-    if (regex.test(text)) {
-      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${med}">$&</span>`);
+    const regex = new RegExp(`\\b${escapeHTML(med)}\\b`, 'gi');
+    if (regex.test(highlightedText)) {
+      highlightedText = highlightedText.replace(regex, `<span class="medication-term" data-med="${escapeHTML(med)}">$&</span>`);
     }
   });
   
